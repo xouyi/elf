@@ -39,18 +39,28 @@
   ],
   "scripts": {
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
+    "lint": "bunx --bun eslint .",
+    "lint:fix": "bunx --bun eslint . --fix",
     "test": "vitest run",
+    "test:unit": "vitest run --project unit",
+    "test:storybook": "vitest run --project storybook-elf --project storybook-novatron",
+    "test:visual": "bun run build-storybook && playwright test",
+    "test:visual:update": "bun run build-storybook && playwright test --update-snapshots",
     "contrast": "bun scripts/contrast.ts",
     "registry:sync": "bun scripts/sync-registry.ts",
     "registry:build": "bun run registry:sync && bunx --bun shadcn-vue build registry.json --output registry/r",
     "llms": "bun scripts/generate-llms.ts",
     "llms:check": "bun scripts/generate-llms.ts --check",
-    "example:build": "bun run --cwd examples/nuxt-demo build",
-    "pages:build": "bun scripts/build-pages.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o storybook-static",
+    "pages:build": "bun scripts/build-pages.ts",
+    "example:build": "bun run --cwd examples/nuxt-demo build",
     "playground:build": "bun run --cwd apps/playground build",
-    "check": "bun run typecheck && bun run test && bun run contrast && bun run registry:build && bun run build-storybook && bun run playground:build"
+    "registry:check": "bun scripts/check-registry.ts",
+    "prepush": "bun run typecheck && bun run lint && bun run test:unit",
+    "release": "bun scripts/release.ts",
+    "prepare": "simple-git-hooks || true",
+    "check": "bun run typecheck && bun run lint && bun run test && bun run contrast && bun run registry:check && bun run llms:check && bun run build-storybook && bun run playground:build"
   },
   "dependencies": {
     "@lucide/vue": "1.79.0",
@@ -74,16 +84,25 @@
     }
   },
   "devDependencies": {
+    "@antfu/eslint-config": "10.0.0",
+    "@playwright/test": "1.64.0",
     "@storybook/addon-a11y": "10.6.8",
     "@storybook/addon-docs": "10.6.8",
+    "@storybook/addon-vitest": "10.6.8",
     "@storybook/vue3-vite": "10.6.8",
     "@tailwindcss/vite": "4.3.5",
+    "@types/bun": "1.4.5",
     "@types/node": "22.10.0",
     "@vitejs/plugin-vue": "6.0.11",
+    "@vitest/browser": "5.1.1",
+    "@vitest/browser-playwright": "5.1.1",
     "@vue/test-utils": "2.6.0",
+    "eslint": "10.15.0",
     "happy-dom": "21.0.4",
     "nuxt": "4.7.0",
+    "playwright": "1.64.0",
     "shadcn-vue": "2.9.0",
+    "simple-git-hooks": "2.14.0",
     "storybook": "10.6.8",
     "tailwindcss": "4.3.5",
     "typescript": "5.9.3",
@@ -94,5 +113,8 @@
   },
   "engines": {
     "node": ">=22"
+  },
+  "simple-git-hooks": {
+    "pre-push": "bun run prepush"
   }
 }
