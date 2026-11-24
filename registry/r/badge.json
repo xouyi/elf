@@ -1,0 +1,27 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "badge",
+  "title": "Badge",
+  "description": "Badge with default, secondary, outline, destructive, success and warning variants.",
+  "dependencies": [
+    "reka-ui",
+    "class-variance-authority",
+    "@vueuse/core"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/badge/index.ts",
+      "content": "import type { PrimitiveProps } from 'reka-ui'\nimport type { VariantProps } from 'class-variance-authority'\nimport type { HTMLAttributes } from 'vue'\nimport { cva } from 'class-variance-authority'\n\nexport { default as Badge } from './Badge.vue'\n\nexport const badgeVariants = cva(\n  'inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-badge border px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 [&>svg]:pointer-events-none [&>svg]:size-3',\n  {\n    variants: {\n      variant: {\n        default: 'border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90',\n        secondary: 'border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90',\n        outline: 'border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',\n        destructive: 'border-transparent bg-destructive text-destructive-foreground [a&]:hover:bg-destructive/90',\n        success: 'border-transparent bg-success text-success-foreground [a&]:hover:bg-success/90',\n        warning: 'border-transparent bg-warning text-warning-foreground [a&]:hover:bg-warning/90',\n      },\n    },\n    defaultVariants: {\n      variant: 'default',\n    },\n  },\n)\n\nexport type BadgeVariants = VariantProps<typeof badgeVariants>\n\nexport interface BadgeProps extends PrimitiveProps {\n  variant?: BadgeVariants['variant']\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/badge/Badge.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { BadgeProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { Primitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { badgeVariants } from './index'\n\nconst props = withDefaults(defineProps<BadgeProps>(), {\n  as: 'span',\n  variant: 'default',\n})\nconst delegatedProps = reactiveOmit(props, 'class', 'variant')\n</script>\n\n<template>\n  <Primitive\n    data-slot=\"badge\"\n    :data-variant=\"props.variant\"\n    :class=\"cn(badgeVariants({ variant: props.variant }), props.class)\"\n    v-bind=\"delegatedProps\"\n  >\n    <slot />\n  </Primitive>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

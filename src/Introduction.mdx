@@ -1,0 +1,57 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Introduction" />
+
+# Elf
+
+Elf is a Vue 3 / Nuxt 4 design system built on [Reka UI](https://reka-ui.com) primitives and
+shadcn-vue style components, themed with CSS variables and Tailwind CSS v4. It is dark-only and ships two themes:
+`elf` (violet, rounded) and `novatron` (gold on obsidian, sharp corners).
+
+## Install in a Nuxt 4 app
+
+```bash
+bun add github:xouyi/elf#v0.1.0 tailwindcss @tailwindcss/vite
+bun add -d typescript
+```
+
+```ts
+// nuxt.config.ts
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineNuxtConfig({
+  modules: ['@elf/ui/nuxt'],
+  css: ['~/assets/css/main.css'],
+  elf: { theme: 'novatron' },
+  vite: { plugins: [tailwindcss()] },
+})
+```
+
+```css
+/* assets/css/main.css */
+@import 'tailwindcss';
+@import '@elf/ui/styles.css';
+```
+
+Components are auto-imported with the `Elf` prefix: `<ElfButton>`, `<ElfCard>`, `<ElfDialog>`, and so on.
+
+## Theming
+
+Themes are CSS variable files selected with `data-theme` on `<html>`. Use the toolbar above to switch themes.
+Tokens mirror shadcn: `--elf-background`, `--elf-primary`, ... plus `--elf-success`, `--elf-warning`, `--elf-radius`.
+Adding a theme means adding one file in `src/themes/` with a `[data-theme='name']` block. `bun run contrast`
+verifies WCAG AA for every pair.
+
+## Registry
+
+Copy a component into your project to fork it:
+
+```bash
+bunx shadcn-vue@latest add https://raw.githubusercontent.com/xouyi/elf/main/registry/r/button.json
+```
+
+## Contributing a component
+
+1. Create `src/components/<name>/` with the SFCs, `index.ts` (variants and prop types), a story and a test.
+2. Export it in `src/index.ts` with the `Elf` prefix.
+3. Add it to `scripts/sync-registry.ts` and run `bun run check`.

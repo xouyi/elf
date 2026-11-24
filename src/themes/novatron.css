@@ -1,0 +1,28 @@
+/* Novatron theme: obsidian black, gold primary, sharp (0px) geometry, zinc borders. */
+[data-theme='novatron'] {
+  --elf-background: #050505;
+  --elf-foreground: #fafafa;
+  --elf-card: #09090b;
+  --elf-card-foreground: #fafafa;
+  --elf-popover: #09090b;
+  --elf-popover-foreground: #fafafa;
+  --elf-primary: #ffcc00;
+  --elf-primary-foreground: #050505;
+  --elf-secondary: #18181b;
+  --elf-secondary-foreground: #fafafa;
+  --elf-muted: #18181b;
+  --elf-muted-foreground: #a1a1aa;
+  --elf-accent: #27272a;
+  --elf-accent-foreground: #fafafa;
+  --elf-destructive: #dc2626;
+  --elf-destructive-foreground: #ffffff;
+  --elf-success: #22c55e;
+  --elf-success-foreground: #050505;
+  --elf-warning: #f59e0b;
+  --elf-warning-foreground: #050505;
+  --elf-border: #27272a;
+  --elf-input: #71717a;
+  --elf-ring: #ffcc00;
+  --elf-radius: 0px;
+  --elf-radius-pill: 0px;
+}

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "elf-theme",
+  "title": "Elf theme",
+  "description": "Tailwind v4 token mappings and the elf and novatron theme files. Import elf.css after tailwindcss.",
+  "files": [
+    {
+      "path": "registry/_generated/css/elf.css",
+      "content": "/*\n * Elf styles. Import AFTER Tailwind in the consumer's main CSS:\n *\n *   @import \"tailwindcss\";\n *   @import \"@elf/ui/styles.css\";\n *\n * Theme token files (@elf/ui/themes/*.css) are added by the Nuxt module,\n * or imported manually in non-Nuxt setups.\n */\n\n/* Make Tailwind scan the Elf component sources for utility classes. */\n@theme inline {\n  --color-background: var(--elf-background);\n  --color-foreground: var(--elf-foreground);\n  --color-card: var(--elf-card);\n  --color-card-foreground: var(--elf-card-foreground);\n  --color-popover: var(--elf-popover);\n  --color-popover-foreground: var(--elf-popover-foreground);\n  --color-primary: var(--elf-primary);\n  --color-primary-foreground: var(--elf-primary-foreground);\n  --color-secondary: var(--elf-secondary);\n  --color-secondary-foreground: var(--elf-secondary-foreground);\n  --color-muted: var(--elf-muted);\n  --color-muted-foreground: var(--elf-muted-foreground);\n  --color-accent: var(--elf-accent);\n  --color-accent-foreground: var(--elf-accent-foreground);\n  --color-destructive: var(--elf-destructive);\n  --color-destructive-foreground: var(--elf-destructive-foreground);\n  --color-success: var(--elf-success);\n  --color-success-foreground: var(--elf-success-foreground);\n  --color-warning: var(--elf-warning);\n  --color-warning-foreground: var(--elf-warning-foreground);\n  --color-border: var(--elf-border);\n  --color-input: var(--elf-input);\n  --color-ring: var(--elf-ring);\n\n  --radius-sm: max(0px, calc(var(--elf-radius) - 4px));\n  --radius-md: max(0px, calc(var(--elf-radius) - 2px));\n  --radius-lg: var(--elf-radius);\n  --radius-xl: calc(var(--elf-radius) + 4px);\n  --radius-badge: var(--elf-radius-pill);\n}\n\n@layer base {\n  :root {\n    color-scheme: dark;\n  }\n\n  *,\n  ::before,\n  ::after {\n    border-color: var(--elf-border);\n  }\n\n  body {\n    background-color: var(--elf-background);\n    color: var(--elf-foreground);\n  }\n}\n\n@keyframes elf-fade-in {\n  from { opacity: 0; }\n}\n@keyframes elf-fade-out {\n  to { opacity: 0; }\n}\n@keyframes elf-zoom-in {\n  from { opacity: 0; scale: 0.96; }\n}\n@keyframes elf-zoom-out {\n  to { opacity: 0; scale: 0.96; }\n}\n\n@media (prefers-reduced-motion: reduce) {\n  [data-slot='dialog-overlay'],\n  [data-slot='dialog-content'] {\n    animation: none !important;\n  }\n}\n",
+      "type": "registry:file",
+      "target": "assets/css/elf/elf.css"
+    },
+    {
+      "path": "registry/_generated/css/themes/elf.css",
+      "content": "/* Elf theme (default): near-black surfaces, violet primary, 0.625rem radius. */\n:root:not([data-theme]),\n[data-theme='elf'] {\n  --elf-background: oklch(0.145 0.012 295);\n  --elf-foreground: oklch(0.97 0.005 295);\n  --elf-card: oklch(0.19 0.02 295);\n  --elf-card-foreground: oklch(0.97 0.005 295);\n  --elf-popover: oklch(0.21 0.022 295);\n  --elf-popover-foreground: oklch(0.97 0.005 295);\n  --elf-primary: oklch(0.7 0.16 293);\n  --elf-primary-foreground: oklch(0.15 0.03 295);\n  --elf-secondary: oklch(0.27 0.035 295);\n  --elf-secondary-foreground: oklch(0.97 0.005 295);\n  --elf-muted: oklch(0.24 0.025 295);\n  --elf-muted-foreground: oklch(0.72 0.03 295);\n  --elf-accent: oklch(0.32 0.07 295);\n  --elf-accent-foreground: oklch(0.98 0.005 295);\n  --elf-destructive: oklch(0.55 0.21 25);\n  --elf-destructive-foreground: oklch(0.99 0 0);\n  --elf-success: oklch(0.72 0.17 150);\n  --elf-success-foreground: oklch(0.15 0.03 150);\n  --elf-warning: oklch(0.82 0.15 85);\n  --elf-warning-foreground: oklch(0.2 0.04 85);\n  --elf-border: oklch(0.3 0.03 295);\n  --elf-input: oklch(0.52 0.05 295);\n  --elf-ring: oklch(0.7 0.16 293);\n  --elf-radius: 0.625rem;\n  --elf-radius-pill: 9999px;\n}\n",
+      "type": "registry:file",
+      "target": "assets/css/elf/themes/elf.css"
+    },
+    {
+      "path": "registry/_generated/css/themes/novatron.css",
+      "content": "/* Novatron theme: obsidian black, gold primary, sharp (0px) geometry, zinc borders. */\n[data-theme='novatron'] {\n  --elf-background: #050505;\n  --elf-foreground: #fafafa;\n  --elf-card: #09090b;\n  --elf-card-foreground: #fafafa;\n  --elf-popover: #09090b;\n  --elf-popover-foreground: #fafafa;\n  --elf-primary: #ffcc00;\n  --elf-primary-foreground: #050505;\n  --elf-secondary: #18181b;\n  --elf-secondary-foreground: #fafafa;\n  --elf-muted: #18181b;\n  --elf-muted-foreground: #a1a1aa;\n  --elf-accent: #27272a;\n  --elf-accent-foreground: #fafafa;\n  --elf-destructive: #dc2626;\n  --elf-destructive-foreground: #ffffff;\n  --elf-success: #22c55e;\n  --elf-success-foreground: #050505;\n  --elf-warning: #f59e0b;\n  --elf-warning-foreground: #050505;\n  --elf-border: #27272a;\n  --elf-input: #71717a;\n  --elf-ring: #ffcc00;\n  --elf-radius: 0px;\n  --elf-radius-pill: 0px;\n}\n",
+      "type": "registry:file",
+      "target": "assets/css/elf/themes/novatron.css"
+    }
+  ],
+  "type": "registry:file"
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@elf/playground",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "link": "bun ../../scripts/link-self.ts",
+    "dev": "bun run link && nuxt dev",
+    "build": "bun run link && nuxt build",
+    "typecheck": "bun run link && nuxt typecheck",
+    "postinstall": "bun run link && nuxt prepare"
+  },
+  "dependencies": {
+    "nuxt": "4.7.0",
+    "vue": "3.5.46",
+    "vue-router": "5.5.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.5",
+    "tailwindcss": "4.3.5",
+    "typescript": "5.9.3",
+    "vue-tsc": "3.3.14"
+  }
+}

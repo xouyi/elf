@@ -1,0 +1,81 @@
+/*
+ * Elf styles. Import AFTER Tailwind in the consumer's main CSS:
+ *
+ *   @import "tailwindcss";
+ *   @import "@elf/ui/styles.css";
+ *
+ * Theme token files (@elf/ui/themes/*.css) are added by the Nuxt module,
+ * or imported manually in non-Nuxt setups.
+ */
+
+/* Make Tailwind scan the Elf component sources for utility classes. */
+@source "./components";
+
+@theme inline {
+  --color-background: var(--elf-background);
+  --color-foreground: var(--elf-foreground);
+  --color-card: var(--elf-card);
+  --color-card-foreground: var(--elf-card-foreground);
+  --color-popover: var(--elf-popover);
+  --color-popover-foreground: var(--elf-popover-foreground);
+  --color-primary: var(--elf-primary);
+  --color-primary-foreground: var(--elf-primary-foreground);
+  --color-secondary: var(--elf-secondary);
+  --color-secondary-foreground: var(--elf-secondary-foreground);
+  --color-muted: var(--elf-muted);
+  --color-muted-foreground: var(--elf-muted-foreground);
+  --color-accent: var(--elf-accent);
+  --color-accent-foreground: var(--elf-accent-foreground);
+  --color-destructive: var(--elf-destructive);
+  --color-destructive-foreground: var(--elf-destructive-foreground);
+  --color-success: var(--elf-success);
+  --color-success-foreground: var(--elf-success-foreground);
+  --color-warning: var(--elf-warning);
+  --color-warning-foreground: var(--elf-warning-foreground);
+  --color-border: var(--elf-border);
+  --color-input: var(--elf-input);
+  --color-ring: var(--elf-ring);
+
+  --radius-sm: max(0px, calc(var(--elf-radius) - 4px));
+  --radius-md: max(0px, calc(var(--elf-radius) - 2px));
+  --radius-lg: var(--elf-radius);
+  --radius-xl: calc(var(--elf-radius) + 4px);
+  --radius-badge: var(--elf-radius-pill);
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  *,
+  ::before,
+  ::after {
+    border-color: var(--elf-border);
+  }
+
+  body {
+    background-color: var(--elf-background);
+    color: var(--elf-foreground);
+  }
+}
+
+@keyframes elf-fade-in {
+  from { opacity: 0; }
+}
+@keyframes elf-fade-out {
+  to { opacity: 0; }
+}
+@keyframes elf-zoom-in {
+  from { opacity: 0; scale: 0.96; }
+}
+@keyframes elf-zoom-out {
+  to { opacity: 0; scale: 0.96; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-slot='dialog-overlay'],
+  [data-slot='dialog-content'] {
+    animation: none !important;
+  }
+}

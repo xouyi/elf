@@ -1,0 +1,252 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry.json",
+  "name": "elf",
+  "homepage": "https://github.com/xouyi/elf",
+  "items": [
+    {
+      "name": "utils",
+      "type": "registry:lib",
+      "title": "cn utility",
+      "description": "clsx + tailwind-merge class helper.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "lib/utils.ts"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Button with default, secondary, outline, ghost, destructive and link variants.",
+      "dependencies": [
+        "reka-ui",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/button/index.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/button/Button.vue",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "Text input with v-model support.",
+      "dependencies": [
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/input/index.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/input/Input.vue",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "Badge with default, secondary, outline, destructive, success and warning variants.",
+      "dependencies": [
+        "reka-ui",
+        "class-variance-authority",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/badge/index.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/badge/Badge.vue",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "Card with header, title, description, action, content and footer.",
+      "dependencies": [],
+      "registryDependencies": [
+        "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/card/index.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/card/CardAction.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/card/CardContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/card/CardDescription.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/card/CardFooter.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/card/CardHeader.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/card/CardTitle.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/card/Card.vue",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "Accessible modal dialog built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core",
+        "@lucide/vue"
+      ],
+      "registryDependencies": [
+        "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json",
+        "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/button.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/dialog/index.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dialog/DialogClose.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dialog/DialogContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dialog/DialogDescription.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dialog/DialogFooter.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dialog/DialogHeader.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dialog/DialogOverlay.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dialog/DialogTitle.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dialog/DialogTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dialog/Dialog.vue",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Accessible tabs built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/tabs/index.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/tabs/TabsContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/tabs/TabsList.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/tabs/TabsTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/tabs/Tabs.vue",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "elf-theme",
+      "type": "registry:file",
+      "title": "Elf theme",
+      "description": "Tailwind v4 token mappings and the elf and novatron theme files. Import elf.css after tailwindcss.",
+      "files": [
+        {
+          "path": "registry/_generated/css/elf.css",
+          "type": "registry:file",
+          "target": "assets/css/elf/elf.css"
+        },
+        {
+          "path": "registry/_generated/css/themes/elf.css",
+          "type": "registry:file",
+          "target": "assets/css/elf/themes/elf.css"
+        },
+        {
+          "path": "registry/_generated/css/themes/novatron.css",
+          "type": "registry:file",
+          "target": "assets/css/elf/themes/novatron.css"
+        }
+      ]
+    }
+  ]
+}

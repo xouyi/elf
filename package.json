@@ -1,0 +1,93 @@
+{
+  "name": "@elf/ui",
+  "version": "0.1.0",
+  "description": "Elf: a Vue 3 / Nuxt 4 design system built on Reka UI and Tailwind CSS v4.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xouyi/elf.git"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "src",
+    "!src/**/*.stories.ts",
+    "!src/**/*.test.ts",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./nuxt": {
+      "types": "./src/nuxt/module.ts",
+      "default": "./src/nuxt/module.ts"
+    },
+    "./styles.css": "./src/styles.css",
+    "./themes/*.css": "./src/themes/*.css",
+    "./lib/utils": "./src/lib/utils.ts",
+    "./package.json": "./package.json"
+  },
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "typecheck": "vue-tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "contrast": "bun scripts/contrast.ts",
+    "registry:sync": "bun scripts/sync-registry.ts",
+    "registry:build": "bun run registry:sync && bunx --bun shadcn-vue build registry.json --output registry/r",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build -o storybook-static",
+    "playground:build": "bun run --cwd apps/playground build",
+    "check": "bun run typecheck && bun run test && bun run contrast && bun run registry:build && bun run build-storybook && bun run playground:build"
+  },
+  "dependencies": {
+    "@lucide/vue": "1.79.0",
+    "@nuxt/kit": "4.7.0",
+    "@vueuse/core": "15.1.0",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "reka-ui": "2.11.0",
+    "tailwind-merge": "3.7.1"
+  },
+  "peerDependencies": {
+    "@tailwindcss/vite": "^4.3.0",
+    "nuxt": "^4.6.4",
+    "tailwindcss": "^4.3.0",
+    "typescript": ">=5.0.0",
+    "vue": "^3.5.0"
+  },
+  "peerDependenciesMeta": {
+    "nuxt": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "10.6.8",
+    "@storybook/addon-docs": "10.6.8",
+    "@storybook/vue3-vite": "10.6.8",
+    "@tailwindcss/vite": "4.3.5",
+    "@types/node": "22.10.0",
+    "@vitejs/plugin-vue": "6.0.11",
+    "@vue/test-utils": "2.6.0",
+    "happy-dom": "21.0.4",
+    "nuxt": "4.7.0",
+    "shadcn-vue": "2.9.0",
+    "storybook": "10.6.8",
+    "tailwindcss": "4.3.5",
+    "typescript": "5.9.3",
+    "vite": "8.3.8",
+    "vitest": "5.1.1",
+    "vue": "3.5.46",
+    "vue-tsc": "3.3.14"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

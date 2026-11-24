@@ -1,0 +1,25 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "input",
+  "title": "Input",
+  "description": "Text input with v-model support.",
+  "dependencies": [
+    "@vueuse/core"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/input/index.ts",
+      "content": "export { default as Input } from './Input.vue'\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/input/Input.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { HTMLAttributes } from 'vue'\nimport { useVModel } from '@vueuse/core'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<{\n  defaultValue?: string | number\n  modelValue?: string | number\n  class?: HTMLAttributes['class']\n}>()\n\nconst emits = defineEmits<{\n  (e: 'update:modelValue', payload: string | number): void\n}>()\n\nconst modelValue = useVModel(props, 'modelValue', emits, {\n  passive: true,\n  defaultValue: props.defaultValue,\n})\n</script>\n\n<template>\n  <input\n    v-model=\"modelValue\"\n    data-slot=\"input\"\n    :class=\"cn(\n      'h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base text-foreground transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',\n      'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',\n      'aria-invalid:border-destructive aria-invalid:ring-destructive/30',\n      props.class,\n    )\"\n  >\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "tabs",
+  "title": "Tabs",
+  "description": "Accessible tabs built on Reka UI.",
+  "dependencies": [
+    "reka-ui",
+    "@vueuse/core"
+  ],
+  "registryDependencies": [
+    "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/tabs/index.ts",
+      "content": "export { default as Tabs } from './Tabs.vue'\nexport { default as TabsContent } from './TabsContent.vue'\nexport { default as TabsList } from './TabsList.vue'\nexport { default as TabsTrigger } from './TabsTrigger.vue'\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/tabs/TabsContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { TabsContentProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { TabsContent } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<TabsContentProps & { class?: HTMLAttributes['class'] }>()\nconst delegatedProps = reactiveOmit(props, 'class')\n</script>\n\n<template>\n  <TabsContent\n    data-slot=\"tabs-content\"\n    v-bind=\"delegatedProps\"\n    :class=\"cn('flex-1 outline-none focus-visible:ring-3 focus-visible:ring-ring/50', props.class)\"\n  >\n    <slot />\n  </TabsContent>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/tabs/TabsList.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { TabsListProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { TabsList } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<TabsListProps & { class?: HTMLAttributes['class'] }>()\nconst delegatedProps = reactiveOmit(props, 'class')\n</script>\n\n<template>\n  <TabsList\n    data-slot=\"tabs-list\"\n    v-bind=\"delegatedProps\"\n    :class=\"cn('inline-flex h-9 w-fit items-center justify-center rounded-lg bg-muted p-0.75 text-muted-foreground', props.class)\"\n  >\n    <slot />\n  </TabsList>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/tabs/TabsTrigger.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { TabsTriggerProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { TabsTrigger, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<TabsTriggerProps & { class?: HTMLAttributes['class'] }>()\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwardedProps = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <TabsTrigger\n    data-slot=\"tabs-trigger\"\n    v-bind=\"forwardedProps\"\n    :class=\"cn(\n      'inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap text-muted-foreground transition-[color,box-shadow] hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 data-[state=active]:border-input data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-4',\n      props.class,\n    )\"\n  >\n    <slot />\n  </TabsTrigger>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/tabs/Tabs.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { TabsRootEmits, TabsRootProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { TabsRoot, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<TabsRootProps & { class?: HTMLAttributes['class'] }>()\nconst emits = defineEmits<TabsRootEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <TabsRoot\n    v-slot=\"slotProps\"\n    data-slot=\"tabs\"\n    v-bind=\"forwarded\"\n    :class=\"cn('flex flex-col gap-2', props.class)\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </TabsRoot>\n</template>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

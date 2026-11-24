@@ -1,0 +1,22 @@
+node_modules
+dist
+.nuxt
+.output
+.nitro
+.data
+storybook-static
+*.log
+.DS_Store
+.env*
+registry/_generated
+
+# AI instruction and planning files (local only)
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+RULES.md
+DESIGN.md
+.claude/
+.cursor/
+.gemini/
+.agents/
