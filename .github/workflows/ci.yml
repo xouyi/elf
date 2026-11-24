@@ -1,12 +1,19 @@
 name: CI
 
+# Quality gate: nothing is accepted unless this workflow is green. The Docs workflow only deploys after it succeeds.
 on:
   push:
     branches: [main]
   pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   check:
+    name: Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,11 +21,54 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-
       - run: bun install --frozen-lockfile
-      - run: bun run typecheck
-      - run: bun run test
-      - run: bun run contrast
-      - run: bun run registry:build
-      - run: git diff --exit-code registry.json registry/r
-      - run: bun run build-storybook
-      - run: bun run playground:build
+      # Storybook tests run every story in real Chromium (Playwright).
+      - run: bunx playwright install --with-deps chromium
+      # typecheck, lint, unit + Storybook (render + a11y, both themes) tests, contrast,
+      # registry and llms.txt freshness, Storybook build, playground build.
+      - run: bun run check
+      - uses: actions/upload-artifact@v4
+        with:
+          name: storybook-static
+          path: storybook-static
+          retention-days: 7
+
+  visual:
+    name: Visual regression
+    runs-on: ubuntu-latest
+    # Baselines must be rendered in exactly this image; see CONTRIBUTING.md.
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.0-noble
+      env:
+        HOME: /root
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: bun install --frozen-lockfile
+      - name: Check for committed baselines
+        id: baselines
+        run: |
+          if ls tests/visual/__screenshots__/*.png >/dev/null 2>&1; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::No visual baselines committed yet. Run the 'Visual baselines' workflow to create them; visual tests are non-blocking until then."
+          fi
+      - if: steps.baselines.outputs.present == 'true'
+        run: bun run test:visual
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-report
+          path: |
+            playwright-report
+            test-results
+          retention-days: 7
