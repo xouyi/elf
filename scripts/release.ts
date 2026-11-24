@@ -40,7 +40,9 @@ if (!run(['bun', 'run', 'check'], { inherit: true }).ok) fail('`bun run check` f
 if (run(['git', 'status', '--porcelain']).out !== '') fail('the gate modified tracked files; commit them and retry')
 
 writeFileSync(pkgPath, readFileSync(pkgPath, 'utf8').replace(/("version":\s*")[^"]+(")/, `$1${version}$2`))
-run(['git', 'add', 'package.json'])
+// llms.txt embeds the version and install tag, so it must be regenerated in the release commit.
+if (!run(['bun', 'run', 'llms'], { inherit: true }).ok) fail('llms generation failed')
+run(['git', 'add', 'package.json', 'llms.txt', 'llms-full.txt'])
 if (!run(['git', 'commit', '-m', `Release v${version}`], { inherit: true }).ok) fail('commit failed')
 if (!run(['git', 'tag', '-a', `v${version}`, '-m', `v${version}`], { inherit: true }).ok) fail('tag failed')
 console.log(`\nCreated commit and tag v${version}. Publish with:\n  git push origin main --follow-tags`)

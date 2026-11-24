@@ -9,7 +9,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@elf/ui": "github:xouyi/elf#v0.1.0",
+    "@elf/ui": "github:xouyi/elf#v0.2.0",
     "@lucide/vue": "1.79.0",
     "nuxt": "4.7.0",
     "vue": "3.5.46",

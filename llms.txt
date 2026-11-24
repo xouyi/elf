@@ -2,7 +2,7 @@
 
 > Elf is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (violet, rounded) and novatron (gold on obsidian, sharp corners).
 
-Elf is source-distributed: install from a pinned GitHub tag (currently v0.1.0). All Vue components use the `Elf` prefix. Use Bun for every command.
+Elf is source-distributed: install from a pinned GitHub tag (currently v0.2.0). All Vue components use the `Elf` prefix. Use Bun for every command.
 
 ## Docs
 

@@ -24,7 +24,7 @@ Requires Bun and Node 22+. Tailwind CSS v4 and `typescript` are installed as the
 The version is the tag in `package.json`:
 
 ```json
-"@elf/ui": "github:xouyi/elf#v0.1.0"
+"@elf/ui": "github:xouyi/elf#v0.2.0"
 ```
 
 To move to a new release (after the tag exists on GitHub):

@@ -23,7 +23,7 @@ Requirements: Bun, Nuxt 4 (or Vue 3 + Vite), Tailwind CSS v4 with `@tailwindcss/
 ## Install in a Nuxt 4 app
 
 ```bash
-bun add github:xouyi/elf#v0.1.0 tailwindcss @tailwindcss/vite
+bun add github:xouyi/elf#v0.2.0 tailwindcss @tailwindcss/vite
 bun add -d typescript
 ```
 
@@ -120,14 +120,14 @@ Node 22+ is recommended for the test and Storybook tooling.
 ## Release flow
 
 ```bash
-# update CHANGELOG.md and package.json version
-bun run check
-git commit -am "chore: release v0.1.0"
-git tag v0.1.0
-git push --follow-tags
+# 1. add a "## x.y.z" section to CHANGELOG.md and commit it
+# 2. run the guarded release (quality gate → version bump → llms regeneration → commit → annotated tag)
+bun run release x.y.z
+# 3. publish
+git push origin main --follow-tags
 ```
 
-Consumers pin with `bun add github:xouyi/elf#v0.1.0`.
+Consumers pin with `bun add github:xouyi/elf#v0.2.0`.
 
 ## Structure
 
