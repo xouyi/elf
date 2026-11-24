@@ -9,6 +9,9 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { components, novatronRules, rules } from './llms-meta'
 
+// readdir order differs between filesystems (local vs CI); sort so the generated files are byte-identical everywhere.
+const byCodePoint = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0)
+
 const root = join(import.meta.dirname, '..')
 const read = (p: string) => readFileSync(join(root, p), 'utf8')
 const pkg = JSON.parse(read('package.json')) as { version: string }
@@ -47,7 +50,7 @@ function themeValue(theme: string, token: string) {
 }
 
 // Fail loudly when a component directory has no curated metadata, or exports drift.
-const dirs = readdirSync(join(root, 'src/components'), { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name)
+const dirs = readdirSync(join(root, 'src/components'), { withFileTypes: true }).filter(d => d.isDirectory()).map(d => d.name).sort(byCodePoint)
 for (const d of dirs) {
   if (!components.some(c => c.dir === d)) throw new Error(`src/components/${d} has no entry in scripts/llms-meta.ts`)
 }
@@ -60,7 +63,7 @@ for (const c of components) {
 }
 
 const tokens = parseTokens()
-const themes = readdirSync(join(root, 'src/themes')).map(f => f.replace('.css', ''))
+const themes = readdirSync(join(root, 'src/themes')).filter(f => f.endsWith('.css')).map(f => f.replace('.css', '')).sort(byCodePoint)
 
 function componentSection(c: (typeof components)[number], heading: string) {
   const out: string[] = [`${heading} ${c.name}`, '', c.summary, '', `Components: ${c.parts.map(p => `\`${p}\``).join(', ')}`, '']
