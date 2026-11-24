@@ -1,5 +1,10 @@
 # Elf
 
+[![CI](https://github.com/xouyi/elf/actions/workflows/ci.yml/badge.svg)](https://github.com/xouyi/elf/actions/workflows/ci.yml)
+[![Docs](https://github.com/xouyi/elf/actions/workflows/pages.yml/badge.svg)](https://xouyi.github.io/elf/)
+
+**[Documentation](https://xouyi.github.io/elf/)** · **[llms.txt](https://xouyi.github.io/elf/llms.txt)** (for AI assistants, [full version](https://xouyi.github.io/elf/llms-full.txt)) · **[Example app](examples/nuxt-demo)**
+
 Elf is a dark-only design system for Vue 3 and Nuxt 4. Components are built on
 [Reka UI](https://reka-ui.com) primitives with shadcn-vue style structure (CVA variants, `cn()`,
 CSS-variable theming) and styled with Tailwind CSS v4.
@@ -7,7 +12,9 @@ CSS-variable theming) and styled with Tailwind CSS v4.
 - Components: Button, Input, Badge, Card, Dialog, Tabs (all prefixed `Elf` in Vue, for example `<ElfButton>`)
 - Themes: `elf` (violet, rounded, default) and `novatron` (gold on obsidian, sharp corners)
 - Distribution: one npm-style package `@elf/ui` installed from GitHub, plus a shadcn-vue registry for copying components
-- Docs and visual tests: Storybook 10 (`bun run storybook`)
+- Docs: Storybook 10 published at https://xouyi.github.io/elf/ (`bun run storybook` locally)
+- AI assistants: `llms.txt` and `llms-full.txt`, generated from the sources (`bun run llms`)
+- Example: [`examples/nuxt-demo`](examples/nuxt-demo) installs Elf from a GitHub tag like a real consumer
 
 Elf ships Vue SFC sources. The Vue compiler needs `typescript` in your project to resolve the Reka UI prop types inside those sources, so install it as a dev dependency.
 
@@ -81,12 +88,14 @@ element: `<div data-theme="elf">`.
 Components can be copied and forked with the shadcn-vue CLI. Register the namespace in `components.json`:
 
 ```json
-{ "registries": { "@elf": "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/{name}.json" } }
+{ "registries": { "@elf": "https://xouyi.github.io/elf/r/{name}.json" } }
 ```
 
 ```bash
 bunx shadcn-vue@latest add @elf/button @elf/dialog @elf/elf-theme
 ```
+
+The same files are also served from `https://raw.githubusercontent.com/xouyi/elf/main/registry/r/{name}.json` as a fallback.
 
 Registry items rewrite imports to your aliases (`@/lib/utils`, `@/components/ui/*`). Regenerate with
 `bun run registry:build`; the generated `registry/r/*.json` files are committed.
@@ -127,6 +136,9 @@ src/components/<name>/   SFCs, index.ts, stories, tests
 src/themes/              one CSS file per theme
 src/styles.css           Tailwind v4 token mappings and base layer
 src/nuxt/module.ts       Nuxt module
+src/docs                 Storybook MDX guides (component docs live next to each component)
+scripts/generate-llms.ts llms.txt generator (curated prose in scripts/llms-meta.ts)
+examples/nuxt-demo       Nuxt 4 app installed from the GitHub tag
 registry.json, registry/r  shadcn-vue registry
 apps/playground          Nuxt 4 integration app
 .storybook               Storybook 10 config
