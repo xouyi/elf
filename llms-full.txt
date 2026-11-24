@@ -1,0 +1,320 @@
+# Elf (full reference)
+
+> Elf is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (violet, rounded) and novatron (gold on obsidian, sharp corners).
+
+Version 0.1.0. Docs: https://xouyi.github.io/elf/ . Source: https://github.com/xouyi/elf .
+
+## Rules for AI assistants
+
+- Use Elf components (ElfButton, ElfInput, ElfBadge, ElfCard, ElfDialog, ElfTabs) instead of hand-rolling buttons, inputs, badges, cards, dialogs or tabs.
+- Choose appearance with props (variant, size), not custom classes or inline styles.
+- Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).
+- Elf is dark only: do not add light-mode styles or dark: variants.
+- Do not override border radius with arbitrary values; radii derive from the theme (novatron is sharp, 0px).
+- Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@elf/ui".
+- Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.
+- Dialogs need a title and description; tabs lists need an aria-label.
+- Keep exactly one primary (default variant) button per view; use destructive only for irreversible actions.
+- Install from a pinned GitHub tag (github:xouyi/elf#vX.Y.Z); typescript must be installed in the consumer project.
+- Use Bun for all package commands (bun add, bun run, bunx), never npm, pnpm or yarn.
+
+### Novatron theme rules
+
+- Use data-theme="novatron" (or elf: { theme: "novatron" } in nuxt.config) for anything representing Novatron Robotics (FRC Team 10202).
+- Palette: obsidian black background (#050505 / #09090b) and Novatron gold (#ffcc00) primary. 100% dark mode.
+- Geometry is sharp: 0px border radius everywhere. Never add rounded-* overrides or rounded arbitrary values.
+- Downstream user-facing copy for Novatron apps is Turkish; code, identifiers and comments are English.
+
+## Install (Nuxt 4)
+
+Requirements: Bun, Nuxt 4, Tailwind CSS v4 with @tailwindcss/vite, typescript (dev dependency; the Vue compiler needs it to resolve Reka UI prop types).
+
+```bash
+bun add github:xouyi/elf#v0.1.0 tailwindcss @tailwindcss/vite
+bun add -d typescript
+```
+
+```ts
+// nuxt.config.ts
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineNuxtConfig({
+  modules: ['@elf/ui/nuxt'],
+  css: ['~/assets/css/main.css'],
+  elf: { theme: 'novatron', themes: ['elf'] }, // theme: 'elf' | 'novatron'
+  vite: { plugins: [tailwindcss()] },
+})
+```
+
+```css
+/* app/assets/css/main.css */
+@import 'tailwindcss';
+@import '@elf/ui/styles.css';
+```
+
+Components are auto-imported with the Elf prefix. Module options: `theme` ('elf' | 'novatron', default 'elf'), `themes` (extra theme CSS to bundle), `prefix` (default 'Elf').
+
+Upgrade: `bun remove @elf/ui && bun add github:xouyi/elf#vX.Y.Z`.
+
+## Install (Vue + Vite, no Nuxt)
+
+```css
+@import 'tailwindcss';
+@import '@elf/ui/styles.css';
+@import '@elf/ui/themes/elf.css';
+@import '@elf/ui/themes/novatron.css';
+```
+
+```ts
+import { ElfButton } from '@elf/ui'
+```
+
+Set `<html data-theme="elf">` (or `novatron`).
+
+## Registry (copy components)
+
+```bash
+bunx shadcn-vue@latest add https://xouyi.github.io/elf/r/button.json
+```
+
+Or register `"@elf": "https://xouyi.github.io/elf/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elf/main/registry/r/{name}.json
+
+## Theming
+
+Themes: `elf`, `novatron`. Select with `data-theme` on html or any element. Dark only.
+
+```ts
+document.documentElement.dataset.theme = 'novatron'
+```
+
+Tokens (CSS variables `--elf-<name>`, Tailwind utilities `bg-<name>`, `text-<name>-foreground`, `border-border`, `ring-ring`):
+
+| Token | elf | novatron |
+| :-- | :-- | :-- |
+| background | `oklch(0.145 0.012 295)` | `#050505` |
+| foreground | `oklch(0.97 0.005 295)` | `#fafafa` |
+| card | `oklch(0.19 0.02 295)` | `#09090b` |
+| card-foreground | `oklch(0.97 0.005 295)` | `#fafafa` |
+| popover | `oklch(0.21 0.022 295)` | `#09090b` |
+| popover-foreground | `oklch(0.97 0.005 295)` | `#fafafa` |
+| primary | `oklch(0.7 0.16 293)` | `#ffcc00` |
+| primary-foreground | `oklch(0.15 0.03 295)` | `#050505` |
+| secondary | `oklch(0.27 0.035 295)` | `#18181b` |
+| secondary-foreground | `oklch(0.97 0.005 295)` | `#fafafa` |
+| muted | `oklch(0.24 0.025 295)` | `#18181b` |
+| muted-foreground | `oklch(0.72 0.03 295)` | `#a1a1aa` |
+| accent | `oklch(0.32 0.07 295)` | `#27272a` |
+| accent-foreground | `oklch(0.98 0.005 295)` | `#fafafa` |
+| destructive | `oklch(0.55 0.21 25)` | `#dc2626` |
+| destructive-foreground | `oklch(0.99 0 0)` | `#ffffff` |
+| success | `oklch(0.72 0.17 150)` | `#22c55e` |
+| success-foreground | `oklch(0.15 0.03 150)` | `#050505` |
+| warning | `oklch(0.82 0.15 85)` | `#f59e0b` |
+| warning-foreground | `oklch(0.2 0.04 85)` | `#050505` |
+| border | `oklch(0.3 0.03 295)` | `#27272a` |
+| input | `oklch(0.52 0.05 295)` | `#71717a` |
+| ring | `oklch(0.7 0.16 293)` | `#ffcc00` |
+| radius | `0.625rem` | `0px` |
+| radius-pill | `9999px` | `0px` |
+
+Create a theme: add a CSS file declaring every token under `[data-theme='name']`, import it after styles.css, then run `bun run contrast` (WCAG AA).
+
+## Components
+
+### Button
+
+Triggers an action. Renders a native button; use as-child to render a link or other element.
+
+Components: `ElfButton`
+
+- variant options: `default`, `secondary`, `outline`, `ghost`, `destructive`, `link` (default `default`)
+- size options: `default`, `sm`, `lg`, `icon` (default `default`)
+
+Props:
+
+- `variant` (variant union, default default): Visual style.
+- `size` (size union, default default): Size. Use icon for square icon-only buttons.
+- `as` (string | Component, default button): Element to render.
+- `asChild` (boolean, default false): Render the child element with Button styling (attribute: as-child).
+- `class` (string | array | object): Merged with base classes via cn().
+
+Slots:
+
+- default: button content (text and icons)
+
+Accessibility:
+
+- Icon-only buttons (size="icon") must have an aria-label.
+- Use as-child with a link for navigation.
+
+Example:
+
+```vue
+<ElfButton variant="outline" size="sm" @click="save">Save</ElfButton>
+<ElfButton as-child><NuxtLink to="/docs">Documentation</NuxtLink></ElfButton>
+<ElfButton size="icon" aria-label="Add"><Plus /></ElfButton>
+```
+
+### Input
+
+Single-line text input with v-model. A native input: all native attributes fall through.
+
+Components: `ElfInput`
+
+Props:
+
+- `modelValue` (string | number): Bound with v-model.
+- `defaultValue` (string | number): Initial value when uncontrolled.
+- `class` (string | array | object): Merged with base classes.
+
+Accessibility:
+
+- Always provide a visible label (label for=) or aria-label; a placeholder is not a label.
+- Set aria-invalid="true" for errors and describe the error in text.
+
+Example:
+
+```vue
+<label for="email" class="text-sm font-medium">Email</label>
+<ElfInput id="email" v-model="email" type="email" placeholder="you@example.com" />
+```
+
+### Badge
+
+Small pill for status and labels. Static text unless rendered as a link or button with as-child.
+
+Components: `ElfBadge`
+
+- variant options: `default`, `secondary`, `outline`, `destructive`, `success`, `warning` (default `default`)
+
+Props:
+
+- `variant` (variant union, default default): Visual style.
+- `as` (string | Component, default span): Element to render.
+- `asChild` (boolean, default false): Render the child element with Badge styling.
+- `class` (string | array | object): Merged with base classes.
+
+Slots:
+
+- default: badge text
+
+Accessibility:
+
+- Do not rely on color alone: the text must state the status.
+
+Example:
+
+```vue
+<ElfBadge variant="success">Live</ElfBadge>
+<ElfBadge variant="warning">Pending review</ElfBadge>
+```
+
+### Card
+
+Container for grouped content, composed from parts.
+
+Components: `ElfCard`, `ElfCardHeader`, `ElfCardTitle`, `ElfCardDescription`, `ElfCardAction`, `ElfCardContent`, `ElfCardFooter`
+
+Props:
+
+- `class` (string | array | object): Accepted by every part; merged with base classes.
+
+Slots:
+
+- default on every part
+- ElfCardAction sits top-right inside ElfCardHeader
+
+Accessibility:
+
+- A card is a plain div; choose heading semantics for the title yourself.
+- If the whole card is a link, link the title rather than wrapping the card.
+
+Example:
+
+```vue
+<ElfCard>
+  <ElfCardHeader>
+    <ElfCardTitle>Match log</ElfCardTitle>
+    <ElfCardDescription>Qualification 12</ElfCardDescription>
+    <ElfCardAction><ElfBadge variant="success">Won</ElfBadge></ElfCardAction>
+  </ElfCardHeader>
+  <ElfCardContent>...</ElfCardContent>
+  <ElfCardFooter><ElfButton>Open</ElfButton></ElfCardFooter>
+</ElfCard>
+```
+
+### Dialog
+
+Accessible modal dialog on Reka UI: focus trap, Escape to close, focus restore.
+
+Components: `ElfDialog`, `ElfDialogTrigger`, `ElfDialogContent`, `ElfDialogHeader`, `ElfDialogTitle`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogClose`, `ElfDialogOverlay`
+
+Props:
+
+- `ElfDialog open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfDialogContent showCloseButton` (boolean, default true): Show the corner close button.
+- `ElfDialogFooter showCloseButton` (boolean, default false): Append a Close button to the footer.
+
+Slots:
+
+- ElfDialogTrigger and ElfDialogClose: use as-child with an ElfButton
+
+Accessibility:
+
+- Always include ElfDialogTitle and ElfDialogDescription.
+- Do not stack dialogs.
+
+Example:
+
+```vue
+<ElfDialog v-model:open="open">
+  <ElfDialogTrigger as-child><ElfButton variant="outline">Edit</ElfButton></ElfDialogTrigger>
+  <ElfDialogContent>
+    <ElfDialogHeader>
+      <ElfDialogTitle>Edit profile</ElfDialogTitle>
+      <ElfDialogDescription>Update your display name.</ElfDialogDescription>
+    </ElfDialogHeader>
+    <ElfInput aria-label="Display name" />
+    <ElfDialogFooter>
+      <ElfDialogClose as-child><ElfButton variant="outline">Cancel</ElfButton></ElfDialogClose>
+      <ElfButton>Save</ElfButton>
+    </ElfDialogFooter>
+  </ElfDialogContent>
+</ElfDialog>
+```
+
+### Tabs
+
+Switch between related views. Roving focus and arrow-key navigation on Reka UI.
+
+Components: `ElfTabs`, `ElfTabsList`, `ElfTabsTrigger`, `ElfTabsContent`
+
+Props:
+
+- `ElfTabs defaultValue / modelValue` (string): Initial or v-model selected tab value.
+- `ElfTabsTrigger value` (string): Required; must match an ElfTabsContent value.
+- `ElfTabsContent value` (string): Required; panel for the matching trigger.
+
+Accessibility:
+
+- Give ElfTabsList an aria-label.
+- Use tabs for peer views, not for step-by-step flows.
+
+Example:
+
+```vue
+<ElfTabs default-value="overview">
+  <ElfTabsList aria-label="Account sections">
+    <ElfTabsTrigger value="overview">Overview</ElfTabsTrigger>
+    <ElfTabsTrigger value="settings">Settings</ElfTabsTrigger>
+  </ElfTabsList>
+  <ElfTabsContent value="overview">...</ElfTabsContent>
+  <ElfTabsContent value="settings">...</ElfTabsContent>
+</ElfTabs>
+```
+
+## Exports from "@elf/ui"
+
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`
+- Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
+- Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`
