@@ -1,0 +1,27 @@
+name: Example app
+
+# Proves that the published tag installs and builds in a real consumer project.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: examples/nuxt-demo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-example-${{ hashFiles('examples/nuxt-demo/bun.lock') }}
+          restore-keys: bun-example-
+      - run: bun install --frozen-lockfile
+      - run: bun run build

@@ -45,6 +45,7 @@
     "registry:build": "bun run registry:sync && bunx --bun shadcn-vue build registry.json --output registry/r",
     "llms": "bun scripts/generate-llms.ts",
     "llms:check": "bun scripts/generate-llms.ts --check",
+    "example:build": "bun run --cwd examples/nuxt-demo build",
     "pages:build": "bun scripts/build-pages.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o storybook-static",
