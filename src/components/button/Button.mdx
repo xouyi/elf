@@ -1,0 +1,59 @@
+import { Canvas, Controls, Meta, Primary } from '@storybook/addon-docs/blocks'
+import * as ButtonStories from './Button.stories'
+
+<Meta of={ButtonStories} />
+
+# Button
+
+Triggers an action. Six variants and four sizes. Render it as another element (for example a link) with `as-child`.
+
+<Primary />
+
+## Usage
+
+```vue
+<ElfButton variant="outline" size="sm" @click="save">Save</ElfButton>
+<ElfButton as-child><NuxtLink to="/docs">Documentation</NuxtLink></ElfButton>
+```
+
+Outside Nuxt: `import { ElfButton } from '@elf/ui'`.
+
+## Props
+
+<Controls />
+
+| Prop | Type | Default |
+| :-- | :-- | :-- |
+| `variant` | `default \| secondary \| outline \| ghost \| destructive \| link` | `default` |
+| `size` | `default \| sm \| lg \| icon` | `default` |
+| `as` | `string \| Component` | `button` |
+| `asChild` | `boolean` | `false` |
+| `class` | `string \| array \| object` | none |
+
+## Variants
+
+<Canvas of={ButtonStories.Variants} />
+
+## Sizes
+
+<Canvas of={ButtonStories.Sizes} />
+
+## Both themes
+
+<Canvas of={ButtonStories.BothThemes} />
+
+## Accessibility
+
+- Renders a native `<button>`, so Enter and Space activate it and it joins the tab order.
+- A visible focus ring (3:1 contrast) appears on keyboard focus.
+- Icon-only buttons (`size="icon"`) **must** have an `aria-label`.
+- `disabled` removes the button from interaction and lowers opacity; explain why nearby, not in a tooltip alone.
+
+## Do and don't
+
+| Do | Don't |
+| :-- | :-- |
+| Use one `default` button per view for the primary action. | Fill a view with several `default` buttons. |
+| Use `destructive` for irreversible actions, confirmed in a Dialog. | Use `destructive` for ordinary cancel actions. |
+| Use `as-child` with a link for navigation. | Put an `onclick` navigation on a button. |
+| Pick a variant with the prop. | Recolor with `bg-*` classes. |

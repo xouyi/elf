@@ -4,54 +4,37 @@ import { Meta } from '@storybook/addon-docs/blocks'
 
 # Elf
 
-Elf is a Vue 3 / Nuxt 4 design system built on [Reka UI](https://reka-ui.com) primitives and
-shadcn-vue style components, themed with CSS variables and Tailwind CSS v4. It is dark-only and ships two themes:
-`elf` (violet, rounded) and `novatron` (gold on obsidian, sharp corners).
+Elf is a dark-only design system for **Vue 3 and Nuxt 4**. Components are built on
+[Reka UI](https://reka-ui.com) primitives, follow the shadcn-vue structure (CVA variants, `cn()`, CSS-variable
+theming) and are styled with **Tailwind CSS v4**.
 
-## Install in a Nuxt 4 app
+## Why Elf
 
-```bash
-bun add github:xouyi/elf#v0.1.0 tailwindcss @tailwindcss/vite
-bun add -d typescript
-```
+- **Accessible by default.** Reka UI handles focus management, keyboard interaction and ARIA. Every story is checked
+  with axe, and `bun run contrast` verifies WCAG AA contrast for every theme.
+- **Themeable with one file.** A theme is a block of `--elf-*` CSS variables selected with `data-theme`. Two ship
+  today: `elf` (violet, rounded) and `novatron` (gold on obsidian, sharp corners).
+- **Dark only.** There is no light mode to maintain. Every surface, border and focus ring is tuned for dark.
+- **Source distributed.** You install Vue SFC sources, so your bundler, Tailwind and TypeScript see exactly what runs.
+  Prefer to own the code? Copy components into your project with the shadcn-vue registry.
+- **Built for humans and AI assistants.** A machine-readable [`llms.txt`](https://xouyi.github.io/elf/llms.txt) describes
+  every component, prop and rule.
 
-```ts
-// nuxt.config.ts
-import tailwindcss from '@tailwindcss/vite'
+## What is included
 
-export default defineNuxtConfig({
-  modules: ['@elf/ui/nuxt'],
-  css: ['~/assets/css/main.css'],
-  elf: { theme: 'novatron' },
-  vite: { plugins: [tailwindcss()] },
-})
-```
+| Area | Contents |
+| :-- | :-- |
+| Components | Button, Input, Badge, Card, Dialog, Tabs. All Vue components carry the `Elf` prefix, for example `ElfButton`. |
+| Themes | `elf` and `novatron`, switched at runtime with `data-theme` on any element. |
+| Nuxt module | `@elf/ui/nuxt` auto-imports components and injects theme tokens. |
+| Registry | shadcn-vue registry served at `https://xouyi.github.io/elf/r/{name}.json`. |
 
-```css
-/* assets/css/main.css */
-@import 'tailwindcss';
-@import '@elf/ui/styles.css';
-```
+## Where to go next
 
-Components are auto-imported with the `Elf` prefix: `<ElfButton>`, `<ElfCard>`, `<ElfDialog>`, and so on.
+1. [Getting started](?path=/docs/guide-getting-started--docs): install Elf in a Nuxt 4 app in a few minutes.
+2. [Theming](?path=/docs/guide-theming--docs): tokens, switching themes and creating your own.
+3. [Components overview](?path=/docs/components-overview--docs): the full list with links.
+4. Want to see it in a real app? Browse the
+   [example project](https://github.com/xouyi/elf/tree/main/examples/nuxt-demo) that installs Elf from a GitHub tag.
 
-## Theming
-
-Themes are CSS variable files selected with `data-theme` on `<html>`. Use the toolbar above to switch themes.
-Tokens mirror shadcn: `--elf-background`, `--elf-primary`, ... plus `--elf-success`, `--elf-warning`, `--elf-radius`.
-Adding a theme means adding one file in `src/themes/` with a `[data-theme='name']` block. `bun run contrast`
-verifies WCAG AA for every pair.
-
-## Registry
-
-Copy a component into your project to fork it:
-
-```bash
-bunx shadcn-vue@latest add https://raw.githubusercontent.com/xouyi/elf/main/registry/r/button.json
-```
-
-## Contributing a component
-
-1. Create `src/components/<name>/` with the SFCs, `index.ts` (variants and prop types), a story and a test.
-2. Export it in `src/index.ts` with the `Elf` prefix.
-3. Add it to `scripts/sync-registry.ts` and run `bun run check`.
+Use the **Theme** toolbar above to flip every story between `elf` and `novatron`.

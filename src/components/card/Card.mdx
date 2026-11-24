@@ -1,0 +1,58 @@
+import { Canvas, Controls, Meta, Primary } from '@storybook/addon-docs/blocks'
+import * as CardStories from './Card.stories'
+
+<Meta of={CardStories} />
+
+# Card
+
+A container for grouped content, composed from parts.
+
+<Primary />
+
+## Usage
+
+```vue
+<ElfCard>
+  <ElfCardHeader>
+    <ElfCardTitle>Match log</ElfCardTitle>
+    <ElfCardDescription>Qualification 12</ElfCardDescription>
+    <ElfCardAction><ElfBadge variant="success">Won</ElfBadge></ElfCardAction>
+  </ElfCardHeader>
+  <ElfCardContent>...</ElfCardContent>
+  <ElfCardFooter><ElfButton>Open</ElfButton></ElfCardFooter>
+</ElfCard>
+```
+
+## Parts
+
+<Controls />
+
+| Part | Purpose |
+| :-- | :-- |
+| `ElfCard` | Root surface with border and padding. |
+| `ElfCardHeader` | Grid for title, description and action. |
+| `ElfCardTitle` | Card heading. |
+| `ElfCardDescription` | Muted supporting text. |
+| `ElfCardAction` | Top-right slot in the header (badge or button). |
+| `ElfCardContent` | Main body. |
+| `ElfCardFooter` | Actions or metadata at the bottom. |
+
+Every part accepts `class`, merged with the base classes.
+
+## Both themes
+
+<Canvas of={CardStories.BothThemes} />
+
+## Accessibility
+
+- A card is a plain `div`. Choose the heading level for `ElfCardTitle` content to fit your page outline.
+- If the whole card is a link, make the title the link instead of wrapping the card, so screen readers announce a
+  meaningful name.
+
+## Do and don't
+
+| Do | Don't |
+| :-- | :-- |
+| Use a card per self-contained item. | Nest cards inside cards. |
+| Put actions in the footer or `ElfCardAction`. | Scatter buttons through the body. |
+| Adjust spacing with `class`. | Fork the component to change padding. |

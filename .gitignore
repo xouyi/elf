@@ -5,6 +5,7 @@ dist
 .nitro
 .data
 storybook-static
+_site
 *.log
 .DS_Store
 .env*

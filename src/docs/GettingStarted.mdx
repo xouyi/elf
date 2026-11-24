@@ -1,0 +1,86 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Guide/Getting started" />
+
+# Getting started
+
+This guide installs Elf in a Nuxt 4 app. Elf requires **Bun**, **Nuxt 4** (or Vue 3 with Vite),
+**Tailwind CSS v4** and **TypeScript**.
+
+## 1. Install from the GitHub tag
+
+Elf is not published to npm. Install a tagged release straight from GitHub and pin the tag:
+
+```bash
+bun add github:xouyi/elf#v0.1.0 tailwindcss @tailwindcss/vite
+bun add -d typescript
+```
+
+`typescript` is required: the Vue compiler uses it to resolve the Reka UI prop types inside Elf's SFC sources.
+
+## 2. Configure Nuxt
+
+```ts
+// nuxt.config.ts
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineNuxtConfig({
+  modules: ['@elf/ui/nuxt'],
+  css: ['~/assets/css/main.css'],
+  elf: { theme: 'novatron' }, // 'elf' | 'novatron'
+  vite: { plugins: [tailwindcss()] },
+})
+```
+
+The module registers every component with the `Elf` prefix, adds the token CSS of the selected theme and sets
+`data-theme` on `<html>`. To bundle more themes for runtime switching, list them:
+`elf: { theme: 'novatron', themes: ['elf'] }`.
+
+## 3. Add the Tailwind v4 entry
+
+```css
+/* app/assets/css/main.css */
+@import 'tailwindcss';
+@import '@elf/ui/styles.css';
+```
+
+`@elf/ui/styles.css` maps Elf tokens to Tailwind colors (`bg-primary`, `text-muted-foreground`, ...) and radii,
+and tells Tailwind to scan the Elf component sources. Import it **after** Tailwind.
+
+## 4. Use a component
+
+```vue
+<template>
+  <ElfCard>
+    <ElfCardHeader>
+      <ElfCardTitle>Hello Elf</ElfCardTitle>
+      <ElfCardDescription>Components are auto-imported.</ElfCardDescription>
+    </ElfCardHeader>
+    <ElfCardContent>
+      <ElfButton>Save</ElfButton>
+    </ElfCardContent>
+  </ElfCard>
+</template>
+```
+
+## Module options
+
+| Option | Type | Default | Description |
+| :-- | :-- | :-- | :-- |
+| `theme` | `'elf' \| 'novatron'` | `'elf'` | Theme applied through `data-theme` on `<html>`. |
+| `themes` | `ElfTheme[]` | selected theme only | Extra theme token files to bundle. |
+| `prefix` | `string` | `'Elf'` | Component name prefix. |
+
+## Pinning and upgrading
+
+Always pin a tag (`#v0.1.0`). To upgrade, remove and add again so the lockfile picks up the new commit:
+
+```bash
+bun remove @elf/ui
+bun add github:xouyi/elf#v0.2.0
+```
+
+## Try the example
+
+The repository contains a complete Nuxt 4 app that installs Elf from a tag exactly as above:
+[`examples/nuxt-demo`](https://github.com/xouyi/elf/tree/main/examples/nuxt-demo).

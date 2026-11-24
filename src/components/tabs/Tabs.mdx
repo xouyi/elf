@@ -1,0 +1,55 @@
+import { Canvas, Controls, Meta, Primary } from '@storybook/addon-docs/blocks'
+import * as TabsStories from './Tabs.stories'
+
+<Meta of={TabsStories} />
+
+# Tabs
+
+Switch between related views in the same context. Built on Reka UI with roving focus and arrow-key navigation.
+
+<Primary />
+
+## Usage
+
+```vue
+<ElfTabs default-value="overview">
+  <ElfTabsList aria-label="Account sections">
+    <ElfTabsTrigger value="overview">Overview</ElfTabsTrigger>
+    <ElfTabsTrigger value="settings">Settings</ElfTabsTrigger>
+  </ElfTabsList>
+  <ElfTabsContent value="overview">...</ElfTabsContent>
+  <ElfTabsContent value="settings">...</ElfTabsContent>
+</ElfTabs>
+```
+
+Control the selection with `v-model="tab"`.
+
+## Parts and props
+
+<Controls />
+
+| Part | Notes |
+| :-- | :-- |
+| `ElfTabs` | Root. Props: `defaultValue`, `modelValue`, `orientation`, `activationMode`. |
+| `ElfTabsList` | Container of triggers. Give it an `aria-label`. |
+| `ElfTabsTrigger` | One tab. Prop `value` (required), `disabled`. |
+| `ElfTabsContent` | Panel matching a trigger `value`. |
+
+## Both themes
+
+<Canvas of={TabsStories.BothThemes} />
+
+## Accessibility
+
+- Implements the WAI-ARIA tabs pattern: Left and Right arrows move between tabs, Home and End jump to the ends,
+  Tab moves into the panel.
+- Label the list with `aria-label` or `aria-labelledby`.
+- `activationMode="manual"` requires Enter or Space to activate, which suits heavy panels.
+
+## Do and don't
+
+| Do | Don't |
+| :-- | :-- |
+| Use short, noun-based labels. | Use more than five or six tabs. |
+| Use tabs for peer views of the same data. | Use tabs for a step-by-step flow. |
+| Keep panel content independent. | Hide required form fields in inactive tabs. |

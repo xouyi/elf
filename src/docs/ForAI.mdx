@@ -1,0 +1,37 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Resources/For AI assistants" />
+
+# For AI assistants
+
+Elf publishes machine-readable documentation following the [llms.txt](https://llmstxt.org) convention.
+
+| File | Contents |
+| :-- | :-- |
+| [`llms.txt`](https://xouyi.github.io/elf/llms.txt) | Concise index: install, components, rules, links |
+| [`llms-full.txt`](https://xouyi.github.io/elf/llms-full.txt) | Everything: every component with props, variants, slots, examples, theme tokens and rules |
+
+Both files are generated from the component sources by `bun run llms` and verified in CI, so they cannot drift from
+the code.
+
+## Using it
+
+Point your assistant at the file, for example in your project instructions:
+
+```text
+When building UI, read https://xouyi.github.io/elf/llms-full.txt and use Elf components.
+```
+
+Or download a pinned copy next to your code:
+
+```bash
+curl -o docs/elf-llms.txt https://xouyi.github.io/elf/llms-full.txt
+```
+
+## Core rules the files teach
+
+- Use Elf components (`ElfButton`, `ElfInput`, ...) instead of hand-rolling buttons, inputs, badges, cards, dialogs or tabs.
+- Use theme tokens (`bg-primary`, `text-muted-foreground`), never hard-coded colors.
+- Elf is dark only: no light-mode variants and no `dark:` classes.
+- Pick variants through props (`variant="outline"`), not custom classes.
+- Under the novatron theme corners are sharp: do not add rounded overrides.

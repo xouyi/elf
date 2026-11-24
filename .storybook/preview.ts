@@ -32,6 +32,16 @@ const preview: Preview = {
     controls: { matchers: { color: /(background|color)$/i } },
     a11y: { test: 'error' },
     docs: { canvas: { sourceState: 'shown' } },
+    options: {
+      storySort: {
+        order: [
+          'Introduction',
+          'Guide', ['Getting started', 'Theming', 'Using without Nuxt', 'Registry'],
+          'Components', ['Overview', '*'],
+          'Resources', ['For AI assistants', 'Contributing', 'Changelog'],
+        ],
+      },
+    },
   },
   tags: ['autodocs'],
 }

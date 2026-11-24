@@ -15,6 +15,7 @@
     "src",
     "!src/**/*.stories.ts",
     "!src/**/*.test.ts",
+    "!src/**/*.mdx",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
@@ -42,6 +43,7 @@
     "contrast": "bun scripts/contrast.ts",
     "registry:sync": "bun scripts/sync-registry.ts",
     "registry:build": "bun run registry:sync && bunx --bun shadcn-vue build registry.json --output registry/r",
+    "pages:build": "bun scripts/build-pages.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o storybook-static",
     "playground:build": "bun run --cwd apps/playground build",

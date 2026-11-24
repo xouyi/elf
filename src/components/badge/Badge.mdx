@@ -1,0 +1,50 @@
+import { Canvas, Controls, Meta, Primary } from '@storybook/addon-docs/blocks'
+import * as BadgeStories from './Badge.stories'
+
+<Meta of={BadgeStories} />
+
+# Badge
+
+A small pill that labels status or metadata. Six variants. Like Button it supports `as` and `as-child`.
+
+<Primary />
+
+## Usage
+
+```vue
+<ElfBadge variant="success">Live</ElfBadge>
+<ElfBadge variant="warning">Pending review</ElfBadge>
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Default |
+| :-- | :-- | :-- |
+| `variant` | `default \| secondary \| outline \| destructive \| success \| warning` | `default` |
+| `as` | `string \| Component` | `span` |
+| `asChild` | `boolean` | `false` |
+| `class` | `string \| array \| object` | none |
+
+## Variants
+
+<Canvas of={BadgeStories.Variants} />
+
+## Both themes
+
+<Canvas of={BadgeStories.BothThemes} />
+
+## Accessibility
+
+- A badge is static text, not interactive. If it must be clickable, render it with `as-child` as a link or button.
+- Never rely on color alone: the text must say what the status is ("Live", "Failed").
+- Text pairs pass WCAG AA in both themes.
+
+## Do and don't
+
+| Do | Don't |
+| :-- | :-- |
+| Use `success`, `warning`, `destructive` for status. | Use badges for primary actions. |
+| Keep labels to one or two words. | Put paragraphs inside a badge. |
+| Use variants from the theme. | Set custom background colors. |

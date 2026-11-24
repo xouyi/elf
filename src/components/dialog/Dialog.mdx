@@ -1,0 +1,63 @@
+import { Canvas, Controls, Meta, Primary } from '@storybook/addon-docs/blocks'
+import * as DialogStories from './Dialog.stories'
+
+<Meta of={DialogStories} />
+
+# Dialog
+
+An accessible modal dialog built on Reka UI. It traps focus, closes on Escape and restores focus to the trigger.
+
+<Primary />
+
+## Usage
+
+```vue
+<ElfDialog>
+  <ElfDialogTrigger as-child><ElfButton variant="outline">Edit</ElfButton></ElfDialogTrigger>
+  <ElfDialogContent>
+    <ElfDialogHeader>
+      <ElfDialogTitle>Edit profile</ElfDialogTitle>
+      <ElfDialogDescription>Update your display name.</ElfDialogDescription>
+    </ElfDialogHeader>
+    <ElfInput aria-label="Display name" />
+    <ElfDialogFooter>
+      <ElfDialogClose as-child><ElfButton variant="outline">Cancel</ElfButton></ElfDialogClose>
+      <ElfButton>Save</ElfButton>
+    </ElfDialogFooter>
+  </ElfDialogContent>
+</ElfDialog>
+```
+
+Control it with `v-model:open` on `ElfDialog`.
+
+## Parts and props
+
+<Controls />
+
+| Part | Notes |
+| :-- | :-- |
+| `ElfDialog` | Root. Props: `open`, `defaultOpen`, `modal`. Emits `update:open`. |
+| `ElfDialogTrigger` | Opens the dialog. Use `as-child` with a button. |
+| `ElfDialogContent` | Portaled surface. Prop `showCloseButton` (default `true`). |
+| `ElfDialogHeader`, `ElfDialogTitle`, `ElfDialogDescription` | Heading structure. |
+| `ElfDialogFooter` | Action row. Prop `showCloseButton` adds a Close button. |
+| `ElfDialogClose` | Closes the dialog. Use `as-child`. |
+| `ElfDialogOverlay` | Backdrop (included by Content). |
+
+## Open example
+
+<Canvas of={DialogStories.OpenByDefault} />
+
+## Accessibility
+
+- Always include `ElfDialogTitle`. Include `ElfDialogDescription` or the screen reader warning appears.
+- Focus moves into the dialog on open and returns to the trigger on close; Escape closes it.
+- Animations respect `prefers-reduced-motion`.
+
+## Do and don't
+
+| Do | Don't |
+| :-- | :-- |
+| Use a dialog for focused tasks and confirmations. | Use a dialog for passive messages. |
+| Label destructive confirmations with the action ("Delete"). | Label them "OK". |
+| Keep the content short and scrollable. | Stack dialogs on top of each other. |

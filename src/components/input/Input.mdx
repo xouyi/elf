@@ -1,0 +1,60 @@
+import { Canvas, Controls, Meta, Primary } from '@storybook/addon-docs/blocks'
+import * as InputStories from './Input.stories'
+
+<Meta of={InputStories} />
+
+# Input
+
+Single-line text input with `v-model` support. It is a native `<input>` and accepts every native attribute.
+
+<Primary />
+
+## Usage
+
+```vue
+<script setup lang="ts">
+const email = ref('')
+</script>
+
+<template>
+  <label for="email" class="text-sm font-medium">Email</label>
+  <ElfInput id="email" v-model="email" type="email" placeholder="you@example.com" />
+</template>
+```
+
+## Props
+
+<Controls />
+
+| Prop | Type | Description |
+| :-- | :-- | :-- |
+| `modelValue` | `string \| number` | Bound with `v-model`. |
+| `defaultValue` | `string \| number` | Initial value when uncontrolled. |
+| `class` | `string \| array \| object` | Merged with the base classes. |
+
+All other attributes (`type`, `placeholder`, `disabled`, `aria-invalid`, ...) fall through to the `<input>`.
+
+## States
+
+<Canvas of={InputStories.Disabled} />
+
+<Canvas of={InputStories.Invalid} />
+
+## Both themes
+
+<Canvas of={InputStories.BothThemes} />
+
+## Accessibility
+
+- Always provide a visible `<label for>` or an `aria-label`; a placeholder is not a label.
+- Set `aria-invalid="true"` for errors; the border and ring turn to the destructive color. Pair it with text that
+  describes the error and link it with `aria-describedby`.
+- The border uses the `input` token, which is verified at 3:1 contrast.
+
+## Do and don't
+
+| Do | Don't |
+| :-- | :-- |
+| Use the right `type` (`email`, `number`, `password`). | Use `type="text"` for everything. |
+| Show validation text next to the field. | Rely on the red border alone. |
+| Use `ElfInput` for text entry. | Style a raw `<input>` with copied classes. |

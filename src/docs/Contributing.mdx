@@ -1,0 +1,22 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Resources/Contributing" />
+
+# Contributing
+
+Contributions are welcome. The full guide lives in the repository:
+[CONTRIBUTING.md](https://github.com/xouyi/elf/blob/main/CONTRIBUTING.md).
+
+## At a glance
+
+```bash
+bun install
+bun run storybook   # develop components and docs at http://localhost:6006
+bun run check       # the gate every change must pass
+```
+
+Adding a component means creating `src/components/<name>/` with the SFCs, `index.ts`, a story, a unit test and a docs
+page, exporting it from `src/index.ts`, registering it in `scripts/sync-registry.ts` and `scripts/llms-meta.ts`,
+then running `bun run registry:build` and `bun run llms`.
+
+Every change must pass `bun run check` before it is accepted.
