@@ -14,8 +14,8 @@
   ],
   "files": [
     {
-      "path": "registry/_generated/ui/dialog/index.ts",
-      "content": "export { default as Dialog } from './Dialog.vue'\nexport { default as DialogClose } from './DialogClose.vue'\nexport { default as DialogContent } from './DialogContent.vue'\nexport { default as DialogDescription } from './DialogDescription.vue'\nexport { default as DialogFooter } from './DialogFooter.vue'\nexport { default as DialogHeader } from './DialogHeader.vue'\nexport { default as DialogOverlay } from './DialogOverlay.vue'\nexport { default as DialogTitle } from './DialogTitle.vue'\nexport { default as DialogTrigger } from './DialogTrigger.vue'\n",
+      "path": "registry/_generated/ui/dialog/Dialog.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { DialogRootEmits, DialogRootProps } from 'reka-ui'\nimport { DialogRoot, useForwardPropsEmits } from 'reka-ui'\n\nconst props = defineProps<DialogRootProps>()\nconst emits = defineEmits<DialogRootEmits>()\n\nconst forwarded = useForwardPropsEmits(props, emits)\n</script>\n\n<template>\n  <DialogRoot\n    v-slot=\"slotProps\"\n    data-slot=\"dialog\"\n    v-bind=\"forwarded\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </DialogRoot>\n</template>\n",
       "type": "registry:ui"
     },
     {
@@ -59,8 +59,8 @@
       "type": "registry:ui"
     },
     {
-      "path": "registry/_generated/ui/dialog/Dialog.vue",
-      "content": "<script setup lang=\"ts\">\nimport type { DialogRootEmits, DialogRootProps } from 'reka-ui'\nimport { DialogRoot, useForwardPropsEmits } from 'reka-ui'\n\nconst props = defineProps<DialogRootProps>()\nconst emits = defineEmits<DialogRootEmits>()\n\nconst forwarded = useForwardPropsEmits(props, emits)\n</script>\n\n<template>\n  <DialogRoot\n    v-slot=\"slotProps\"\n    data-slot=\"dialog\"\n    v-bind=\"forwarded\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </DialogRoot>\n</template>\n",
+      "path": "registry/_generated/ui/dialog/index.ts",
+      "content": "export { default as Dialog } from './Dialog.vue'\nexport { default as DialogClose } from './DialogClose.vue'\nexport { default as DialogContent } from './DialogContent.vue'\nexport { default as DialogDescription } from './DialogDescription.vue'\nexport { default as DialogFooter } from './DialogFooter.vue'\nexport { default as DialogHeader } from './DialogHeader.vue'\nexport { default as DialogOverlay } from './DialogOverlay.vue'\nexport { default as DialogTitle } from './DialogTitle.vue'\nexport { default as DialogTrigger } from './DialogTrigger.vue'\n",
       "type": "registry:ui"
     }
   ],

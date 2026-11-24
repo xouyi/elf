@@ -34,11 +34,11 @@
       ],
       "files": [
         {
-          "path": "registry/_generated/ui/button/index.ts",
+          "path": "registry/_generated/ui/button/Button.vue",
           "type": "registry:ui"
         },
         {
-          "path": "registry/_generated/ui/button/Button.vue",
+          "path": "registry/_generated/ui/button/index.ts",
           "type": "registry:ui"
         }
       ]
@@ -56,11 +56,11 @@
       ],
       "files": [
         {
-          "path": "registry/_generated/ui/input/index.ts",
+          "path": "registry/_generated/ui/input/Input.vue",
           "type": "registry:ui"
         },
         {
-          "path": "registry/_generated/ui/input/Input.vue",
+          "path": "registry/_generated/ui/input/index.ts",
           "type": "registry:ui"
         }
       ]
@@ -80,11 +80,11 @@
       ],
       "files": [
         {
-          "path": "registry/_generated/ui/badge/index.ts",
+          "path": "registry/_generated/ui/badge/Badge.vue",
           "type": "registry:ui"
         },
         {
-          "path": "registry/_generated/ui/badge/Badge.vue",
+          "path": "registry/_generated/ui/badge/index.ts",
           "type": "registry:ui"
         }
       ]
@@ -100,7 +100,7 @@
       ],
       "files": [
         {
-          "path": "registry/_generated/ui/card/index.ts",
+          "path": "registry/_generated/ui/card/Card.vue",
           "type": "registry:ui"
         },
         {
@@ -128,7 +128,7 @@
           "type": "registry:ui"
         },
         {
-          "path": "registry/_generated/ui/card/Card.vue",
+          "path": "registry/_generated/ui/card/index.ts",
           "type": "registry:ui"
         }
       ]
@@ -149,7 +149,7 @@
       ],
       "files": [
         {
-          "path": "registry/_generated/ui/dialog/index.ts",
+          "path": "registry/_generated/ui/dialog/Dialog.vue",
           "type": "registry:ui"
         },
         {
@@ -185,7 +185,7 @@
           "type": "registry:ui"
         },
         {
-          "path": "registry/_generated/ui/dialog/Dialog.vue",
+          "path": "registry/_generated/ui/dialog/index.ts",
           "type": "registry:ui"
         }
       ]
@@ -204,7 +204,7 @@
       ],
       "files": [
         {
-          "path": "registry/_generated/ui/tabs/index.ts",
+          "path": "registry/_generated/ui/tabs/Tabs.vue",
           "type": "registry:ui"
         },
         {
@@ -220,7 +220,7 @@
           "type": "registry:ui"
         },
         {
-          "path": "registry/_generated/ui/tabs/Tabs.vue",
+          "path": "registry/_generated/ui/tabs/index.ts",
           "type": "registry:ui"
         }
       ]

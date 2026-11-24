@@ -12,8 +12,8 @@
   ],
   "files": [
     {
-      "path": "registry/_generated/ui/tabs/index.ts",
-      "content": "export { default as Tabs } from './Tabs.vue'\nexport { default as TabsContent } from './TabsContent.vue'\nexport { default as TabsList } from './TabsList.vue'\nexport { default as TabsTrigger } from './TabsTrigger.vue'\n",
+      "path": "registry/_generated/ui/tabs/Tabs.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { TabsRootEmits, TabsRootProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { TabsRoot, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<TabsRootProps & { class?: HTMLAttributes['class'] }>()\nconst emits = defineEmits<TabsRootEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <TabsRoot\n    v-slot=\"slotProps\"\n    data-slot=\"tabs\"\n    v-bind=\"forwarded\"\n    :class=\"cn('flex flex-col gap-2', props.class)\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </TabsRoot>\n</template>\n",
       "type": "registry:ui"
     },
     {
@@ -32,8 +32,8 @@
       "type": "registry:ui"
     },
     {
-      "path": "registry/_generated/ui/tabs/Tabs.vue",
-      "content": "<script setup lang=\"ts\">\nimport type { TabsRootEmits, TabsRootProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { TabsRoot, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<TabsRootProps & { class?: HTMLAttributes['class'] }>()\nconst emits = defineEmits<TabsRootEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <TabsRoot\n    v-slot=\"slotProps\"\n    data-slot=\"tabs\"\n    v-bind=\"forwarded\"\n    :class=\"cn('flex flex-col gap-2', props.class)\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </TabsRoot>\n</template>\n",
+      "path": "registry/_generated/ui/tabs/index.ts",
+      "content": "export { default as Tabs } from './Tabs.vue'\nexport { default as TabsContent } from './TabsContent.vue'\nexport { default as TabsList } from './TabsList.vue'\nexport { default as TabsTrigger } from './TabsTrigger.vue'\n",
       "type": "registry:ui"
     }
   ],

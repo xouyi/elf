@@ -9,8 +9,8 @@
   ],
   "files": [
     {
-      "path": "registry/_generated/ui/card/index.ts",
-      "content": "export { default as Card } from './Card.vue'\nexport { default as CardAction } from './CardAction.vue'\nexport { default as CardContent } from './CardContent.vue'\nexport { default as CardDescription } from './CardDescription.vue'\nexport { default as CardFooter } from './CardFooter.vue'\nexport { default as CardHeader } from './CardHeader.vue'\nexport { default as CardTitle } from './CardTitle.vue'\n",
+      "path": "registry/_generated/ui/card/Card.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { HTMLAttributes } from 'vue'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<{\n  class?: HTMLAttributes['class']\n}>()\n</script>\n\n<template>\n  <div\n    data-slot=\"card\"\n    :class=\"cn('flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm', props.class)\"\n  >\n    <slot />\n  </div>\n</template>\n",
       "type": "registry:ui"
     },
     {
@@ -44,8 +44,8 @@
       "type": "registry:ui"
     },
     {
-      "path": "registry/_generated/ui/card/Card.vue",
-      "content": "<script setup lang=\"ts\">\nimport type { HTMLAttributes } from 'vue'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<{\n  class?: HTMLAttributes['class']\n}>()\n</script>\n\n<template>\n  <div\n    data-slot=\"card\"\n    :class=\"cn('flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm', props.class)\"\n  >\n    <slot />\n  </div>\n</template>\n",
+      "path": "registry/_generated/ui/card/index.ts",
+      "content": "export { default as Card } from './Card.vue'\nexport { default as CardAction } from './CardAction.vue'\nexport { default as CardContent } from './CardContent.vue'\nexport { default as CardDescription } from './CardDescription.vue'\nexport { default as CardFooter } from './CardFooter.vue'\nexport { default as CardHeader } from './CardHeader.vue'\nexport { default as CardTitle } from './CardTitle.vue'\n",
       "type": "registry:ui"
     }
   ],

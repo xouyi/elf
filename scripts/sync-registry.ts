@@ -47,7 +47,9 @@ for (const [name, m] of Object.entries(meta)) {
   const srcDir = join(root, 'src/components', name)
   const dstDir = join(out, 'ui', name)
   mkdirSync(dstDir, { recursive: true })
-  const files = readdirSync(srcDir).filter(f => !/\.(test|stories)\.ts$/.test(f) && !f.endsWith('.mdx'))
+  const files = readdirSync(srcDir)
+    .filter(f => !/\.(test|stories)\.ts$/.test(f) && !f.endsWith('.mdx'))
+    .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0)) // code-point order: readdir order differs per filesystem
   for (const f of files) {
     writeFileSync(join(dstDir, f), rewrite(readFileSync(join(srcDir, f), 'utf8')))
   }
