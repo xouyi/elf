@@ -1,7 +1,7 @@
 {
   "$schema": "https://shadcn-vue.com/schema/registry.json",
   "name": "elf",
-  "homepage": "https://github.com/xouyi/elf",
+  "homepage": "https://xouyi.github.io/elf/",
   "items": [
     {
       "name": "utils",
@@ -30,7 +30,7 @@
         "class-variance-authority"
       ],
       "registryDependencies": [
-        "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json"
+        "https://xouyi.github.io/elf/r/utils.json"
       ],
       "files": [
         {
@@ -52,7 +52,7 @@
         "@vueuse/core"
       ],
       "registryDependencies": [
-        "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json"
+        "https://xouyi.github.io/elf/r/utils.json"
       ],
       "files": [
         {
@@ -76,7 +76,7 @@
         "@vueuse/core"
       ],
       "registryDependencies": [
-        "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json"
+        "https://xouyi.github.io/elf/r/utils.json"
       ],
       "files": [
         {
@@ -96,7 +96,7 @@
       "description": "Card with header, title, description, action, content and footer.",
       "dependencies": [],
       "registryDependencies": [
-        "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json"
+        "https://xouyi.github.io/elf/r/utils.json"
       ],
       "files": [
         {
@@ -144,8 +144,8 @@
         "@lucide/vue"
       ],
       "registryDependencies": [
-        "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json",
-        "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/button.json"
+        "https://xouyi.github.io/elf/r/utils.json",
+        "https://xouyi.github.io/elf/r/button.json"
       ],
       "files": [
         {
@@ -200,7 +200,7 @@
         "@vueuse/core"
       ],
       "registryDependencies": [
-        "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json"
+        "https://xouyi.github.io/elf/r/utils.json"
       ],
       "files": [
         {

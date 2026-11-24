@@ -17,7 +17,8 @@ const rewrite = (s: string) =>
     .replaceAll(/from '\.\.\/\.\.\/lib\/utils'/g, 'from \'@/lib/utils\'')
     .replaceAll(/from '\.\.\/([a-z]+)'/g, 'from \'@/components/ui/$1\'')
 
-const REGISTRY = 'https://raw.githubusercontent.com/xouyi/elf/main/registry/r'
+// Primary host is GitHub Pages; https://raw.githubusercontent.com/xouyi/elf/main/registry/r is the fallback.
+const REGISTRY = 'https://xouyi.github.io/elf/r'
 const dep = (name: string) => `${REGISTRY}/${name}.json`
 
 mkdirSync(join(out, 'lib'), { recursive: true })
@@ -83,6 +84,6 @@ items.push({
 
 writeFileSync(
   join(root, 'registry.json'),
-  `${JSON.stringify({ $schema: 'https://shadcn-vue.com/schema/registry.json', name: 'elf', homepage: 'https://github.com/xouyi/elf', items }, null, 2)}\n`,
+  `${JSON.stringify({ $schema: 'https://shadcn-vue.com/schema/registry.json', name: 'elf', homepage: 'https://xouyi.github.io/elf/', items }, null, 2)}\n`,
 )
 console.log(`registry.json: ${items.length} items`)

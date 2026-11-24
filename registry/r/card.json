@@ -5,7 +5,7 @@
   "description": "Card with header, title, description, action, content and footer.",
   "dependencies": [],
   "registryDependencies": [
-    "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json"
+    "https://xouyi.github.io/elf/r/utils.json"
   ],
   "files": [
     {

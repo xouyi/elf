@@ -9,8 +9,8 @@
     "@lucide/vue"
   ],
   "registryDependencies": [
-    "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/utils.json",
-    "https://raw.githubusercontent.com/xouyi/elf/main/registry/r/button.json"
+    "https://xouyi.github.io/elf/r/utils.json",
+    "https://xouyi.github.io/elf/r/button.json"
   ],
   "files": [
     {
