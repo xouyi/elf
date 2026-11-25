@@ -1,0 +1,74 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "select",
+  "title": "Select",
+  "description": "Dropdown to choose one value from a list, with groups, typeahead and scroll buttons, built on Reka UI.",
+  "dependencies": [
+    "reka-ui",
+    "@vueuse/core",
+    "@lucide/vue",
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json",
+    "https://xouyi.github.io/elfUI/r/field.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/select/Select.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { SelectRootEmits, SelectRootProps } from 'reka-ui'\nimport { SelectRoot, useForwardPropsEmits } from 'reka-ui'\nimport { computed } from 'vue'\nimport { useFieldContext } from '@/components/ui/field'\n\nconst props = defineProps<SelectRootProps>()\nconst emits = defineEmits<SelectRootEmits>()\n\n// Inside an ElfField the select also reports the field's required state (aria-required on the trigger).\nconst field = useFieldContext()\nconst required = computed(() => props.required || Boolean(field?.required.value))\n\nconst forwarded = useForwardPropsEmits(props, emits)\n</script>\n\n<template>\n  <SelectRoot v-slot=\"slotProps\" v-bind=\"forwarded\" :required=\"required\">\n    <slot v-bind=\"slotProps\" />\n  </SelectRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/select/SelectContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { SelectContentEmits, SelectContentProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { SelectContent, SelectPortal, SelectViewport, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport SelectScrollDownButton from './SelectScrollDownButton.vue'\nimport SelectScrollUpButton from './SelectScrollUpButton.vue'\n\ndefineOptions({\n  inheritAttrs: false,\n})\n\nconst props = withDefaults(defineProps<SelectContentProps & {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}>(), {\n  position: 'popper',\n  sideOffset: 4,\n})\nconst emits = defineEmits<SelectContentEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <SelectPortal>\n    <SelectContent\n      data-slot=\"select-content\"\n      v-bind=\"{ ...$attrs, ...forwarded }\"\n      :class=\"cn(\n        'relative z-50 max-h-(--reka-select-content-available-height) min-w-32 origin-(--reka-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-md data-[state=closed]:animate-[elf-fade-out_100ms_ease-in_forwards] data-[state=open]:animate-[elf-fade-in_120ms_ease-out] motion-reduce:animate-none!',\n        props.position === 'popper' && 'min-w-(--reka-select-trigger-width)',\n        props.class,\n      )\"\n    >\n      <SelectScrollUpButton />\n      <SelectViewport :class=\"cn('p-1', props.position === 'popper' && 'w-full scroll-my-1')\">\n        <slot />\n      </SelectViewport>\n      <SelectScrollDownButton />\n    </SelectContent>\n  </SelectPortal>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/select/SelectGroup.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { SelectGroupProps } from 'reka-ui'\nimport { SelectGroup } from 'reka-ui'\n\nconst props = defineProps<SelectGroupProps>()\n</script>\n\n<template>\n  <SelectGroup data-slot=\"select-group\" v-bind=\"props\">\n    <slot />\n  </SelectGroup>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/select/SelectItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { SelectItemProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { Check } from '@lucide/vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { SelectItem, SelectItemIndicator, SelectItemText, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<SelectItemProps & {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}>()\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwardedProps = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <SelectItem\n    data-slot=\"select-item\"\n    v-bind=\"forwardedProps\"\n    :class=\"cn(\n      'relative flex w-full cursor-default items-center gap-2 rounded-sm py-2 pr-8 pl-2 text-base outline-hidden select-none md:py-1.5 md:text-sm',\n      'data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',\n      '[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-4',\n      props.class,\n    )\"\n  >\n    <span class=\"absolute right-2 flex size-4 items-center justify-center\">\n      <SelectItemIndicator>\n        <Check class=\"size-4\" />\n      </SelectItemIndicator>\n    </span>\n    <SelectItemText>\n      <slot />\n    </SelectItemText>\n  </SelectItem>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/select/SelectLabel.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { SelectLabelProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { SelectLabel } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<SelectLabelProps & {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}>()\nconst delegatedProps = reactiveOmit(props, 'class')\n</script>\n\n<template>\n  <SelectLabel\n    data-slot=\"select-label\"\n    v-bind=\"delegatedProps\"\n    :class=\"cn('px-2 py-1.5 text-xs text-muted-foreground', props.class)\"\n  >\n    <slot />\n  </SelectLabel>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/select/SelectScrollDownButton.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { SelectScrollDownButtonProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { ChevronDown } from '@lucide/vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { SelectScrollDownButton, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<SelectScrollDownButtonProps & {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}>()\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwardedProps = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <SelectScrollDownButton\n    data-slot=\"select-scroll-down-button\"\n    v-bind=\"forwardedProps\"\n    :class=\"cn('flex cursor-default items-center justify-center py-1 text-muted-foreground', props.class)\"\n  >\n    <slot>\n      <ChevronDown class=\"size-4\" />\n    </slot>\n  </SelectScrollDownButton>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/select/SelectScrollUpButton.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { SelectScrollUpButtonProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { ChevronUp } from '@lucide/vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { SelectScrollUpButton, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<SelectScrollUpButtonProps & {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}>()\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwardedProps = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <SelectScrollUpButton\n    data-slot=\"select-scroll-up-button\"\n    v-bind=\"forwardedProps\"\n    :class=\"cn('flex cursor-default items-center justify-center py-1 text-muted-foreground', props.class)\"\n  >\n    <slot>\n      <ChevronUp class=\"size-4\" />\n    </slot>\n  </SelectScrollUpButton>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/select/SelectSeparator.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { SelectSeparatorProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { SelectSeparator } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<SelectSeparatorProps & {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}>()\nconst delegatedProps = reactiveOmit(props, 'class')\n</script>\n\n<template>\n  <SelectSeparator\n    data-slot=\"select-separator\"\n    v-bind=\"delegatedProps\"\n    :class=\"cn('pointer-events-none -mx-1 my-1 h-px bg-border', props.class)\"\n  />\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/select/SelectTrigger.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { SelectTriggerProps } from './index'\nimport { ChevronDown } from '@lucide/vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { SelectIcon, SelectTrigger, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { selectTriggerVariants } from './index'\n\nconst props = withDefaults(defineProps<SelectTriggerProps>(), {\n  size: 'default',\n})\nconst delegatedProps = reactiveOmit(props, 'class', 'size', 'invalid')\nconst forwardedProps = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <SelectTrigger\n    data-slot=\"select-trigger\"\n    :data-size=\"props.size\"\n    v-bind=\"forwardedProps\"\n    :aria-invalid=\"props.invalid ? 'true' : undefined\"\n    :class=\"cn(selectTriggerVariants({ size: props.size }), props.class)\"\n  >\n    <slot />\n    <SelectIcon as-child>\n      <ChevronDown class=\"size-4 text-muted-foreground\" />\n    </SelectIcon>\n  </SelectTrigger>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/select/SelectValue.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { SelectValueProps } from 'reka-ui'\nimport { SelectValue } from 'reka-ui'\n\nconst props = defineProps<SelectValueProps>()\n</script>\n\n<template>\n  <SelectValue data-slot=\"select-value\" v-bind=\"props\">\n    <slot />\n  </SelectValue>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/select/index.ts",
+      "content": "import type { VariantProps } from 'class-variance-authority'\nimport type { SelectTriggerProps as RekaSelectTriggerProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { cva } from 'class-variance-authority'\n\nexport { default as Select } from './Select.vue'\nexport { default as SelectContent } from './SelectContent.vue'\nexport { default as SelectGroup } from './SelectGroup.vue'\nexport { default as SelectItem } from './SelectItem.vue'\nexport { default as SelectLabel } from './SelectLabel.vue'\nexport { default as SelectScrollDownButton } from './SelectScrollDownButton.vue'\nexport { default as SelectScrollUpButton } from './SelectScrollUpButton.vue'\nexport { default as SelectSeparator } from './SelectSeparator.vue'\nexport { default as SelectTrigger } from './SelectTrigger.vue'\nexport { default as SelectValue } from './SelectValue.vue'\n\nexport const selectTriggerVariants = cva(\n  'flex w-full min-w-0 items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 text-base whitespace-nowrap text-foreground transition-[color,box-shadow] outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/30 data-[placeholder]:text-muted-foreground md:text-sm [&>span]:truncate [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-4',\n  {\n    variants: {\n      size: {\n        default: 'h-9',\n        sm: 'h-8 py-1',\n      },\n    },\n    defaultVariants: {\n      size: 'default',\n    },\n  },\n)\n\nexport type SelectTriggerVariants = VariantProps<typeof selectTriggerVariants>\n\nexport interface SelectTriggerProps extends RekaSelectTriggerProps {\n  /** Trigger height. */\n  size?: SelectTriggerVariants['size']\n  /** Marks the select as invalid: sets `aria-invalid=\"true\"` and the destructive border and ring. */\n  invalid?: boolean\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

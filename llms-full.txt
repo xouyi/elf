@@ -89,7 +89,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -2139,8 +2139,270 @@ const sms = ref(false)
 </template>
 ```
 
+### Select
+
+Dropdown to choose one value, built on Reka UI Select. Compose ElfSelect (v-model) > ElfSelectTrigger + ElfSelectValue, ElfSelectContent > ElfSelectItem (optionally in ElfSelectGroup with ElfSelectLabel and ElfSelectSeparator). Inside ElfField wrap only the trigger in ElfFieldControl.
+
+Components: `ElfSelect`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfSelectContent`, `ElfSelectItem`, `ElfSelectGroup`, `ElfSelectLabel`, `ElfSelectSeparator`, `ElfSelectScrollUpButton`, `ElfSelectScrollDownButton`
+
+- size options: `default`, `sm` (default `default`)
+
+Props:
+
+- `ElfSelect modelValue` (string | number | boolean | object): Selected value, bound with v-model.
+- `ElfSelect defaultValue` (same as modelValue): Initial value when uncontrolled.
+- `ElfSelect open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfSelect disabled` (boolean, default false): Disables the select.
+- `ElfSelect required` (boolean, default false): aria-required on the trigger. Inherited from ElfField required.
+- `ElfSelect name` (string): Form field name; renders a hidden native select.
+- `ElfSelect multiple` (boolean, default false): Allow several values (v-model is an array).
+- `ElfSelectTrigger size` ('default' | 'sm', default default): Trigger height (36px or 32px).
+- `ElfSelectTrigger invalid` (boolean, default false): aria-invalid="true" and the destructive border and ring.
+- `ElfSelectValue placeholder` (string): Text shown while nothing is selected.
+- `ElfSelectContent position` ('popper' | 'item-aligned', default popper): popper opens below the trigger and flips; item-aligned overlaps the trigger.
+- `ElfSelectItem value` (string | number | boolean | object): Required. Value of the option.
+- `ElfSelectItem disabled` (boolean, default false): Option cannot be selected.
+- `class` (string | array | object): Accepted by every part except ElfSelect; merged with base classes.
+
+Slots:
+
+- ElfSelectTrigger default: ElfSelectValue
+- ElfSelectContent default: items, groups and separators
+- ElfSelectItem default: option text
+
+Accessibility:
+
+- The trigger needs an accessible name: ElfLabel for= the trigger id, an ElfField label, or aria-label.
+- Enter, Space and ArrowDown open the list; arrows, Home, End and typeahead move the highlight; Enter selects; Escape closes and returns focus to the trigger.
+- Use a RadioGroup for two or three options.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfLabel, ElfSelect, ElfSelectContent, ElfSelectItem, ElfSelectTrigger, ElfSelectValue } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const subteam = ref('')
+</script>
+
+<template>
+  <div class="grid w-64 gap-2">
+    <ElfLabel for="select-subteam">
+      Subteam
+    </ElfLabel>
+    <ElfSelect v-model="subteam">
+      <ElfSelectTrigger id="select-subteam">
+        <ElfSelectValue placeholder="Choose a subteam" />
+      </ElfSelectTrigger>
+      <ElfSelectContent>
+        <ElfSelectItem value="mechanical">
+          Mechanical
+        </ElfSelectItem>
+        <ElfSelectItem value="electrical">
+          Electrical
+        </ElfSelectItem>
+        <ElfSelectItem value="software">
+          Software
+        </ElfSelectItem>
+        <ElfSelectItem value="business">
+          Business and outreach
+        </ElfSelectItem>
+      </ElfSelectContent>
+    </ElfSelect>
+  </div>
+</template>
+```
+
+#### Groups
+
+```vue
+<script setup lang="ts">
+import {
+  ElfSelect,
+  ElfSelectContent,
+  ElfSelectGroup,
+  ElfSelectItem,
+  ElfSelectLabel,
+  ElfSelectSeparator,
+  ElfSelectTrigger,
+  ElfSelectValue,
+} from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfSelect default-value="istanbul">
+    <ElfSelectTrigger class="w-64" aria-label="Event location">
+      <ElfSelectValue placeholder="Choose an event" />
+    </ElfSelectTrigger>
+    <ElfSelectContent>
+      <ElfSelectGroup>
+        <ElfSelectLabel>Turkey</ElfSelectLabel>
+        <ElfSelectItem value="istanbul">
+          Istanbul Regional
+        </ElfSelectItem>
+        <ElfSelectItem value="ankara">
+          Ankara Regional
+        </ElfSelectItem>
+      </ElfSelectGroup>
+      <ElfSelectSeparator />
+      <ElfSelectGroup>
+        <ElfSelectLabel>Europe</ElfSelectLabel>
+        <ElfSelectItem value="rotterdam">
+          Rotterdam District
+        </ElfSelectItem>
+        <ElfSelectItem value="lyon" disabled>
+          Lyon District (full)
+        </ElfSelectItem>
+      </ElfSelectGroup>
+    </ElfSelectContent>
+  </ElfSelect>
+</template>
+```
+
+#### Scrollable
+
+```vue
+<script setup lang="ts">
+import { ElfSelect, ElfSelectContent, ElfSelectItem, ElfSelectTrigger, ElfSelectValue } from '@xouyi/elfui'
+
+const timezones = [
+  'UTC-08:00 Los Angeles',
+  'UTC-07:00 Denver',
+  'UTC-06:00 Chicago',
+  'UTC-05:00 New York',
+  'UTC-03:00 Sao Paulo',
+  'UTC+00:00 London',
+  'UTC+01:00 Berlin',
+  'UTC+02:00 Athens',
+  'UTC+03:00 Istanbul',
+  'UTC+04:00 Dubai',
+  'UTC+05:30 Mumbai',
+  'UTC+08:00 Singapore',
+  'UTC+09:00 Tokyo',
+  'UTC+10:00 Sydney',
+  'UTC+12:00 Auckland',
+]
+</script>
+
+<template>
+  <ElfSelect default-value="UTC+03:00 Istanbul">
+    <ElfSelectTrigger class="w-64" aria-label="Time zone">
+      <ElfSelectValue />
+    </ElfSelectTrigger>
+    <ElfSelectContent class="max-h-48">
+      <ElfSelectItem v-for="zone in timezones" :key="zone" :value="zone">
+        {{ zone }}
+      </ElfSelectItem>
+    </ElfSelectContent>
+  </ElfSelect>
+</template>
+```
+
+#### States
+
+```vue
+<script setup lang="ts">
+import { ElfSelect, ElfSelectContent, ElfSelectItem, ElfSelectTrigger, ElfSelectValue } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid w-64 gap-4">
+    <ElfSelect default-value="a">
+      <ElfSelectTrigger size="sm" aria-label="Small select">
+        <ElfSelectValue />
+      </ElfSelectTrigger>
+      <ElfSelectContent>
+        <ElfSelectItem value="a">
+          Small trigger
+        </ElfSelectItem>
+      </ElfSelectContent>
+    </ElfSelect>
+    <ElfSelect>
+      <ElfSelectTrigger invalid aria-label="Invalid select">
+        <ElfSelectValue placeholder="Invalid select" />
+      </ElfSelectTrigger>
+      <ElfSelectContent>
+        <ElfSelectItem value="a">
+          Option
+        </ElfSelectItem>
+      </ElfSelectContent>
+    </ElfSelect>
+    <ElfSelect disabled default-value="a">
+      <ElfSelectTrigger aria-label="Disabled select">
+        <ElfSelectValue />
+      </ElfSelectTrigger>
+      <ElfSelectContent>
+        <ElfSelectItem value="a">
+          Disabled select
+        </ElfSelectItem>
+      </ElfSelectContent>
+    </ElfSelect>
+  </div>
+</template>
+```
+
+#### With Field
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfField, ElfFieldControl, ElfSelect, ElfSelectContent, ElfSelectItem, ElfSelectTrigger, ElfSelectValue } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const role = ref('')
+const submitted = ref(false)
+const sent = ref(false)
+
+function submit() {
+  submitted.value = true
+  sent.value = role.value !== ''
+}
+</script>
+
+<template>
+  <form class="grid w-80 gap-5" novalidate @submit.prevent="submit">
+    <ElfField
+      label="Role"
+      description="Pick the role you will fill at events."
+      required
+      :error="submitted && !role ? 'Choose a role.' : ''"
+    >
+      <ElfSelect v-model="role">
+        <ElfFieldControl>
+          <ElfSelectTrigger>
+            <ElfSelectValue placeholder="Select a role" />
+          </ElfSelectTrigger>
+        </ElfFieldControl>
+        <ElfSelectContent>
+          <ElfSelectItem value="driver">
+            Driver
+          </ElfSelectItem>
+          <ElfSelectItem value="operator">
+            Operator
+          </ElfSelectItem>
+          <ElfSelectItem value="coach">
+            Human player
+          </ElfSelectItem>
+          <ElfSelectItem value="scout">
+            Scout
+          </ElfSelectItem>
+        </ElfSelectContent>
+      </ElfSelect>
+    </ElfField>
+    <ElfButton type="submit" class="w-fit">
+      Save role
+    </ElfButton>
+    <p v-if="sent" role="status" class="text-sm text-muted-foreground">
+      Role saved: {{ role }}.
+    </p>
+  </form>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

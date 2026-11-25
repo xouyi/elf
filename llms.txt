@@ -29,6 +29,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [Checkbox](https://xouyi.github.io/elfUI/docs/components/checkbox): Binary or indeterminate selection control built on Reka UI Checkbox. v-model is boolean | 'indeterminate'. Pair it with ElfLabel; inside ElfField wrap it in ElfFieldControl.
 - [RadioGroup](https://xouyi.github.io/elfUI/docs/components/radio-group): Mutually exclusive options built on Reka UI RadioGroup. ElfRadioGroup holds the value (v-model); each ElfRadioGroupItem is one option. Pair every item with ElfLabel; inside ElfField wrap the group in ElfFieldControl.
 - [Switch](https://xouyi.github.io/elfUI/docs/components/switch): On/off setting that applies immediately, built on Reka UI Switch. A role=switch button with v-model (boolean). Pair it with ElfLabel; use a Checkbox for choices submitted later.
+- [Select](https://xouyi.github.io/elfUI/docs/components/select): Dropdown to choose one value, built on Reka UI Select. Compose ElfSelect (v-model) > ElfSelectTrigger + ElfSelectValue, ElfSelectContent > ElfSelectItem (optionally in ElfSelectGroup with ElfSelectLabel and ElfSelectSeparator). Inside ElfField wrap only the trigger in ElfFieldControl.
 
 ## Reference
 

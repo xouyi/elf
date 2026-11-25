@@ -76,5 +76,20 @@ export { RadioGroup as ElfRadioGroup, RadioGroupItem as ElfRadioGroupItem } from
 export { Switch as ElfSwitch, switchVariants } from './components/switch'
 export type { SwitchProps, SwitchVariants } from './components/switch'
 
+export {
+  Select as ElfSelect,
+  SelectContent as ElfSelectContent,
+  SelectGroup as ElfSelectGroup,
+  SelectItem as ElfSelectItem,
+  SelectLabel as ElfSelectLabel,
+  SelectScrollDownButton as ElfSelectScrollDownButton,
+  SelectScrollUpButton as ElfSelectScrollUpButton,
+  SelectSeparator as ElfSelectSeparator,
+  SelectTrigger as ElfSelectTrigger,
+  selectTriggerVariants,
+  SelectValue as ElfSelectValue,
+} from './components/select'
+export type { SelectTriggerProps, SelectTriggerVariants } from './components/select'
+
 export const elfThemes = ['elf', 'novatron'] as const
 export type ElfTheme = (typeof elfThemes)[number]
