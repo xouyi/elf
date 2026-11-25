@@ -2,7 +2,7 @@
 
 > ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (violet, rounded) and novatron (gold on obsidian, sharp corners).
 
-ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.2.0). Install with `bun add @xouyi/elfui` or `bunx @xouyi/elfui@latest init`. All Vue components use the `Elf` prefix. Use Bun for every command.
+ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.3.0). Install with `bun add @xouyi/elfui` or `bunx @xouyi/elfui@latest init`. All Vue components use the `Elf` prefix. Use Bun for every command.
 
 ## Docs
 
