@@ -100,6 +100,13 @@ Themes: `elf`, `novatron`. Select with `data-theme` on html or any element. Dark
 document.documentElement.dataset.theme = 'novatron'
 ```
 
+Or from code, SSR-safe, with optional persistence (auto-imported in Nuxt; otherwise `import { useElfTheme } from "@xouyi/elfui"`):
+
+```ts
+const { theme, themes, setTheme, cycle } = useElfTheme({ storage: 'cookie' }) // storage: 'cookie' | 'localStorage' | 'none' (default)
+setTheme('novatron')
+```
+
 Tokens (CSS variables `--elf-<name>`, Tailwind utilities `bg-<name>`, `text-<name>-foreground`, `border-border`, `ring-ring`):
 
 | Token | elf | novatron |

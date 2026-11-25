@@ -1,6 +1,7 @@
-import { addComponentsDir, createResolver, defineNuxtModule } from '@nuxt/kit'
+import type { ElfTheme } from '../lib/themes'
+import { addComponentsDir, addImports, createResolver, defineNuxtModule } from '@nuxt/kit'
 
-export type ElfTheme = 'elf' | 'novatron'
+export type { ElfTheme }
 
 export interface ModuleOptions {
   /** Theme applied through `data-theme` on `<html>`. */
@@ -36,6 +37,13 @@ export default defineNuxtModule<ModuleOptions>({
       ignore: ['**/examples/**'],
       global: false,
     })
+
+    // Composables are auto-imported like the components.
+    addImports([
+      { name: 'useElfTheme', from: resolve('../composables/use-elf-theme') },
+      { name: 'elfThemeBootScript', from: resolve('../composables/use-elf-theme') },
+      { name: 'isElfTheme', from: resolve('../lib/themes') },
+    ])
 
     // Theme tokens are plain CSS variables; Tailwind mappings live in styles.css,
     // which the app imports after `@import "tailwindcss"`.

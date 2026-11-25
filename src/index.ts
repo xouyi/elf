@@ -106,5 +106,8 @@ export {
 } from './components/avatar'
 export type { AvatarFallbackProps, AvatarGroupProps, AvatarImageProps, AvatarProps, AvatarVariants } from './components/avatar'
 
-export const elfThemes = ['elf', 'novatron'] as const
-export type ElfTheme = (typeof elfThemes)[number]
+export { elfThemes, isElfTheme } from './lib/themes'
+export type { ElfTheme } from './lib/themes'
+
+export { elfThemeBootScript, useElfTheme } from './composables/use-elf-theme'
+export type { ElfThemeBootScriptOptions, ElfThemeStorage, UseElfThemeOptions, UseElfThemeReturn } from './composables/use-elf-theme'

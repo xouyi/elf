@@ -228,12 +228,12 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 
 - **Purpose:** Composable to read and set the active theme (`elf`, `novatron`) and persist it; works with and without Nuxt.
 - **Built on:** utility
-- **Key props, variants and parts:** `theme`, `setTheme`, `themes`.
+- **Key props, variants and parts:** `theme`, `setTheme`, `cycle`, `themes`; options `themes`, `defaultTheme`, `initial`, `storage` (`cookie` | `localStorage` | `none`), `storageKey`; `elfThemeBootScript()` for no-flash loads.
 - **Accessibility:** Native semantics; no dedicated APG pattern. Keyboard and ARIA covered by the Definition of Done.
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** Docs site switcher; every app that exposes a theme choice.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 ### v0.4: Overlays and disclosure
 
