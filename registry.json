@@ -361,6 +361,50 @@
       ]
     },
     {
+      "name": "field",
+      "type": "registry:ui",
+      "title": "Field",
+      "description": "Form row with label, control, description and error wired through ids and ARIA attributes.",
+      "dependencies": [
+        "reka-ui",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/label.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/field/Field.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/field/FieldControl.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/field/FieldDescription.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/field/FieldError.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/field/FieldLabel.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/field/context.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/field/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "visually-hidden",
       "type": "registry:ui",
       "title": "Visually Hidden",

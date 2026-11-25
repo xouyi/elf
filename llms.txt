@@ -24,6 +24,7 @@ ElfUI is source-distributed: install from a pinned GitHub tag (currently v0.2.0)
 - [Spinner](https://xouyi.github.io/elfUI/docs/components/spinner): Indeterminate busy indicator. An SVG ring in a role=status region with a visually hidden label; inherits the text color.
 - [Skeleton](https://xouyi.github.io/elfUI/docs/components/skeleton): Placeholder block shown while content loads. Decorative (aria-hidden); size and shape come from classes.
 - [Textarea](https://xouyi.github.io/elfUI/docs/components/textarea): Multi-line text input with v-model and optional auto-grow. A native textarea: all native attributes fall through.
+- [Field](https://xouyi.github.io/elfUI/docs/components/field): Form row: label, one control, description and error wired through id, for, aria-describedby and aria-invalid. Wrap the control in ElfFieldControl; works with ElfInput, ElfTextarea and native controls.
 
 ## Reference
 

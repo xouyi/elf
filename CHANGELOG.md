@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add `ElfField` with `ElfFieldControl`, `ElfFieldLabel`, `ElfFieldDescription` and `ElfFieldError`: label, control, description and error wired through `id`, `for`, `aria-describedby`, `aria-invalid` and `aria-required`, plus `useFieldContext()`; works with `ElfInput` and `ElfTextarea`.
 - Add `ElfTextarea`: native textarea with `v-model`, `autoResize`, `invalid`, `rows` and `maxlength`, sharing the `ElfInput` styles.
 - Add `ElfSkeleton`: a decorative placeholder block (`aria-hidden`, reduced-motion aware).
 - Add `ElfSpinner`: an SVG busy indicator with `size` and an announced `label` (`role="status"`), reduced-motion aware.

@@ -90,7 +90,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** ElfLabel
 - **Complexity:** M
 - **Novatron screens:** stock `WishlistForm`, `ItemEditSheet`; courses `CourseForm`, `AssignmentForm`; forum `PostForm`, `ProfileEditForm`.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.3)
 
 #### ElfTextarea
 
