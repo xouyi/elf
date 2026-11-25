@@ -38,7 +38,7 @@ Create `src/components/<name>/` with:
 | :--- | :--- |
 | `<Name>.vue` | The component. Reka UI primitive + `cva()` variants + `cn()`. Use relative imports in `src`. Document every prop with a JSDoc comment; the docs API table is generated from them. |
 | `index.ts` | Public exports, the `cva` factory and prop types. |
-| `examples/<Example>.vue` | One single-file component per example (`Default`, `Variants`, `Sizes`, `WithIcon`, `Disabled`, ...). Import components from `'elfui'` exactly as a consumer would. These files are the live previews and the code tabs on the docs site, and the fixtures the browser tests mount. |
+| `examples/<Example>.vue` | One single-file component per example (`Default`, `Variants`, `Sizes`, `WithIcon`, `Disabled`, ...). Import components from `'@xouyi/elfui'` exactly as a consumer would. These files are the live previews and the code tabs on the docs site, and the fixtures the browser tests mount. |
 | `<Name>.test.ts` | Unit tests (Vitest + `@vue/test-utils`): rendering, variants, emitted events, ARIA attributes. |
 
 Then wire it into the rest of the repository:
