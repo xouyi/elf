@@ -134,7 +134,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** ElfLabel
 - **Complexity:** S
 - **Novatron screens:** courses `CourseRulesCard`, `ChatAdmin`; HQ settings.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfSelect
 

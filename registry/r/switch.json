@@ -1,0 +1,27 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "switch",
+  "title": "Switch",
+  "description": "On/off setting with sm and default sizes, built on Reka UI.",
+  "dependencies": [
+    "reka-ui",
+    "@vueuse/core",
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/switch/Switch.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { SwitchRootEmits } from 'reka-ui'\nimport type { SwitchProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { SwitchRoot, SwitchThumb, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { switchVariants } from './index'\n\nconst props = withDefaults(defineProps<SwitchProps>(), {\n  size: 'default',\n})\nconst emits = defineEmits<SwitchRootEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class', 'size')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <SwitchRoot\n    v-slot=\"slotProps\"\n    data-slot=\"switch\"\n    :data-size=\"props.size\"\n    v-bind=\"forwarded\"\n    :class=\"cn(switchVariants({ size: props.size }), props.class)\"\n  >\n    <SwitchThumb\n      data-slot=\"switch-thumb\"\n      class=\"pointer-events-none block size-5 rounded-(--elf-radius-pill) bg-muted-foreground transition-transform data-[state=checked]:translate-x-5 data-[state=checked]:bg-primary-foreground group-data-[size=sm]/switch:size-4 group-data-[size=sm]/switch:data-[state=checked]:translate-x-4 motion-reduce:transition-none\"\n    >\n      <slot name=\"thumb\" v-bind=\"slotProps\" />\n    </SwitchThumb>\n  </SwitchRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/switch/index.ts",
+      "content": "import type { VariantProps } from 'class-variance-authority'\nimport type { SwitchRootProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { cva } from 'class-variance-authority'\n\nexport { default as Switch } from './Switch.vue'\n\nexport const switchVariants = cva(\n  'peer group/switch inline-flex shrink-0 items-center rounded-(--elf-radius-pill) border border-input bg-transparent p-px transition-[color,background-color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary data-[state=checked]:bg-primary',\n  {\n    variants: {\n      size: {\n        default: 'h-6 w-11',\n        sm: 'h-5 w-9',\n      },\n    },\n    defaultVariants: {\n      size: 'default',\n    },\n  },\n)\n\nexport type SwitchVariants = VariantProps<typeof switchVariants>\n\nexport interface SwitchProps extends SwitchRootProps {\n  /** Track and thumb size. */\n  size?: SwitchVariants['size']\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

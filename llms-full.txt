@@ -89,7 +89,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -1976,8 +1976,171 @@ function submit() {
 </template>
 ```
 
+### Switch
+
+On/off setting that applies immediately, built on Reka UI Switch. A role=switch button with v-model (boolean). Pair it with ElfLabel; use a Checkbox for choices submitted later.
+
+Components: `ElfSwitch`
+
+- size options: `default`, `sm` (default `default`)
+
+Props:
+
+- `modelValue` (boolean): Bound with v-model.
+- `defaultValue` (boolean): Initial state when uncontrolled.
+- `size` ('default' | 'sm', default default): Track and thumb size (24px or 20px high).
+- `disabled` (boolean, default false): Prevents interaction and dims the control.
+- `name` (string): Form field name; renders a hidden input inside a form.
+- `class` (string | array | object): Merged with base classes.
+
+Slots:
+
+- thumb: content inside the thumb (for example an icon), receives { modelValue }
+
+Accessibility:
+
+- Always give it a visible label (ElfLabel for= the switch id) or an aria-label, and keep the label the same in both states.
+- Space and Enter toggle it.
+- There is no required state: aria-required is not valid on role=switch.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfLabel, ElfSwitch } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const reminders = ref(true)
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <ElfSwitch id="switch-reminders" v-model="reminders" />
+    <ElfLabel for="switch-reminders">
+      Match reminders
+    </ElfLabel>
+  </div>
+</template>
+```
+
+#### Disabled
+
+```vue
+<script setup lang="ts">
+import { ElfLabel, ElfSwitch } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid gap-4">
+    <div class="flex items-center gap-3">
+      <ElfSwitch id="switch-dis-off" disabled />
+      <ElfLabel for="switch-dis-off">
+        Auto-sync (off)
+      </ElfLabel>
+    </div>
+    <div class="flex items-center gap-3">
+      <ElfSwitch id="switch-dis-on" disabled default-value />
+      <ElfLabel for="switch-dis-on">
+        Two-factor sign-in (managed by HQ)
+      </ElfLabel>
+    </div>
+  </div>
+</template>
+```
+
+#### Sizes
+
+```vue
+<script setup lang="ts">
+import { ElfLabel, ElfSwitch } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid gap-4">
+    <div class="flex items-center gap-3">
+      <ElfSwitch id="switch-default" default-value />
+      <ElfLabel for="switch-default">
+        Default size
+      </ElfLabel>
+    </div>
+    <div class="flex items-center gap-3">
+      <ElfSwitch id="switch-sm" size="sm" default-value />
+      <ElfLabel for="switch-sm">
+        Small size
+      </ElfLabel>
+    </div>
+  </div>
+</template>
+```
+
+#### With Description
+
+```vue
+<script setup lang="ts">
+import { ElfLabel, ElfSwitch } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const publicProfile = ref(false)
+</script>
+
+<template>
+  <div class="flex w-96 max-w-full items-center justify-between gap-4 rounded-lg border p-4">
+    <div class="grid gap-1">
+      <ElfLabel for="switch-profile">
+        Public profile
+      </ElfLabel>
+      <p id="switch-profile-help" class="text-sm text-muted-foreground">
+        Other teams can see your name and subteam.
+      </p>
+    </div>
+    <ElfSwitch
+      id="switch-profile"
+      v-model="publicProfile"
+      aria-describedby="switch-profile-help"
+    />
+  </div>
+</template>
+```
+
+#### With Field
+
+```vue
+<script setup lang="ts">
+import { ElfField, ElfFieldControl, ElfFieldDescription, ElfFieldLabel, ElfSwitch } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const digest = ref(true)
+const sms = ref(false)
+</script>
+
+<template>
+  <div class="grid w-80 gap-6">
+    <ElfField>
+      <div class="flex items-center justify-between gap-4">
+        <ElfFieldLabel>Weekly digest</ElfFieldLabel>
+        <ElfFieldControl>
+          <ElfSwitch v-model="digest" />
+        </ElfFieldControl>
+      </div>
+      <ElfFieldDescription>One email every Monday.</ElfFieldDescription>
+    </ElfField>
+    <ElfField disabled>
+      <div class="flex items-center justify-between gap-4">
+        <ElfFieldLabel>SMS alerts</ElfFieldLabel>
+        <ElfFieldControl>
+          <ElfSwitch v-model="sms" />
+        </ElfFieldControl>
+      </div>
+      <ElfFieldDescription>Not available on your plan.</ElfFieldDescription>
+    </ElfField>
+  </div>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

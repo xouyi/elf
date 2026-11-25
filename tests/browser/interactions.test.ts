@@ -28,6 +28,10 @@ import RadioGroupDefault from '../../src/components/radio-group/examples/Default
 import RadioGroupDisabled from '../../src/components/radio-group/examples/Disabled.vue'
 import RadioGroupHorizontal from '../../src/components/radio-group/examples/Horizontal.vue'
 import RadioGroupWithField from '../../src/components/radio-group/examples/WithField.vue'
+import SwitchDefault from '../../src/components/switch/examples/Default.vue'
+import SwitchDisabled from '../../src/components/switch/examples/Disabled.vue'
+import SwitchSizes from '../../src/components/switch/examples/Sizes.vue'
+import SwitchWithField from '../../src/components/switch/examples/WithField.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -660,6 +664,70 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await userEvent.click(el.querySelector('button[type="submit"]')!)
       await settle()
       expect(el.textContent).toContain('Request sent with high priority.')
+    })
+  })
+
+  describe('Switch', () => {
+    it('toggles with Space and Enter and exposes aria-checked', async () => {
+      setTheme(theme)
+      const { el } = await show(SwitchDefault)
+      const toggle = el.querySelector<HTMLElement>('[role="switch"]')!
+      expect(toggle.getAttribute('aria-checked')).toBe('true')
+      await userEvent.tab()
+      expect(document.activeElement).toBe(toggle)
+      await userEvent.keyboard(' ')
+      expect(toggle.getAttribute('aria-checked')).toBe('false')
+      await userEvent.keyboard('{Enter}')
+      expect(toggle.getAttribute('aria-checked')).toBe('true')
+      expect(getComputedStyle(toggle).boxShadow, 'focus ring').not.toBe('none')
+    })
+
+    it('toggles when its label is clicked and is named by it', async () => {
+      setTheme(theme)
+      const { el } = await show(SwitchDefault)
+      await userEvent.click(el.querySelector('label')!)
+      expect(el.querySelector('[role="switch"]')!.getAttribute('aria-checked')).toBe('false')
+      await expect.element(page.getByRole('switch', { name: 'Match reminders' })).toBeInTheDocument()
+    })
+
+    it('slides the thumb across the track when it turns on', async () => {
+      setTheme(theme)
+      const { el } = await show(SwitchSizes)
+      const [regular, small] = [...el.querySelectorAll<HTMLElement>('[role="switch"]')]
+      for (const toggle of [regular!, small!]) {
+        const thumb = toggle.querySelector<HTMLElement>('[data-slot="switch-thumb"]')!
+        const track = toggle.getBoundingClientRect()
+        // Checked: the thumb sits against the right inner edge (border and padding are 1px each).
+        await settle(250)
+        expect(Math.round(track.right - thumb.getBoundingClientRect().right)).toBe(2)
+        await userEvent.click(toggle)
+        await settle(250)
+        expect(Math.round(thumb.getBoundingClientRect().left - track.left)).toBe(2)
+      }
+      expect(regular!.getBoundingClientRect().height).toBe(24)
+      expect(small!.getBoundingClientRect().height).toBe(20)
+    })
+
+    it('ignores input and Tab focus while disabled', async () => {
+      setTheme(theme)
+      const { el } = await show(SwitchDisabled)
+      const toggles = [...el.querySelectorAll<HTMLButtonElement>('[role="switch"]')]
+      expect(toggles.every(t => t.disabled)).toBe(true)
+      await userEvent.tab()
+      expect(toggles).not.toContain(document.activeElement)
+      expect(toggles.map(t => t.getAttribute('aria-checked'))).toEqual(['false', 'true'])
+    })
+
+    it('in a Field: label and description wire up, a disabled field disables the switch and dims its label', async () => {
+      setTheme(theme)
+      const { el } = await show(SwitchWithField)
+      const [digest, sms] = [...el.querySelectorAll<HTMLButtonElement>('[role="switch"]')]
+      await expect.element(page.getByRole('switch', { name: 'Weekly digest' })).toBeInTheDocument()
+      expect(document.getElementById(digest!.getAttribute('aria-describedby')!)?.textContent).toContain('One email every Monday')
+      await userEvent.click(el.querySelector('label')!)
+      expect(digest!.getAttribute('aria-checked')).toBe('false')
+      expect(sms!.disabled).toBe(true)
+      expect(getComputedStyle(el.querySelectorAll('label')[1]!).opacity).toBe('0.5')
     })
   })
 

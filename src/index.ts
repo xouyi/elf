@@ -73,5 +73,8 @@ export { Checkbox as ElfCheckbox } from './components/checkbox'
 
 export { RadioGroup as ElfRadioGroup, RadioGroupItem as ElfRadioGroupItem } from './components/radio-group'
 
+export { Switch as ElfSwitch, switchVariants } from './components/switch'
+export type { SwitchProps, SwitchVariants } from './components/switch'
+
 export const elfThemes = ['elf', 'novatron'] as const
 export type ElfTheme = (typeof elfThemes)[number]

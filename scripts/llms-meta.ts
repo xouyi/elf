@@ -245,6 +245,23 @@ export const components: ComponentMeta[] = [
     slots: ['ElfRadioGroup default: the ElfRadioGroupItem options with their labels'],
     a11y: ['Name the group with aria-label, aria-labelledby or an ElfField label, and label every item.', 'Tab enters the group on the checked item; arrow keys move and check; Space checks the focused item.', 'Use a Checkbox for multi-select and a Select for long lists.'],
   },
+  {
+    dir: 'switch',
+    name: 'Switch',
+    summary: 'On/off setting that applies immediately, built on Reka UI Switch. A role=switch button with v-model (boolean). Pair it with ElfLabel; use a Checkbox for choices submitted later.',
+    parts: ['ElfSwitch'],
+    variants: 'switchVariants',
+    props: [
+      { name: 'modelValue', type: 'boolean', description: 'Bound with v-model.' },
+      { name: 'defaultValue', type: 'boolean', description: 'Initial state when uncontrolled.' },
+      { name: 'size', type: '\'default\' | \'sm\'', default: 'default', description: 'Track and thumb size (24px or 20px high).' },
+      { name: 'disabled', type: 'boolean', default: 'false', description: 'Prevents interaction and dims the control.' },
+      { name: 'name', type: 'string', description: 'Form field name; renders a hidden input inside a form.' },
+      { name: 'class', type: 'string | array | object', description: 'Merged with base classes.' },
+    ],
+    slots: ['thumb: content inside the thumb (for example an icon), receives { modelValue }'],
+    a11y: ['Always give it a visible label (ElfLabel for= the switch id) or an aria-label, and keep the label the same in both states.', 'Space and Enter toggle it.', 'There is no required state: aria-required is not valid on role=switch.'],
+  },
 ]
 
 export const rules = [

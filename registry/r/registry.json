@@ -458,6 +458,30 @@
       ]
     },
     {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "On/off setting with sm and default sizes, built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/switch/Switch.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/switch/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "visually-hidden",
       "type": "registry:ui",
       "title": "Visually Hidden",
