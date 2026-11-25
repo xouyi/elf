@@ -9,8 +9,8 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@elf/ui": "github:xouyi/elfUI#v0.2.0",
     "@lucide/vue": "1.79.0",
+    "@xouyi/elfui": "^0.3.0",
     "nuxt": "4.7.0",
     "vue": "3.5.46",
     "vue-router": "5.5.1"

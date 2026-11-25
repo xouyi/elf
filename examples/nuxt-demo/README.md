@@ -1,19 +1,15 @@
-# Elf Nuxt demo
+# ElfUI Nuxt demo
 
-A realistic Nuxt 4 app that consumes Elf **exactly like a real project**: it installs ElfUI from the public
-GitHub tag, not from a workspace link. It is the proof that a published tag works end to end.
-
-> **Temporary GitHub install.** The pinned tag `v0.2.0` predates the rename, so this app still depends on `@elf/ui`
-> (package name inside that tag) and uses `@elf/ui/nuxt`, `@elf/ui/styles.css` and the `elf:` config key. After the first
-> npm release it switches to `"@xouyi/elfui": "^0.3.0"`, `modules: ['@xouyi/elfui/nuxt']`, `@import '@xouyi/elfui/styles.css'`
-> and an `elfui:` config key (`bun remove @elf/ui && bun add @xouyi/elfui`).
+A realistic Nuxt 4 app that consumes ElfUI **exactly like a real project**: it installs the published
+[`@xouyi/elfui`](https://www.npmjs.com/package/@xouyi/elfui) package from npm, not a workspace link. It is the proof that a
+published release works end to end; CI builds it on every push and pull request.
 
 - Dashboard: stat cards, badges, filterable list (`app/pages/index.vue`)
 - Members: form inside a dialog with inline validation (`app/pages/members.vue`)
 - Settings: tabs, forms and a destructive confirmation (`app/pages/settings.vue`)
 - Theme switcher (`novatron` / `elf`) in the header, persisted in a cookie (`app/composables/useElfTheme.ts`)
 
-## How to try Elf
+## How to try ElfUI
 
 ```bash
 cd examples/nuxt-demo
@@ -22,29 +18,28 @@ bun run dev        # http://localhost:3000
 bun run build      # production build, what CI runs
 ```
 
-Requires Bun and Node 22+. Tailwind CSS v4 and `typescript` are installed as the Elf docs describe.
+Requires Bun and Node 22+. Tailwind CSS v4 and `typescript@5` are installed as the ElfUI docs describe.
 
-## Pin and bump the Elf version
+## Setup used here
 
-The version is the tag in `package.json`:
-
-```json
-"@elf/ui": "github:xouyi/elfUI#v0.2.0"
+```ts
+// nuxt.config.ts
+modules: ['@xouyi/elfui/nuxt'],
+elfui: { theme: 'novatron', themes: ['elf'] },
 ```
 
-To move to a new release (after the tag exists on GitHub):
+```css
+/* app/assets/css/main.css */
+@import 'tailwindcss';
+@import '@xouyi/elfui/styles.css';
+```
+
+## Bump the ElfUI version
 
 ```bash
 cd examples/nuxt-demo
-bun remove @elf/ui
-bun add github:xouyi/elfUI#v0.2.0
+bun update @xouyi/elfui
 bun run build
 ```
 
-Remove and add (instead of editing `package.json`) so `bun.lock` records the new commit. Commit both files.
-
-## Notes
-
-- This directory is not part of the root workspace (`workspaces` only covers `apps/*`) and is not published
-  with the package (`files` whitelist). It has its own `bun.lock`.
-- CI (`.github/workflows/example.yml`) installs and builds it on every push and pull request.
+Commit `package.json` and `bun.lock` together.
