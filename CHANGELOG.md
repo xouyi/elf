@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.4.0
 
 - Add the `useElfTheme()` composable (`theme`, `themes`, `setTheme`, `cycle`) and `elfThemeBootScript()`: reads and sets `data-theme` on `<html>`, SSR-safe (per-app state, no `document` access on the server), typed theme names with support for custom themes, optional persistence in a cookie or localStorage, auto-imported by the Nuxt module. `elfThemes`, `ElfTheme` and the new `isElfTheme()` now live in `src/lib/themes.ts` and are still exported from the package root.
 - Add the `--elf-destructive-text` token and the `text-destructive-text` utility: readable error text on `background`, `card` and `popover` (7.2:1 or better in both themes, checked by `bun run contrast`). `ElfFieldError`, the required marker of `ElfFieldLabel`, the Input, Textarea and Label examples and `ElfAlert` use it instead of mixing `destructive` with white. Custom themes must define `--elf-destructive-text`.
