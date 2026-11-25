@@ -1,6 +1,6 @@
 /**
  * Curated, human-written metadata for llms.txt. Variant lists, exports and theme tokens are read
- * from the sources by generate-llms.ts; only prose and examples live here.
+ * from the sources by generate-llms.ts; only prose lives here; code examples are read from src/components/<dir>/examples/*.vue.
  * Adding a component: add an entry below (the generator fails when a component directory has none).
  */
 export interface ComponentMeta {
@@ -15,7 +15,6 @@ export interface ComponentMeta {
   props: { name: string, type: string, default?: string, description: string }[]
   slots?: string[]
   a11y: string[]
-  example: string
 }
 
 export const components: ComponentMeta[] = [
@@ -34,9 +33,6 @@ export const components: ComponentMeta[] = [
     ],
     slots: ['default: button content (text and icons)'],
     a11y: ['Icon-only buttons (size="icon") must have an aria-label.', 'Use as-child with a link for navigation.'],
-    example: `<ElfButton variant="outline" size="sm" @click="save">Save</ElfButton>
-<ElfButton as-child><NuxtLink to="/docs">Documentation</NuxtLink></ElfButton>
-<ElfButton size="icon" aria-label="Add"><Plus /></ElfButton>`,
   },
   {
     dir: 'input',
@@ -49,8 +45,6 @@ export const components: ComponentMeta[] = [
       { name: 'class', type: 'string | array | object', description: 'Merged with base classes.' },
     ],
     a11y: ['Always provide a visible label (label for=) or aria-label; a placeholder is not a label.', 'Set aria-invalid="true" for errors and describe the error in text.'],
-    example: `<label for="email" class="text-sm font-medium">Email</label>
-<ElfInput id="email" v-model="email" type="email" placeholder="you@example.com" />`,
   },
   {
     dir: 'badge',
@@ -66,8 +60,6 @@ export const components: ComponentMeta[] = [
     ],
     slots: ['default: badge text'],
     a11y: ['Do not rely on color alone: the text must state the status.'],
-    example: `<ElfBadge variant="success">Live</ElfBadge>
-<ElfBadge variant="warning">Pending review</ElfBadge>`,
   },
   {
     dir: 'card',
@@ -77,15 +69,6 @@ export const components: ComponentMeta[] = [
     props: [{ name: 'class', type: 'string | array | object', description: 'Accepted by every part; merged with base classes.' }],
     slots: ['default on every part', 'ElfCardAction sits top-right inside ElfCardHeader'],
     a11y: ['A card is a plain div; choose heading semantics for the title yourself.', 'If the whole card is a link, link the title rather than wrapping the card.'],
-    example: `<ElfCard>
-  <ElfCardHeader>
-    <ElfCardTitle>Match log</ElfCardTitle>
-    <ElfCardDescription>Qualification 12</ElfCardDescription>
-    <ElfCardAction><ElfBadge variant="success">Won</ElfBadge></ElfCardAction>
-  </ElfCardHeader>
-  <ElfCardContent>...</ElfCardContent>
-  <ElfCardFooter><ElfButton>Open</ElfButton></ElfCardFooter>
-</ElfCard>`,
   },
   {
     dir: 'dialog',
@@ -99,20 +82,6 @@ export const components: ComponentMeta[] = [
     ],
     slots: ['ElfDialogTrigger and ElfDialogClose: use as-child with an ElfButton'],
     a11y: ['Always include ElfDialogTitle and ElfDialogDescription.', 'Do not stack dialogs.'],
-    example: `<ElfDialog v-model:open="open">
-  <ElfDialogTrigger as-child><ElfButton variant="outline">Edit</ElfButton></ElfDialogTrigger>
-  <ElfDialogContent>
-    <ElfDialogHeader>
-      <ElfDialogTitle>Edit profile</ElfDialogTitle>
-      <ElfDialogDescription>Update your display name.</ElfDialogDescription>
-    </ElfDialogHeader>
-    <ElfInput aria-label="Display name" />
-    <ElfDialogFooter>
-      <ElfDialogClose as-child><ElfButton variant="outline">Cancel</ElfButton></ElfDialogClose>
-      <ElfButton>Save</ElfButton>
-    </ElfDialogFooter>
-  </ElfDialogContent>
-</ElfDialog>`,
   },
   {
     dir: 'tabs',
@@ -125,28 +94,20 @@ export const components: ComponentMeta[] = [
       { name: 'ElfTabsContent value', type: 'string', description: 'Required; panel for the matching trigger.' },
     ],
     a11y: ['Give ElfTabsList an aria-label.', 'Use tabs for peer views, not for step-by-step flows.'],
-    example: `<ElfTabs default-value="overview">
-  <ElfTabsList aria-label="Account sections">
-    <ElfTabsTrigger value="overview">Overview</ElfTabsTrigger>
-    <ElfTabsTrigger value="settings">Settings</ElfTabsTrigger>
-  </ElfTabsList>
-  <ElfTabsContent value="overview">...</ElfTabsContent>
-  <ElfTabsContent value="settings">...</ElfTabsContent>
-</ElfTabs>`,
   },
 ]
 
 export const rules = [
-  'Use Elf components (ElfButton, ElfInput, ElfBadge, ElfCard, ElfDialog, ElfTabs) instead of hand-rolling buttons, inputs, badges, cards, dialogs or tabs.',
+  'Use ElfUI components (ElfButton, ElfInput, ElfBadge, ElfCard, ElfDialog, ElfTabs) instead of hand-rolling buttons, inputs, badges, cards, dialogs or tabs.',
   'Choose appearance with props (variant, size), not custom classes or inline styles.',
   'Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).',
-  'Elf is dark only: do not add light-mode styles or dark: variants.',
+  'ElfUI is dark only: do not add light-mode styles or dark: variants.',
   'Do not override border radius with arbitrary values; radii derive from the theme (novatron is sharp, 0px).',
   'Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@elf/ui".',
   'Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.',
   'Dialogs need a title and description; tabs lists need an aria-label.',
   'Keep exactly one primary (default variant) button per view; use destructive only for irreversible actions.',
-  'Install from a pinned GitHub tag (github:xouyi/elf#vX.Y.Z); typescript must be installed in the consumer project.',
+  'Install from a pinned GitHub tag (github:xouyi/elfUI#vX.Y.Z); typescript 5 or 6 (not 7) must be installed in the consumer project.',
   'Use Bun for all package commands (bun add, bun run, bunx), never npm, pnpm or yarn.',
 ]
 

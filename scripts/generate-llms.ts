@@ -15,8 +15,8 @@ const byCodePoint = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 
 const root = join(import.meta.dirname, '..')
 const read = (p: string) => readFileSync(join(root, p), 'utf8')
 const pkg = JSON.parse(read('package.json')) as { version: string }
-const SITE = 'https://xouyi.github.io/elf'
-const REPO = 'https://github.com/xouyi/elf'
+const SITE = 'https://xouyi.github.io/elfUI'
+const REPO = 'https://github.com/xouyi/elfUI'
 const TAG = `v${pkg.version}`
 
 /** Parse `variants: { name: { option: '...' } }` and defaultVariants from a cva() call. */
@@ -77,14 +77,20 @@ function componentSection(c: (typeof components)[number], heading: string) {
   out.push('Props:', '')
   for (const p of c.props) out.push(`- \`${p.name}\` (${p.type}${p.default ? `, default ${p.default}` : ''}): ${p.description}`)
   if (c.slots) out.push('', 'Slots:', '', ...c.slots.map(s => `- ${s}`))
-  out.push('', 'Accessibility:', '', ...c.a11y.map(a => `- ${a}`), '', 'Example:', '', '```vue', c.example, '```', '')
+  out.push('', 'Accessibility:', '', ...c.a11y.map(a => `- ${a}`), '')
+  // The examples are the same single-file components the docs site previews and the tests mount.
+  const exDir = join(root, 'src/components', c.dir, 'examples')
+  const files = existsSync(exDir) ? readdirSync(exDir).filter(f => f.endsWith('.vue')).sort(byCodePoint) : []
+  if (files.length === 0) throw new Error(`src/components/${c.dir} has no examples/*.vue`)
+  out.push('Examples:', '')
+  for (const f of files) out.push(`${heading}# ${f.replace('.vue', '').replace(/([a-z0-9])([A-Z])/g, '$1 $2')}`, '', '```vue', read(`src/components/${c.dir}/examples/${f}`).trimEnd(), '```', '')
   return out
 }
 
 const installNuxt = [
   '```bash',
-  `bun add github:xouyi/elf#${TAG} tailwindcss @tailwindcss/vite`,
-  'bun add -d typescript',
+  `bun add github:xouyi/elfUI#${TAG} tailwindcss @tailwindcss/vite`,
+  'bun add -d typescript@5',
   '```',
   '',
   '```ts',
@@ -121,10 +127,10 @@ const installPlain = [
   'Set `<html data-theme="elf">` (or `novatron`).',
 ]
 
-const intro = 'Elf is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (violet, rounded) and novatron (gold on obsidian, sharp corners).'
+const intro = 'ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (violet, rounded) and novatron (gold on obsidian, sharp corners).'
 
 const links = [
-  `- [Documentation site](${SITE}/): Storybook with every component, props and guides`,
+  `- [Documentation site](${SITE}/): guides and a page per component with live previews, API tables and accessibility notes`,
   `- [Repository](${REPO}): source, issues, releases`,
   `- [Example Nuxt app](${REPO}/tree/main/examples/nuxt-demo): realistic consumer installed from a GitHub tag`,
   `- [Registry item index](${SITE}/r/registry.json): shadcn-vue registry (copy components into your project)`,
@@ -133,19 +139,20 @@ const links = [
 
 // llms.txt (llmstxt.org): H1, blockquote, free text, H2 link lists.
 const index = [
-  '# Elf',
+  '# ElfUI',
   '',
   `> ${intro}`,
   '',
-  `Elf is source-distributed: install from a pinned GitHub tag (currently ${TAG}). All Vue components use the \`Elf\` prefix. Use Bun for every command.`,
+  `ElfUI is source-distributed: install from a pinned GitHub tag (currently ${TAG}). All Vue components use the \`Elf\` prefix. Use Bun for every command.`,
   '',
   '## Docs',
   '',
-  `- [Getting started](${SITE}/?path=/docs/guide-getting-started--docs): install in a Nuxt 4 app`,
-  `- [Theming](${SITE}/?path=/docs/guide-theming--docs): tokens, data-theme, creating a theme`,
-  `- [Using without Nuxt](${SITE}/?path=/docs/guide-using-without-nuxt--docs): Vite and Vue setup`,
-  `- [Registry](${SITE}/?path=/docs/guide-registry--docs): copy components with the shadcn-vue CLI`,
-  ...components.map(c => `- [${c.name}](${SITE}/?path=/docs/components-${c.dir}--docs): ${c.summary}`),
+  `- [Introduction](${SITE}/docs/getting-started/introduction): what ElfUI is and what it includes`,
+  `- [Installation (Nuxt)](${SITE}/docs/getting-started/installation-nuxt): install in a Nuxt 4 app`,
+  `- [Installation (Vite + Vue)](${SITE}/docs/getting-started/installation-vite): Vite and Vue setup`,
+  `- [Theming](${SITE}/docs/getting-started/theming): tokens, data-theme, creating a theme`,
+  `- [Registry](${SITE}/docs/getting-started/registry): copy components with the shadcn-vue CLI`,
+  ...components.map(c => `- [${c.name}](${SITE}/docs/components/${c.dir}): ${c.summary}`),
   '',
   '## Reference',
   '',
@@ -157,13 +164,14 @@ const index = [
   '',
   '## Optional',
   '',
-  `- [Changelog](${REPO}/blob/main/CHANGELOG.md)`,
-  `- [Contributing](${REPO}/blob/main/CONTRIBUTING.md)`,
+  `- [Changelog](${SITE}/docs/resources/changelog)`,
+  `- [Roadmap](${SITE}/docs/resources/roadmap)`,
+  `- [Contributing](${SITE}/docs/resources/contributing)`,
   '',
 ].join('\n')
 
 const full = [
-  '# Elf (full reference)',
+  '# ElfUI (full reference)',
   '',
   `> ${intro}`,
   '',
@@ -179,13 +187,13 @@ const full = [
   '',
   '## Install (Nuxt 4)',
   '',
-  'Requirements: Bun, Nuxt 4, Tailwind CSS v4 with @tailwindcss/vite, typescript (dev dependency; the Vue compiler needs it to resolve Reka UI prop types).',
+  'Requirements: Bun, Nuxt 4, Tailwind CSS v4 with @tailwindcss/vite, typescript 5 or 6 as a dev dependency (`typescript@5`; the Vue compiler needs its JavaScript API to resolve Reka UI prop types, which TypeScript 7 no longer exposes).',
   '',
   ...installNuxt,
   '',
   'Components are auto-imported with the Elf prefix. Module options: `theme` (\'elf\' | \'novatron\', default \'elf\'), `themes` (extra theme CSS to bundle), `prefix` (default \'Elf\').',
   '',
-  'Upgrade: `bun remove @elf/ui && bun add github:xouyi/elf#vX.Y.Z`.',
+  'Upgrade: `bun remove @elf/ui && bun add github:xouyi/elfUI#vX.Y.Z`.',
   '',
   '## Install (Vue + Vite, no Nuxt)',
   '',
@@ -197,7 +205,7 @@ const full = [
   `bunx shadcn-vue@latest add ${SITE}/r/button.json`,
   '```',
   '',
-  `Or register \`"@elf": "${SITE}/r/{name}.json"\` under \`registries\` in components.json and run \`bunx shadcn-vue@latest add @elf/button @elf/elf-theme\`. Items: utils, ${components.map(c => c.dir).join(', ')}, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elf/main/registry/r/{name}.json`,
+  `Or register \`"@elf": "${SITE}/r/{name}.json"\` under \`registries\` in components.json and run \`bunx shadcn-vue@latest add @elf/button @elf/elf-theme\`. Items: utils, ${components.map(c => c.dir).join(', ')}, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json`,
   '',
   '## Theming',
   '',

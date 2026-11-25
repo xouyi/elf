@@ -24,7 +24,7 @@ Requires Bun and Node 22+. Tailwind CSS v4 and `typescript` are installed as the
 The version is the tag in `package.json`:
 
 ```json
-"@elf/ui": "github:xouyi/elf#v0.2.0"
+"@elf/ui": "github:xouyi/elfUI#v0.2.0"
 ```
 
 To move to a new release (after the tag exists on GitHub):
@@ -32,7 +32,7 @@ To move to a new release (after the tag exists on GitHub):
 ```bash
 cd examples/nuxt-demo
 bun remove @elf/ui
-bun add github:xouyi/elf#v0.2.0
+bun add github:xouyi/elfUI#v0.2.0
 bun run build
 ```
 

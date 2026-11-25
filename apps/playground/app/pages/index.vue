@@ -12,7 +12,7 @@ watchEffect(() => {
 <template>
   <main class="mx-auto flex max-w-3xl flex-col gap-8 p-6">
     <header class="flex items-center justify-between">
-      <h1 class="text-2xl font-semibold">Elf playground</h1>
+      <h1 class="text-2xl font-semibold">ElfUI playground</h1>
       <ElfButton variant="outline" size="sm" @click="theme = theme === 'novatron' ? 'elf' : 'novatron'">
         Theme: {{ theme }}
       </ElfButton>
