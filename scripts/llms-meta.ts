@@ -319,6 +319,23 @@ export const components: ComponentMeta[] = [
     ],
     a11y: ['Name the bar: label, aria-label, or aria-labelledby pointing at the visible label.', 'Progress changes are not announced by themselves; announce completion with a status message.', 'The indeterminate animation stops under prefers-reduced-motion.'],
   },
+  {
+    dir: 'avatar',
+    name: 'Avatar',
+    summary: 'Person or team image with an initials fallback, built on Reka UI Avatar. ElfAvatar (size) contains ElfAvatarImage and ElfAvatarFallback; ElfAvatarGroup overlaps several.',
+    parts: ['ElfAvatar', 'ElfAvatarImage', 'ElfAvatarFallback', 'ElfAvatarGroup'],
+    variants: 'avatarVariants',
+    props: [
+      { name: 'ElfAvatar size', type: '\'sm\' | \'default\' | \'lg\' | \'xl\'', default: 'default', description: 'Diameter (24, 32, 40 or 56px).' },
+      { name: 'ElfAvatar label', type: 'string', description: 'Accessible name; exposes the avatar as one role=img and hides its content from assistive technology.' },
+      { name: 'ElfAvatarImage src', type: 'string', description: 'Required image URL. Add alt. The image replaces the fallback once loaded.' },
+      { name: 'ElfAvatarFallback name', type: 'string', description: 'Full name; shows its initials (first and last word) when the slot is empty.' },
+      { name: 'ElfAvatarFallback delayMs', type: 'number', description: 'Wait before showing the fallback, to avoid a flash while the image loads (attribute: delay-ms).' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part; merged with base classes.' },
+    ],
+    slots: ['ElfAvatarFallback default: custom fallback content (an icon, +3)', 'ElfAvatarGroup default: ElfAvatar items'],
+    a11y: ['Give ElfAvatarImage an alt (the name, or empty when the name is shown beside it).', 'Use label on a standalone avatar, and aria-label on a group.', 'Avatars are not interactive; name the link or button you wrap one in.'],
+  },
 ]
 
 export const rules = [

@@ -32,6 +32,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [Select](https://xouyi.github.io/elfUI/docs/components/select): Dropdown to choose one value, built on Reka UI Select. Compose ElfSelect (v-model) > ElfSelectTrigger + ElfSelectValue, ElfSelectContent > ElfSelectItem (optionally in ElfSelectGroup with ElfSelectLabel and ElfSelectSeparator). Inside ElfField wrap only the trigger in ElfFieldControl.
 - [Alert](https://xouyi.github.io/elfUI/docs/components/alert): Static message with an icon, a title and a description. Variants: default, destructive, success, warning. Composed from native elements (no Reka primitive): ElfAlert with ElfAlertTitle and ElfAlertDescription.
 - [Progress](https://xouyi.github.io/elfUI/docs/components/progress): Progress bar built on Reka UI Progress (role=progressbar). Determinate with v-model (0..max) or indeterminate with a null value. Always give it a name with label, aria-label or aria-labelledby.
+- [Avatar](https://xouyi.github.io/elfUI/docs/components/avatar): Person or team image with an initials fallback, built on Reka UI Avatar. ElfAvatar (size) contains ElfAvatarImage and ElfAvatarFallback; ElfAvatarGroup overlaps several.
 
 ## Reference
 

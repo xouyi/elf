@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add `ElfAvatar`, `ElfAvatarImage`, `ElfAvatarFallback` and `ElfAvatarGroup` (`avatarVariants`), built on the Reka UI Avatar primitive: image with fallback, initials from `name`, `size` (`sm` | `default` | `lg` | `xl`), a `label` that exposes the avatar as one named image, and an overlapping group.
 - Add `ElfProgress`, built on the Reka UI Progress primitive: determinate (`v-model`, `max`) and indeterminate (`null`) bars, `size`, `label`, `aria-labelledby` wiring, `getValueText`, `indicatorClass`, and a reduced-motion fallback. Adds the `elf-progress-indeterminate` keyframes to `styles.css`.
 - Add `ElfAlert`, `ElfAlertTitle` and `ElfAlertDescription` (`alertVariants`): `default`, `destructive`, `success` and `warning` variants with per-variant icons, an `icon` slot, `showIcon`, and `role` handling (`alert` for destructive, `status` otherwise, `none` to drop the role).
 - Add `ElfSelect` with `ElfSelectTrigger`, `ElfSelectValue`, `ElfSelectContent`, `ElfSelectItem`, `ElfSelectGroup`, `ElfSelectLabel`, `ElfSelectSeparator`, `ElfSelectScrollUpButton` and `ElfSelectScrollDownButton`, built on the Reka UI Select primitive: popper positioning, typeahead, `size`, `invalid`, 16px text on small screens, and `ElfField` wiring through `ElfFieldControl` around the trigger.

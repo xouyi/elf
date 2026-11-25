@@ -1,0 +1,42 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "avatar",
+  "title": "Avatar",
+  "description": "Image with initials fallback, four sizes and an overlapping group, built on Reka UI.",
+  "dependencies": [
+    "reka-ui",
+    "@vueuse/core",
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/avatar/Avatar.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { AvatarProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { AvatarRoot, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { avatarVariants } from './index'\n\nconst props = withDefaults(defineProps<AvatarProps>(), {\n  size: 'default',\n})\nconst delegatedProps = reactiveOmit(props, 'class', 'size', 'label')\nconst forwardedProps = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <AvatarRoot\n    data-slot=\"avatar\"\n    :data-size=\"props.size\"\n    v-bind=\"forwardedProps\"\n    :role=\"props.label ? 'img' : undefined\"\n    :aria-label=\"props.label\"\n    :class=\"cn(avatarVariants({ size: props.size }), props.class)\"\n  >\n    <slot />\n  </AvatarRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/avatar/AvatarFallback.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { AvatarFallbackProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { AvatarFallback, useForwardProps } from 'reka-ui'\nimport { computed, useSlots } from 'vue'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<AvatarFallbackProps>()\nconst delegatedProps = reactiveOmit(props, 'class', 'name')\nconst forwardedProps = useForwardProps(delegatedProps)\nconst slots = useSlots()\n\nconst initials = computed(() => {\n  const words = props.name?.trim().split(/\\s+/).filter(Boolean) ?? []\n  if (words.length === 0)\n    return ''\n  const letters = words.length === 1 ? [words[0]!] : [words[0]!, words.at(-1)!]\n  return letters.map(word => Array.from(word)[0]).join('').toUpperCase()\n})\n</script>\n\n<template>\n  <AvatarFallback\n    data-slot=\"avatar-fallback\"\n    v-bind=\"forwardedProps\"\n    :class=\"cn(\n      'flex size-full items-center justify-center bg-muted font-medium text-muted-foreground',\n      'text-xs group-data-[size=sm]/avatar:text-[0.625rem] group-data-[size=lg]/avatar:text-sm group-data-[size=xl]/avatar:text-lg',\n      props.class,\n    )\"\n  >\n    <slot>\n      <template v-if=\"!slots.default\">\n        {{ initials }}\n      </template>\n    </slot>\n  </AvatarFallback>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/avatar/AvatarGroup.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { AvatarGroupProps } from './index'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<AvatarGroupProps>()\n</script>\n\n<template>\n  <div\n    data-slot=\"avatar-group\"\n    role=\"group\"\n    :class=\"cn('flex items-center -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background', props.class)\"\n  >\n    <slot />\n  </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/avatar/AvatarImage.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { AvatarImageEmits } from 'reka-ui'\nimport type { AvatarImageProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { AvatarImage, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<AvatarImageProps>()\nconst emits = defineEmits<AvatarImageEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <AvatarImage\n    data-slot=\"avatar-image\"\n    v-bind=\"forwarded\"\n    :class=\"cn('aspect-square size-full object-cover', props.class)\"\n  />\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/avatar/index.ts",
+      "content": "import type { VariantProps } from 'class-variance-authority'\nimport type { AvatarFallbackProps as RekaAvatarFallbackProps, AvatarImageProps as RekaAvatarImageProps, AvatarRootProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { cva } from 'class-variance-authority'\n\nexport { default as Avatar } from './Avatar.vue'\nexport { default as AvatarFallback } from './AvatarFallback.vue'\nexport { default as AvatarGroup } from './AvatarGroup.vue'\nexport { default as AvatarImage } from './AvatarImage.vue'\n\nexport const avatarVariants = cva(\n  'group/avatar relative inline-flex shrink-0 overflow-hidden rounded-(--elf-radius-pill) align-middle select-none',\n  {\n    variants: {\n      size: {\n        sm: 'size-6',\n        default: 'size-8',\n        lg: 'size-10',\n        xl: 'size-14',\n      },\n    },\n    defaultVariants: {\n      size: 'default',\n    },\n  },\n)\n\nexport type AvatarVariants = VariantProps<typeof avatarVariants>\n\nexport interface AvatarProps extends AvatarRootProps {\n  /** Diameter of the avatar. */\n  size?: AvatarVariants['size']\n  /**\n   * Accessible name for the whole avatar (\"Ayşe Demir\"). When set, the avatar is exposed as a single image with this\n   * name and its content is hidden from assistive technology. Leave it unset when the person's name is shown next to it.\n   */\n  label?: string\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface AvatarImageProps extends RekaAvatarImageProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface AvatarFallbackProps extends RekaAvatarFallbackProps {\n  /** Full name; its initials (first letters of the first and last word) are shown when the slot is empty. */\n  name?: string\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface AvatarGroupProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

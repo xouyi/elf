@@ -45,6 +45,10 @@ import ProgressDefault from '../../src/components/progress/examples/Default.vue'
 import ProgressIndeterminate from '../../src/components/progress/examples/Indeterminate.vue'
 import ProgressSizes from '../../src/components/progress/examples/Sizes.vue'
 import ProgressWithLabel from '../../src/components/progress/examples/WithLabel.vue'
+import AvatarDefault from '../../src/components/avatar/examples/Default.vue'
+import AvatarFallbackExample from '../../src/components/avatar/examples/Fallback.vue'
+import AvatarGroupExample from '../../src/components/avatar/examples/Group.vue'
+import AvatarSizes from '../../src/components/avatar/examples/Sizes.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -1031,6 +1035,53 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       const { el } = await show(ProgressSizes)
       const heights = [0, 1, 2].map(i => bar(el, i).getBoundingClientRect().height)
       expect(heights).toEqual([6, 8, 12])
+    })
+  })
+
+  describe('Avatar', () => {
+    it('shows the image once it has loaded and the initials when it fails', async () => {
+      setTheme(theme)
+      const { el } = await show(AvatarDefault)
+      await settle(300)
+      const [loaded, broken] = [...el.querySelectorAll<HTMLElement>('[data-slot="avatar"]')]
+      const image = loaded!.querySelector<HTMLImageElement>('img[data-slot="avatar-image"]')!
+      expect(image.complete && image.naturalWidth > 0, 'the image is decoded').toBe(true)
+      expect(loaded!.querySelector('[data-slot="avatar-fallback"]'), 'no fallback behind a loaded image').toBeNull()
+      expect(getComputedStyle(broken!.querySelector('img')!).display, 'a failed image stays hidden').toBe('none')
+      expect(broken!.querySelector('[data-slot="avatar-fallback"]')?.textContent?.trim()).toBe('MK')
+      await expect.element(page.getByRole('img', { name: 'Ayşe Demir' })).toBeInTheDocument()
+    })
+
+    it('clips to the shape and draws the four sizes', async () => {
+      setTheme(theme)
+      const { el } = await show(AvatarSizes)
+      const avatars = [...el.querySelectorAll<HTMLElement>('[data-slot="avatar"]')]
+      expect(avatars.map(a => a.getBoundingClientRect().width)).toEqual([24, 32, 40, 56])
+      expect(avatars.map(a => a.getAttribute('role'))).toEqual(['img', 'img', 'img', 'img'])
+      await expect.element(page.getByRole('img', { name: 'Avatar, xl size' })).toBeInTheDocument()
+      const radius = getComputedStyle(avatars[3]!).borderTopLeftRadius
+      expect(radius === '0px' ? theme === 'novatron' : theme === 'elf', 'round in elf, square in novatron').toBe(true)
+      expect(getComputedStyle(avatars[3]!.firstElementChild!).backgroundColor).not.toBe('rgba(0, 0, 0, 0)')
+    })
+
+    it('shows the name beside a decorative fallback and an icon fallback for an unnamed member', async () => {
+      setTheme(theme)
+      const { el } = await show(AvatarFallbackExample)
+      expect(el.querySelector('[data-slot="avatar-fallback"]')?.textContent?.trim()).toBe('ZA')
+      await expect.element(page.getByRole('img', { name: 'Unknown member' })).toBeInTheDocument()
+      expect(el.querySelectorAll('[data-slot="avatar-fallback"] svg')).toHaveLength(1)
+    })
+
+    it('overlaps the avatars of a group and names the group', async () => {
+      setTheme(theme)
+      const { el } = await show(AvatarGroupExample)
+      await expect.element(page.getByRole('group', { name: 'Software subteam, 7 members' })).toBeInTheDocument()
+      const avatars = [...el.querySelectorAll<HTMLElement>('[data-slot="avatar"]')]
+      expect(avatars).toHaveLength(5)
+      expect(avatars[4]!.textContent?.trim()).toBe('+3')
+      const [a, b] = [avatars[0]!.getBoundingClientRect(), avatars[1]!.getBoundingClientRect()]
+      expect(b.left, 'each avatar overlaps the previous one').toBeLessThan(a.right)
+      expect(getComputedStyle(avatars[0]!).boxShadow).not.toBe('none')
     })
   })
 
