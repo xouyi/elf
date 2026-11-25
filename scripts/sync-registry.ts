@@ -43,6 +43,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   switch: { title: 'Switch', description: 'On/off setting with sm and default sizes, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
   select: { title: 'Select', description: 'Dropdown to choose one value from a list, with groups, typeahead and scroll buttons, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('field')] },
   alert: { title: 'Alert', description: 'Static message with default, destructive, success and warning variants and live region handling.', dependencies: ['class-variance-authority', '@lucide/vue'] },
+  progress: { title: 'Progress', description: 'Determinate and indeterminate progress bar built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
   'visually-hidden': { title: 'Visually Hidden', description: 'Hides content visually while keeping it available to assistive technology.', dependencies: ['reka-ui'] },
 }
 

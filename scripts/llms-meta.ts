@@ -302,6 +302,23 @@ export const components: ComponentMeta[] = [
     slots: ['ElfAlert default: ElfAlertTitle and ElfAlertDescription', 'ElfAlert icon: replaces the default variant icon (a 16px SVG)'],
     a11y: ['Only an alert inserted after load is announced; use v-if after a user action, and role="none" for static notices.', 'Do not move focus to it or auto-dismiss it.', 'Say the severity in the title, never in color or icon alone.'],
   },
+  {
+    dir: 'progress',
+    name: 'Progress',
+    summary: 'Progress bar built on Reka UI Progress (role=progressbar). Determinate with v-model (0..max) or indeterminate with a null value. Always give it a name with label, aria-label or aria-labelledby.',
+    parts: ['ElfProgress'],
+    variants: 'progressVariants',
+    props: [
+      { name: 'modelValue', type: 'number | null', description: 'Current value, bound with v-model. null (or omitted) makes the bar indeterminate: no aria-valuenow, animated.' },
+      { name: 'max', type: 'number', default: '100', description: 'Maximum value (aria-valuemax).' },
+      { name: 'size', type: '\'sm\' | \'default\' | \'lg\'', default: 'default', description: 'Bar thickness (6, 8 or 12px).' },
+      { name: 'label', type: 'string', description: 'Accessible name (aria-label) when there is no visible label.' },
+      { name: 'getValueText', type: '(value, max) => string', description: 'Sets aria-valuetext, for example "7 of 12 tasks".' },
+      { name: 'class', type: 'string | array | object', description: 'Merged onto the track.' },
+      { name: 'indicatorClass', type: 'string | array | object', description: 'Merged onto the filled indicator, for example bg-success (attribute: indicator-class).' },
+    ],
+    a11y: ['Name the bar: label, aria-label, or aria-labelledby pointing at the visible label.', 'Progress changes are not announced by themselves; announce completion with a status message.', 'The indeterminate animation stops under prefers-reduced-motion.'],
+  },
 ]
 
 export const rules = [

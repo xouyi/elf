@@ -73,6 +73,11 @@
   to { opacity: 0; scale: 0.96; }
 }
 
+@keyframes elf-progress-indeterminate {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(250%); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-slot='dialog-overlay'],
   [data-slot='dialog-content'] {

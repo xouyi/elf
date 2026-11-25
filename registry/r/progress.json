@@ -1,0 +1,27 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "progress",
+  "title": "Progress",
+  "description": "Determinate and indeterminate progress bar built on Reka UI.",
+  "dependencies": [
+    "reka-ui",
+    "@vueuse/core",
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/progress/Progress.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ProgressRootEmits } from 'reka-ui'\nimport type { ProgressProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { ProgressIndicator, ProgressRoot, useForwardPropsEmits } from 'reka-ui'\nimport { computed, useAttrs } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { progressVariants } from './index'\n\ndefineOptions({\n  inheritAttrs: false,\n})\n\nconst props = withDefaults(defineProps<ProgressProps>(), {\n  size: 'default',\n})\nconst emits = defineEmits<ProgressRootEmits>()\n\nconst attrs = useAttrs()\nconst delegatedProps = reactiveOmit(props, 'class', 'indicatorClass', 'size', 'label', 'getValueLabel')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n\n// The name comes from `label` or aria-label; with aria-labelledby the visible label names the bar. Otherwise Reka's \"60%\" is used.\nfunction valueLabel(value: number | null | undefined, max: number) {\n  const explicit = props.label ?? attrs['aria-label']\n  if (explicit)\n    return String(explicit)\n  if (attrs['aria-labelledby'])\n    return undefined\n  return props.getValueLabel?.(value, max) ?? (typeof value === 'number' ? `${Math.round(value / max * 100)}%` : undefined)\n}\n\nconst max = computed(() => (props.max && props.max > 0 ? props.max : 100))\nfunction percent(value: number | null | undefined) {\n  return typeof value === 'number' ? Math.min(100, Math.max(0, value / max.value * 100)) : null\n}\n</script>\n\n<template>\n  <ProgressRoot\n    v-slot=\"{ modelValue }\"\n    data-slot=\"progress\"\n    :data-size=\"props.size\"\n    v-bind=\"{ ...attrs, ...forwarded }\"\n    :get-value-label=\"valueLabel\"\n    :class=\"cn(progressVariants({ size: props.size }), props.class)\"\n  >\n    <ProgressIndicator\n      data-slot=\"progress-indicator\"\n      :style=\"percent(modelValue) === null ? undefined : { width: `${percent(modelValue)}%` }\"\n      :class=\"cn(\n        'h-full rounded-(--elf-radius-pill) bg-primary transition-[width] duration-300 motion-reduce:transition-none',\n        'data-[state=indeterminate]:absolute data-[state=indeterminate]:w-2/5 data-[state=indeterminate]:animate-[elf-progress-indeterminate_1.4s_ease-in-out_infinite]',\n        'motion-reduce:data-[state=indeterminate]:inset-0 motion-reduce:data-[state=indeterminate]:w-full motion-reduce:data-[state=indeterminate]:animate-none motion-reduce:data-[state=indeterminate]:opacity-50',\n        props.indicatorClass,\n      )\"\n    />\n  </ProgressRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/progress/index.ts",
+      "content": "import type { VariantProps } from 'class-variance-authority'\nimport type { ProgressRootProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { cva } from 'class-variance-authority'\n\nexport { default as Progress } from './Progress.vue'\n\nexport const progressVariants = cva(\n  'relative w-full overflow-hidden rounded-(--elf-radius-pill) bg-secondary',\n  {\n    variants: {\n      size: {\n        sm: 'h-1.5',\n        default: 'h-2',\n        lg: 'h-3',\n      },\n    },\n    defaultVariants: {\n      size: 'default',\n    },\n  },\n)\n\nexport type ProgressVariants = VariantProps<typeof progressVariants>\n\nexport interface ProgressProps extends ProgressRootProps {\n  /** Bar thickness. */\n  size?: ProgressVariants['size']\n  /**\n   * Accessible name of the bar (\"Uploading roster.csv\"). Use it when there is no visible label;\n   * with a visible label point `aria-labelledby` at it instead.\n   */\n  label?: string\n  /** Extra classes for the track, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n  /** Extra classes for the filled indicator, for example to change its color. */\n  indicatorClass?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

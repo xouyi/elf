@@ -94,5 +94,8 @@ export type { SelectTriggerProps, SelectTriggerVariants } from './components/sel
 export { Alert as ElfAlert, AlertDescription as ElfAlertDescription, alertVariants, AlertTitle as ElfAlertTitle } from './components/alert'
 export type { AlertDescriptionProps, AlertProps, AlertTitleProps, AlertVariants } from './components/alert'
 
+export { Progress as ElfProgress, progressVariants } from './components/progress'
+export type { ProgressProps, ProgressVariants } from './components/progress'
+
 export const elfThemes = ['elf', 'novatron'] as const
 export type ElfTheme = (typeof elfThemes)[number]
