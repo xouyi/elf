@@ -16,6 +16,10 @@ export default defineConfig({
         test: { name: 'unit', environment: 'happy-dom', include: ['src/**/*.test.ts'] },
       },
       {
+        // The elfui CLI: pure logic plus an end-to-end run of the built binary against temp projects. No browser, no network.
+        test: { name: 'cli', environment: 'node', include: ['cli/**/*.test.ts'], testTimeout: 60_000 },
+      },
+      {
         // Real Chromium: every example in both themes (axe) plus keyboard/focus behavior. Needs `bunx playwright install chromium`.
         extends: true,
         plugins: [vue(), tailwindcss()],
