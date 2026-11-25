@@ -7,6 +7,9 @@ import VisuallyHiddenTable from '../../src/components/visually-hidden/examples/T
 import LabelDefault from '../../src/components/label/examples/Default.vue'
 import LabelDisabled from '../../src/components/label/examples/Disabled.vue'
 import LabelWithCheckbox from '../../src/components/label/examples/WithCheckbox.vue'
+import SeparatorDefault from '../../src/components/separator/examples/Default.vue'
+import SeparatorSemantic from '../../src/components/separator/examples/Semantic.vue'
+import SeparatorVertical from '../../src/components/separator/examples/Vertical.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -257,6 +260,31 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       setTheme(theme)
       const { el } = await show(LabelDisabled)
       expect(getComputedStyle(el.querySelector('label')!).opacity).toBe('0.5')
+    })
+  })
+
+  describe('Separator', () => {
+    it('draws a 1px line in the border color in both orientations', async () => {
+      setTheme(theme)
+      const horizontal = (await show(SeparatorDefault)).el.querySelector<HTMLElement>('[data-slot="separator"]')!
+      const h = horizontal.getBoundingClientRect()
+      expect(h.height).toBe(1)
+      expect(h.width).toBeGreaterThan(100)
+      expect(getComputedStyle(horizontal).backgroundColor).not.toBe('rgba(0, 0, 0, 0)')
+      unmount?.()
+      const vertical = (await show(SeparatorVertical)).el.querySelector<HTMLElement>('[data-slot="separator"]')!
+      const v = vertical.getBoundingClientRect()
+      expect(v.width).toBe(1)
+      expect(v.height).toBeGreaterThan(10)
+    })
+
+    it('is ignored by assistive technology unless it is marked as meaningful', async () => {
+      setTheme(theme)
+      await show(SeparatorSemantic)
+      await expect.element(page.getByRole('separator')).toBeInTheDocument()
+      unmount?.()
+      await show(SeparatorDefault)
+      expect(document.querySelector('[role="separator"]')).toBeNull()
     })
   })
 

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "separator",
+  "title": "Separator",
+  "description": "Horizontal or vertical divider, built on Reka UI.",
+  "dependencies": [
+    "reka-ui"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/separator/Separator.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { SeparatorProps } from './index'\nimport { Separator } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = withDefaults(defineProps<SeparatorProps>(), {\n  orientation: 'horizontal',\n  decorative: true,\n})\n</script>\n\n<template>\n  <Separator\n    data-slot=\"separator\"\n    :as=\"props.as\"\n    :as-child=\"props.asChild\"\n    :orientation=\"props.orientation\"\n    :decorative=\"props.decorative\"\n    :class=\"cn(\n      'shrink-0 bg-border data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px',\n      props.class,\n    )\"\n  />\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/separator/index.ts",
+      "content": "import type { SeparatorProps as RekaSeparatorProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\n\nexport { default as Separator } from './Separator.vue'\n\nexport interface SeparatorProps extends RekaSeparatorProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
