@@ -15,7 +15,7 @@ onBeforeUnmount(() => unregister?.())
     :id="field?.errorId"
     data-slot="field-error"
     role="alert"
-    :class="cn('text-sm text-[color-mix(in_oklab,var(--color-destructive)_55%,white)]', props.class)"
+    :class="cn('text-sm text-destructive-text', props.class)"
   >
     <slot />
   </div>

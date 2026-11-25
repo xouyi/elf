@@ -19,6 +19,6 @@ const field = useFieldContext()
     )"
   >
     <slot />
-    <span v-if="field?.required.value" aria-hidden="true" class="text-[color-mix(in_oklab,var(--color-destructive)_55%,white)]">*</span>
+    <span v-if="field?.required.value" aria-hidden="true" class="text-destructive-text">*</span>
   </Label>
 </template>

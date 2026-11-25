@@ -28,6 +28,7 @@
   --color-accent-foreground: var(--elf-accent-foreground);
   --color-destructive: var(--elf-destructive);
   --color-destructive-foreground: var(--elf-destructive-foreground);
+  --color-destructive-text: var(--elf-destructive-text);
   --color-success: var(--elf-success);
   --color-success-foreground: var(--elf-success-foreground);
   --color-warning: var(--elf-warning);

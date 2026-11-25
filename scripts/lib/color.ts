@@ -62,6 +62,9 @@ export const textPairs: Array<[string, string]> = [
   ['muted-foreground', 'card'],
   ['accent-foreground', 'accent'],
   ['destructive-foreground', 'destructive'],
+  ['destructive-text', 'background'], // error text on the page, cards and popovers
+  ['destructive-text', 'card'],
+  ['destructive-text', 'popover'],
   ['success-foreground', 'success'],
   ['warning-foreground', 'warning'],
   ['primary', 'background'], // primary used as text (link variant)

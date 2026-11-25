@@ -9,6 +9,7 @@ Version 0.3.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com
 - Use ElfUI components (ElfButton, ElfInput, ElfBadge, ElfCard, ElfDialog, ElfTabs) instead of hand-rolling buttons, inputs, badges, cards, dialogs or tabs.
 - Choose appearance with props (variant, size), not custom classes or inline styles.
 - Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).
+- Use text-destructive-text for error messages and required markers; bg-destructive is a fill and is too dark for text.
 - ElfUI is dark only: do not add light-mode styles or dark: variants.
 - Do not override border radius with arbitrary values; radii derive from the theme (novatron is sharp, 0px).
 - Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".
@@ -119,6 +120,7 @@ Tokens (CSS variables `--elf-<name>`, Tailwind utilities `bg-<name>`, `text-<nam
 | accent-foreground | `#fafafa` | `#fafafa` |
 | destructive | `oklch(0.55 0.21 25)` | `#dc2626` |
 | destructive-foreground | `oklch(0.99 0 0)` | `#ffffff` |
+| destructive-text | `oklch(0.72 0.17 22)` | `#f87171` |
 | success | `oklch(0.72 0.17 150)` | `#22c55e` |
 | success-foreground | `oklch(0.15 0.03 150)` | `#050505` |
 | warning | `oklch(0.82 0.15 85)` | `#f59e0b` |
@@ -321,7 +323,7 @@ import { ElfInput } from '@xouyi/elfui'
 <template>
   <div class="grid w-72 gap-2">
     <ElfInput aria-invalid="true" model-value="not-an-email" aria-label="Email" aria-describedby="email-error" />
-    <p id="email-error" class="text-sm text-[color-mix(in_oklab,var(--color-destructive)_55%,white)]">
+    <p id="email-error" class="text-sm text-destructive-text">
       Enter a valid email address.
     </p>
   </div>
@@ -834,7 +836,7 @@ import { ElfInput, ElfLabel } from '@xouyi/elfui'
   <div class="grid w-72 gap-2">
     <ElfLabel for="label-team-name">
       Team name
-      <span aria-hidden="true" class="text-[color-mix(in_oklab,var(--color-destructive)_55%,white)]">*</span>
+      <span aria-hidden="true" class="text-destructive-text">*</span>
     </ElfLabel>
     <ElfInput id="label-team-name" required placeholder="Novatron Robotics" />
   </div>
@@ -1408,7 +1410,7 @@ import { ElfLabel, ElfTextarea } from '@xouyi/elfui'
       model-value="Hi"
       aria-describedby="textarea-bio-error"
     />
-    <p id="textarea-bio-error" class="text-sm text-[color-mix(in_oklab,var(--color-destructive)_55%,white)]">
+    <p id="textarea-bio-error" class="text-sm text-destructive-text">
       Write at least 20 characters.
     </p>
   </div>

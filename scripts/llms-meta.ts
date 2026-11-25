@@ -342,6 +342,7 @@ export const rules = [
   'Use ElfUI components (ElfButton, ElfInput, ElfBadge, ElfCard, ElfDialog, ElfTabs) instead of hand-rolling buttons, inputs, badges, cards, dialogs or tabs.',
   'Choose appearance with props (variant, size), not custom classes or inline styles.',
   'Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).',
+  'Use text-destructive-text for error messages and required markers; bg-destructive is a fill and is too dark for text.',
   'ElfUI is dark only: do not add light-mode styles or dark: variants.',
   'Do not override border radius with arbitrary values; radii derive from the theme (novatron is sharp, 0px).',
   'Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".',

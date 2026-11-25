@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add the `--elf-destructive-text` token and the `text-destructive-text` utility: readable error text on `background`, `card` and `popover` (7.2:1 or better in both themes, checked by `bun run contrast`). `ElfFieldError`, the required marker of `ElfFieldLabel`, the Input, Textarea and Label examples and `ElfAlert` use it instead of mixing `destructive` with white. Custom themes must define `--elf-destructive-text`.
 - Add `ElfAvatar`, `ElfAvatarImage`, `ElfAvatarFallback` and `ElfAvatarGroup` (`avatarVariants`), built on the Reka UI Avatar primitive: image with fallback, initials from `name`, `size` (`sm` | `default` | `lg` | `xl`), a `label` that exposes the avatar as one named image, and an overlapping group.
 - Add `ElfProgress`, built on the Reka UI Progress primitive: determinate (`v-model`, `max`) and indeterminate (`null`) bars, `size`, `label`, `aria-labelledby` wiring, `getValueText`, `indicatorClass`, and a reduced-motion fallback. Adds the `elf-progress-indeterminate` keyframes to `styles.css`.
 - Add `ElfAlert`, `ElfAlertTitle` and `ElfAlertDescription` (`alertVariants`): `default`, `destructive`, `success` and `warning` variants with per-variant icons, an `icon` slot, `showIcon`, and `role` handling (`alert` for destructive, `status` otherwise, `none` to drop the role).
