@@ -1,0 +1,26 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "spinner",
+  "title": "Spinner",
+  "description": "Indeterminate busy indicator announced through role status.",
+  "dependencies": [
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json",
+    "https://xouyi.github.io/elfUI/r/visually-hidden.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/spinner/Spinner.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { SpinnerProps } from './index'\nimport { cn } from '@/lib/utils'\nimport { VisuallyHidden } from '@/components/ui/visually-hidden'\nimport { spinnerVariants } from './index'\n\nconst props = withDefaults(defineProps<SpinnerProps>(), {\n  size: 'default',\n  label: 'Loading',\n})\n</script>\n\n<template>\n  <span\n    role=\"status\"\n    data-slot=\"spinner\"\n    :data-size=\"props.size\"\n    :class=\"cn(spinnerVariants({ size: props.size }), props.class)\"\n  >\n    <svg\n      viewBox=\"0 0 24 24\"\n      fill=\"none\"\n      stroke=\"currentColor\"\n      stroke-width=\"2.5\"\n      stroke-linecap=\"round\"\n      aria-hidden=\"true\"\n      class=\"size-full animate-spin motion-reduce:animate-none\"\n    >\n      <circle cx=\"12\" cy=\"12\" r=\"9\" class=\"opacity-25\" />\n      <path d=\"M21 12a9 9 0 0 0-9-9\" />\n    </svg>\n    <VisuallyHidden>{{ props.label }}</VisuallyHidden>\n  </span>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/spinner/index.ts",
+      "content": "import type { VariantProps } from 'class-variance-authority'\nimport type { HTMLAttributes } from 'vue'\nimport { cva } from 'class-variance-authority'\n\nexport { default as Spinner } from './Spinner.vue'\n\nexport const spinnerVariants = cva(\n  'inline-flex shrink-0 items-center justify-center',\n  {\n    variants: {\n      size: {\n        sm: 'size-3',\n        default: 'size-4',\n        lg: 'size-6',\n        xl: 'size-8',\n      },\n    },\n    defaultVariants: {\n      size: 'default',\n    },\n  },\n)\n\nexport type SpinnerVariants = VariantProps<typeof spinnerVariants>\n\nexport interface SpinnerProps {\n  /** Diameter of the spinner. */\n  size?: SpinnerVariants['size']\n  /** Text announced to assistive technology through `role=\"status\"`. Not shown on screen. */\n  label?: string\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
