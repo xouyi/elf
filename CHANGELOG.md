@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- **Breaking rename: `@elf/ui` is now `elfui`.** The package is published on npm as `elfui` (unscoped). Imports become `from 'elfui'`, `elfui/nuxt`, `elfui/styles.css`, `elfui/themes/*.css` and `elfui/lib/utils`, and the Nuxt module option key becomes `elfui:` (was `elf:`). The `Elf` component prefix is unchanged. No compatibility shim: `@elf/ui` was never published to npm. Upgrade from a GitHub install: `bun remove @elf/ui && bun add elfui`, then rename the imports and the `elf:` config key.
+- npm-ready package: `files` whitelist, `publishConfig` (public, provenance), `bin`, `keywords`, `homepage`, `bugs`, `engines` and peer dependencies (`vue`, `tailwindcss`, `@tailwindcss/vite`, `typescript`, optional `nuxt`).
 - Add `ElfField` with `ElfFieldControl`, `ElfFieldLabel`, `ElfFieldDescription` and `ElfFieldError`: label, control, description and error wired through `id`, `for`, `aria-describedby`, `aria-invalid` and `aria-required`, plus `useFieldContext()`; works with `ElfInput` and `ElfTextarea`.
 - Add `ElfTextarea`: native textarea with `v-model`, `autoResize`, `invalid`, `rows` and `maxlength`, sharing the `ElfInput` styles.
 - Add `ElfSkeleton`: a decorative placeholder block (`aria-hidden`, reduced-motion aware).
@@ -12,7 +14,7 @@
 - Add `ElfVisuallyHidden`, built on the Reka UI VisuallyHidden primitive (`as`, `asChild`, `feature`).
 - Docs: Storybook is gone. The documentation is a Nuxt 4 + Nuxt Content site (`apps/docs`) built with ElfUI itself, with live previews and copyable source for every example, API tables generated from the component sources (`vue-component-meta`), a live theme token and contrast table, Cmd/Ctrl+K search, and a page per component. Published at https://xouyi.github.io/elfUI/.
 - Examples: component stories became `src/components/<name>/examples/*.vue`, the single source for docs previews and tests.
-- The repository is now `xouyi/elfUI` (package name `@elf/ui` and the `Elf` component prefix are unchanged). Registry URLs are `https://xouyi.github.io/elfUI/r/`.
+- The repository is now `xouyi/elfUI`. Registry URLs are `https://xouyi.github.io/elfUI/r/`.
 - Removed `bun run storybook`, `bun run build-storybook` and the Storybook-based tests; `bun run check` builds the docs site instead (`bun run docs:build`).
 - Tests: Vitest browser project (real Chromium) mounts every example in both themes and requires zero `axe-core` violations, plus interaction tests for Dialog focus and Escape handling, Tabs keyboard navigation, Button `as-child` and Input `v-model`. `bun run test:browser`.
 - Visual regression: Playwright screenshots every example in isolation (`/__examples/<component>/<example>` on the docs site) in both themes at 1280 and 360 px; baselines are created only by the Visual baselines workflow in the Playwright image. New docs page "Testing".

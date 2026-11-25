@@ -13,8 +13,8 @@ export interface ModuleOptions {
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: '@elf/ui',
-    configKey: 'elf',
+    name: 'elfui',
+    configKey: 'elfui',
     compatibility: { nuxt: '>=4.0.0' },
   },
   defaults: {
@@ -25,7 +25,7 @@ export default defineNuxtModule<ModuleOptions>({
     const { resolve } = createResolver(import.meta.url)
 
     // Source-distributed package: let Vite/Nitro compile the .vue and .ts files.
-    nuxt.options.build.transpile.push('@elf/ui')
+    nuxt.options.build.transpile.push('elfui')
 
     addComponentsDir({
       path: resolve('../components'),

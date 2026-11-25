@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfSpinner } from '@elf/ui'
+import { ElfSpinner } from 'elfui'
 </script>
 
 <template>

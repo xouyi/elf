@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import '@elf/ui/styles.css';
+@import 'elfui/styles.css';
 
 @theme {
   --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;

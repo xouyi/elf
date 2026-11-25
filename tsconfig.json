@@ -11,8 +11,8 @@
     "verbatimModuleSyntax": true,
     "resolveJsonModule": true,
     "types": ["node", "bun", "vite/client"],
-    "paths": { "@elf/ui": ["./src/index.ts"] },
+    "paths": { "elfui": ["./src/index.ts"] },
     "lib": ["ESNext", "DOM", "DOM.Iterable"]
   },
-  "include": ["src/**/*.ts", "src/**/*.vue", "scripts/**/*.ts", "apps/docs/scripts/**/*.ts", "tests/**/*.ts", "vitest.config.ts", "playwright.config.ts"]
+  "include": ["cli/**/*.ts", "src/**/*.ts", "src/**/*.vue", "scripts/**/*.ts", "apps/docs/scripts/**/*.ts", "tests/**/*.ts", "vitest.config.ts", "playwright.config.ts"]
 }

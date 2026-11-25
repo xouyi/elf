@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfKbd, ElfKbdGroup, ElfVisuallyHidden } from '@elf/ui'
+import { ElfKbd, ElfKbdGroup, ElfVisuallyHidden } from 'elfui'
 import { ArrowDown, ArrowUp, CornerDownLeft } from '@lucide/vue'
 </script>
 

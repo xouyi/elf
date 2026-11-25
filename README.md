@@ -11,7 +11,7 @@ CSS-variable theming) and styled with Tailwind CSS v4.
 
 - Components: Button, Input, Badge, Card, Dialog, Tabs (all prefixed `Elf` in Vue, for example `<ElfButton>`)
 - Themes: `elf` (violet, rounded, default) and `novatron` (gold on obsidian, sharp corners)
-- Distribution: one npm-style package `@elf/ui` installed from GitHub, plus a shadcn-vue registry for copying components
+- Distribution: one npm-style package `elfui` installed from GitHub, plus a shadcn-vue registry for copying components
 - Docs: a Nuxt Content site built with ElfUI itself, published at https://xouyi.github.io/elfUI/ (`bun run docs:dev` locally)
 - AI assistants: `llms.txt` and `llms-full.txt`, generated from the sources (`bun run llms`)
 - Example: [`examples/nuxt-demo`](examples/nuxt-demo) installs ElfUI from a GitHub tag like a real consumer
@@ -33,9 +33,9 @@ bun add -d typescript@5
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
-  modules: ['@elf/ui/nuxt'],
+  modules: ['elfui/nuxt'],
   css: ['~/assets/css/main.css'],
-  elf: { theme: 'novatron' }, // 'elf' | 'novatron'; optional: themes: ['elf'] to bundle extra themes
+  elfui: { theme: 'novatron' }, // 'elf' | 'novatron'; optional: themes: ['elf'] to bundle extra themes
   vite: { plugins: [tailwindcss()] },
 })
 ```
@@ -44,7 +44,7 @@ export default defineNuxtConfig({
 
 ```css
 @import 'tailwindcss';
-@import '@elf/ui/styles.css';
+@import 'elfui/styles.css';
 ```
 
 Use the components (auto-imported with the `Elf` prefix):
@@ -56,19 +56,19 @@ Use the components (auto-imported with the `Elf` prefix):
 </ElfCard>
 ```
 
-`@elf/ui/styles.css` maps ElfUI tokens to Tailwind colors and radii and tells Tailwind to scan the
+`elfui/styles.css` maps ElfUI tokens to Tailwind colors and radii and tells Tailwind to scan the
 ElfUI component sources. The Nuxt module adds the theme token CSS and sets `data-theme` on `<html>`.
 
 ### Without Nuxt
 
 ```ts
-import { ElfButton } from '@elf/ui'
+import { ElfButton } from 'elfui'
 ```
 
 ```css
 @import 'tailwindcss';
-@import '@elf/ui/styles.css';
-@import '@elf/ui/themes/elf.css';
+@import 'elfui/styles.css';
+@import 'elfui/themes/elf.css';
 ```
 
 Set `<html data-theme="elf">` (or `novatron`).

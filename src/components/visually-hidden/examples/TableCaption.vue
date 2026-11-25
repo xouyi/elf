@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfVisuallyHidden } from '@elf/ui'
+import { ElfVisuallyHidden } from 'elfui'
 
 const rows = [
   { name: 'Ayşe Demir', role: 'Captain', status: 'Active' },

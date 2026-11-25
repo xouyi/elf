@@ -41,7 +41,7 @@ ElfUI is source-distributed: install from a pinned GitHub tag (currently v0.2.0)
 - Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).
 - ElfUI is dark only: do not add light-mode styles or dark: variants.
 - Do not override border radius with arbitrary values; radii derive from the theme (novatron is sharp, 0px).
-- Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@elf/ui".
+- Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "elfui".
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.
 - Dialogs need a title and description; tabs lists need an aria-label.
 - Keep exactly one primary (default variant) button per view; use destructive only for irreversible actions.

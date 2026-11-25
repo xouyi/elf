@@ -1,5 +1,5 @@
 {
-  "name": "@elf/playground",
+  "name": "elfui-playground",
   "private": true,
   "type": "module",
   "scripts": {

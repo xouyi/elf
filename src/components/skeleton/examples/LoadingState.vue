@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfButton, ElfSkeleton, ElfVisuallyHidden } from '@elf/ui'
+import { ElfButton, ElfSkeleton, ElfVisuallyHidden } from 'elfui'
 import { ref } from 'vue'
 
 const loading = ref(true)

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfButton, ElfVisuallyHidden } from '@elf/ui'
+import { ElfButton, ElfVisuallyHidden } from 'elfui'
 import { Trash2 } from '@lucide/vue'
 </script>
 

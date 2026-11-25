@@ -39,8 +39,8 @@
       },
       "peerDependencies": {
         "@tailwindcss/vite": "^4.3.0",
-        "nuxt": "^4.6.4",
-        "tailwindcss": "^4.3.0",
+        "nuxt": ">=4.0.0",
+        "tailwindcss": "^4.0.0",
         "typescript": ">=5.0.0 <7.0.0",
         "vue": "^3.5.0",
       },
@@ -49,7 +49,7 @@
       ],
     },
     "apps/docs": {
-      "name": "@elf/docs",
+      "name": "elfui-docs",
       "dependencies": {
         "@lucide/vue": "1.79.0",
         "@nuxt/content": "3.17.0",
@@ -68,7 +68,7 @@
       },
     },
     "apps/playground": {
-      "name": "@elf/playground",
+      "name": "elfui-playground",
       "dependencies": {
         "nuxt": "4.7.0",
         "vue": "3.5.46",
@@ -172,10 +172,6 @@
     "@dxup/unimport": ["@dxup/unimport@0.1.2", "", {}, "sha512-/B8YJGPzaYq1NbsQmwgP8EZqg40NpTw4ZB3suuI0TplbxKHeK94jeaawLmVhCv+YwUnOpiWEz9U6SeThku/8JQ=="],
 
     "@e18e/eslint-plugin": ["@e18e/eslint-plugin@0.8.1", "", { "dependencies": { "empathic": "^2.0.1", "module-replacements": "^3.3.0", "verkit": "^0.4.0" }, "peerDependencies": { "eslint": "^9.0.0 || ^10.0.0", "oxlint": "^1.72.0" }, "optionalPeers": ["eslint", "oxlint"] }, "sha512-OV3T7l0r52/IglskdAuoO+BJyzsCs7AcIHpwpBMlIMO0+3RHskM2h5MuHdLuesIhSRhwCURGMKtp/XwnfXrfxg=="],
-
-    "@elf/docs": ["@elf/docs@workspace:apps/docs"],
-
-    "@elf/playground": ["@elf/playground@workspace:apps/playground"],
 
     "@emnapi/core": ["@emnapi/core@2.0.0-beta.2", "", { "dependencies": { "@emnapi/wasi-threads": "2.2.0", "tslib": "^2.4.0" } }, "sha512-MzCVoWtcg4Pm2B3je5mMvYMvj3MmBKw+fU7vbsJc9/iT8ip6/eYIHo/Dsm/mr+wsHB6SEyJDuxB09Yy6r/8+4A=="],
 
@@ -1034,6 +1030,10 @@
     "ee-first": ["ee-first@1.1.1", "", {}, "sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow=="],
 
     "electron-to-chromium": ["electron-to-chromium@1.5.493", "", {}, "sha512-/Wto2sKd0EpepzMqwSP2il2TNc+rnBDF6k1poCvhRKpaSSD4sLGRBE+FydqHs2QwcW9cXKLVDqnauzJy1oByYw=="],
+
+    "elfui-docs": ["elfui-docs@workspace:apps/docs"],
+
+    "elfui-playground": ["elfui-playground@workspace:apps/playground"],
 
     "emoji-regex": ["emoji-regex@8.0.0", "", {}, "sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A=="],
 
