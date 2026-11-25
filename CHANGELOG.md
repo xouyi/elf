@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add `ElfAlert`, `ElfAlertTitle` and `ElfAlertDescription` (`alertVariants`): `default`, `destructive`, `success` and `warning` variants with per-variant icons, an `icon` slot, `showIcon`, and `role` handling (`alert` for destructive, `status` otherwise, `none` to drop the role).
 - Add `ElfSelect` with `ElfSelectTrigger`, `ElfSelectValue`, `ElfSelectContent`, `ElfSelectItem`, `ElfSelectGroup`, `ElfSelectLabel`, `ElfSelectSeparator`, `ElfSelectScrollUpButton` and `ElfSelectScrollDownButton`, built on the Reka UI Select primitive: popper positioning, typeahead, `size`, `invalid`, 16px text on small screens, and `ElfField` wiring through `ElfFieldControl` around the trigger.
 - Add `ElfSwitch`, built on the Reka UI Switch primitive: `v-model`, `size` (`default` | `sm`, exported `switchVariants`), `disabled`, a `thumb` slot, Space and Enter toggling, and `ElfField` wiring.
 - Add `ElfRadioGroup` and `ElfRadioGroupItem`, built on the Reka UI RadioGroup primitive: `v-model`, `orientation`, `disabled`, `required`, `invalid`, roving arrow-key selection, and in `ElfField` the group is named by the field label and gets the described, invalid and required wiring.

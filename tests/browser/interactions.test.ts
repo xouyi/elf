@@ -37,6 +37,9 @@ import SelectGroups from '../../src/components/select/examples/Groups.vue'
 import SelectScrollable from '../../src/components/select/examples/Scrollable.vue'
 import SelectStates from '../../src/components/select/examples/States.vue'
 import SelectWithField from '../../src/components/select/examples/WithField.vue'
+import AlertCustomIcon from '../../src/components/alert/examples/CustomIcon.vue'
+import AlertDynamic from '../../src/components/alert/examples/Dynamic.vue'
+import AlertVariants from '../../src/components/alert/examples/Variants.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -910,6 +913,52 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       disabled!.click()
       await settle(150)
       expect(listbox()).toBeNull()
+    })
+  })
+
+  describe('Alert', () => {
+    it('gives destructive alerts role alert and the others role status', async () => {
+      setTheme(theme)
+      const { el } = await show(AlertVariants)
+      const alerts = [...el.querySelectorAll<HTMLElement>('[data-slot="alert"]')]
+      expect(alerts.map(a => a.dataset.variant)).toEqual(['default', 'success', 'warning', 'destructive'])
+      expect(alerts.map(a => a.getAttribute('role'))).toEqual(['status', 'status', 'status', 'alert'])
+      await expect.element(page.getByRole('alert')).toBeInTheDocument()
+      expect(el.querySelector('[role="alert"]')?.textContent).toContain('Could not save the schedule')
+      expect(el.querySelectorAll('[data-slot="alert-icon"][aria-hidden="true"] svg')).toHaveLength(4)
+    })
+
+    it('draws variant-specific colors from the theme tokens', async () => {
+      setTheme(theme)
+      const { el } = await show(AlertVariants)
+      const alerts = [...el.querySelectorAll<HTMLElement>('[data-slot="alert"]')]
+      const colors = alerts.map(a => getComputedStyle(a.querySelector('[data-slot="alert-title"]')!).color)
+      expect(new Set(colors).size, 'title colors differ per variant').toBe(colors.length)
+      const borders = alerts.map(a => getComputedStyle(a).borderTopColor)
+      expect(new Set(borders).size, 'every variant has its own border color').toBe(4)
+    })
+
+    it('renders a custom icon, and role none and no icon when asked', async () => {
+      setTheme(theme)
+      const { el } = await show(AlertCustomIcon)
+      const [withIcon, bare] = [...el.querySelectorAll<HTMLElement>('[data-slot="alert"]')]
+      expect(withIcon!.querySelector('[data-slot="alert-icon"] svg')).not.toBeNull()
+      expect(bare!.hasAttribute('role')).toBe(false)
+      expect(bare!.querySelector('[data-slot="alert-icon"]')).toBeNull()
+    })
+
+    it('inserts live regions on demand and removes the previous message', async () => {
+      setTheme(theme)
+      const { el } = await show(AlertDynamic)
+      expect(el.querySelector('[data-slot="alert"]')).toBeNull()
+      const [save, fail] = [...el.querySelectorAll<HTMLElement>('button')]
+      await userEvent.click(fail!)
+      await settle()
+      expect(el.querySelector('[role="alert"]')?.textContent).toContain('Save failed')
+      await userEvent.click(save!)
+      await settle()
+      expect(el.querySelector('[role="alert"]')).toBeNull()
+      expect(el.querySelector('[role="status"]')?.textContent).toContain('Roster saved')
     })
   })
 

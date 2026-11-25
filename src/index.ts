@@ -91,5 +91,8 @@ export {
 } from './components/select'
 export type { SelectTriggerProps, SelectTriggerVariants } from './components/select'
 
+export { Alert as ElfAlert, AlertDescription as ElfAlertDescription, alertVariants, AlertTitle as ElfAlertTitle } from './components/alert'
+export type { AlertDescriptionProps, AlertProps, AlertTitleProps, AlertVariants } from './components/alert'
+
 export const elfThemes = ['elf', 'novatron'] as const
 export type ElfTheme = (typeof elfThemes)[number]
