@@ -42,7 +42,8 @@
     "lint:fix": "bunx --bun eslint . --fix",
     "test": "vitest run",
     "test:unit": "vitest run --project unit",
-    "test:visual": "echo 'Visual regression is being rebuilt on the docs site; see CONTRIBUTING.md' && exit 0",
+    "test:browser": "vitest run --project browser",
+    "test:visual": "playwright test",
     "contrast": "bun scripts/contrast.ts",
     "registry:sync": "bun scripts/sync-registry.ts",
     "registry:build": "bun run registry:sync && bunx --bun shadcn-vue build registry.json --output registry/r",
@@ -60,7 +61,7 @@
     "docs:dev": "bun run --cwd apps/docs dev",
     "docs:build": "bun run --cwd apps/docs generate",
     "docs:preview": "bun scripts/serve-static.ts apps/docs/.output/public 4173 /elfUI/",
-    "test:visual:update": "echo 'Visual baselines are being rebuilt on the docs site; see CONTRIBUTING.md' && exit 0",
+    "test:visual:update": "playwright test --update-snapshots",
     "docs:typecheck": "bun run --cwd apps/docs typecheck"
   },
   "dependencies": {
@@ -94,6 +95,7 @@
     "@vitest/browser": "5.1.1",
     "@vitest/browser-playwright": "5.1.1",
     "@vue/test-utils": "2.6.0",
+    "axe-core": "^4.14.1",
     "eslint": "10.15.0",
     "happy-dom": "21.0.4",
     "nuxt": "4.7.0",

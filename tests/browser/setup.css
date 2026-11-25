@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+@import '../../src/styles.css';
+@import '../../src/themes/elf.css';
+@import '../../src/themes/novatron.css';
+
+body {
+  margin: 0;
+  background: var(--elf-background);
+  color: var(--elf-foreground);
+}
