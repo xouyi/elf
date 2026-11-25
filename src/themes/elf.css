@@ -1,28 +1,28 @@
-/* Elf theme (default): near-black surfaces, violet primary, 0.625rem radius. */
+/* Elf theme (default): pure black neutral surfaces, violet brand accent, 0.625rem radius. */
 :root:not([data-theme]),
 [data-theme='elf'] {
-  --elf-background: oklch(0.145 0.012 295);
-  --elf-foreground: oklch(0.97 0.005 295);
-  --elf-card: oklch(0.19 0.02 295);
-  --elf-card-foreground: oklch(0.97 0.005 295);
-  --elf-popover: oklch(0.21 0.022 295);
-  --elf-popover-foreground: oklch(0.97 0.005 295);
+  --elf-background: #000000;
+  --elf-foreground: #fafafa;
+  --elf-card: #0a0a0a;
+  --elf-card-foreground: #fafafa;
+  --elf-popover: #0f0f0f;
+  --elf-popover-foreground: #fafafa;
   --elf-primary: oklch(0.7 0.16 293);
   --elf-primary-foreground: oklch(0.15 0.03 295);
-  --elf-secondary: oklch(0.27 0.035 295);
-  --elf-secondary-foreground: oklch(0.97 0.005 295);
-  --elf-muted: oklch(0.24 0.025 295);
-  --elf-muted-foreground: oklch(0.72 0.03 295);
-  --elf-accent: oklch(0.32 0.07 295);
-  --elf-accent-foreground: oklch(0.98 0.005 295);
+  --elf-secondary: #1c1c1c;
+  --elf-secondary-foreground: #fafafa;
+  --elf-muted: #171717;
+  --elf-muted-foreground: #a3a3a3;
+  --elf-accent: oklch(0.27 0.06 293);
+  --elf-accent-foreground: #fafafa;
   --elf-destructive: oklch(0.55 0.21 25);
   --elf-destructive-foreground: oklch(0.99 0 0);
   --elf-success: oklch(0.72 0.17 150);
   --elf-success-foreground: oklch(0.15 0.03 150);
   --elf-warning: oklch(0.82 0.15 85);
   --elf-warning-foreground: oklch(0.2 0.04 85);
-  --elf-border: oklch(0.3 0.03 295);
-  --elf-input: oklch(0.52 0.05 295);
+  --elf-border: #262626;
+  --elf-input: #6b6b6b;
   --elf-ring: oklch(0.7 0.16 293);
   --elf-radius: 0.625rem;
   --elf-radius-pill: 9999px;

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Theme: the `elf` theme now uses pure black, neutral (zero-chroma) surfaces instead of purple-tinted near-black: background `#000000`, card `#0a0a0a`, popover `#0f0f0f`, muted `#171717`, secondary `#1c1c1c`, border `#262626`, input `#6b6b6b`. Violet stays the brand accent (`primary`, `ring`) and `accent` is a subtle violet for hover and selected states. All pairs still pass WCAG AA (`bun run contrast`). Visual baselines of the `elf` theme change.
+
 ## 0.3.0
 
 - **Breaking rename: `@elf/ui` is now `@xouyi/elfui`.** The package is published on npm as `@xouyi/elfui` (the unscoped `elfui` name was rejected by npm as too similar to the existing `elf-ui`). Imports become `from '@xouyi/elfui'`, `@xouyi/elfui/nuxt`, `@xouyi/elfui/styles.css`, `@xouyi/elfui/themes/*.css` and `@xouyi/elfui/lib/utils`. The installed CLI binary is still `elfui`, the Nuxt module option key becomes `elfui:` (was `elf:`) and the `Elf` component prefix is unchanged. No compatibility shim: `@elf/ui` was never published to npm. Upgrade from a GitHub install: `bun remove @elf/ui && bun add @xouyi/elfui`, then rename the imports and the `elf:` config key.

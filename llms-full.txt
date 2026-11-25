@@ -1,6 +1,6 @@
 # ElfUI (full reference)
 
-> ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (violet, rounded) and novatron (gold on obsidian, sharp corners).
+> ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (pure black with violet accents, rounded) and novatron (gold on obsidian, sharp corners).
 
 Version 0.3.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com/xouyi/elfUI .
 
@@ -103,28 +103,28 @@ Tokens (CSS variables `--elf-<name>`, Tailwind utilities `bg-<name>`, `text-<nam
 
 | Token | elf | novatron |
 | :-- | :-- | :-- |
-| background | `oklch(0.145 0.012 295)` | `#050505` |
-| foreground | `oklch(0.97 0.005 295)` | `#fafafa` |
-| card | `oklch(0.19 0.02 295)` | `#09090b` |
-| card-foreground | `oklch(0.97 0.005 295)` | `#fafafa` |
-| popover | `oklch(0.21 0.022 295)` | `#09090b` |
-| popover-foreground | `oklch(0.97 0.005 295)` | `#fafafa` |
+| background | `#000000` | `#050505` |
+| foreground | `#fafafa` | `#fafafa` |
+| card | `#0a0a0a` | `#09090b` |
+| card-foreground | `#fafafa` | `#fafafa` |
+| popover | `#0f0f0f` | `#09090b` |
+| popover-foreground | `#fafafa` | `#fafafa` |
 | primary | `oklch(0.7 0.16 293)` | `#ffcc00` |
 | primary-foreground | `oklch(0.15 0.03 295)` | `#050505` |
-| secondary | `oklch(0.27 0.035 295)` | `#18181b` |
-| secondary-foreground | `oklch(0.97 0.005 295)` | `#fafafa` |
-| muted | `oklch(0.24 0.025 295)` | `#18181b` |
-| muted-foreground | `oklch(0.72 0.03 295)` | `#a1a1aa` |
-| accent | `oklch(0.32 0.07 295)` | `#27272a` |
-| accent-foreground | `oklch(0.98 0.005 295)` | `#fafafa` |
+| secondary | `#1c1c1c` | `#18181b` |
+| secondary-foreground | `#fafafa` | `#fafafa` |
+| muted | `#171717` | `#18181b` |
+| muted-foreground | `#a3a3a3` | `#a1a1aa` |
+| accent | `oklch(0.27 0.06 293)` | `#27272a` |
+| accent-foreground | `#fafafa` | `#fafafa` |
 | destructive | `oklch(0.55 0.21 25)` | `#dc2626` |
 | destructive-foreground | `oklch(0.99 0 0)` | `#ffffff` |
 | success | `oklch(0.72 0.17 150)` | `#22c55e` |
 | success-foreground | `oklch(0.15 0.03 150)` | `#050505` |
 | warning | `oklch(0.82 0.15 85)` | `#f59e0b` |
 | warning-foreground | `oklch(0.2 0.04 85)` | `#050505` |
-| border | `oklch(0.3 0.03 295)` | `#27272a` |
-| input | `oklch(0.52 0.05 295)` | `#71717a` |
+| border | `#262626` | `#27272a` |
+| input | `#6b6b6b` | `#71717a` |
 | ring | `oklch(0.7 0.16 293)` | `#ffcc00` |
 | radius | `0.625rem` | `0px` |
 | radius-pill | `9999px` | `0px` |
