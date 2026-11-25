@@ -97,5 +97,14 @@ export type { AlertDescriptionProps, AlertProps, AlertTitleProps, AlertVariants 
 export { Progress as ElfProgress, progressVariants } from './components/progress'
 export type { ProgressProps, ProgressVariants } from './components/progress'
 
+export {
+  Avatar as ElfAvatar,
+  AvatarFallback as ElfAvatarFallback,
+  AvatarGroup as ElfAvatarGroup,
+  AvatarImage as ElfAvatarImage,
+  avatarVariants,
+} from './components/avatar'
+export type { AvatarFallbackProps, AvatarGroupProps, AvatarImageProps, AvatarProps, AvatarVariants } from './components/avatar'
+
 export const elfThemes = ['elf', 'novatron'] as const
 export type ElfTheme = (typeof elfThemes)[number]

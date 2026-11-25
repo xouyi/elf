@@ -89,7 +89,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -2665,8 +2665,134 @@ const value = computed(() => done / total * 100)
 </template>
 ```
 
+### Avatar
+
+Person or team image with an initials fallback, built on Reka UI Avatar. ElfAvatar (size) contains ElfAvatarImage and ElfAvatarFallback; ElfAvatarGroup overlaps several.
+
+Components: `ElfAvatar`, `ElfAvatarImage`, `ElfAvatarFallback`, `ElfAvatarGroup`
+
+- size options: `sm`, `default`, `lg`, `xl` (default `default`)
+
+Props:
+
+- `ElfAvatar size` ('sm' | 'default' | 'lg' | 'xl', default default): Diameter (24, 32, 40 or 56px).
+- `ElfAvatar label` (string): Accessible name; exposes the avatar as one role=img and hides its content from assistive technology.
+- `ElfAvatarImage src` (string): Required image URL. Add alt. The image replaces the fallback once loaded.
+- `ElfAvatarFallback name` (string): Full name; shows its initials (first and last word) when the slot is empty.
+- `ElfAvatarFallback delayMs` (number): Wait before showing the fallback, to avoid a flash while the image loads (attribute: delay-ms).
+- `class` (string | array | object): Accepted by every part; merged with base classes.
+
+Slots:
+
+- ElfAvatarFallback default: custom fallback content (an icon, +3)
+- ElfAvatarGroup default: ElfAvatar items
+
+Accessibility:
+
+- Give ElfAvatarImage an alt (the name, or empty when the name is shown beside it).
+- Use label on a standalone avatar, and aria-label on a group.
+- Avatars are not interactive; name the link or button you wrap one in.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfAvatar, ElfAvatarFallback, ElfAvatarImage } from '@xouyi/elfui'
+
+// A self-contained image so the example needs no network.
+const photo = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" fill="#7c5cd6"/><circle cx="32" cy="26" r="11" fill="#e9e3ff"/><path d="M10 64c2-16 12-22 22-22s20 6 22 22z" fill="#e9e3ff"/></svg>')}`
+</script>
+
+<template>
+  <div class="flex items-center gap-4">
+    <ElfAvatar>
+      <ElfAvatarImage :src="photo" alt="Ayşe Demir" />
+      <ElfAvatarFallback name="Ayşe Demir" />
+    </ElfAvatar>
+    <ElfAvatar>
+      <!-- Not an image: the fallback is shown when the source fails to load. -->
+      <ElfAvatarImage src="data:image/png;base64,broken" alt="Mehmet Kaya" />
+      <ElfAvatarFallback name="Mehmet Kaya" />
+    </ElfAvatar>
+  </div>
+</template>
+```
+
+#### Fallback
+
+```vue
+<script setup lang="ts">
+import { ElfAvatar, ElfAvatarFallback } from '@xouyi/elfui'
+import { User } from '@lucide/vue'
+</script>
+
+<template>
+  <div class="flex items-center gap-6">
+    <div class="flex items-center gap-3">
+      <ElfAvatar>
+        <ElfAvatarFallback name="Zeynep Arslan" />
+      </ElfAvatar>
+      <div class="text-sm">
+        <p class="font-medium">
+          Zeynep Arslan
+        </p>
+        <p class="text-muted-foreground">
+          Software lead
+        </p>
+      </div>
+    </div>
+    <ElfAvatar label="Unknown member">
+      <ElfAvatarFallback>
+        <User class="size-4" />
+      </ElfAvatarFallback>
+    </ElfAvatar>
+  </div>
+</template>
+```
+
+#### Group
+
+```vue
+<script setup lang="ts">
+import { ElfAvatar, ElfAvatarFallback, ElfAvatarGroup } from '@xouyi/elfui'
+
+const members = ['Ayşe Demir', 'Mehmet Kaya', 'Zeynep Arslan', 'Can Yıldız']
+</script>
+
+<template>
+  <ElfAvatarGroup aria-label="Software subteam, 7 members">
+    <ElfAvatar v-for="name in members" :key="name">
+      <ElfAvatarFallback :name="name" />
+    </ElfAvatar>
+    <ElfAvatar>
+      <ElfAvatarFallback>+3</ElfAvatarFallback>
+    </ElfAvatar>
+  </ElfAvatarGroup>
+</template>
+```
+
+#### Sizes
+
+```vue
+<script setup lang="ts">
+import { ElfAvatar, ElfAvatarFallback } from '@xouyi/elfui'
+
+const sizes = ['sm', 'default', 'lg', 'xl'] as const
+</script>
+
+<template>
+  <div class="flex items-end gap-4">
+    <ElfAvatar v-for="size in sizes" :key="size" :size="size" :label="`Avatar, ${size} size`">
+      <ElfAvatarFallback name="Novatron Robotics" />
+    </ElfAvatar>
+  </div>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`
