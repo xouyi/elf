@@ -95,6 +95,20 @@ export const components: ComponentMeta[] = [
     ],
     a11y: ['Give ElfTabsList an aria-label.', 'Use tabs for peer views, not for step-by-step flows.'],
   },
+  {
+    dir: 'visually-hidden',
+    name: 'VisuallyHidden',
+    summary: 'Hides content visually while keeping it in the accessibility tree. Use it for icon-button names, hidden labels and table captions.',
+    parts: ['ElfVisuallyHidden'],
+    props: [
+      { name: 'as', type: 'string | Component', default: 'span', description: 'Element to render.' },
+      { name: 'asChild', type: 'boolean', default: 'false', description: 'Render the child element with the hiding styles (attribute: as-child).' },
+      { name: 'feature', type: '\'focusable\' | \'fully-hidden\'', default: 'focusable', description: 'fully-hidden also removes the content from the accessibility tree and tab order (aria-hidden, tabindex -1).' },
+      { name: 'class', type: 'string | array | object', description: 'Merged onto the element.' },
+    ],
+    slots: ['default: the hidden content (text, or an element with as-child)'],
+    a11y: ['Prefer visible text. Use this only where a visual label would be redundant.', 'Keep fully-hidden for decorative helpers; never put real content in it.'],
+  },
 ]
 
 export const rules = [

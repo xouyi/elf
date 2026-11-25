@@ -68,7 +68,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** courses `AdminTable` captions, `AdminFilterBar` labels (`cx-visually-hidden`).
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.3)
 
 #### ElfLabel
 
