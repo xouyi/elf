@@ -77,7 +77,7 @@ Set `<html data-theme="elf">` (or `novatron`).
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-Or register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+Or register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -1162,8 +1162,123 @@ import { ElfSpinner } from '@elf/ui'
 </template>
 ```
 
+### Skeleton
+
+Placeholder block shown while content loads. Decorative (aria-hidden); size and shape come from classes.
+
+Components: `ElfSkeleton`
+
+Props:
+
+- `class` (string | array | object): Size and shape (h-4 w-40, size-10 rounded-full); merged with base classes.
+
+Accessibility:
+
+- Skeletons are aria-hidden: mark the loading region with aria-busy and render a visually hidden role=status message.
+- The pulse stops under prefers-reduced-motion.
+
+Examples:
+
+#### Card
+
+```vue
+<script setup lang="ts">
+import { ElfCard, ElfCardContent, ElfCardHeader, ElfSkeleton, ElfVisuallyHidden } from '@elf/ui'
+</script>
+
+<template>
+  <ElfCard class="w-full max-w-sm" aria-busy="true">
+    <ElfVisuallyHidden role="status">
+      Loading robot status
+    </ElfVisuallyHidden>
+    <ElfCardHeader>
+      <ElfSkeleton class="h-5 w-32" />
+      <ElfSkeleton class="h-4 w-48" />
+    </ElfCardHeader>
+    <ElfCardContent class="grid gap-2">
+      <ElfSkeleton class="h-24 w-full" />
+      <ElfSkeleton class="h-4 w-3/4" />
+    </ElfCardContent>
+  </ElfCard>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfSkeleton } from '@elf/ui'
+</script>
+
+<template>
+  <div class="flex items-center gap-4">
+    <ElfSkeleton class="size-12 rounded-full" />
+    <div class="grid gap-2">
+      <ElfSkeleton class="h-4 w-60" />
+      <ElfSkeleton class="h-4 w-44" />
+    </div>
+  </div>
+</template>
+```
+
+#### List
+
+```vue
+<script setup lang="ts">
+import { ElfSkeleton } from '@elf/ui'
+</script>
+
+<template>
+  <ul class="grid w-full max-w-md gap-3" aria-busy="true" aria-label="Members, loading">
+    <li v-for="n in 4" :key="n" class="flex items-center gap-3 border border-border p-3">
+      <ElfSkeleton class="size-8 rounded-full" />
+      <div class="grid flex-1 gap-1.5">
+        <ElfSkeleton class="h-3.5 w-1/2" />
+        <ElfSkeleton class="h-3 w-3/4" />
+      </div>
+    </li>
+  </ul>
+</template>
+```
+
+#### Loading State
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfSkeleton, ElfVisuallyHidden } from '@elf/ui'
+import { ref } from 'vue'
+
+const loading = ref(true)
+</script>
+
+<template>
+  <div class="grid w-72 gap-3">
+    <div :aria-busy="loading" class="grid gap-2">
+      <template v-if="loading">
+        <ElfVisuallyHidden role="status">
+          Loading profile
+        </ElfVisuallyHidden>
+        <ElfSkeleton class="h-5 w-40" />
+        <ElfSkeleton class="h-4 w-56" />
+      </template>
+      <template v-else>
+        <h4 class="text-sm leading-none font-medium">
+          Ayşe Demir
+        </h4>
+        <p class="text-sm text-muted-foreground">
+          Team captain, Istanbul
+        </p>
+      </template>
+    </div>
+    <ElfButton variant="outline" size="sm" class="w-fit" @click="loading = !loading">
+      {{ loading ? 'Show loaded content' : 'Show loading state' }}
+    </ElfButton>
+  </div>
+</template>
+```
+
 ## Exports from "@elf/ui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

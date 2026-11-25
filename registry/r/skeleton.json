@@ -1,0 +1,23 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "skeleton",
+  "title": "Skeleton",
+  "description": "Placeholder block shown while content loads.",
+  "dependencies": [],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/skeleton/Skeleton.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { SkeletonProps } from './index'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<SkeletonProps>()\n</script>\n\n<template>\n  <div\n    data-slot=\"skeleton\"\n    aria-hidden=\"true\"\n    :class=\"cn('animate-pulse rounded-md bg-accent motion-reduce:animate-none', props.class)\"\n  />\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/skeleton/index.ts",
+      "content": "import type { HTMLAttributes } from 'vue'\n\nexport { default as Skeleton } from './Skeleton.vue'\n\nexport interface SkeletonProps {\n  /** Extra classes, merged with the base classes through `cn()`. Set the size and shape here (`h-4 w-40`, `size-10 rounded-full`). */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

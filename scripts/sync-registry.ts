@@ -35,6 +35,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   separator: { title: 'Separator', description: 'Horizontal or vertical divider, built on Reka UI.', dependencies: ['reka-ui'] },
   kbd: { title: 'Kbd', description: 'Keyboard key hint with a group for shortcuts.', dependencies: ['reka-ui'] },
   spinner: { title: 'Spinner', description: 'Indeterminate busy indicator announced through role status.', dependencies: ['class-variance-authority'], registryDependencies: [dep('visually-hidden')] },
+  skeleton: { title: 'Skeleton', description: 'Placeholder block shown while content loads.', dependencies: [] },
   'visually-hidden': { title: 'Visually Hidden', description: 'Hides content visually while keeping it available to assistive technology.', dependencies: ['reka-ui'] },
 }
 

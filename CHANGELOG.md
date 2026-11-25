@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add `ElfSkeleton`: a decorative placeholder block (`aria-hidden`, reduced-motion aware).
 - Add `ElfSpinner`: an SVG busy indicator with `size` and an announced `label` (`role="status"`), reduced-motion aware.
 - Add `ElfKbd` and `ElfKbdGroup`, composed from the native `kbd` element.
 - Add `ElfSeparator`, built on the Reka UI Separator primitive (`orientation`, `decorative`, default decorative).

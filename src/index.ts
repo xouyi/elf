@@ -52,5 +52,8 @@ export type { KbdGroupProps, KbdProps } from './components/kbd'
 export { Spinner as ElfSpinner, spinnerVariants } from './components/spinner'
 export type { SpinnerProps, SpinnerVariants } from './components/spinner'
 
+export { Skeleton as ElfSkeleton } from './components/skeleton'
+export type { SkeletonProps } from './components/skeleton'
+
 export const elfThemes = ['elf', 'novatron'] as const
 export type ElfTheme = (typeof elfThemes)[number]

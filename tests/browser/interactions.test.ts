@@ -14,6 +14,7 @@ import KbdGroupExample from '../../src/components/kbd/examples/Group.vue'
 import KbdWithIcons from '../../src/components/kbd/examples/WithIcons.vue'
 import SpinnerInButton from '../../src/components/spinner/examples/InButton.vue'
 import SpinnerSizes from '../../src/components/spinner/examples/Sizes.vue'
+import SkeletonLoadingState from '../../src/components/skeleton/examples/LoadingState.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -336,6 +337,30 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await settle(1700)
       expect(button.disabled).toBe(false)
       expect(button.querySelector('[role="status"]')).toBeNull()
+    })
+  })
+
+  describe('Skeleton', () => {
+    it('is hidden from assistive technology and drops its animation under reduced motion', async () => {
+      setTheme(theme)
+      const { el } = await show(SkeletonLoadingState)
+      const skeleton = el.querySelector<HTMLElement>('[data-slot="skeleton"]')!
+      expect(skeleton.getAttribute('aria-hidden')).toBe('true')
+      expect(getComputedStyle(skeleton).animationName).toBe('pulse')
+      expect(getComputedStyle(skeleton).backgroundColor).not.toBe('rgba(0, 0, 0, 0)')
+      expect(el.querySelector('[role="status"]')?.textContent?.trim()).toBe('Loading profile')
+    })
+
+    it('swaps to the real content and clears aria-busy', async () => {
+      setTheme(theme)
+      const { el } = await show(SkeletonLoadingState)
+      const region = el.querySelector<HTMLElement>('[aria-busy]')!
+      expect(region.getAttribute('aria-busy')).toBe('true')
+      await userEvent.click(el.querySelector('button')!)
+      await settle()
+      expect(region.getAttribute('aria-busy')).toBe('false')
+      expect(el.querySelector('[data-slot="skeleton"]')).toBeNull()
+      expect(region.textContent).toContain('Ayşe Demir')
     })
   })
 
