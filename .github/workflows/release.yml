@@ -1,0 +1,75 @@
+name: Release
+
+# Publishes `elfui` to npm and creates the GitHub Release when a version tag is pushed
+# (`bun run release x.y.z`, then `git push origin main --follow-tags`).
+#
+# Authentication is npm Trusted Publishing (OIDC): no NPM_TOKEN secret exists. The package must be linked to this
+# repository and workflow on npmjs.com (see CONTRIBUTING.md, "Publishing"). Provenance is attached automatically.
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: write # create the GitHub Release
+  id-token: write # npm Trusted Publishing and provenance (OIDC)
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest # Trusted Publishing needs GitHub-hosted runners
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      # Trusted Publishing needs npm >= 11.5.1 and Node >= 22.14.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-
+      - run: bun install --frozen-lockfile
+      - run: bunx playwright install --with-deps chromium
+      - run: bun run check
+
+      - name: Verify the tag matches package.json
+        id: version
+        run: |
+          VERSION="$(bun -e "console.log(require('./package.json').version)")"
+          if [ "${GITHUB_REF_NAME}" != "v${VERSION}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match package.json version ${VERSION}" >&2
+            exit 1
+          fi
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          if [[ "${VERSION}" == *-* ]]; then echo "prerelease=true" >> "$GITHUB_OUTPUT"; else echo "prerelease=false" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Check the tarball
+        run: bun pm pack --dry-run
+
+      # `bun publish` cannot do the OIDC token exchange yet, so the npm CLI publishes. `bunx npm@latest` guarantees
+      # npm >= 11.5.1 whatever the runner ships. Prereleases (1.0.0-beta.1) go to the `next` dist-tag, never `latest`.
+      # `prepack` builds dist/cli.mjs. Do not set NODE_AUTH_TOKEN: a token would override OIDC.
+      - name: Publish
+        env:
+          PRERELEASE: ${{ steps.version.outputs.prerelease }}
+        run: |
+          if [ "${PRERELEASE}" = "true" ]; then TAG="--tag next"; else TAG=""; fi
+          bunx npm@latest publish --provenance --access public ${TAG}
+
+      - name: Extract release notes
+        run: bun scripts/changelog-section.ts "${{ steps.version.outputs.version }}" > release-notes.md
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PRERELEASE: ${{ steps.version.outputs.prerelease }}
+        run: |
+          FLAGS=""
+          if [ "${PRERELEASE}" = "true" ]; then FLAGS="--prerelease"; fi
+          gh release create "${GITHUB_REF_NAME}" --title "${GITHUB_REF_NAME}" --notes-file release-notes.md --verify-tag ${FLAGS}
