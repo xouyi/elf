@@ -1,0 +1,30 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "kbd",
+  "title": "Kbd",
+  "description": "Keyboard key hint with a group for shortcuts.",
+  "dependencies": [
+    "reka-ui"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/kbd/Kbd.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { KbdProps } from './index'\nimport { Primitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = withDefaults(defineProps<KbdProps>(), {\n  as: 'kbd',\n})\n</script>\n\n<template>\n  <Primitive\n    data-slot=\"kbd\"\n    :as=\"props.as\"\n    :as-child=\"props.asChild\"\n    :class=\"cn(\n      'pointer-events-none inline-flex h-5 min-w-5 w-fit items-center justify-center gap-1 rounded-sm border border-border bg-muted px-1 font-sans text-xs font-medium text-muted-foreground select-none',\n      '[&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-3',\n      props.class,\n    )\"\n  >\n    <slot />\n  </Primitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/kbd/KbdGroup.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { KbdGroupProps } from './index'\nimport { Primitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = withDefaults(defineProps<KbdGroupProps>(), {\n  as: 'kbd',\n})\n</script>\n\n<template>\n  <Primitive\n    data-slot=\"kbd-group\"\n    :as=\"props.as\"\n    :as-child=\"props.asChild\"\n    :class=\"cn('inline-flex items-center gap-1', props.class)\"\n  >\n    <slot />\n  </Primitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/kbd/index.ts",
+      "content": "import type { PrimitiveProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\n\nexport { default as Kbd } from './Kbd.vue'\nexport { default as KbdGroup } from './KbdGroup.vue'\n\nexport interface KbdProps extends PrimitiveProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface KbdGroupProps extends PrimitiveProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

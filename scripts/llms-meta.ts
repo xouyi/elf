@@ -136,6 +136,19 @@ export const components: ComponentMeta[] = [
     ],
     a11y: ['Use decorative="false" only when the divider separates meaningful regions.', 'Do not use a separator as the only cue between sections.'],
   },
+  {
+    dir: 'kbd',
+    name: 'Kbd',
+    summary: 'Keyboard key hint. A native kbd element; ElfKbdGroup keeps the keys of one shortcut together.',
+    parts: ['ElfKbd', 'ElfKbdGroup'],
+    props: [
+      { name: 'as', type: 'string | Component', default: 'kbd', description: 'Element to render (both parts).' },
+      { name: 'asChild', type: 'boolean', default: 'false', description: 'Render the child element with Kbd styling (attribute: as-child).' },
+      { name: 'class', type: 'string | array | object', description: 'Merged with base classes (both parts).' },
+    ],
+    slots: ['default: key name or an icon (icon-only keys need ElfVisuallyHidden text)'],
+    a11y: ['Icon-only keys need visually hidden text naming the key (aria-label is not valid on kbd).', 'A hint is not a control: keep the action reachable another way.'],
+  },
 ]
 
 export const rules = [

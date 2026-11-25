@@ -33,6 +33,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   tabs: { title: 'Tabs', description: 'Accessible tabs built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
   label: { title: 'Label', description: 'Accessible label for a form control, built on Reka UI.', dependencies: ['reka-ui'] },
   separator: { title: 'Separator', description: 'Horizontal or vertical divider, built on Reka UI.', dependencies: ['reka-ui'] },
+  kbd: { title: 'Kbd', description: 'Keyboard key hint with a group for shortcuts.', dependencies: ['reka-ui'] },
   'visually-hidden': { title: 'Visually Hidden', description: 'Hides content visually while keeping it available to assistive technology.', dependencies: ['reka-ui'] },
 }
 

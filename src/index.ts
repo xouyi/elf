@@ -46,5 +46,8 @@ export type { LabelProps } from './components/label'
 export { Separator as ElfSeparator } from './components/separator'
 export type { SeparatorProps } from './components/separator'
 
+export { Kbd as ElfKbd, KbdGroup as ElfKbdGroup } from './components/kbd'
+export type { KbdGroupProps, KbdProps } from './components/kbd'
+
 export const elfThemes = ['elf', 'novatron'] as const
 export type ElfTheme = (typeof elfThemes)[number]

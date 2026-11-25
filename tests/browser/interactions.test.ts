@@ -10,6 +10,8 @@ import LabelWithCheckbox from '../../src/components/label/examples/WithCheckbox.
 import SeparatorDefault from '../../src/components/separator/examples/Default.vue'
 import SeparatorSemantic from '../../src/components/separator/examples/Semantic.vue'
 import SeparatorVertical from '../../src/components/separator/examples/Vertical.vue'
+import KbdGroupExample from '../../src/components/kbd/examples/Group.vue'
+import KbdWithIcons from '../../src/components/kbd/examples/WithIcons.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -285,6 +287,27 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       unmount?.()
       await show(SeparatorDefault)
       expect(document.querySelector('[role="separator"]')).toBeNull()
+    })
+  })
+
+  describe('Kbd', () => {
+    it('is not focusable or selectable and keeps the keys of a group inline', async () => {
+      setTheme(theme)
+      const { el } = await show(KbdGroupExample)
+      const group = el.querySelector<HTMLElement>('[data-slot="kbd-group"]')!
+      const keys = [...group.querySelectorAll<HTMLElement>('[data-slot="kbd"]')]
+      expect(keys.map(k => k.textContent)).toEqual(['Ctrl', 'K'])
+      expect(getComputedStyle(group).display).toBe('inline-flex')
+      expect(getComputedStyle(keys[0]!).pointerEvents).toBe('none')
+      await userEvent.tab()
+      expect(group.contains(document.activeElement)).toBe(false)
+    })
+
+    it('names icon-only keys through hidden text', async () => {
+      setTheme(theme)
+      await show(KbdWithIcons)
+      await expect.element(page.getByText('Arrow up')).toBeInTheDocument()
+      await expect.element(page.getByText('Enter')).toBeInTheDocument()
     })
   })
 
