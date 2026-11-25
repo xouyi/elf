@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add `ElfKbd` and `ElfKbdGroup`, composed from the native `kbd` element.
 - Add `ElfSeparator`, built on the Reka UI Separator primitive (`orientation`, `decorative`, default decorative).
 - Add `ElfLabel`, built on the Reka UI Label primitive (`for`, `as`, `asChild`), with `peer-disabled` and `group` disabled styling.
 - Add `ElfVisuallyHidden`, built on the Reka UI VisuallyHidden primitive (`as`, `asChild`, `feature`).

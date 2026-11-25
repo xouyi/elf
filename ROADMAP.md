@@ -222,7 +222,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** Command palette hints, docs, courses `QuickSearch`.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.3)
 
 #### useElfTheme
 
