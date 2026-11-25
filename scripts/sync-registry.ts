@@ -40,6 +40,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   field: { title: 'Field', description: 'Form row with label, control, description and error wired through ids and ARIA attributes.', dependencies: ['reka-ui', 'class-variance-authority'], registryDependencies: [dep('label')] },
   checkbox: { title: 'Checkbox', description: 'Binary or indeterminate selection control built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('field')] },
   'radio-group': { title: 'Radio Group', description: 'Mutually exclusive options with arrow-key navigation, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'], registryDependencies: [dep('field')] },
+  switch: { title: 'Switch', description: 'On/off setting with sm and default sizes, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
   'visually-hidden': { title: 'Visually Hidden', description: 'Hides content visually while keeping it available to assistive technology.', dependencies: ['reka-ui'] },
 }
 
