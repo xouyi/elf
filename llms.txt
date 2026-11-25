@@ -18,6 +18,7 @@ ElfUI is source-distributed: install from a pinned GitHub tag (currently v0.2.0)
 - [Dialog](https://xouyi.github.io/elfUI/docs/components/dialog): Accessible modal dialog on Reka UI: focus trap, Escape to close, focus restore.
 - [Tabs](https://xouyi.github.io/elfUI/docs/components/tabs): Switch between related views. Roving focus and arrow-key navigation on Reka UI.
 - [VisuallyHidden](https://xouyi.github.io/elfUI/docs/components/visually-hidden): Hides content visually while keeping it in the accessibility tree. Use it for icon-button names, hidden labels and table captions.
+- [Label](https://xouyi.github.io/elfUI/docs/components/label): Accessible label for a form control. Renders a native label; clicking it focuses or toggles the control.
 
 ## Reference
 

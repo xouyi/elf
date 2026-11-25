@@ -1,0 +1,25 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "label",
+  "title": "Label",
+  "description": "Accessible label for a form control, built on Reka UI.",
+  "dependencies": [
+    "reka-ui"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/label/Label.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { LabelProps } from './index'\nimport { Label } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<LabelProps>()\n</script>\n\n<template>\n  <Label\n    data-slot=\"label\"\n    :for=\"props.for\"\n    :as=\"props.as\"\n    :as-child=\"props.asChild\"\n    :class=\"cn(\n      'flex items-center gap-2 text-sm leading-none font-medium text-foreground select-none',\n      'group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50',\n      props.class,\n    )\"\n  >\n    <slot />\n  </Label>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/label/index.ts",
+      "content": "import type { LabelProps as RekaLabelProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\n\nexport { default as Label } from './Label.vue'\n\nexport interface LabelProps extends RekaLabelProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

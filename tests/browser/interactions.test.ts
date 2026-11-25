@@ -4,6 +4,9 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 import VisuallyHiddenDefault from '../../src/components/visually-hidden/examples/Default.vue'
 import VisuallyHiddenTable from '../../src/components/visually-hidden/examples/TableCaption.vue'
+import LabelDefault from '../../src/components/label/examples/Default.vue'
+import LabelDisabled from '../../src/components/label/examples/Disabled.vue'
+import LabelWithCheckbox from '../../src/components/label/examples/WithCheckbox.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -228,6 +231,32 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       setTheme(theme)
       await show(VisuallyHiddenTable)
       await expect.element(page.getByRole('table', { name: 'Team roster with role and status' })).toBeInTheDocument()
+    })
+  })
+
+  describe('Label', () => {
+    it('focuses the control when the label is clicked and exposes the accessible name', async () => {
+      setTheme(theme)
+      const { el } = await show(LabelDefault)
+      const input = el.querySelector('input')!
+      await userEvent.click(el.querySelector('label')!)
+      expect(document.activeElement).toBe(input)
+      await expect.element(page.getByRole('textbox', { name: 'Email' })).toBeInTheDocument()
+    })
+
+    it('toggles a checkbox from its label', async () => {
+      setTheme(theme)
+      const { el } = await show(LabelWithCheckbox)
+      const box = el.querySelector<HTMLInputElement>('input[type="checkbox"]')!
+      expect(box.checked).toBe(false)
+      await userEvent.click(el.querySelector('label')!)
+      expect(box.checked).toBe(true)
+    })
+
+    it('dims the label when its peer control is disabled', async () => {
+      setTheme(theme)
+      const { el } = await show(LabelDisabled)
+      expect(getComputedStyle(el.querySelector('label')!).opacity).toBe('0.5')
     })
   })
 

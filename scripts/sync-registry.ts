@@ -31,6 +31,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   card: { title: 'Card', description: 'Card with header, title, description, action, content and footer.', dependencies: [] },
   dialog: { title: 'Dialog', description: 'Accessible modal dialog built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('button')] },
   tabs: { title: 'Tabs', description: 'Accessible tabs built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
+  label: { title: 'Label', description: 'Accessible label for a form control, built on Reka UI.', dependencies: ['reka-ui'] },
   'visually-hidden': { title: 'Visually Hidden', description: 'Hides content visually while keeping it available to assistive technology.', dependencies: ['reka-ui'] },
 }
 
