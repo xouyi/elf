@@ -25,7 +25,8 @@ runs on Bun's runtime (`bunx --bun nuxt`), so it needs no native SQLite module.
 | `src/themes/`, `src/styles.css` | Theme token files and the Tailwind v4 mapping. |
 | `apps/docs/` | The documentation site (Nuxt 4 + Nuxt Content, built with ElfUI). Markdown pages in `content/docs/`. |
 | `apps/playground/` | Nuxt 4 integration app linked to the live sources. |
-| `examples/nuxt-demo/` | A consumer app installed from a GitHub tag. |
+| `examples/nuxt-demo/` | A consumer app (installed from a GitHub tag until the first npm release). |
+| `cli/` | The `elfui` CLI (`bun run build:cli` bundles it to `dist/cli.mjs`; `bun run test:cli`). |
 | `registry.json`, `registry/r/` | Generated shadcn-vue registry (committed). |
 | `llms.txt`, `llms-full.txt` | Generated AI documentation (committed). |
 
@@ -132,14 +133,42 @@ examples in the same pull request. To debug the harness locally, `bun run docs:b
   Fast on purpose; bypass only in emergencies with `git push --no-verify`.
 - **CI** (`.github/workflows/ci.yml`, on push and pull request to `main`, Bun + Node 22): the full `bun run check`
   (**Check**, includes the browser tests), the blocking Playwright **Visual regression** job, and **Build example**. The built docs site is uploaded as an artifact. The docs site (`apps/docs`), the registry and
-  the llms files are deployed to GitHub Pages at `https://xouyi.github.io/elfUI/` only after CI succeeds on `main`. A separate workflow builds `examples/nuxt-demo` from the published tag.
+  the llms files are deployed to GitHub Pages at `https://xouyi.github.io/elfUI/` only after CI succeeds on `main`. A separate workflow builds `examples/nuxt-demo`. The CLI is tested by unit tests and by an end-to-end test of the built binary against temporary projects and the local `registry/r` (no network); both run inside `bun run check`.
 
 Commits are small and in English, written in the imperative mood ("Add Tooltip component").
 
 ## Releasing
 
 1. Add a `## x.y.z` section to `CHANGELOG.md` (rename the Unreleased section) and commit it on `main`.
-2. Run `bun run release x.y.z`. It refuses unless the working tree is clean, you are on `main`, the changelog has the
-   section, and `bun run check` passes. It then bumps `package.json`, commits `Release vx.y.z` and creates the tag `vx.y.z`.
-3. Publish: `git push origin main --follow-tags`.
-4. Bump `examples/nuxt-demo` to the new tag (see its README) in a follow-up commit.
+2. Run `bun run release x.y.z` (`x.y.z-beta.N` for a prerelease). It refuses unless the working tree is clean, you are on `main`, the changelog has the
+   section, and `bun run check` passes. It then bumps `package.json`, commits `Release vx.y.z` and creates the tag `vx.y.z`. It never pushes.
+3. Publish: `git push origin main --follow-tags`. The **Release** workflow (`.github/workflows/release.yml`) then verifies that the tag equals
+   the `package.json` version, runs `bun run check`, publishes `elfui` to npm with provenance and creates the GitHub Release from the changelog section.
+   Prereleases are published with the `next` dist-tag, so `bun add elfui` keeps resolving to the last stable version.
+4. After the first npm release, switch `examples/nuxt-demo` to `"elfui": "^x.y.z"` (see its README).
+
+## Publishing to npm (one-time setup)
+
+CI publishes with npm Trusted Publishing (OIDC): there is no `NPM_TOKEN` secret. npm only lets you configure a trusted publisher for a package
+that already exists, so the very first version is published by hand.
+
+1. Create an npm account at npmjs.com, verify the e-mail and enable two-factor authentication (authenticator app or security key).
+2. First publish from a clean checkout of the release tag (this claims the name `elfui`). `bunx npm` is used because Bun has no `login`/OIDC flow
+   and `npm publish` is the only client that can attach provenance:
+
+   ```bash
+   git clone https://github.com/xouyi/elfUI.git && cd elfUI
+   git checkout v0.3.0 && bun install --frozen-lockfile
+   bun run check
+   bunx npm@latest login
+   bunx npm@latest publish --access public   # `prepack` builds dist/cli.mjs; enter the 2FA code when asked
+   ```
+
+   Provenance cannot be generated from a laptop, so this first version has none; later ones do.
+3. On npmjs.com open **elfui > Settings > Trusted publishing > GitHub Actions** and enter owner `xouyi`, repository `elfUI`, workflow filename `release.yml`
+   (leave the environment empty). Save.
+4. Optional hardening: under **Settings > Publishing access** choose "Require two-factor authentication and disallow tokens".
+5. From then on, releases are `bun run release x.y.z` plus `git push origin main --follow-tags`.
+
+Trusted Publishing needs npm 11.5.1 or newer and Node 22.14 or newer; the workflow uses `bunx npm@latest` on Node 22. `bun publish` is not used
+because it cannot perform the OIDC token exchange.

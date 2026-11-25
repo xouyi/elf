@@ -3,6 +3,9 @@
 ## Unreleased
 
 - **Breaking rename: `@elf/ui` is now `elfui`.** The package is published on npm as `elfui` (unscoped). Imports become `from 'elfui'`, `elfui/nuxt`, `elfui/styles.css`, `elfui/themes/*.css` and `elfui/lib/utils`, and the Nuxt module option key becomes `elfui:` (was `elf:`). The `Elf` component prefix is unchanged. No compatibility shim: `@elf/ui` was never published to npm. Upgrade from a GitHub install: `bun remove @elf/ui && bun add elfui`, then rename the imports and the `elf:` config key.
+- Add the `elfui` CLI (`bunx elfui@latest init | add | list | diff`): sets up Nuxt or Vite + Vue projects idempotently and copies registry components with import rewriting, never overwriting without `--overwrite`. Zero runtime dependencies, built to `dist/cli.mjs`; unit and end-to-end tests run in `bun run check`.
+- Release: pushing a `vX.Y.Z` tag publishes to npm with Trusted Publishing (OIDC, provenance, `-beta.N` goes to the `next` tag) and creates the GitHub Release from this changelog.
+- Docs: Installation pages rewritten around `bun add elfui` and `bunx elfui@latest init`; new CLI page; GitHub installs moved to "Install from GitHub".
 - npm-ready package: `files` whitelist, `publishConfig` (public, provenance), `bin`, `keywords`, `homepage`, `bugs`, `engines` and peer dependencies (`vue`, `tailwindcss`, `@tailwindcss/vite`, `typescript`, optional `nuxt`).
 - Add `ElfField` with `ElfFieldControl`, `ElfFieldLabel`, `ElfFieldDescription` and `ElfFieldError`: label, control, description and error wired through `id`, `for`, `aria-describedby`, `aria-invalid` and `aria-required`, plus `useFieldContext()`; works with `ElfInput` and `ElfTextarea`.
 - Add `ElfTextarea`: native textarea with `v-model`, `autoResize`, `invalid`, `rows` and `maxlength`, sharing the `ElfInput` styles.

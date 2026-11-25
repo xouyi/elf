@@ -17,7 +17,6 @@ const read = (p: string) => readFileSync(join(root, p), 'utf8')
 const pkg = JSON.parse(read('package.json')) as { version: string }
 const SITE = 'https://xouyi.github.io/elfUI'
 const REPO = 'https://github.com/xouyi/elfUI'
-const TAG = `v${pkg.version}`
 
 /** Parse `variants: { name: { option: '...' } }` and defaultVariants from a cva() call. */
 function parseVariants(src: string, factory: string) {
@@ -89,7 +88,11 @@ function componentSection(c: (typeof components)[number], heading: string) {
 
 const installNuxt = [
   '```bash',
-  `bun add github:xouyi/elfUI#${TAG} tailwindcss @tailwindcss/vite`,
+  '# automatic: installs, patches nuxt.config and the main CSS (idempotent)',
+  'bunx elfui@latest init --theme novatron --yes',
+  '',
+  '# or by hand',
+  'bun add elfui tailwindcss @tailwindcss/vite',
   'bun add -d typescript@5',
   '```',
   '',
@@ -113,6 +116,10 @@ const installNuxt = [
 ]
 
 const installPlain = [
+  '```bash',
+  'bunx elfui@latest init --yes   # or: bun add elfui tailwindcss @tailwindcss/vite && bun add -d typescript@5',
+  '```',
+  '',
   '```css',
   '@import \'tailwindcss\';',
   '@import \'elfui/styles.css\';',
@@ -132,7 +139,7 @@ const intro = 'ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on
 const links = [
   `- [Documentation site](${SITE}/): guides and a page per component with live previews, API tables and accessibility notes`,
   `- [Repository](${REPO}): source, issues, releases`,
-  `- [Example Nuxt app](${REPO}/tree/main/examples/nuxt-demo): realistic consumer installed from a GitHub tag`,
+  `- [Example Nuxt app](${REPO}/tree/main/examples/nuxt-demo): realistic consumer app`,
   `- [Registry item index](${SITE}/r/registry.json): shadcn-vue registry (copy components into your project)`,
   `- [llms-full.txt](${SITE}/llms-full.txt): complete reference for AI assistants`,
 ]
@@ -143,7 +150,7 @@ const index = [
   '',
   `> ${intro}`,
   '',
-  `ElfUI is source-distributed: install from a pinned GitHub tag (currently ${TAG}). All Vue components use the \`Elf\` prefix. Use Bun for every command.`,
+  `ElfUI is source-distributed and published on npm as \`elfui\` (currently ${pkg.version}). Install with \`bun add elfui\` or \`bunx elfui@latest init\`. All Vue components use the \`Elf\` prefix. Use Bun for every command.`,
   '',
   '## Docs',
   '',
@@ -151,7 +158,8 @@ const index = [
   `- [Installation (Nuxt)](${SITE}/docs/getting-started/installation-nuxt): install in a Nuxt 4 app`,
   `- [Installation (Vite + Vue)](${SITE}/docs/getting-started/installation-vite): Vite and Vue setup`,
   `- [Theming](${SITE}/docs/getting-started/theming): tokens, data-theme, creating a theme`,
-  `- [Registry](${SITE}/docs/getting-started/registry): copy components with the shadcn-vue CLI`,
+  `- [CLI](${SITE}/docs/getting-started/cli): bunx elfui init, add, list, diff`,
+  `- [Registry](${SITE}/docs/getting-started/registry): copy components with bunx elfui add (or the shadcn-vue CLI)`,
   ...components.map(c => `- [${c.name}](${SITE}/docs/components/${c.dir}): ${c.summary}`),
   '',
   '## Reference',
@@ -193,19 +201,23 @@ const full = [
   '',
   'Components are auto-imported with the Elf prefix. Module options: `theme` (\'elf\' | \'novatron\', default \'elf\'), `themes` (extra theme CSS to bundle), `prefix` (default \'Elf\').',
   '',
-  'Upgrade: `bun remove elfui && bun add github:xouyi/elfUI#vX.Y.Z`.',
+  'Upgrade: `bun update elfui`. Advanced: an unreleased commit can be installed with `bun add github:xouyi/elfUI#<tag-or-sha>`.',
   '',
   '## Install (Vue + Vite, no Nuxt)',
   '',
   ...installPlain,
   '',
-  '## Registry (copy components)',
+  '## CLI and registry (copy components)',
   '',
   '```bash',
+  'bunx elfui add button dialog          # copies sources, rewrites imports to your alias, installs deps',
+  'bunx elfui list                       # all components',
+  'bunx elfui diff button                # compare your copy with the registry',
+  'bunx elfui add button --overwrite     # replace a changed local copy (never done without the flag)',
   `bunx shadcn-vue@latest add ${SITE}/r/button.json`,
   '```',
   '',
-  `Or register \`"@elf": "${SITE}/r/{name}.json"\` under \`registries\` in components.json and run \`bunx shadcn-vue@latest add @elf/button @elf/elf-theme\`. Items: utils, ${components.map(c => c.dir).join(', ')}, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json`,
+  `The same files work with shadcn-vue. Register \`"@elf": "${SITE}/r/{name}.json"\` under \`registries\` in components.json and run \`bunx shadcn-vue@latest add @elf/button @elf/elf-theme\`. Items: utils, ${components.map(c => c.dir).join(', ')}, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json`,
   '',
   '## Theming',
   '',

@@ -2,7 +2,7 @@
 
 > ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (violet, rounded) and novatron (gold on obsidian, sharp corners).
 
-ElfUI is source-distributed: install from a pinned GitHub tag (currently v0.2.0). All Vue components use the `Elf` prefix. Use Bun for every command.
+ElfUI is source-distributed and published on npm as `elfui` (currently 0.2.0). Install with `bun add elfui` or `bunx elfui@latest init`. All Vue components use the `Elf` prefix. Use Bun for every command.
 
 ## Docs
 
@@ -10,7 +10,8 @@ ElfUI is source-distributed: install from a pinned GitHub tag (currently v0.2.0)
 - [Installation (Nuxt)](https://xouyi.github.io/elfUI/docs/getting-started/installation-nuxt): install in a Nuxt 4 app
 - [Installation (Vite + Vue)](https://xouyi.github.io/elfUI/docs/getting-started/installation-vite): Vite and Vue setup
 - [Theming](https://xouyi.github.io/elfUI/docs/getting-started/theming): tokens, data-theme, creating a theme
-- [Registry](https://xouyi.github.io/elfUI/docs/getting-started/registry): copy components with the shadcn-vue CLI
+- [CLI](https://xouyi.github.io/elfUI/docs/getting-started/cli): bunx elfui init, add, list, diff
+- [Registry](https://xouyi.github.io/elfUI/docs/getting-started/registry): copy components with bunx elfui add (or the shadcn-vue CLI)
 - [Button](https://xouyi.github.io/elfUI/docs/components/button): Triggers an action. Renders a native button; use as-child to render a link or other element.
 - [Input](https://xouyi.github.io/elfUI/docs/components/input): Single-line text input with v-model. A native input: all native attributes fall through.
 - [Badge](https://xouyi.github.io/elfUI/docs/components/badge): Small pill for status and labels. Static text unless rendered as a link or button with as-child.
@@ -30,7 +31,7 @@ ElfUI is source-distributed: install from a pinned GitHub tag (currently v0.2.0)
 
 - [Documentation site](https://xouyi.github.io/elfUI/): guides and a page per component with live previews, API tables and accessibility notes
 - [Repository](https://github.com/xouyi/elfUI): source, issues, releases
-- [Example Nuxt app](https://github.com/xouyi/elfUI/tree/main/examples/nuxt-demo): realistic consumer installed from a GitHub tag
+- [Example Nuxt app](https://github.com/xouyi/elfUI/tree/main/examples/nuxt-demo): realistic consumer app
 - [Registry item index](https://xouyi.github.io/elfUI/r/registry.json): shadcn-vue registry (copy components into your project)
 - [llms-full.txt](https://xouyi.github.io/elfUI/llms-full.txt): complete reference for AI assistants
 
@@ -45,7 +46,7 @@ ElfUI is source-distributed: install from a pinned GitHub tag (currently v0.2.0)
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.
 - Dialogs need a title and description; tabs lists need an aria-label.
 - Keep exactly one primary (default variant) button per view; use destructive only for irreversible actions.
-- Install from a pinned GitHub tag (github:xouyi/elfUI#vX.Y.Z); typescript 5 or 6 (not 7) must be installed in the consumer project.
+- Install from npm (`bun add elfui`, or `bunx elfui@latest init` to set up a project); typescript 5 or 6 (not 7) must be installed in the consumer project.
 - Use Bun for all package commands (bun add, bun run, bunx), never npm, pnpm or yarn.
 
 ## Optional

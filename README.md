@@ -11,19 +11,28 @@ CSS-variable theming) and styled with Tailwind CSS v4.
 
 - Components: Button, Input, Badge, Card, Dialog, Tabs (all prefixed `Elf` in Vue, for example `<ElfButton>`)
 - Themes: `elf` (violet, rounded, default) and `novatron` (gold on obsidian, sharp corners)
-- Distribution: one npm-style package `elfui` installed from GitHub, plus a shadcn-vue registry for copying components
+- Distribution: the npm package [`elfui`](https://www.npmjs.com/package/elfui) (with its own CLI), plus a registry for copying components into your project
 - Docs: a Nuxt Content site built with ElfUI itself, published at https://xouyi.github.io/elfUI/ (`bun run docs:dev` locally)
 - AI assistants: `llms.txt` and `llms-full.txt`, generated from the sources (`bun run llms`)
-- Example: [`examples/nuxt-demo`](examples/nuxt-demo) installs ElfUI from a GitHub tag like a real consumer
+- Example: [`examples/nuxt-demo`](examples/nuxt-demo) consumes ElfUI like a real project
 
 ElfUI ships Vue SFC sources. The Vue compiler needs `typescript` in your project to resolve the Reka UI prop types inside those sources, so install it as a dev dependency. Use **TypeScript 5 or 6** (`typescript@5`): TypeScript 7 is the native port and no longer exposes the JavaScript API that the Vue compiler uses.
 
 Requirements: Bun, Nuxt 4 (or Vue 3 + Vite), Tailwind CSS v4 with `@tailwindcss/vite`.
 
-## Install in a Nuxt 4 app
+## Quick start
 
 ```bash
-bun add github:xouyi/elfUI#v0.2.0 tailwindcss @tailwindcss/vite
+bunx elfui@latest init            # Nuxt 4 or Vite + Vue: installs deps, patches config and CSS (safe to re-run)
+bunx elfui add button dialog      # optional: copy components into your project instead of importing them
+```
+
+`init` detects your framework and package manager, installs `elfui`, `tailwindcss`, `@tailwindcss/vite` and `typescript@5` when missing, and refuses to touch a config it does not recognize (it prints the manual steps). See [the CLI docs](https://xouyi.github.io/elfUI/docs/getting-started/cli).
+
+## Install in a Nuxt 4 app (by hand)
+
+```bash
+bun add elfui tailwindcss @tailwindcss/vite
 bun add -d typescript@5
 ```
 
@@ -73,6 +82,10 @@ import { ElfButton } from 'elfui'
 
 Set `<html data-theme="elf">` (or `novatron`).
 
+### Install from GitHub (advanced)
+
+An unreleased tag or commit can be installed with `bun add github:xouyi/elfUI#<tag-or-sha>`. The package name is still `elfui`.
+
 ## Theming
 
 Each theme is one CSS file in `src/themes/` that defines `--elf-*` tokens under `[data-theme='<name>']`:
@@ -85,7 +98,11 @@ element: `<div data-theme="elf">`.
 
 ## Registry (copy a component into your project)
 
-Components can be copied and forked with the shadcn-vue CLI. Register the namespace in `components.json`:
+```bash
+bunx elfui add button dialog
+```
+
+The CLI copies the sources, rewrites imports to your aliases and installs dependencies; it never overwrites your files without `--overwrite`. The registry is also a standard shadcn-vue registry. Register the namespace in `components.json`:
 
 ```json
 { "registries": { "@elf": "https://xouyi.github.io/elfUI/r/{name}.json" } }
@@ -125,11 +142,11 @@ Node 22+ is recommended for the test tooling.
 # 1. add a "## x.y.z" section to CHANGELOG.md and commit it
 # 2. run the guarded release (quality gate → version bump → llms regeneration → commit → annotated tag)
 bun run release x.y.z
-# 3. publish
+# 3. push the tag: .github/workflows/release.yml publishes to npm (Trusted Publishing) and creates the GitHub Release
 git push origin main --follow-tags
 ```
 
-Consumers pin with `bun add github:xouyi/elfUI#v0.2.0`.
+Consumers install with `bun add elfui` (see CONTRIBUTING.md, "Publishing to npm", for the one-time setup).
 
 ## Structure
 
@@ -140,7 +157,8 @@ src/styles.css           Tailwind v4 token mappings and base layer
 src/nuxt/module.ts       Nuxt module
 apps/docs                Nuxt Content documentation site (Markdown pages in content/, built with ElfUI)
 scripts/generate-llms.ts llms.txt generator (curated prose in scripts/llms-meta.ts)
-examples/nuxt-demo       Nuxt 4 app installed from the GitHub tag
+examples/nuxt-demo       Nuxt 4 consumer app
+cli/                     the elfui CLI (built to dist/cli.mjs)
 registry.json, registry/r  shadcn-vue registry
 apps/playground          Nuxt 4 integration app
 ```

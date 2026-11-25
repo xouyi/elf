@@ -15,7 +15,7 @@ Version 0.2.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.
 - Dialogs need a title and description; tabs lists need an aria-label.
 - Keep exactly one primary (default variant) button per view; use destructive only for irreversible actions.
-- Install from a pinned GitHub tag (github:xouyi/elfUI#vX.Y.Z); typescript 5 or 6 (not 7) must be installed in the consumer project.
+- Install from npm (`bun add elfui`, or `bunx elfui@latest init` to set up a project); typescript 5 or 6 (not 7) must be installed in the consumer project.
 - Use Bun for all package commands (bun add, bun run, bunx), never npm, pnpm or yarn.
 
 ### Novatron theme rules
@@ -30,7 +30,11 @@ Version 0.2.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com
 Requirements: Bun, Nuxt 4, Tailwind CSS v4 with @tailwindcss/vite, typescript 5 or 6 as a dev dependency (`typescript@5`; the Vue compiler needs its JavaScript API to resolve Reka UI prop types, which TypeScript 7 no longer exposes).
 
 ```bash
-bun add github:xouyi/elfUI#v0.2.0 tailwindcss @tailwindcss/vite
+# automatic: installs, patches nuxt.config and the main CSS (idempotent)
+bunx elfui@latest init --theme novatron --yes
+
+# or by hand
+bun add elfui tailwindcss @tailwindcss/vite
 bun add -d typescript@5
 ```
 
@@ -54,9 +58,13 @@ export default defineNuxtConfig({
 
 Components are auto-imported with the Elf prefix. Module options: `theme` ('elf' | 'novatron', default 'elf'), `themes` (extra theme CSS to bundle), `prefix` (default 'Elf').
 
-Upgrade: `bun remove elfui && bun add github:xouyi/elfUI#vX.Y.Z`.
+Upgrade: `bun update elfui`. Advanced: an unreleased commit can be installed with `bun add github:xouyi/elfUI#<tag-or-sha>`.
 
 ## Install (Vue + Vite, no Nuxt)
+
+```bash
+bunx elfui@latest init --yes   # or: bun add elfui tailwindcss @tailwindcss/vite && bun add -d typescript@5
+```
 
 ```css
 @import 'tailwindcss';
@@ -71,13 +79,17 @@ import { ElfButton } from 'elfui'
 
 Set `<html data-theme="elf">` (or `novatron`).
 
-## Registry (copy components)
+## CLI and registry (copy components)
 
 ```bash
+bunx elfui add button dialog          # copies sources, rewrites imports to your alias, installs deps
+bunx elfui list                       # all components
+bunx elfui diff button                # compare your copy with the registry
+bunx elfui add button --overwrite     # replace a changed local copy (never done without the flag)
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-Or register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
