@@ -40,6 +40,11 @@ import SelectWithField from '../../src/components/select/examples/WithField.vue'
 import AlertCustomIcon from '../../src/components/alert/examples/CustomIcon.vue'
 import AlertDynamic from '../../src/components/alert/examples/Dynamic.vue'
 import AlertVariants from '../../src/components/alert/examples/Variants.vue'
+import ProgressControlled from '../../src/components/progress/examples/Controlled.vue'
+import ProgressDefault from '../../src/components/progress/examples/Default.vue'
+import ProgressIndeterminate from '../../src/components/progress/examples/Indeterminate.vue'
+import ProgressSizes from '../../src/components/progress/examples/Sizes.vue'
+import ProgressWithLabel from '../../src/components/progress/examples/WithLabel.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -959,6 +964,73 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await settle()
       expect(el.querySelector('[role="alert"]')).toBeNull()
       expect(el.querySelector('[role="status"]')?.textContent).toContain('Roster saved')
+    })
+  })
+
+  describe('Progress', () => {
+    const bar = (el: Element, index = 0) => el.querySelectorAll<HTMLElement>('[role="progressbar"]')[index]!
+
+    it('exposes aria-valuenow, min and max and an accessible name, and draws the indicator to scale', async () => {
+      setTheme(theme)
+      const { el } = await show(ProgressDefault)
+      const progress = bar(el)
+      expect(progress.getAttribute('aria-valuenow')).toBe('64')
+      expect(progress.getAttribute('aria-valuemin')).toBe('0')
+      expect(progress.getAttribute('aria-valuemax')).toBe('100')
+      await expect.element(page.getByRole('progressbar', { name: 'Robot build progress' })).toBeInTheDocument()
+      const indicator = progress.querySelector<HTMLElement>('[data-slot="progress-indicator"]')!
+      expect(indicator.getBoundingClientRect().width / progress.getBoundingClientRect().width).toBeCloseTo(0.64, 1)
+      expect(getComputedStyle(indicator).backgroundColor).not.toBe('rgba(0, 0, 0, 0)')
+    })
+
+    it('updates aria-valuenow and the indicator when the model changes', async () => {
+      setTheme(theme)
+      const { el } = await show(ProgressControlled)
+      const [less, more] = [...el.querySelectorAll<HTMLButtonElement>('button')]
+      expect(bar(el).getAttribute('aria-valuenow')).toBe('20')
+      await userEvent.click(more!)
+      await userEvent.click(more!)
+      await settle(400)
+      expect(bar(el).getAttribute('aria-valuenow')).toBe('60')
+      expect(el.querySelector('output')?.textContent).toBe('60%')
+      const track = bar(el).getBoundingClientRect().width
+      expect(bar(el).querySelector<HTMLElement>('[data-slot="progress-indicator"]')!.getBoundingClientRect().width / track).toBeCloseTo(0.6, 1)
+      await userEvent.click(less!)
+      await settle(400)
+      expect(bar(el).getAttribute('aria-valuenow')).toBe('40')
+      expect(bar(el).getAttribute('data-state')).toBe('loading')
+      for (let i = 0; i < 3; i++) await userEvent.click(more!)
+      await settle()
+      expect(bar(el).getAttribute('data-state')).toBe('complete')
+      expect(more!.disabled).toBe(true)
+    })
+
+    it('is indeterminate without aria-valuenow and takes its name from the visible label', async () => {
+      setTheme(theme)
+      const { el } = await show(ProgressIndeterminate)
+      const progress = bar(el)
+      expect(progress.getAttribute('data-state')).toBe('indeterminate')
+      expect(progress.hasAttribute('aria-valuenow')).toBe(false)
+      expect(progress.getAttribute('aria-labelledby')).toBe('progress-sync-label')
+      expect(progress.hasAttribute('aria-label')).toBe(false)
+      await expect.element(page.getByRole('progressbar', { name: 'Syncing the match schedule' })).toBeInTheDocument()
+      expect(getComputedStyle(progress.querySelector('[data-slot="progress-indicator"]')!).animationName).toBe('elf-progress-indeterminate')
+    })
+
+    it('reads a count through aria-valuetext when the label is visible', async () => {
+      setTheme(theme)
+      const { el } = await show(ProgressWithLabel)
+      const progress = bar(el)
+      expect(progress.getAttribute('aria-valuetext')).toBe('7 of 12 tasks done')
+      expect(Number(progress.getAttribute('aria-valuenow'))).toBeCloseTo(58.33, 1)
+      await expect.element(page.getByRole('progressbar', { name: 'Build tasks' })).toBeInTheDocument()
+    })
+
+    it('renders three sizes with their own heights', async () => {
+      setTheme(theme)
+      const { el } = await show(ProgressSizes)
+      const heights = [0, 1, 2].map(i => bar(el, i).getBoundingClientRect().height)
+      expect(heights).toEqual([6, 8, 12])
     })
   })
 

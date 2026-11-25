@@ -89,7 +89,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -2537,8 +2537,136 @@ import { ElfAlert, ElfAlertDescription, ElfAlertTitle } from '@xouyi/elfui'
 </template>
 ```
 
+### Progress
+
+Progress bar built on Reka UI Progress (role=progressbar). Determinate with v-model (0..max) or indeterminate with a null value. Always give it a name with label, aria-label or aria-labelledby.
+
+Components: `ElfProgress`
+
+- size options: `sm`, `default`, `lg` (default `default`)
+
+Props:
+
+- `modelValue` (number | null): Current value, bound with v-model. null (or omitted) makes the bar indeterminate: no aria-valuenow, animated.
+- `max` (number, default 100): Maximum value (aria-valuemax).
+- `size` ('sm' | 'default' | 'lg', default default): Bar thickness (6, 8 or 12px).
+- `label` (string): Accessible name (aria-label) when there is no visible label.
+- `getValueText` ((value, max) => string): Sets aria-valuetext, for example "7 of 12 tasks".
+- `class` (string | array | object): Merged onto the track.
+- `indicatorClass` (string | array | object): Merged onto the filled indicator, for example bg-success (attribute: indicator-class).
+
+Accessibility:
+
+- Name the bar: label, aria-label, or aria-labelledby pointing at the visible label.
+- Progress changes are not announced by themselves; announce completion with a status message.
+- The indeterminate animation stops under prefers-reduced-motion.
+
+Examples:
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfProgress } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const value = ref(20)
+function step(delta: number) {
+  value.value = Math.min(100, Math.max(0, value.value + delta))
+}
+</script>
+
+<template>
+  <div class="grid w-80 max-w-full gap-3">
+    <ElfProgress v-model="value" label="Upload progress" />
+    <div class="flex items-center gap-2">
+      <ElfButton variant="outline" size="sm" :disabled="value <= 0" @click="step(-20)">
+        Less
+      </ElfButton>
+      <ElfButton variant="outline" size="sm" :disabled="value >= 100" @click="step(20)">
+        More
+      </ElfButton>
+      <output class="ml-auto text-sm text-muted-foreground tabular-nums">{{ value }}%</output>
+    </div>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfProgress } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfProgress :model-value="64" label="Robot build progress" class="w-80 max-w-full" />
+</template>
+```
+
+#### Indeterminate
+
+```vue
+<script setup lang="ts">
+import { ElfProgress } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid w-80 max-w-full gap-2">
+    <p id="progress-sync-label" class="text-sm font-medium">
+      Syncing the match schedule
+    </p>
+    <!-- No value: the bar animates and exposes no aria-valuenow, because the duration is unknown. -->
+    <ElfProgress :model-value="null" aria-labelledby="progress-sync-label" />
+  </div>
+</template>
+```
+
+#### Sizes
+
+```vue
+<script setup lang="ts">
+import { ElfProgress } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid w-80 max-w-full gap-4">
+    <ElfProgress :model-value="30" size="sm" label="Small bar" />
+    <ElfProgress :model-value="55" label="Default bar" />
+    <ElfProgress :model-value="80" size="lg" label="Large bar" />
+  </div>
+</template>
+```
+
+#### With Label
+
+```vue
+<script setup lang="ts">
+import { ElfProgress } from '@xouyi/elfui'
+import { computed } from 'vue'
+
+const done = 7
+const total = 12
+const value = computed(() => done / total * 100)
+</script>
+
+<template>
+  <div class="grid w-80 max-w-full gap-2">
+    <div class="flex items-baseline justify-between text-sm">
+      <span id="progress-tasks-label" class="font-medium">Build tasks</span>
+      <span class="text-muted-foreground">{{ done }} of {{ total }} done</span>
+    </div>
+    <ElfProgress
+      :model-value="value"
+      aria-labelledby="progress-tasks-label"
+      :get-value-text="() => `${done} of ${total} tasks done`"
+    />
+  </div>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`
