@@ -17,10 +17,14 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
   twitterImage: `${config.public.site}/og.png`,
 })
+
+// The isolated example harness (/__examples/**) renders without site chrome so screenshots contain only the example.
+const bare = computed(() => route.path.includes('/__examples/'))
 </script>
 
 <template>
-  <div class="flex min-h-dvh flex-col">
+  <NuxtPage v-if="bare" />
+  <div v-else class="flex min-h-dvh flex-col">
     <a href="#main" class="skip-link rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground">Skip to content</a>
     <AppHeader />
     <main id="main" class="flex-1">
