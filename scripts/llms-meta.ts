@@ -162,6 +162,14 @@ export const components: ComponentMeta[] = [
     ],
     a11y: ['Mount the spinner when work starts so the status is announced.', 'Use a specific label when several spinners can appear.', 'Animation stops under prefers-reduced-motion.'],
   },
+  {
+    dir: 'skeleton',
+    name: 'Skeleton',
+    summary: 'Placeholder block shown while content loads. Decorative (aria-hidden); size and shape come from classes.',
+    parts: ['ElfSkeleton'],
+    props: [{ name: 'class', type: 'string | array | object', description: 'Size and shape (h-4 w-40, size-10 rounded-full); merged with base classes.' }],
+    a11y: ['Skeletons are aria-hidden: mark the loading region with aria-busy and render a visually hidden role=status message.', 'The pulse stops under prefers-reduced-motion.'],
+  },
 ]
 
 export const rules = [

@@ -319,6 +319,26 @@
       ]
     },
     {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "Placeholder block shown while content loads.",
+      "dependencies": [],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/skeleton/Skeleton.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/skeleton/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "visually-hidden",
       "type": "registry:ui",
       "title": "Visually Hidden",
