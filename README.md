@@ -1,30 +1,30 @@
-# Elf
+# ElfUI
 
-[![CI](https://github.com/xouyi/elf/actions/workflows/ci.yml/badge.svg)](https://github.com/xouyi/elf/actions/workflows/ci.yml)
-[![Docs](https://github.com/xouyi/elf/actions/workflows/pages.yml/badge.svg)](https://xouyi.github.io/elf/)
+[![CI](https://github.com/xouyi/elfUI/actions/workflows/ci.yml/badge.svg)](https://github.com/xouyi/elfUI/actions/workflows/ci.yml)
+[![Docs](https://github.com/xouyi/elfUI/actions/workflows/pages.yml/badge.svg)](https://xouyi.github.io/elfUI/)
 
-**[Documentation](https://xouyi.github.io/elf/)** · **[llms.txt](https://xouyi.github.io/elf/llms.txt)** (for AI assistants, [full version](https://xouyi.github.io/elf/llms-full.txt)) · **[Example app](examples/nuxt-demo)**
+**[Documentation](https://xouyi.github.io/elfUI/)** · **[llms.txt](https://xouyi.github.io/elfUI/llms.txt)** (for AI assistants, [full version](https://xouyi.github.io/elfUI/llms-full.txt)) · **[Example app](examples/nuxt-demo)**
 
-Elf is a dark-only design system for Vue 3 and Nuxt 4. Components are built on
+ElfUI is a dark-only design system for Vue 3 and Nuxt 4. Components are built on
 [Reka UI](https://reka-ui.com) primitives with shadcn-vue style structure (CVA variants, `cn()`,
 CSS-variable theming) and styled with Tailwind CSS v4.
 
 - Components: Button, Input, Badge, Card, Dialog, Tabs (all prefixed `Elf` in Vue, for example `<ElfButton>`)
 - Themes: `elf` (violet, rounded, default) and `novatron` (gold on obsidian, sharp corners)
 - Distribution: one npm-style package `@elf/ui` installed from GitHub, plus a shadcn-vue registry for copying components
-- Docs: Storybook 10 published at https://xouyi.github.io/elf/ (`bun run storybook` locally)
+- Docs: a Nuxt Content site built with ElfUI itself, published at https://xouyi.github.io/elfUI/ (`bun run docs:dev` locally)
 - AI assistants: `llms.txt` and `llms-full.txt`, generated from the sources (`bun run llms`)
-- Example: [`examples/nuxt-demo`](examples/nuxt-demo) installs Elf from a GitHub tag like a real consumer
+- Example: [`examples/nuxt-demo`](examples/nuxt-demo) installs ElfUI from a GitHub tag like a real consumer
 
-Elf ships Vue SFC sources. The Vue compiler needs `typescript` in your project to resolve the Reka UI prop types inside those sources, so install it as a dev dependency.
+ElfUI ships Vue SFC sources. The Vue compiler needs `typescript` in your project to resolve the Reka UI prop types inside those sources, so install it as a dev dependency. Use **TypeScript 5 or 6** (`typescript@5`): TypeScript 7 is the native port and no longer exposes the JavaScript API that the Vue compiler uses.
 
 Requirements: Bun, Nuxt 4 (or Vue 3 + Vite), Tailwind CSS v4 with `@tailwindcss/vite`.
 
 ## Install in a Nuxt 4 app
 
 ```bash
-bun add github:xouyi/elf#v0.2.0 tailwindcss @tailwindcss/vite
-bun add -d typescript
+bun add github:xouyi/elfUI#v0.2.0 tailwindcss @tailwindcss/vite
+bun add -d typescript@5
 ```
 
 `nuxt.config.ts`:
@@ -56,8 +56,8 @@ Use the components (auto-imported with the `Elf` prefix):
 </ElfCard>
 ```
 
-`@elf/ui/styles.css` maps Elf tokens to Tailwind colors and radii and tells Tailwind to scan the
-Elf component sources. The Nuxt module adds the theme token CSS and sets `data-theme` on `<html>`.
+`@elf/ui/styles.css` maps ElfUI tokens to Tailwind colors and radii and tells Tailwind to scan the
+ElfUI component sources. The Nuxt module adds the theme token CSS and sets `data-theme` on `<html>`.
 
 ### Without Nuxt
 
@@ -88,14 +88,14 @@ element: `<div data-theme="elf">`.
 Components can be copied and forked with the shadcn-vue CLI. Register the namespace in `components.json`:
 
 ```json
-{ "registries": { "@elf": "https://xouyi.github.io/elf/r/{name}.json" } }
+{ "registries": { "@elf": "https://xouyi.github.io/elfUI/r/{name}.json" } }
 ```
 
 ```bash
 bunx shadcn-vue@latest add @elf/button @elf/dialog @elf/elf-theme
 ```
 
-The same files are also served from `https://raw.githubusercontent.com/xouyi/elf/main/registry/r/{name}.json` as a fallback.
+The same files are also served from `https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json` as a fallback.
 
 Registry items rewrite imports to your aliases (`@/lib/utils`, `@/components/ui/*`). Regenerate with
 `bun run registry:build`; the generated `registry/r/*.json` files are committed.
@@ -104,18 +104,20 @@ Registry items rewrite imports to your aliases (`@/lib/utils`, `@/components/ui/
 
 ```bash
 bun install
-bun run storybook        # docs and visual testing
-bun run check            # typecheck, tests, contrast, registry, storybook build, playground build
+bun run docs:dev         # docs site with live previews on :3000
+bun run check            # typecheck, lint, tests, contrast, registry, llms, docs build, playground build
 ```
 
 Adding a component:
 
-1. Create `src/components/<name>/` with the SFCs, an `index.ts` (variants, prop types), `<Name>.stories.ts` and `<Name>.test.ts`.
+1. Create `src/components/<name>/` with the SFCs, an `index.ts` (variants, prop types), `examples/*.vue` (the live previews, docs code and test fixtures) and `<Name>.test.ts`.
 2. Import siblings and utilities with relative paths (`../../lib/utils`); the registry sync rewrites them.
 3. Export it with the `Elf` prefix from `src/index.ts`.
-4. Add it to `scripts/sync-registry.ts`, then run `bun run check`.
+4. Add it to `scripts/sync-registry.ts` and `scripts/llms-meta.ts`, write its docs page in `apps/docs/content/docs/2.components/`, then run `bun run check`.
 
-Node 22+ is recommended for the test and Storybook tooling.
+The full steps are in [CONTRIBUTING.md](CONTRIBUTING.md).
+
+Node 22+ is recommended for the test tooling.
 
 ## Release flow
 
@@ -127,21 +129,20 @@ bun run release x.y.z
 git push origin main --follow-tags
 ```
 
-Consumers pin with `bun add github:xouyi/elf#v0.2.0`.
+Consumers pin with `bun add github:xouyi/elfUI#v0.2.0`.
 
 ## Structure
 
 ```
-src/components/<name>/   SFCs, index.ts, stories, tests
+src/components/<name>/   SFCs, index.ts, examples/*.vue, tests
 src/themes/              one CSS file per theme
 src/styles.css           Tailwind v4 token mappings and base layer
 src/nuxt/module.ts       Nuxt module
-src/docs                 Storybook MDX guides (component docs live next to each component)
+apps/docs                Nuxt Content documentation site (Markdown pages in content/, built with ElfUI)
 scripts/generate-llms.ts llms.txt generator (curated prose in scripts/llms-meta.ts)
 examples/nuxt-demo       Nuxt 4 app installed from the GitHub tag
 registry.json, registry/r  shadcn-vue registry
 apps/playground          Nuxt 4 integration app
-.storybook               Storybook 10 config
 ```
 
 ## License

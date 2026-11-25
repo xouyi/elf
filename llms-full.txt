@@ -1,21 +1,21 @@
-# Elf (full reference)
+# ElfUI (full reference)
 
-> Elf is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (violet, rounded) and novatron (gold on obsidian, sharp corners).
+> ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (violet, rounded) and novatron (gold on obsidian, sharp corners).
 
-Version 0.2.0. Docs: https://xouyi.github.io/elf/ . Source: https://github.com/xouyi/elf .
+Version 0.2.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com/xouyi/elfUI .
 
 ## Rules for AI assistants
 
-- Use Elf components (ElfButton, ElfInput, ElfBadge, ElfCard, ElfDialog, ElfTabs) instead of hand-rolling buttons, inputs, badges, cards, dialogs or tabs.
+- Use ElfUI components (ElfButton, ElfInput, ElfBadge, ElfCard, ElfDialog, ElfTabs) instead of hand-rolling buttons, inputs, badges, cards, dialogs or tabs.
 - Choose appearance with props (variant, size), not custom classes or inline styles.
 - Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).
-- Elf is dark only: do not add light-mode styles or dark: variants.
+- ElfUI is dark only: do not add light-mode styles or dark: variants.
 - Do not override border radius with arbitrary values; radii derive from the theme (novatron is sharp, 0px).
 - Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@elf/ui".
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.
 - Dialogs need a title and description; tabs lists need an aria-label.
 - Keep exactly one primary (default variant) button per view; use destructive only for irreversible actions.
-- Install from a pinned GitHub tag (github:xouyi/elf#vX.Y.Z); typescript must be installed in the consumer project.
+- Install from a pinned GitHub tag (github:xouyi/elfUI#vX.Y.Z); typescript 5 or 6 (not 7) must be installed in the consumer project.
 - Use Bun for all package commands (bun add, bun run, bunx), never npm, pnpm or yarn.
 
 ### Novatron theme rules
@@ -27,11 +27,11 @@ Version 0.2.0. Docs: https://xouyi.github.io/elf/ . Source: https://github.com/x
 
 ## Install (Nuxt 4)
 
-Requirements: Bun, Nuxt 4, Tailwind CSS v4 with @tailwindcss/vite, typescript (dev dependency; the Vue compiler needs it to resolve Reka UI prop types).
+Requirements: Bun, Nuxt 4, Tailwind CSS v4 with @tailwindcss/vite, typescript 5 or 6 as a dev dependency (`typescript@5`; the Vue compiler needs its JavaScript API to resolve Reka UI prop types, which TypeScript 7 no longer exposes).
 
 ```bash
-bun add github:xouyi/elf#v0.2.0 tailwindcss @tailwindcss/vite
-bun add -d typescript
+bun add github:xouyi/elfUI#v0.2.0 tailwindcss @tailwindcss/vite
+bun add -d typescript@5
 ```
 
 ```ts
@@ -54,7 +54,7 @@ export default defineNuxtConfig({
 
 Components are auto-imported with the Elf prefix. Module options: `theme` ('elf' | 'novatron', default 'elf'), `themes` (extra theme CSS to bundle), `prefix` (default 'Elf').
 
-Upgrade: `bun remove @elf/ui && bun add github:xouyi/elf#vX.Y.Z`.
+Upgrade: `bun remove @elf/ui && bun add github:xouyi/elfUI#vX.Y.Z`.
 
 ## Install (Vue + Vite, no Nuxt)
 
@@ -74,10 +74,10 @@ Set `<html data-theme="elf">` (or `novatron`).
 ## Registry (copy components)
 
 ```bash
-bunx shadcn-vue@latest add https://xouyi.github.io/elf/r/button.json
+bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-Or register `"@elf": "https://xouyi.github.io/elf/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elf/main/registry/r/{name}.json
+Or register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -147,12 +147,101 @@ Accessibility:
 - Icon-only buttons (size="icon") must have an aria-label.
 - Use as-child with a link for navigation.
 
-Example:
+Examples:
+
+#### As Child
 
 ```vue
-<ElfButton variant="outline" size="sm" @click="save">Save</ElfButton>
-<ElfButton as-child><NuxtLink to="/docs">Documentation</NuxtLink></ElfButton>
-<ElfButton size="icon" aria-label="Add"><Plus /></ElfButton>
+<script setup lang="ts">
+import { ElfButton } from '@elf/ui'
+</script>
+
+<template>
+  <ElfButton as-child>
+    <a href="#docs">Documentation</a>
+  </ElfButton>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfButton } from '@elf/ui'
+</script>
+
+<template>
+  <ElfButton>Button</ElfButton>
+</template>
+```
+
+#### Disabled
+
+```vue
+<script setup lang="ts">
+import { ElfButton } from '@elf/ui'
+</script>
+
+<template>
+  <ElfButton disabled>
+    Disabled
+  </ElfButton>
+</template>
+```
+
+#### Sizes
+
+```vue
+<script setup lang="ts">
+import { ElfButton } from '@elf/ui'
+import { Plus } from '@lucide/vue'
+
+const sizes = ['sm', 'default', 'lg'] as const
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfButton v-for="size in sizes" :key="size" :size="size">
+      {{ size }}
+    </ElfButton>
+    <ElfButton size="icon" aria-label="Add">
+      <Plus />
+    </ElfButton>
+  </div>
+</template>
+```
+
+#### Variants
+
+```vue
+<script setup lang="ts">
+import { ElfButton } from '@elf/ui'
+
+const variants = ['default', 'secondary', 'outline', 'ghost', 'destructive', 'link'] as const
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-3">
+    <ElfButton v-for="variant in variants" :key="variant" :variant="variant">
+      {{ variant }}
+    </ElfButton>
+  </div>
+</template>
+```
+
+#### With Icon
+
+```vue
+<script setup lang="ts">
+import { ElfButton } from '@elf/ui'
+import { Plus } from '@lucide/vue'
+</script>
+
+<template>
+  <ElfButton>
+    <Plus /> New item
+  </ElfButton>
+</template>
 ```
 
 ### Input
@@ -172,11 +261,80 @@ Accessibility:
 - Always provide a visible label (label for=) or aria-label; a placeholder is not a label.
 - Set aria-invalid="true" for errors and describe the error in text.
 
-Example:
+Examples:
+
+#### Default
 
 ```vue
-<label for="email" class="text-sm font-medium">Email</label>
-<ElfInput id="email" v-model="email" type="email" placeholder="you@example.com" />
+<script setup lang="ts">
+import { ElfInput } from '@elf/ui'
+</script>
+
+<template>
+  <ElfInput placeholder="Email address" aria-label="Email" class="w-72" />
+</template>
+```
+
+#### Disabled
+
+```vue
+<script setup lang="ts">
+import { ElfInput } from '@elf/ui'
+</script>
+
+<template>
+  <ElfInput disabled placeholder="Disabled" aria-label="Disabled" class="w-72" />
+</template>
+```
+
+#### File
+
+```vue
+<script setup lang="ts">
+import { ElfInput } from '@elf/ui'
+</script>
+
+<template>
+  <ElfInput type="file" aria-label="File" class="w-72" />
+</template>
+```
+
+#### Invalid
+
+```vue
+<script setup lang="ts">
+import { ElfInput } from '@elf/ui'
+</script>
+
+<template>
+  <div class="grid w-72 gap-2">
+    <ElfInput aria-invalid="true" model-value="not-an-email" aria-label="Email" aria-describedby="email-error" />
+    <p id="email-error" class="text-sm text-destructive">
+      Enter a valid email address.
+    </p>
+  </div>
+</template>
+```
+
+#### With Label
+
+```vue
+<script setup lang="ts">
+import { ElfInput } from '@elf/ui'
+import { ref } from 'vue'
+
+const email = ref('')
+</script>
+
+<template>
+  <div class="grid w-72 gap-2">
+    <label for="email" class="text-sm font-medium">Email</label>
+    <ElfInput id="email" v-model="email" type="email" placeholder="you@example.com" />
+    <p class="text-sm text-muted-foreground">
+      Value: {{ email || 'empty' }}
+    </p>
+  </div>
+</template>
 ```
 
 ### Badge
@@ -202,11 +360,36 @@ Accessibility:
 
 - Do not rely on color alone: the text must state the status.
 
-Example:
+Examples:
+
+#### Default
 
 ```vue
-<ElfBadge variant="success">Live</ElfBadge>
-<ElfBadge variant="warning">Pending review</ElfBadge>
+<script setup lang="ts">
+import { ElfBadge } from '@elf/ui'
+</script>
+
+<template>
+  <ElfBadge>Badge</ElfBadge>
+</template>
+```
+
+#### Variants
+
+```vue
+<script setup lang="ts">
+import { ElfBadge } from '@elf/ui'
+
+const variants = ['default', 'secondary', 'outline', 'destructive', 'success', 'warning'] as const
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-2">
+    <ElfBadge v-for="variant in variants" :key="variant" :variant="variant">
+      {{ variant }}
+    </ElfBadge>
+  </div>
+</template>
 ```
 
 ### Card
@@ -229,18 +412,41 @@ Accessibility:
 - A card is a plain div; choose heading semantics for the title yourself.
 - If the whole card is a link, link the title rather than wrapping the card.
 
-Example:
+Examples:
+
+#### Default
 
 ```vue
-<ElfCard>
-  <ElfCardHeader>
-    <ElfCardTitle>Match log</ElfCardTitle>
-    <ElfCardDescription>Qualification 12</ElfCardDescription>
-    <ElfCardAction><ElfBadge variant="success">Won</ElfBadge></ElfCardAction>
-  </ElfCardHeader>
-  <ElfCardContent>...</ElfCardContent>
-  <ElfCardFooter><ElfButton>Open</ElfButton></ElfCardFooter>
-</ElfCard>
+<script setup lang="ts">
+import { ElfBadge, ElfButton, ElfCard, ElfCardAction, ElfCardContent, ElfCardDescription, ElfCardFooter, ElfCardHeader, ElfCardTitle } from '@elf/ui'
+</script>
+
+<template>
+  <ElfCard class="w-full max-w-sm">
+    <ElfCardHeader>
+      <ElfCardTitle>Robot status</ElfCardTitle>
+      <ElfCardDescription>Drivetrain diagnostics for the last match.</ElfCardDescription>
+      <ElfCardAction>
+        <ElfBadge variant="success">
+          Ready
+        </ElfBadge>
+      </ElfCardAction>
+    </ElfCardHeader>
+    <ElfCardContent>
+      <p class="text-sm">
+        All swerve modules calibrated. Battery at 12.4 V.
+      </p>
+    </ElfCardContent>
+    <ElfCardFooter class="gap-2">
+      <ElfButton size="sm">
+        Open log
+      </ElfButton>
+      <ElfButton size="sm" variant="outline">
+        Dismiss
+      </ElfButton>
+    </ElfCardFooter>
+  </ElfCard>
+</template>
 ```
 
 ### Dialog
@@ -264,23 +470,96 @@ Accessibility:
 - Always include ElfDialogTitle and ElfDialogDescription.
 - Do not stack dialogs.
 
-Example:
+Examples:
+
+#### Controlled
 
 ```vue
-<ElfDialog v-model:open="open">
-  <ElfDialogTrigger as-child><ElfButton variant="outline">Edit</ElfButton></ElfDialogTrigger>
-  <ElfDialogContent>
-    <ElfDialogHeader>
-      <ElfDialogTitle>Edit profile</ElfDialogTitle>
-      <ElfDialogDescription>Update your display name.</ElfDialogDescription>
-    </ElfDialogHeader>
-    <ElfInput aria-label="Display name" />
-    <ElfDialogFooter>
-      <ElfDialogClose as-child><ElfButton variant="outline">Cancel</ElfButton></ElfDialogClose>
-      <ElfButton>Save</ElfButton>
-    </ElfDialogFooter>
-  </ElfDialogContent>
-</ElfDialog>
+<script setup lang="ts">
+import { ElfButton, ElfDialog, ElfDialogContent, ElfDialogDescription, ElfDialogHeader, ElfDialogTitle } from '@elf/ui'
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <ElfButton variant="outline" @click="open = true">
+      Open dialog
+    </ElfButton>
+    <span class="text-sm text-muted-foreground">open = {{ open }}</span>
+    <ElfDialog v-model:open="open">
+      <ElfDialogContent>
+        <ElfDialogHeader>
+          <ElfDialogTitle>Controlled dialog</ElfDialogTitle>
+          <ElfDialogDescription>The open state lives in your component.</ElfDialogDescription>
+        </ElfDialogHeader>
+      </ElfDialogContent>
+    </ElfDialog>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfDialog, ElfDialogClose, ElfDialogContent, ElfDialogDescription, ElfDialogFooter, ElfDialogHeader, ElfDialogTitle, ElfDialogTrigger, ElfInput } from '@elf/ui'
+</script>
+
+<template>
+  <ElfDialog>
+    <ElfDialogTrigger as-child>
+      <ElfButton variant="outline">
+        Edit profile
+      </ElfButton>
+    </ElfDialogTrigger>
+    <ElfDialogContent>
+      <ElfDialogHeader>
+        <ElfDialogTitle>Edit profile</ElfDialogTitle>
+        <ElfDialogDescription>Update your display name. Save when you are done.</ElfDialogDescription>
+      </ElfDialogHeader>
+      <ElfInput aria-label="Display name" placeholder="Display name" />
+      <ElfDialogFooter>
+        <ElfDialogClose as-child>
+          <ElfButton variant="outline">
+            Cancel
+          </ElfButton>
+        </ElfDialogClose>
+        <ElfButton>Save</ElfButton>
+      </ElfDialogFooter>
+    </ElfDialogContent>
+  </ElfDialog>
+</template>
+```
+
+#### Destructive
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfDialog, ElfDialogContent, ElfDialogDescription, ElfDialogFooter, ElfDialogHeader, ElfDialogTitle, ElfDialogTrigger } from '@elf/ui'
+</script>
+
+<template>
+  <ElfDialog>
+    <ElfDialogTrigger as-child>
+      <ElfButton variant="destructive">
+        Delete match log
+      </ElfButton>
+    </ElfDialogTrigger>
+    <ElfDialogContent>
+      <ElfDialogHeader>
+        <ElfDialogTitle>Delete match log?</ElfDialogTitle>
+        <ElfDialogDescription>This action cannot be undone.</ElfDialogDescription>
+      </ElfDialogHeader>
+      <ElfDialogFooter show-close-button>
+        <ElfButton variant="destructive">
+          Delete
+        </ElfButton>
+      </ElfDialogFooter>
+    </ElfDialogContent>
+  </ElfDialog>
+</template>
 ```
 
 ### Tabs
@@ -300,17 +579,72 @@ Accessibility:
 - Give ElfTabsList an aria-label.
 - Use tabs for peer views, not for step-by-step flows.
 
-Example:
+Examples:
+
+#### Controlled
 
 ```vue
-<ElfTabs default-value="overview">
-  <ElfTabsList aria-label="Account sections">
-    <ElfTabsTrigger value="overview">Overview</ElfTabsTrigger>
-    <ElfTabsTrigger value="settings">Settings</ElfTabsTrigger>
-  </ElfTabsList>
-  <ElfTabsContent value="overview">...</ElfTabsContent>
-  <ElfTabsContent value="settings">...</ElfTabsContent>
-</ElfTabs>
+<script setup lang="ts">
+import { ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from '@elf/ui'
+import { ref } from 'vue'
+
+const tab = ref('code')
+</script>
+
+<template>
+  <ElfTabs v-model="tab" activation-mode="manual" class="w-full max-w-md">
+    <ElfTabsList aria-label="Editor">
+      <ElfTabsTrigger value="code">
+        Code
+      </ElfTabsTrigger>
+      <ElfTabsTrigger value="preview">
+        Preview
+      </ElfTabsTrigger>
+      <ElfTabsTrigger value="history" disabled>
+        History
+      </ElfTabsTrigger>
+    </ElfTabsList>
+    <ElfTabsContent value="code" class="text-sm">
+      Selected: {{ tab }}. With manual activation, arrows move focus and Enter or Space selects.
+    </ElfTabsContent>
+    <ElfTabsContent value="preview" class="text-sm">
+      Selected: {{ tab }}.
+    </ElfTabsContent>
+  </ElfTabs>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from '@elf/ui'
+</script>
+
+<template>
+  <ElfTabs default-value="overview" class="w-full max-w-md">
+    <ElfTabsList aria-label="Sections">
+      <ElfTabsTrigger value="overview">
+        Overview
+      </ElfTabsTrigger>
+      <ElfTabsTrigger value="members">
+        Members
+      </ElfTabsTrigger>
+      <ElfTabsTrigger value="settings">
+        Settings
+      </ElfTabsTrigger>
+    </ElfTabsList>
+    <ElfTabsContent value="overview" class="text-sm">
+      Team overview and recent activity.
+    </ElfTabsContent>
+    <ElfTabsContent value="members" class="text-sm">
+      Member list and roles.
+    </ElfTabsContent>
+    <ElfTabsContent value="settings" class="text-sm">
+      Workspace settings.
+    </ElfTabsContent>
+  </ElfTabs>
+</template>
 ```
 
 ## Exports from "@elf/ui"

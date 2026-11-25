@@ -6,5 +6,5 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   elf: { theme: 'novatron', themes: ['elf'] },
   vite: { plugins: [tailwindcss()] },
-  app: { head: { title: 'Elf playground' } },
+  app: { head: { title: 'ElfUI playground' } },
 })
