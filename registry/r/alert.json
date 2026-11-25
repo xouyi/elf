@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "alert",
+  "title": "Alert",
+  "description": "Static message with default, destructive, success and warning variants and live region handling.",
+  "dependencies": [
+    "class-variance-authority",
+    "@lucide/vue"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/alert/Alert.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { AlertProps } from './index'\nimport { CircleAlert, CircleCheck, Info, TriangleAlert } from '@lucide/vue'\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { alertVariants } from './index'\n\nconst props = withDefaults(defineProps<AlertProps>(), {\n  variant: 'default',\n  showIcon: true,\n})\n\nconst icons = { default: Info, destructive: CircleAlert, success: CircleCheck, warning: TriangleAlert }\nconst role = computed(() => {\n  if (props.role === 'none')\n    return undefined\n  return props.role ?? (props.variant === 'destructive' ? 'alert' : 'status')\n})\n</script>\n\n<template>\n  <div\n    data-slot=\"alert\"\n    :data-variant=\"props.variant\"\n    :role=\"role\"\n    :class=\"cn(alertVariants({ variant: props.variant }), props.class)\"\n  >\n    <span\n      v-if=\"props.showIcon\"\n      data-slot=\"alert-icon\"\n      aria-hidden=\"true\"\n      class=\"mt-0.5 shrink-0 group-data-[variant=destructive]/alert:text-[color-mix(in_oklab,var(--color-destructive)_55%,white)] group-data-[variant=success]/alert:text-success group-data-[variant=warning]/alert:text-warning [&_svg]:size-4\"\n    >\n      <slot name=\"icon\">\n        <component :is=\"icons[props.variant ?? 'default']\" />\n      </slot>\n    </span>\n    <div data-slot=\"alert-content\" class=\"grid min-w-0 flex-1 gap-1\">\n      <slot />\n    </div>\n  </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/alert/AlertDescription.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { AlertDescriptionProps } from './index'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<AlertDescriptionProps>()\n</script>\n\n<template>\n  <div\n    data-slot=\"alert-description\"\n    :class=\"cn(\n      'text-sm text-muted-foreground [&_p]:leading-relaxed',\n      'group-data-[variant=destructive]/alert:text-foreground/80 group-data-[variant=success]/alert:text-foreground/80 group-data-[variant=warning]/alert:text-foreground/80',\n      props.class,\n    )\"\n  >\n    <slot />\n  </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/alert/AlertTitle.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { AlertTitleProps } from './index'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<AlertTitleProps>()\n</script>\n\n<template>\n  <div\n    data-slot=\"alert-title\"\n    :class=\"cn(\n      'leading-snug font-medium tracking-tight',\n      'group-data-[variant=destructive]/alert:text-[color-mix(in_oklab,var(--color-destructive)_55%,white)] group-data-[variant=success]/alert:text-success group-data-[variant=warning]/alert:text-warning',\n      props.class,\n    )\"\n  >\n    <slot />\n  </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/alert/index.ts",
+      "content": "import type { VariantProps } from 'class-variance-authority'\nimport type { HTMLAttributes } from 'vue'\nimport { cva } from 'class-variance-authority'\n\nexport { default as Alert } from './Alert.vue'\nexport { default as AlertDescription } from './AlertDescription.vue'\nexport { default as AlertTitle } from './AlertTitle.vue'\n\nexport const alertVariants = cva(\n  'group/alert relative flex w-full items-start gap-3 rounded-lg border px-4 py-3 text-sm text-foreground',\n  {\n    variants: {\n      variant: {\n        default: 'bg-card',\n        destructive: 'border-destructive/50 bg-destructive/10',\n        success: 'border-success/40 bg-success/10',\n        warning: 'border-warning/40 bg-warning/10',\n      },\n    },\n    defaultVariants: {\n      variant: 'default',\n    },\n  },\n)\n\nexport type AlertVariants = VariantProps<typeof alertVariants>\n\nexport interface AlertProps {\n  /** Visual style and default icon. */\n  variant?: AlertVariants['variant']\n  /**\n   * Live region role. `alert` interrupts assistive technology (assertive), `status` is announced politely and `none`\n   * renders no role, for messages that are already on the page when it loads. Defaults to `alert` for the\n   * `destructive` variant and `status` for the others. Only content added after load is announced.\n   */\n  role?: 'alert' | 'status' | 'none'\n  /** Show the icon. Replace it with the `icon` slot. */\n  showIcon?: boolean\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface AlertTitleProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface AlertDescriptionProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -89,7 +89,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -2401,8 +2401,144 @@ function submit() {
 </template>
 ```
 
+### Alert
+
+Static message with an icon, a title and a description. Variants: default, destructive, success, warning. Composed from native elements (no Reka primitive): ElfAlert with ElfAlertTitle and ElfAlertDescription.
+
+Components: `ElfAlert`, `ElfAlertTitle`, `ElfAlertDescription`
+
+- variant options: `default`, `destructive`, `success`, `warning` (default `default`)
+
+Props:
+
+- `ElfAlert variant` (variant union, default default): Visual style and default icon.
+- `ElfAlert role` ('alert' | 'status' | 'none', default alert for destructive, otherwise status): Live region role; none renders no role (use for notices already on the page at load).
+- `ElfAlert showIcon` (boolean, default true): Show the icon (attribute: show-icon).
+- `class` (string | array | object): Accepted by every part; merged with base classes.
+
+Slots:
+
+- ElfAlert default: ElfAlertTitle and ElfAlertDescription
+- ElfAlert icon: replaces the default variant icon (a 16px SVG)
+
+Accessibility:
+
+- Only an alert inserted after load is announced; use v-if after a user action, and role="none" for static notices.
+- Do not move focus to it or auto-dismiss it.
+- Say the severity in the title, never in color or icon alone.
+
+Examples:
+
+#### Custom Icon
+
+```vue
+<script setup lang="ts">
+import { ElfAlert, ElfAlertDescription, ElfAlertTitle } from '@xouyi/elfui'
+import { Rocket } from '@lucide/vue'
+</script>
+
+<template>
+  <div class="grid max-w-lg gap-4">
+    <ElfAlert>
+      <template #icon>
+        <Rocket />
+      </template>
+      <ElfAlertTitle>New season kickoff</ElfAlertTitle>
+      <ElfAlertDescription>The game manual is out. Read it before Thursday's meeting.</ElfAlertDescription>
+    </ElfAlert>
+    <ElfAlert :show-icon="false" role="none">
+      <ElfAlertTitle>Title only, no icon</ElfAlertTitle>
+    </ElfAlert>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfAlert, ElfAlertDescription, ElfAlertTitle } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfAlert class="max-w-lg">
+    <ElfAlertTitle>Practice moved to Saturday</ElfAlertTitle>
+    <ElfAlertDescription>
+      The gym is booked on Friday evening, so the build session starts at 10:00 on Saturday instead.
+    </ElfAlertDescription>
+  </ElfAlert>
+</template>
+```
+
+#### Dynamic
+
+```vue
+<script setup lang="ts">
+import { ElfAlert, ElfAlertDescription, ElfAlertTitle, ElfButton } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const failed = ref(false)
+const saved = ref(false)
+
+function save(ok: boolean) {
+  failed.value = !ok
+  saved.value = ok
+}
+</script>
+
+<template>
+  <div class="grid max-w-lg gap-4">
+    <div class="flex gap-2">
+      <ElfButton variant="outline" @click="save(true)">
+        Save
+      </ElfButton>
+      <ElfButton variant="outline" @click="save(false)">
+        Save with an error
+      </ElfButton>
+    </div>
+    <!-- Inserted after the page loaded, so the live region role announces it. -->
+    <ElfAlert v-if="failed" variant="destructive">
+      <ElfAlertTitle>Save failed</ElfAlertTitle>
+      <ElfAlertDescription>The roster could not be saved. Try again in a moment.</ElfAlertDescription>
+    </ElfAlert>
+    <ElfAlert v-if="saved" variant="success">
+      <ElfAlertTitle>Roster saved</ElfAlertTitle>
+    </ElfAlert>
+  </div>
+</template>
+```
+
+#### Variants
+
+```vue
+<script setup lang="ts">
+import { ElfAlert, ElfAlertDescription, ElfAlertTitle } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid max-w-lg gap-4">
+    <ElfAlert>
+      <ElfAlertTitle>Heads up</ElfAlertTitle>
+      <ElfAlertDescription>Registration for the Istanbul Regional opens next week.</ElfAlertDescription>
+    </ElfAlert>
+    <ElfAlert variant="success">
+      <ElfAlertTitle>Robot inspection passed</ElfAlertTitle>
+      <ElfAlertDescription>You are cleared to queue for your first match.</ElfAlertDescription>
+    </ElfAlert>
+    <ElfAlert variant="warning">
+      <ElfAlertTitle>Battery 3 is below 12 V</ElfAlertTitle>
+      <ElfAlertDescription>Swap it for a charged battery before the next match.</ElfAlertDescription>
+    </ElfAlert>
+    <ElfAlert variant="destructive">
+      <ElfAlertTitle>Could not save the schedule</ElfAlertTitle>
+      <ElfAlertDescription>Check your connection and try again.</ElfAlertDescription>
+    </ElfAlert>
+  </div>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

@@ -287,6 +287,21 @@ export const components: ComponentMeta[] = [
     slots: ['ElfSelectTrigger default: ElfSelectValue', 'ElfSelectContent default: items, groups and separators', 'ElfSelectItem default: option text'],
     a11y: ['The trigger needs an accessible name: ElfLabel for= the trigger id, an ElfField label, or aria-label.', 'Enter, Space and ArrowDown open the list; arrows, Home, End and typeahead move the highlight; Enter selects; Escape closes and returns focus to the trigger.', 'Use a RadioGroup for two or three options.'],
   },
+  {
+    dir: 'alert',
+    name: 'Alert',
+    summary: 'Static message with an icon, a title and a description. Variants: default, destructive, success, warning. Composed from native elements (no Reka primitive): ElfAlert with ElfAlertTitle and ElfAlertDescription.',
+    parts: ['ElfAlert', 'ElfAlertTitle', 'ElfAlertDescription'],
+    variants: 'alertVariants',
+    props: [
+      { name: 'ElfAlert variant', type: 'variant union', default: 'default', description: 'Visual style and default icon.' },
+      { name: 'ElfAlert role', type: '\'alert\' | \'status\' | \'none\'', default: 'alert for destructive, otherwise status', description: 'Live region role; none renders no role (use for notices already on the page at load).' },
+      { name: 'ElfAlert showIcon', type: 'boolean', default: 'true', description: 'Show the icon (attribute: show-icon).' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part; merged with base classes.' },
+    ],
+    slots: ['ElfAlert default: ElfAlertTitle and ElfAlertDescription', 'ElfAlert icon: replaces the default variant icon (a 16px SVG)'],
+    a11y: ['Only an alert inserted after load is announced; use v-if after a user action, and role="none" for static notices.', 'Do not move focus to it or auto-dismiss it.', 'Say the severity in the title, never in color or icon alone.'],
+  },
 ]
 
 export const rules = [
