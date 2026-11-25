@@ -405,6 +405,31 @@
       ]
     },
     {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "Binary or indeterminate selection control built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core",
+        "@lucide/vue"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/field.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/checkbox/Checkbox.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/checkbox/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "visually-hidden",
       "type": "registry:ui",
       "title": "Visually Hidden",

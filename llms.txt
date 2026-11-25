@@ -26,6 +26,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [Skeleton](https://xouyi.github.io/elfUI/docs/components/skeleton): Placeholder block shown while content loads. Decorative (aria-hidden); size and shape come from classes.
 - [Textarea](https://xouyi.github.io/elfUI/docs/components/textarea): Multi-line text input with v-model and optional auto-grow. A native textarea: all native attributes fall through.
 - [Field](https://xouyi.github.io/elfUI/docs/components/field): Form row: label, one control, description and error wired through id, for, aria-describedby and aria-invalid. Wrap the control in ElfFieldControl; works with ElfInput, ElfTextarea and native controls.
+- [Checkbox](https://xouyi.github.io/elfUI/docs/components/checkbox): Binary or indeterminate selection control built on Reka UI Checkbox. v-model is boolean | 'indeterminate'. Pair it with ElfLabel; inside ElfField wrap it in ElfFieldControl.
 
 ## Reference
 

@@ -89,7 +89,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -1570,8 +1570,196 @@ const bio = ref('Hi')
 </template>
 ```
 
+### Checkbox
+
+Binary or indeterminate selection control built on Reka UI Checkbox. v-model is boolean | 'indeterminate'. Pair it with ElfLabel; inside ElfField wrap it in ElfFieldControl.
+
+Components: `ElfCheckbox`
+
+Props:
+
+- `modelValue` (boolean | 'indeterminate'): Bound with v-model.
+- `defaultValue` (boolean | 'indeterminate'): Initial state when uncontrolled.
+- `disabled` (boolean, default false): Prevents interaction and dims the control.
+- `required` (boolean, default false): Marks the checkbox required (aria-required; form validation). Inherited from ElfField required.
+- `invalid` (boolean, default false): Sets aria-invalid="true" and the destructive border and ring.
+- `name` (string): Form field name; renders a hidden input inside a form.
+- `value` (string, default on): Value submitted with the form when checked.
+- `class` (string | array | object): Merged with base classes.
+
+Slots:
+
+- default: custom indicator content, receives { modelValue, state }
+
+Accessibility:
+
+- Always give it a visible label (ElfLabel for= the checkbox id) or an aria-label.
+- Space toggles; an indeterminate checkbox becomes checked.
+- Use a Switch for settings that apply immediately and a RadioGroup for exclusive choices.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfCheckbox, ElfLabel } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const accepted = ref(false)
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <ElfCheckbox id="checkbox-terms" v-model="accepted" />
+    <ElfLabel for="checkbox-terms">
+      Accept the team code of conduct
+    </ElfLabel>
+  </div>
+</template>
+```
+
+#### Disabled
+
+```vue
+<script setup lang="ts">
+import { ElfCheckbox, ElfLabel } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid gap-3">
+    <div class="flex items-center gap-3">
+      <ElfCheckbox id="checkbox-off" disabled />
+      <ElfLabel for="checkbox-off">
+        Receive match reminders
+      </ElfLabel>
+    </div>
+    <div class="flex items-center gap-3">
+      <ElfCheckbox id="checkbox-on" disabled default-value />
+      <ElfLabel for="checkbox-on">
+        Member of the pit crew
+      </ElfLabel>
+    </div>
+  </div>
+</template>
+```
+
+#### Indeterminate
+
+```vue
+<script setup lang="ts">
+import { ElfCheckbox, ElfLabel } from '@xouyi/elfui'
+import { computed, ref } from 'vue'
+
+const subteams = ref([
+  { id: 'mechanical', label: 'Mechanical', checked: true },
+  { id: 'electrical', label: 'Electrical', checked: false },
+  { id: 'software', label: 'Software', checked: true },
+])
+
+// 'indeterminate' when only some children are selected.
+const all = computed<boolean | 'indeterminate'>({
+  get() {
+    const selected = subteams.value.filter(s => s.checked).length
+    if (selected === 0)
+      return false
+    return selected === subteams.value.length ? true : 'indeterminate'
+  },
+  set(value) {
+    for (const subteam of subteams.value)
+      subteam.checked = value === true
+  },
+})
+</script>
+
+<template>
+  <div class="grid gap-3">
+    <div class="flex items-center gap-3">
+      <ElfCheckbox id="checkbox-all" v-model="all" />
+      <ElfLabel for="checkbox-all">
+        All subteams
+      </ElfLabel>
+    </div>
+    <div class="grid gap-3 pl-7">
+      <div v-for="subteam in subteams" :key="subteam.id" class="flex items-center gap-3">
+        <ElfCheckbox :id="`checkbox-${subteam.id}`" v-model="subteam.checked" />
+        <ElfLabel :for="`checkbox-${subteam.id}`">
+          {{ subteam.label }}
+        </ElfLabel>
+      </div>
+    </div>
+  </div>
+</template>
+```
+
+#### With Description
+
+```vue
+<script setup lang="ts">
+import { ElfCheckbox, ElfLabel } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const digest = ref<boolean | 'indeterminate'>(true)
+</script>
+
+<template>
+  <div class="flex w-80 items-start gap-3">
+    <ElfCheckbox id="checkbox-digest" v-model="digest" aria-describedby="checkbox-digest-help" class="mt-0.5" />
+    <div class="grid gap-1.5">
+      <ElfLabel for="checkbox-digest">
+        Weekly digest
+      </ElfLabel>
+      <p id="checkbox-digest-help" class="text-sm text-muted-foreground">
+        One email every Monday with scheduled practice sessions and open tasks.
+      </p>
+    </div>
+  </div>
+</template>
+```
+
+#### With Field
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfCheckbox, ElfField, ElfFieldControl, ElfFieldDescription, ElfFieldError, ElfFieldLabel } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const accepted = ref(false)
+const submitted = ref(false)
+const sent = ref(false)
+
+function submit() {
+  submitted.value = true
+  sent.value = accepted.value
+}
+</script>
+
+<template>
+  <form class="grid w-80 gap-5" novalidate @submit.prevent="submit">
+    <ElfField required :invalid="submitted && !accepted">
+      <div class="flex items-center gap-3">
+        <ElfFieldControl>
+          <ElfCheckbox v-model="accepted" />
+        </ElfFieldControl>
+        <ElfFieldLabel>I agree to the travel and photo release</ElfFieldLabel>
+      </div>
+      <ElfFieldDescription>Required for every member attending the event.</ElfFieldDescription>
+      <ElfFieldError v-if="submitted && !accepted">
+        You must agree before registering.
+      </ElfFieldError>
+    </ElfField>
+    <ElfButton type="submit" class="w-fit">
+      Register
+    </ElfButton>
+    <p v-if="sent" role="status" class="text-sm text-muted-foreground">
+      Registration saved.
+    </p>
+  </form>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

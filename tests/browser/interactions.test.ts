@@ -20,6 +20,10 @@ import TextareaCharacterCount from '../../src/components/textarea/examples/Chara
 import TextareaInvalid from '../../src/components/textarea/examples/Invalid.vue'
 import FieldHorizontal from '../../src/components/field/examples/Horizontal.vue'
 import FieldValidation from '../../src/components/field/examples/Validation.vue'
+import CheckboxDefault from '../../src/components/checkbox/examples/Default.vue'
+import CheckboxDisabled from '../../src/components/checkbox/examples/Disabled.vue'
+import CheckboxIndeterminate from '../../src/components/checkbox/examples/Indeterminate.vue'
+import CheckboxWithField from '../../src/components/checkbox/examples/WithField.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -476,6 +480,91 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(disabled.querySelector('input')!.disabled).toBe(true)
       expect(getComputedStyle(disabled.querySelector('label')!).opacity).toBe('0.5')
       expect(getComputedStyle(fields[0]!.querySelector('label')!).opacity).toBe('1')
+    })
+  })
+
+  describe('Checkbox', () => {
+    it('toggles with Space (not Enter) and exposes aria-checked', async () => {
+      setTheme(theme)
+      const { el } = await show(CheckboxDefault)
+      const box = el.querySelector<HTMLElement>('[role="checkbox"]')!
+      expect(box.getAttribute('aria-checked')).toBe('false')
+      await userEvent.tab()
+      expect(document.activeElement).toBe(box)
+      await userEvent.keyboard(' ')
+      expect(box.getAttribute('aria-checked')).toBe('true')
+      expect(box.querySelector('svg'), 'check icon is drawn').not.toBeNull()
+      await userEvent.keyboard('{Enter}')
+      expect(box.getAttribute('aria-checked'), 'Enter does not toggle a checkbox').toBe('true')
+      await userEvent.keyboard(' ')
+      expect(box.getAttribute('aria-checked')).toBe('false')
+    })
+
+    it('toggles when its label is clicked and is named by it', async () => {
+      setTheme(theme)
+      const { el } = await show(CheckboxDefault)
+      const box = el.querySelector<HTMLElement>('[role="checkbox"]')!
+      await userEvent.click(el.querySelector('label')!)
+      expect(box.getAttribute('aria-checked')).toBe('true')
+      await expect.element(page.getByRole('checkbox', { name: 'Accept the team code of conduct' })).toBeInTheDocument()
+    })
+
+    it('shows a visible focus ring on keyboard focus', async () => {
+      setTheme(theme)
+      const { el } = await show(CheckboxDefault)
+      await userEvent.tab()
+      const box = el.querySelector<HTMLElement>('[role="checkbox"]')!
+      expect(document.activeElement).toBe(box)
+      expect(getComputedStyle(box).boxShadow, 'focus ring').not.toBe('none')
+    })
+
+    it('cycles a parent through indeterminate and checks every child when clicked', async () => {
+      setTheme(theme)
+      const { el } = await show(CheckboxIndeterminate)
+      const [parent, ...children] = [...el.querySelectorAll<HTMLElement>('[role="checkbox"]')]
+      expect(parent!.getAttribute('aria-checked')).toBe('mixed')
+      expect(children.map(c => c.getAttribute('aria-checked'))).toEqual(['true', 'false', 'true'])
+      await userEvent.click(children[1]!)
+      expect(parent!.getAttribute('aria-checked')).toBe('true')
+      await userEvent.click(parent!)
+      expect(children.map(c => c.getAttribute('aria-checked'))).toEqual(['false', 'false', 'false'])
+      expect(parent!.getAttribute('aria-checked')).toBe('false')
+      await userEvent.click(parent!)
+      expect(children.every(c => c.getAttribute('aria-checked') === 'true')).toBe(true)
+    })
+
+    it('ignores input and Tab focus while disabled', async () => {
+      setTheme(theme)
+      const { el } = await show(CheckboxDisabled)
+      const boxes = [...el.querySelectorAll<HTMLButtonElement>('[role="checkbox"]')]
+      expect(boxes.every(b => b.disabled)).toBe(true)
+      await userEvent.tab()
+      expect(boxes).not.toContain(document.activeElement)
+      expect(boxes.map(b => b.getAttribute('aria-checked'))).toEqual(['false', 'true'])
+      expect(getComputedStyle(el.querySelector('label')!).opacity).toBe('0.5')
+    })
+
+    it('in a Field: required, described, invalid after a failed submit, valid once checked', async () => {
+      setTheme(theme)
+      const { el } = await show(CheckboxWithField)
+      const box = el.querySelector<HTMLElement>('[role="checkbox"]')!
+      expect(box.getAttribute('aria-required')).toBe('true')
+      expect(document.getElementById(box.getAttribute('aria-describedby')!)?.textContent).toContain('Required for every member')
+      expect(box.getAttribute('aria-invalid')).toBeNull()
+      await expect.element(page.getByRole('checkbox', { name: /travel and photo release/ })).toBeInTheDocument()
+
+      await userEvent.click(el.querySelector('button[type="submit"]')!)
+      await settle()
+      expect(box.getAttribute('aria-invalid')).toBe('true')
+      expect(el.querySelector('[role="alert"]')?.textContent).toContain('You must agree')
+
+      await userEvent.click(el.querySelector('label')!)
+      await settle()
+      expect(box.getAttribute('aria-invalid')).toBeNull()
+      expect(el.querySelector('[role="alert"]')).toBeNull()
+      await userEvent.click(el.querySelector('button[type="submit"]')!)
+      await settle()
+      expect(el.textContent).toContain('Registration saved.')
     })
   })
 

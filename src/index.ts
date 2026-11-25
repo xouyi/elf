@@ -69,5 +69,7 @@ export {
 } from './components/field'
 export type { FieldContext, FieldDescriptionProps, FieldErrorProps, FieldLabelProps, FieldProps, FieldVariants } from './components/field'
 
+export { Checkbox as ElfCheckbox } from './components/checkbox'
+
 export const elfThemes = ['elf', 'novatron'] as const
 export type ElfTheme = (typeof elfThemes)[number]

@@ -112,7 +112,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** ElfLabel
 - **Complexity:** S
 - **Novatron screens:** courses `AudiencePicker`, admin tables (row select); stock filters.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfRadioGroup
 
