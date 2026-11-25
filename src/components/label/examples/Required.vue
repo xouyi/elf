@@ -6,7 +6,7 @@ import { ElfInput, ElfLabel } from '@xouyi/elfui'
   <div class="grid w-72 gap-2">
     <ElfLabel for="label-team-name">
       Team name
-      <span aria-hidden="true" class="text-[color-mix(in_oklab,var(--color-destructive)_55%,white)]">*</span>
+      <span aria-hidden="true" class="text-destructive-text">*</span>
     </ElfLabel>
     <ElfInput id="label-team-name" required placeholder="Novatron Robotics" />
   </div>

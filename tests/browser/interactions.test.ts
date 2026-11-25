@@ -1085,6 +1085,40 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
     })
   })
 
+  describe('destructive-text token', () => {
+    function resolved(token: string, property: 'color' | 'backgroundColor' = 'color') {
+      const probe = document.createElement('span')
+      probe.style.cssText = `${property === 'color' ? 'color' : 'background-color'}: var(--elf-${token})`
+      document.body.append(probe)
+      const value = getComputedStyle(probe)[property]
+      probe.remove()
+      return value
+    }
+
+    it('colors the field error, the required marker and the invalid examples with it, not with the destructive fill', async () => {
+      setTheme(theme)
+      const text = resolved('destructive-text')
+      expect(text).not.toBe(resolved('destructive'))
+      const { el } = await show(FieldValidation)
+      await userEvent.click(el.querySelector('button[type="submit"]')!)
+      await settle()
+      for (const alert of el.querySelectorAll<HTMLElement>('[role="alert"]'))
+        expect(getComputedStyle(alert).color).toBe(text)
+      expect(getComputedStyle(el.querySelector('label span[aria-hidden="true"]')!).color).toBe(text)
+      unmount?.()
+      const { el: textarea } = await show(TextareaInvalid)
+      expect(getComputedStyle(textarea.querySelector('#textarea-bio-error')!).color).toBe(text)
+    })
+
+    it('colors the destructive alert title and icon with it', async () => {
+      setTheme(theme)
+      const { el } = await show(AlertVariants)
+      const destructive = el.querySelector<HTMLElement>('[data-variant="destructive"]')!
+      expect(getComputedStyle(destructive.querySelector('[data-slot="alert-title"]')!).color).toBe(resolved('destructive-text'))
+      expect(getComputedStyle(destructive.querySelector('[data-slot="alert-icon"]')!).color).toBe(resolved('destructive-text'))
+    })
+  })
+
   describe('Tabs fixture sanity', () => {
     it('supports an inline Tabs composition', async () => {
       setTheme(theme)

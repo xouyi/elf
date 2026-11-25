@@ -13,7 +13,7 @@ import { ElfLabel, ElfTextarea } from '@xouyi/elfui'
       model-value="Hi"
       aria-describedby="textarea-bio-error"
     />
-    <p id="textarea-bio-error" class="text-sm text-[color-mix(in_oklab,var(--color-destructive)_55%,white)]">
+    <p id="textarea-bio-error" class="text-sm text-destructive-text">
       Write at least 20 characters.
     </p>
   </div>

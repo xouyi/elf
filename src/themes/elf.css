@@ -17,6 +17,7 @@
   --elf-accent-foreground: #fafafa;
   --elf-destructive: oklch(0.55 0.21 25);
   --elf-destructive-foreground: oklch(0.99 0 0);
+  --elf-destructive-text: oklch(0.72 0.17 22);
   --elf-success: oklch(0.72 0.17 150);
   --elf-success-foreground: oklch(0.15 0.03 150);
   --elf-warning: oklch(0.82 0.15 85);

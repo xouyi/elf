@@ -10,7 +10,7 @@ const props = defineProps<AlertTitleProps>()
     data-slot="alert-title"
     :class="cn(
       'leading-snug font-medium tracking-tight',
-      'group-data-[variant=destructive]/alert:text-[color-mix(in_oklab,var(--color-destructive)_55%,white)] group-data-[variant=success]/alert:text-success group-data-[variant=warning]/alert:text-warning',
+      'group-data-[variant=destructive]/alert:text-destructive-text group-data-[variant=success]/alert:text-success group-data-[variant=warning]/alert:text-warning',
       props.class,
     )"
   >
