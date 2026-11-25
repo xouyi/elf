@@ -1,7 +1,9 @@
 import { ElfButton, ElfInput, ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from '@elf/ui'
-import { userEvent } from 'vitest/browser'
+import { page, userEvent } from 'vitest/browser'
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
+import VisuallyHiddenDefault from '../../src/components/visually-hidden/examples/Default.vue'
+import VisuallyHiddenTable from '../../src/components/visually-hidden/examples/TableCaption.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -209,6 +211,27 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(locked!.disabled).toBe(true)
     })
   })
+
+  describe('VisuallyHidden', () => {
+    it('is not visible but names its control and the table', async () => {
+      setTheme(theme)
+      const { el } = await show(VisuallyHiddenDefault)
+      const hidden = el.querySelector<HTMLElement>('[data-slot="visually-hidden"]')!
+      const rect = hidden.getBoundingClientRect()
+      expect(rect.width).toBeLessThanOrEqual(1)
+      expect(rect.height).toBeLessThanOrEqual(1)
+      expect(hidden.textContent).toBe('Delete item')
+      await expect.element(page.getByRole('button', { name: 'Delete item' })).toBeInTheDocument()
+    })
+
+    it('exposes a hidden caption as the table name', async () => {
+      setTheme(theme)
+      await show(VisuallyHiddenTable)
+      await expect.element(page.getByRole('table', { name: 'Team roster with role and status' })).toBeInTheDocument()
+    })
+  })
+
+  // @@NEW-INTERACTIONS@@
 
   describe('Tabs fixture sanity', () => {
     it('supports an inline Tabs composition', async () => {

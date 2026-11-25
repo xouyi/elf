@@ -226,6 +226,28 @@
       ]
     },
     {
+      "name": "visually-hidden",
+      "type": "registry:ui",
+      "title": "Visually Hidden",
+      "description": "Hides content visually while keeping it available to assistive technology.",
+      "dependencies": [
+        "reka-ui"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/visually-hidden/VisuallyHidden.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/visually-hidden/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "elf-theme",
       "type": "registry:file",
       "title": "Elf theme",

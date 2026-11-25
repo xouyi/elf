@@ -1,0 +1,25 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "visually-hidden",
+  "title": "Visually Hidden",
+  "description": "Hides content visually while keeping it available to assistive technology.",
+  "dependencies": [
+    "reka-ui"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/visually-hidden/VisuallyHidden.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { VisuallyHiddenProps } from './index'\nimport { VisuallyHidden } from 'reka-ui'\n\nconst props = withDefaults(defineProps<VisuallyHiddenProps>(), {\n  as: 'span',\n  feature: 'focusable',\n})\n</script>\n\n<template>\n  <VisuallyHidden\n    data-slot=\"visually-hidden\"\n    :as=\"props.as\"\n    :as-child=\"props.asChild\"\n    :feature=\"props.feature\"\n    :class=\"props.class\"\n  >\n    <slot />\n  </VisuallyHidden>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/visually-hidden/index.ts",
+      "content": "import type { VisuallyHiddenProps as RekaVisuallyHiddenProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\n\nexport { default as VisuallyHidden } from './VisuallyHidden.vue'\n\nexport interface VisuallyHiddenProps extends RekaVisuallyHiddenProps {\n  /** Extra classes, merged onto the element. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

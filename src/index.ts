@@ -37,5 +37,8 @@ export {
   TabsTrigger as ElfTabsTrigger,
 } from './components/tabs'
 
+export { VisuallyHidden as ElfVisuallyHidden } from './components/visually-hidden'
+export type { VisuallyHiddenProps } from './components/visually-hidden'
+
 export const elfThemes = ['elf', 'novatron'] as const
 export type ElfTheme = (typeof elfThemes)[number]
