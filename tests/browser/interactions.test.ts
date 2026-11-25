@@ -18,6 +18,8 @@ import SkeletonLoadingState from '../../src/components/skeleton/examples/Loading
 import TextareaAutoResize from '../../src/components/textarea/examples/AutoResize.vue'
 import TextareaCharacterCount from '../../src/components/textarea/examples/CharacterCount.vue'
 import TextareaInvalid from '../../src/components/textarea/examples/Invalid.vue'
+import FieldHorizontal from '../../src/components/field/examples/Horizontal.vue'
+import FieldValidation from '../../src/components/field/examples/Validation.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -413,6 +415,67 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(area.getAttribute('aria-invalid')).toBe('true')
       expect(document.getElementById(area.getAttribute('aria-describedby')!)?.textContent).toContain('at least 20')
       await expect.element(page.getByRole('textbox', { name: 'Bio' })).toBeInTheDocument()
+    })
+  })
+
+  describe('Field', () => {
+    it('names the controls through their labels and links the description', async () => {
+      setTheme(theme)
+      const { el } = await show(FieldValidation)
+      await expect.element(page.getByRole('textbox', { name: 'Email' })).toBeInTheDocument()
+      await expect.element(page.getByRole('textbox', { name: 'Message' })).toBeInTheDocument()
+      const message = el.querySelector('textarea')!
+      expect(document.getElementById(message.getAttribute('aria-describedby')!)?.textContent).toContain('At least 10 characters')
+      expect(message.getAttribute('aria-required')).toBe('true')
+      expect(message.getAttribute('aria-invalid')).toBeNull()
+    })
+
+    it('clicking the label focuses the control', async () => {
+      setTheme(theme)
+      const { el } = await show(FieldValidation)
+      await userEvent.click(el.querySelectorAll('label')[1]!)
+      expect(document.activeElement).toBe(el.querySelector('textarea'))
+    })
+
+    it('shows errors after submit, flags the controls invalid, announces them and clears them when fixed', async () => {
+      setTheme(theme)
+      const { el } = await show(FieldValidation)
+      const [email, message] = [el.querySelector('input')!, el.querySelector('textarea')!]
+      expect(el.querySelector('[role="alert"]')).toBeNull()
+
+      await userEvent.click(el.querySelector('button[type="submit"]')!)
+      await settle()
+      const alerts = [...el.querySelectorAll<HTMLElement>('[role="alert"]')]
+      expect(alerts.map(a => a.textContent?.trim())).toEqual(['Enter a valid email address.', 'Write at least 10 characters.'])
+      expect(email.getAttribute('aria-invalid')).toBe('true')
+      expect(email.getAttribute('aria-describedby')).toBe(alerts[0]!.id)
+      expect(message.getAttribute('aria-invalid')).toBe('true')
+      expect(message.getAttribute('aria-describedby')!.split(' ')).toContain(alerts[1]!.id)
+      expect(message.getAttribute('aria-describedby')!.split(' ')).toHaveLength(2)
+
+      await userEvent.click(email)
+      await userEvent.keyboard('ada@example.com')
+      await settle()
+      expect(email.getAttribute('aria-invalid')).toBeNull()
+      expect(email.getAttribute('aria-describedby')).toBeNull()
+      expect(el.querySelectorAll('[role="alert"]')).toHaveLength(1)
+
+      await userEvent.click(message)
+      await userEvent.keyboard('Hello team, see you at the event.')
+      await userEvent.click(el.querySelector('button[type="submit"]')!)
+      await settle()
+      expect(el.querySelector('[role="alert"]')).toBeNull()
+      expect(el.textContent).toContain('Message sent.')
+    })
+
+    it('dims the label and disables the control of a disabled field', async () => {
+      setTheme(theme)
+      const { el } = await show(FieldHorizontal)
+      const fields = el.querySelectorAll<HTMLElement>('[data-slot="field"]')
+      const disabled = fields[1]!
+      expect(disabled.querySelector('input')!.disabled).toBe(true)
+      expect(getComputedStyle(disabled.querySelector('label')!).opacity).toBe('0.5')
+      expect(getComputedStyle(fields[0]!.querySelector('label')!).opacity).toBe('1')
     })
   })
 

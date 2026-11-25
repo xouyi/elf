@@ -57,5 +57,17 @@ export type { SkeletonProps } from './components/skeleton'
 
 export { Textarea as ElfTextarea } from './components/textarea'
 
+export {
+  Field as ElfField,
+  FieldControl as ElfFieldControl,
+  FieldDescription as ElfFieldDescription,
+  FieldError as ElfFieldError,
+  fieldContextKey,
+  FieldLabel as ElfFieldLabel,
+  fieldVariants,
+  useFieldContext,
+} from './components/field'
+export type { FieldContext, FieldDescriptionProps, FieldErrorProps, FieldLabelProps, FieldProps, FieldVariants } from './components/field'
+
 export const elfThemes = ['elf', 'novatron'] as const
 export type ElfTheme = (typeof elfThemes)[number]
