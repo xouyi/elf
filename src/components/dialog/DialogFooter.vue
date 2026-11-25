@@ -5,7 +5,9 @@ import { cn } from '../../lib/utils'
 import { Button } from '../button'
 
 const props = withDefaults(defineProps<{
+  /** Extra classes, merged with the base classes through `cn()`. */
   class?: HTMLAttributes['class']
+  /** Render a `Close` button after the slot content. */
   showCloseButton?: boolean
 }>(), {
   showCloseButton: false,

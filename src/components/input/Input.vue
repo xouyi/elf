@@ -4,12 +4,17 @@ import { useVModel } from '@vueuse/core'
 import { cn } from '../../lib/utils'
 
 const props = defineProps<{
+  /** Initial value when the input is uncontrolled. */
   defaultValue?: string | number
+  /** Current value, bound with `v-model`. */
   modelValue?: string | number
+  /** Extra classes, merged with the base classes through `cn()`. */
+  /** Extra classes, merged with the base classes through `cn()`. */
   class?: HTMLAttributes['class']
 }>()
 
 const emits = defineEmits<{
+  /** Emitted with the new value whenever the user edits the input. */
   (e: 'update:modelValue', payload: string | number): void
 }>()
 

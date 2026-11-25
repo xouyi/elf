@@ -32,6 +32,8 @@ export default defineNuxtModule<ModuleOptions>({
       prefix: options.prefix,
       pathPrefix: false,
       extensions: ['vue'],
+      // Docs examples live next to each component but are not part of the public API.
+      ignore: ['**/examples/**'],
       global: false,
     })
 

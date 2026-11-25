@@ -34,7 +34,10 @@ export const buttonVariants = cva(
 export type ButtonVariants = VariantProps<typeof buttonVariants>
 
 export interface ButtonProps extends PrimitiveProps {
+  /** Visual style. */
   variant?: ButtonVariants['variant']
+  /** Height and padding. Use `icon` for square icon-only buttons. */
   size?: ButtonVariants['size']
+  /** Extra classes, merged with the base classes through `cn()`. */
   class?: HTMLAttributes['class']
 }

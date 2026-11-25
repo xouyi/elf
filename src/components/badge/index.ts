@@ -27,6 +27,8 @@ export const badgeVariants = cva(
 export type BadgeVariants = VariantProps<typeof badgeVariants>
 
 export interface BadgeProps extends PrimitiveProps {
+  /** Visual style. */
   variant?: BadgeVariants['variant']
+  /** Extra classes, merged with the base classes through `cn()`. */
   class?: HTMLAttributes['class']
 }
