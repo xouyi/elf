@@ -11,7 +11,12 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const props = withDefaults(defineProps<DialogContentProps & { class?: HTMLAttributes['class'], showCloseButton?: boolean }>(), {
+const props = withDefaults(defineProps<DialogContentProps & {
+  /** Extra classes, merged with the base classes through `cn()`. */
+  class?: HTMLAttributes['class']
+  /** Render the built-in close button in the top-right corner. */
+  showCloseButton?: boolean
+}>(), {
   showCloseButton: true,
 })
 const emits = defineEmits<DialogContentEmits>()

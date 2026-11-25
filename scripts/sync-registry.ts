@@ -17,8 +17,8 @@ const rewrite = (s: string) =>
     .replaceAll(/from '\.\.\/\.\.\/lib\/utils'/g, 'from \'@/lib/utils\'')
     .replaceAll(/from '\.\.\/([a-z]+)'/g, 'from \'@/components/ui/$1\'')
 
-// Primary host is GitHub Pages; https://raw.githubusercontent.com/xouyi/elf/main/registry/r is the fallback.
-const REGISTRY = 'https://xouyi.github.io/elf/r'
+// Primary host is GitHub Pages; https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r is the fallback.
+const REGISTRY = 'https://xouyi.github.io/elfUI/r'
 const dep = (name: string) => `${REGISTRY}/${name}.json`
 
 mkdirSync(join(out, 'lib'), { recursive: true })
@@ -48,8 +48,9 @@ for (const [name, m] of Object.entries(meta)) {
   const srcDir = join(root, 'src/components', name)
   const dstDir = join(out, 'ui', name)
   mkdirSync(dstDir, { recursive: true })
-  const files = readdirSync(srcDir)
-    .filter(f => !/\.(test|stories)\.ts$/.test(f) && !f.endsWith('.mdx'))
+  const files = readdirSync(srcDir, { withFileTypes: true })
+    .filter(e => e.isFile() && !e.name.endsWith('.test.ts'))
+    .map(e => e.name)
     .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0)) // code-point order: readdir order differs per filesystem
   for (const f of files) {
     writeFileSync(join(dstDir, f), rewrite(readFileSync(join(srcDir, f), 'utf8')))
@@ -84,6 +85,6 @@ items.push({
 
 writeFileSync(
   join(root, 'registry.json'),
-  `${JSON.stringify({ $schema: 'https://shadcn-vue.com/schema/registry.json', name: 'elf', homepage: 'https://xouyi.github.io/elf/', items }, null, 2)}\n`,
+  `${JSON.stringify({ $schema: 'https://shadcn-vue.com/schema/registry.json', name: 'elf', homepage: 'https://xouyi.github.io/elfUI/', items }, null, 2)}\n`,
 )
 console.log(`registry.json: ${items.length} items`)
