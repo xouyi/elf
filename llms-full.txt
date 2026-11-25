@@ -77,7 +77,7 @@ Set `<html data-theme="elf">` (or `novatron`).
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-Or register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+Or register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -849,8 +849,112 @@ const accepted = ref(false)
 </template>
 ```
 
+### Separator
+
+Horizontal or vertical divider. Decorative by default; set decorative to false to expose role=separator.
+
+Components: `ElfSeparator`
+
+Props:
+
+- `orientation` ('horizontal' | 'vertical', default horizontal): Direction of the line. A vertical separator needs a parent with a height.
+- `decorative` (boolean, default true): When true the element is hidden from assistive technology (role none).
+- `as` (string | Component, default div): Element to render.
+- `class` (string | array | object): Merged with base classes.
+
+Accessibility:
+
+- Use decorative="false" only when the divider separates meaningful regions.
+- Do not use a separator as the only cue between sections.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfSeparator } from '@elf/ui'
+</script>
+
+<template>
+  <div class="w-72">
+    <div class="space-y-1">
+      <h4 class="text-sm leading-none font-medium">
+        Novatron Robotics
+      </h4>
+      <p class="text-sm text-muted-foreground">
+        FIRST Robotics Competition team 10202.
+      </p>
+    </div>
+    <ElfSeparator class="my-4" />
+    <p class="text-sm">
+      Istanbul, Turkey
+    </p>
+  </div>
+</template>
+```
+
+#### Semantic
+
+```vue
+<script setup lang="ts">
+import { ElfSeparator } from '@elf/ui'
+</script>
+
+<template>
+  <div class="w-72 text-sm">
+    <p>Season summary</p>
+    <!-- Not decorative: announced as a separator because it divides two regions of content. -->
+    <ElfSeparator :decorative="false" class="my-3" />
+    <p class="text-muted-foreground">
+      Event results
+    </p>
+  </div>
+</template>
+```
+
+#### Vertical
+
+```vue
+<script setup lang="ts">
+import { ElfSeparator } from '@elf/ui'
+</script>
+
+<template>
+  <div class="flex h-5 items-center gap-4 text-sm">
+    <span>Docs</span>
+    <ElfSeparator orientation="vertical" />
+    <span>Examples</span>
+    <ElfSeparator orientation="vertical" />
+    <span>Changelog</span>
+  </div>
+</template>
+```
+
+#### With Label
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfSeparator } from '@elf/ui'
+</script>
+
+<template>
+  <div class="grid w-72 gap-4">
+    <ElfButton>Sign in with your member account</ElfButton>
+    <div class="flex items-center gap-3 text-xs text-muted-foreground uppercase">
+      <ElfSeparator class="flex-1" />
+      or
+      <ElfSeparator class="flex-1" />
+    </div>
+    <ElfButton variant="outline">
+      Request access
+    </ElfButton>
+  </div>
+</template>
+```
+
 ## Exports from "@elf/ui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

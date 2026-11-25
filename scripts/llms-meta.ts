@@ -123,6 +123,19 @@ export const components: ComponentMeta[] = [
     slots: ['default: label text'],
     a11y: ['Connect every control with for and a matching id.', 'Put the control before the label and give it the peer class so peer-disabled dims the label.'],
   },
+  {
+    dir: 'separator',
+    name: 'Separator',
+    summary: 'Horizontal or vertical divider. Decorative by default; set decorative to false to expose role=separator.',
+    parts: ['ElfSeparator'],
+    props: [
+      { name: 'orientation', type: '\'horizontal\' | \'vertical\'', default: 'horizontal', description: 'Direction of the line. A vertical separator needs a parent with a height.' },
+      { name: 'decorative', type: 'boolean', default: 'true', description: 'When true the element is hidden from assistive technology (role none).' },
+      { name: 'as', type: 'string | Component', default: 'div', description: 'Element to render.' },
+      { name: 'class', type: 'string | array | object', description: 'Merged with base classes.' },
+    ],
+    a11y: ['Use decorative="false" only when the divider separates meaningful regions.', 'Do not use a separator as the only cue between sections.'],
+  },
 ]
 
 export const rules = [
