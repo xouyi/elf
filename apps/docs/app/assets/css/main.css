@@ -1,0 +1,91 @@
+@import 'tailwindcss';
+@import '@elf/ui/styles.css';
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  font-family: var(--font-sans);
+  min-height: 100dvh;
+  text-rendering: optimizeLegibility;
+}
+
+:focus-visible {
+  outline: 2px solid var(--elf-ring);
+  outline-offset: 2px;
+}
+
+/* Skip link */
+.skip-link {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 100;
+  transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+
+/* ---------- Documentation content (rendered Markdown) ----------
+   Block elements are styled by the Prose* components in app/components/content; this holds only what cannot live there. */
+.doc-content {
+  color: var(--elf-foreground);
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  overflow-wrap: break-word;
+}
+.doc-content > :first-child { margin-top: 0; }
+.doc-content :not(pre, .not-prose, .not-prose *) > code,
+.api-table code {
+  padding: 0.15rem 0.375rem;
+  border: 1px solid var(--elf-border);
+  border-radius: max(0px, calc(var(--elf-radius) - 4px));
+  background: var(--elf-muted);
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+.doc-content a > code { color: inherit; }
+.doc-content :not(.not-prose, .not-prose *) > a:hover { text-decoration: underline; }
+
+.table-wrap { margin: 1.25rem 0; overflow-x: auto; border-radius: var(--elf-radius); }
+.table-wrap table { width: 100%; border-collapse: collapse; font-size: 0.875rem; line-height: 1.5; }
+.table-wrap th { text-align: left; font-weight: 600; background: var(--elf-card); white-space: nowrap; }
+.table-wrap :is(th, td) { padding: 0.5rem 0.75rem; border: 1px solid var(--elf-border); vertical-align: top; }
+.table-wrap thead th { border-top: 0; }
+.table-wrap tr > :first-child { border-left: 0; }
+.table-wrap tr > :last-child { border-right: 0; }
+.table-wrap tbody tr:last-child > * { border-bottom: 0; }
+
+/* Code blocks (Shiki). The theme paints its own background; use the Elf card surface instead. */
+.code-block pre,
+.doc-code pre {
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  background: var(--elf-card) !important;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  tab-size: 2;
+}
+.code-block pre code, .doc-code pre code { display: block; width: max-content; min-width: 100%; background: none; border: 0; padding: 0; font-size: inherit; }
+.code-block pre code .line { display: inline-block; min-width: 100%; }
+.code-block pre code .line.highlight, .code-block pre code .highlight { background: var(--elf-accent); }
+.code-block pre:focus-visible, .doc-code pre:focus-visible { outline-offset: -2px; }
+
+/* Anchors of headings inside API sections */
+.api-heading { scroll-margin-top: 5rem; }
+
+/* Let the preview region show the theme background even inside the dark page. */
+.preview-surface { background: var(--elf-background); color: var(--elf-foreground); }

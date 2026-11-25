@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://xouyi.github.io/elfUI/sitemap.xml
