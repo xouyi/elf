@@ -15,7 +15,7 @@ rmSync(out, { recursive: true, force: true })
 const rewrite = (s: string) =>
   s
     .replaceAll(/from '\.\.\/\.\.\/lib\/utils'/g, 'from \'@/lib/utils\'')
-    .replaceAll(/from '\.\.\/([a-z]+)'/g, 'from \'@/components/ui/$1\'')
+    .replaceAll(/from '\.\.\/([a-z-]+)'/g, 'from \'@/components/ui/$1\'')
 
 // Primary host is GitHub Pages; https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r is the fallback.
 const REGISTRY = 'https://xouyi.github.io/elfUI/r'
@@ -34,6 +34,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   label: { title: 'Label', description: 'Accessible label for a form control, built on Reka UI.', dependencies: ['reka-ui'] },
   separator: { title: 'Separator', description: 'Horizontal or vertical divider, built on Reka UI.', dependencies: ['reka-ui'] },
   kbd: { title: 'Kbd', description: 'Keyboard key hint with a group for shortcuts.', dependencies: ['reka-ui'] },
+  spinner: { title: 'Spinner', description: 'Indeterminate busy indicator announced through role status.', dependencies: ['class-variance-authority'], registryDependencies: [dep('visually-hidden')] },
   'visually-hidden': { title: 'Visually Hidden', description: 'Hides content visually while keeping it available to assistive technology.', dependencies: ['reka-ui'] },
 }
 

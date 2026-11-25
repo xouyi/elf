@@ -167,7 +167,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** ElfVisuallyHidden
 - **Complexity:** S
 - **Novatron screens:** Buttons in loading state; page loaders everywhere.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.3)
 
 #### ElfSkeleton
 

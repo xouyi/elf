@@ -296,6 +296,29 @@
       ]
     },
     {
+      "name": "spinner",
+      "type": "registry:ui",
+      "title": "Spinner",
+      "description": "Indeterminate busy indicator announced through role status.",
+      "dependencies": [
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/visually-hidden.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/spinner/Spinner.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/spinner/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "visually-hidden",
       "type": "registry:ui",
       "title": "Visually Hidden",

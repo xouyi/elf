@@ -12,6 +12,8 @@ import SeparatorSemantic from '../../src/components/separator/examples/Semantic.
 import SeparatorVertical from '../../src/components/separator/examples/Vertical.vue'
 import KbdGroupExample from '../../src/components/kbd/examples/Group.vue'
 import KbdWithIcons from '../../src/components/kbd/examples/WithIcons.vue'
+import SpinnerInButton from '../../src/components/spinner/examples/InButton.vue'
+import SpinnerSizes from '../../src/components/spinner/examples/Sizes.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -308,6 +310,32 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await show(KbdWithIcons)
       await expect.element(page.getByText('Arrow up')).toBeInTheDocument()
       await expect.element(page.getByText('Enter')).toBeInTheDocument()
+    })
+  })
+
+  describe('Spinner', () => {
+    it('exposes each label as hidden text in a status region and renders the sizes', async () => {
+      setTheme(theme)
+      const { el } = await show(SpinnerSizes)
+      expect([...el.querySelectorAll('[role="status"]')].map(s => s.textContent)).toEqual(['Loading, small', 'Loading, default', 'Loading, large', 'Loading, extra large'])
+      await expect.element(page.getByText('Loading, small')).toBeInTheDocument()
+      const widths = [...el.querySelectorAll<HTMLElement>('[data-slot="spinner"]')].map(s => s.getBoundingClientRect().width)
+      expect(widths).toEqual([12, 16, 24, 32])
+    })
+
+    it('shows the spinner and disables the button while busy, then restores it', async () => {
+      setTheme(theme)
+      const { el } = await show(SpinnerInButton)
+      const button = el.querySelector<HTMLButtonElement>('button')!
+      expect(button.querySelector('[role="status"]')).toBeNull()
+      await userEvent.click(button)
+      await settle()
+      expect(button.disabled).toBe(true)
+      expect(button.getAttribute('aria-busy')).toBe('true')
+      expect(button.querySelector('[role="status"]')?.textContent).toBe('Saving changes')
+      await settle(1700)
+      expect(button.disabled).toBe(false)
+      expect(button.querySelector('[role="status"]')).toBeNull()
     })
   })
 

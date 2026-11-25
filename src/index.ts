@@ -49,5 +49,8 @@ export type { SeparatorProps } from './components/separator'
 export { Kbd as ElfKbd, KbdGroup as ElfKbdGroup } from './components/kbd'
 export type { KbdGroupProps, KbdProps } from './components/kbd'
 
+export { Spinner as ElfSpinner, spinnerVariants } from './components/spinner'
+export type { SpinnerProps, SpinnerVariants } from './components/spinner'
+
 export const elfThemes = ['elf', 'novatron'] as const
 export type ElfTheme = (typeof elfThemes)[number]

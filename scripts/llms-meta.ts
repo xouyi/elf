@@ -149,6 +149,19 @@ export const components: ComponentMeta[] = [
     slots: ['default: key name or an icon (icon-only keys need ElfVisuallyHidden text)'],
     a11y: ['Icon-only keys need visually hidden text naming the key (aria-label is not valid on kbd).', 'A hint is not a control: keep the action reachable another way.'],
   },
+  {
+    dir: 'spinner',
+    name: 'Spinner',
+    summary: 'Indeterminate busy indicator. An SVG ring in a role=status region with a visually hidden label; inherits the text color.',
+    parts: ['ElfSpinner'],
+    variants: 'spinnerVariants',
+    props: [
+      { name: 'size', type: 'size union', default: 'default', description: 'Diameter: sm, default, lg, xl.' },
+      { name: 'label', type: 'string', default: 'Loading', description: 'Announced to assistive technology, not shown.' },
+      { name: 'class', type: 'string | array | object', description: 'Merged with base classes; set the color with a text utility.' },
+    ],
+    a11y: ['Mount the spinner when work starts so the status is announced.', 'Use a specific label when several spinners can appear.', 'Animation stops under prefers-reduced-motion.'],
+  },
 ]
 
 export const rules = [

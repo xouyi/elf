@@ -21,6 +21,7 @@ ElfUI is source-distributed: install from a pinned GitHub tag (currently v0.2.0)
 - [Label](https://xouyi.github.io/elfUI/docs/components/label): Accessible label for a form control. Renders a native label; clicking it focuses or toggles the control.
 - [Separator](https://xouyi.github.io/elfUI/docs/components/separator): Horizontal or vertical divider. Decorative by default; set decorative to false to expose role=separator.
 - [Kbd](https://xouyi.github.io/elfUI/docs/components/kbd): Keyboard key hint. A native kbd element; ElfKbdGroup keeps the keys of one shortcut together.
+- [Spinner](https://xouyi.github.io/elfUI/docs/components/spinner): Indeterminate busy indicator. An SVG ring in a role=status region with a visually hidden label; inherits the text color.
 
 ## Reference
 

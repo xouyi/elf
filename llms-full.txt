@@ -77,7 +77,7 @@ Set `<html data-theme="elf">` (or `novatron`).
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-Or register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+Or register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -1066,8 +1066,104 @@ import { ArrowDown, ArrowUp, CornerDownLeft } from '@lucide/vue'
 </template>
 ```
 
+### Spinner
+
+Indeterminate busy indicator. An SVG ring in a role=status region with a visually hidden label; inherits the text color.
+
+Components: `ElfSpinner`
+
+- size options: `sm`, `default`, `lg`, `xl` (default `default`)
+
+Props:
+
+- `size` (size union, default default): Diameter: sm, default, lg, xl.
+- `label` (string, default Loading): Announced to assistive technology, not shown.
+- `class` (string | array | object): Merged with base classes; set the color with a text utility.
+
+Accessibility:
+
+- Mount the spinner when work starts so the status is announced.
+- Use a specific label when several spinners can appear.
+- Animation stops under prefers-reduced-motion.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfSpinner } from '@elf/ui'
+</script>
+
+<template>
+  <ElfSpinner />
+</template>
+```
+
+#### In Button
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfSpinner } from '@elf/ui'
+import { ref } from 'vue'
+
+const saving = ref(false)
+
+function save() {
+  saving.value = true
+  setTimeout(() => (saving.value = false), 1500)
+}
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfButton :disabled="saving" :aria-busy="saving" @click="save">
+      <ElfSpinner v-if="saving" label="Saving changes" />
+      {{ saving ? 'Saving' : 'Save changes' }}
+    </ElfButton>
+    <ElfButton variant="outline" disabled>
+      <ElfSpinner label="Please wait" /> Please wait
+    </ElfButton>
+  </div>
+</template>
+```
+
+#### Page Loader
+
+```vue
+<script setup lang="ts">
+import { ElfSpinner } from '@elf/ui'
+</script>
+
+<template>
+  <div class="flex w-72 flex-col items-center gap-3 border border-border p-8 text-sm text-muted-foreground">
+    <ElfSpinner size="xl" class="text-primary" label="Loading the match schedule" />
+    <p aria-hidden="true">
+      Loading the match schedule
+    </p>
+  </div>
+</template>
+```
+
+#### Sizes
+
+```vue
+<script setup lang="ts">
+import { ElfSpinner } from '@elf/ui'
+</script>
+
+<template>
+  <div class="flex items-center gap-6 text-primary">
+    <ElfSpinner size="sm" label="Loading, small" />
+    <ElfSpinner label="Loading, default" />
+    <ElfSpinner size="lg" label="Loading, large" />
+    <ElfSpinner size="xl" label="Loading, extra large" />
+  </div>
+</template>
+```
+
 ## Exports from "@elf/ui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

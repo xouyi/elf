@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add `ElfSpinner`: an SVG busy indicator with `size` and an announced `label` (`role="status"`), reduced-motion aware.
 - Add `ElfKbd` and `ElfKbdGroup`, composed from the native `kbd` element.
 - Add `ElfSeparator`, built on the Reka UI Separator primitive (`orientation`, `decorative`, default decorative).
 - Add `ElfLabel`, built on the Reka UI Label primitive (`for`, `as`, `asChild`), with `peer-disabled` and `group` disabled styling.
