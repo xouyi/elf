@@ -109,6 +109,20 @@ export const components: ComponentMeta[] = [
     slots: ['default: the hidden content (text, or an element with as-child)'],
     a11y: ['Prefer visible text. Use this only where a visual label would be redundant.', 'Keep fully-hidden for decorative helpers; never put real content in it.'],
   },
+  {
+    dir: 'label',
+    name: 'Label',
+    summary: 'Accessible label for a form control. Renders a native label; clicking it focuses or toggles the control.',
+    parts: ['ElfLabel'],
+    props: [
+      { name: 'for', type: 'string', description: 'The id of the control the label belongs to.' },
+      { name: 'as', type: 'string | Component', default: 'label', description: 'Element to render.' },
+      { name: 'asChild', type: 'boolean', default: 'false', description: 'Render the child element with Label styling (attribute: as-child).' },
+      { name: 'class', type: 'string | array | object', description: 'Merged with base classes.' },
+    ],
+    slots: ['default: label text'],
+    a11y: ['Connect every control with for and a matching id.', 'Put the control before the label and give it the peer class so peer-disabled dims the label.'],
+  },
 ]
 
 export const rules = [

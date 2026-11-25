@@ -40,5 +40,8 @@ export {
 export { VisuallyHidden as ElfVisuallyHidden } from './components/visually-hidden'
 export type { VisuallyHiddenProps } from './components/visually-hidden'
 
+export { Label as ElfLabel } from './components/label'
+export type { LabelProps } from './components/label'
+
 export const elfThemes = ['elf', 'novatron'] as const
 export type ElfTheme = (typeof elfThemes)[number]
