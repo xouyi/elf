@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add `ElfSelect` with `ElfSelectTrigger`, `ElfSelectValue`, `ElfSelectContent`, `ElfSelectItem`, `ElfSelectGroup`, `ElfSelectLabel`, `ElfSelectSeparator`, `ElfSelectScrollUpButton` and `ElfSelectScrollDownButton`, built on the Reka UI Select primitive: popper positioning, typeahead, `size`, `invalid`, 16px text on small screens, and `ElfField` wiring through `ElfFieldControl` around the trigger.
 - Add `ElfSwitch`, built on the Reka UI Switch primitive: `v-model`, `size` (`default` | `sm`, exported `switchVariants`), `disabled`, a `thumb` slot, Space and Enter toggling, and `ElfField` wiring.
 - Add `ElfRadioGroup` and `ElfRadioGroupItem`, built on the Reka UI RadioGroup primitive: `v-model`, `orientation`, `disabled`, `required`, `invalid`, roving arrow-key selection, and in `ElfField` the group is named by the field label and gets the described, invalid and required wiring.
 - Add `ElfCheckbox`, built on the Reka UI Checkbox primitive: `v-model` (`boolean | 'indeterminate'`), `invalid`, `disabled`, `required`, a custom indicator slot, and automatic id, `aria-describedby`, `aria-invalid` and required wiring inside `ElfField`.

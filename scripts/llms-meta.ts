@@ -262,6 +262,31 @@ export const components: ComponentMeta[] = [
     slots: ['thumb: content inside the thumb (for example an icon), receives { modelValue }'],
     a11y: ['Always give it a visible label (ElfLabel for= the switch id) or an aria-label, and keep the label the same in both states.', 'Space and Enter toggle it.', 'There is no required state: aria-required is not valid on role=switch.'],
   },
+  {
+    dir: 'select',
+    name: 'Select',
+    summary: 'Dropdown to choose one value, built on Reka UI Select. Compose ElfSelect (v-model) > ElfSelectTrigger + ElfSelectValue, ElfSelectContent > ElfSelectItem (optionally in ElfSelectGroup with ElfSelectLabel and ElfSelectSeparator). Inside ElfField wrap only the trigger in ElfFieldControl.',
+    parts: ['ElfSelect', 'ElfSelectTrigger', 'ElfSelectValue', 'ElfSelectContent', 'ElfSelectItem', 'ElfSelectGroup', 'ElfSelectLabel', 'ElfSelectSeparator', 'ElfSelectScrollUpButton', 'ElfSelectScrollDownButton'],
+    variants: 'selectTriggerVariants',
+    props: [
+      { name: 'ElfSelect modelValue', type: 'string | number | boolean | object', description: 'Selected value, bound with v-model.' },
+      { name: 'ElfSelect defaultValue', type: 'same as modelValue', description: 'Initial value when uncontrolled.' },
+      { name: 'ElfSelect open / defaultOpen', type: 'boolean', description: 'Controlled (v-model:open) or initial open state.' },
+      { name: 'ElfSelect disabled', type: 'boolean', default: 'false', description: 'Disables the select.' },
+      { name: 'ElfSelect required', type: 'boolean', default: 'false', description: 'aria-required on the trigger. Inherited from ElfField required.' },
+      { name: 'ElfSelect name', type: 'string', description: 'Form field name; renders a hidden native select.' },
+      { name: 'ElfSelect multiple', type: 'boolean', default: 'false', description: 'Allow several values (v-model is an array).' },
+      { name: 'ElfSelectTrigger size', type: '\'default\' | \'sm\'', default: 'default', description: 'Trigger height (36px or 32px).' },
+      { name: 'ElfSelectTrigger invalid', type: 'boolean', default: 'false', description: 'aria-invalid="true" and the destructive border and ring.' },
+      { name: 'ElfSelectValue placeholder', type: 'string', description: 'Text shown while nothing is selected.' },
+      { name: 'ElfSelectContent position', type: '\'popper\' | \'item-aligned\'', default: 'popper', description: 'popper opens below the trigger and flips; item-aligned overlaps the trigger.' },
+      { name: 'ElfSelectItem value', type: 'string | number | boolean | object', description: 'Required. Value of the option.' },
+      { name: 'ElfSelectItem disabled', type: 'boolean', default: 'false', description: 'Option cannot be selected.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part except ElfSelect; merged with base classes.' },
+    ],
+    slots: ['ElfSelectTrigger default: ElfSelectValue', 'ElfSelectContent default: items, groups and separators', 'ElfSelectItem default: option text'],
+    a11y: ['The trigger needs an accessible name: ElfLabel for= the trigger id, an ElfField label, or aria-label.', 'Enter, Space and ArrowDown open the list; arrows, Home, End and typeahead move the highlight; Enter selects; Escape closes and returns focus to the trigger.', 'Use a RadioGroup for two or three options.'],
+  },
 ]
 
 export const rules = [

@@ -32,6 +32,11 @@ import SwitchDefault from '../../src/components/switch/examples/Default.vue'
 import SwitchDisabled from '../../src/components/switch/examples/Disabled.vue'
 import SwitchSizes from '../../src/components/switch/examples/Sizes.vue'
 import SwitchWithField from '../../src/components/switch/examples/WithField.vue'
+import SelectDefault from '../../src/components/select/examples/Default.vue'
+import SelectGroups from '../../src/components/select/examples/Groups.vue'
+import SelectScrollable from '../../src/components/select/examples/Scrollable.vue'
+import SelectStates from '../../src/components/select/examples/States.vue'
+import SelectWithField from '../../src/components/select/examples/WithField.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -728,6 +733,183 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(digest!.getAttribute('aria-checked')).toBe('false')
       expect(sms!.disabled).toBe(true)
       expect(getComputedStyle(el.querySelectorAll('label')[1]!).opacity).toBe('0.5')
+    })
+  })
+
+  describe('Select', () => {
+    const trigger = (el: Element) => el.querySelector<HTMLElement>('[role="combobox"]')!
+    const listbox = () => document.querySelector<HTMLElement>('[role="listbox"]')
+    const options = () => [...document.querySelectorAll<HTMLElement>('[role="option"]')]
+    const highlighted = () => options().findIndex(o => o.hasAttribute('data-highlighted'))
+
+    it('opens with Enter, ArrowDown and Space, exposes combobox and listbox roles, and Escape closes it and restores focus', async () => {
+      setTheme(theme)
+      const { el } = await show(SelectDefault)
+      const t = trigger(el)
+      expect(t.getAttribute('aria-expanded')).toBe('false')
+      expect(t.textContent).toContain('Choose a subteam')
+      await userEvent.tab()
+      expect(document.activeElement).toBe(t)
+
+      for (const key of ['{Enter}', '{ArrowDown}', ' ']) {
+        await userEvent.keyboard(key)
+        await settle(150)
+        expect(t.getAttribute('aria-expanded'), `${key} opens the list`).toBe('true')
+        expect(listbox(), `${key} renders a listbox`).not.toBeNull()
+        expect(options().map(o => o.textContent?.trim())).toEqual(['Mechanical', 'Electrical', 'Software', 'Business and outreach'])
+        await userEvent.keyboard('{Escape}')
+        await settle(200)
+        expect(listbox()).toBeNull()
+        expect(t.getAttribute('aria-expanded')).toBe('false')
+        expect(document.activeElement, 'focus returns to the trigger').toBe(t)
+        expect(t.textContent, 'Escape keeps the value').toContain('Choose a subteam')
+      }
+    })
+
+    it('moves the highlight with the arrow keys, Home and End, and selects the highlighted option with Enter', async () => {
+      setTheme(theme)
+      const { el } = await show(SelectDefault)
+      const t = trigger(el)
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(150)
+      expect(highlighted()).toBe(0)
+      await userEvent.keyboard('{ArrowDown}{ArrowDown}')
+      await settle()
+      expect(highlighted()).toBe(2)
+      await userEvent.keyboard('{End}')
+      await settle()
+      expect(highlighted()).toBe(3)
+      await userEvent.keyboard('{Home}')
+      await settle()
+      expect(highlighted()).toBe(0)
+      await userEvent.keyboard('{ArrowDown}{Enter}')
+      await settle(200)
+      expect(listbox()).toBeNull()
+      expect(t.textContent).toContain('Electrical')
+      expect(t.hasAttribute('data-placeholder')).toBe(false)
+      expect(document.activeElement).toBe(t)
+
+      await userEvent.keyboard('{Enter}')
+      await settle(150)
+      const selected = options().find(o => o.getAttribute('aria-selected') === 'true')
+      expect(selected?.textContent?.trim(), 'the selected option is marked').toBe('Electrical')
+      expect(selected?.hasAttribute('data-highlighted'), 'and highlighted when reopened').toBe(true)
+    })
+
+    it('typeahead highlights the matching option and selecting by click closes the list', async () => {
+      setTheme(theme)
+      const { el } = await show(SelectDefault)
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(150)
+      await userEvent.keyboard('s')
+      await settle()
+      expect(options()[highlighted()]?.textContent?.trim()).toBe('Software')
+      await settle(1100) // typeahead forgets the typed characters after one second
+      await userEvent.keyboard('b')
+      await settle()
+      expect(options()[highlighted()]?.textContent?.trim()).toBe('Business and outreach')
+      await userEvent.click(options()[0]!)
+      await settle(200)
+      expect(listbox()).toBeNull()
+      expect(trigger(el).textContent).toContain('Mechanical')
+      await expect.element(page.getByRole('combobox', { name: 'Subteam' })).toBeInTheDocument()
+    })
+
+    it('opens with the pointer, closes on an outside click and keeps the list inside the viewport', async () => {
+      setTheme(theme)
+      const { el } = await show(SelectDefault)
+      await userEvent.click(trigger(el))
+      await settle(150)
+      const content = document.querySelector<HTMLElement>('[data-slot="select-content"]')!
+      const rect = content.getBoundingClientRect()
+      expect(rect.top).toBeGreaterThanOrEqual(0)
+      expect(rect.bottom).toBeLessThanOrEqual(window.innerHeight)
+      expect(rect.right).toBeLessThanOrEqual(window.innerWidth)
+      expect(Math.round(rect.width), 'at least as wide as the trigger').toBeGreaterThanOrEqual(Math.round(trigger(el).getBoundingClientRect().width))
+      // The page behind an open select has pointer-events: none, so dispatch the outside press directly.
+      document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerType: 'mouse', button: 0 }))
+      await settle(200)
+      expect(listbox()).toBeNull()
+    })
+
+    it('groups options under labels and skips disabled options', async () => {
+      setTheme(theme)
+      const { el } = await show(SelectGroups)
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(150)
+      const groups = [...document.querySelectorAll('[role="group"]')]
+      expect(groups).toHaveLength(2)
+      expect(document.querySelector('[data-slot="select-label"]')?.textContent).toBe('Turkey')
+      expect(document.querySelector('[data-slot="select-separator"]')).not.toBeNull()
+      const lyon = options().find(o => o.textContent?.includes('Lyon'))!
+      expect(lyon.getAttribute('aria-disabled')).toBe('true')
+      await userEvent.keyboard('{End}')
+      await settle()
+      expect(options()[highlighted()]?.textContent?.trim(), 'End skips the disabled option').toBe('Rotterdam District')
+      expect(trigger(el).textContent).toContain('Istanbul Regional')
+    })
+
+    it('shows scroll buttons for a long list and scrolls to a far option with the keyboard', async () => {
+      setTheme(theme)
+      await show(SelectScrollable)
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      const content = document.querySelector<HTMLElement>('[data-slot="select-content"]')!
+      expect(content.getBoundingClientRect().height, 'capped by max-h-48').toBeLessThanOrEqual(192)
+      await userEvent.keyboard('{End}')
+      await settle(200)
+      const last = options().at(-1)!
+      expect(last.hasAttribute('data-highlighted')).toBe(true)
+      const viewport = document.querySelector<HTMLElement>('[data-reka-select-viewport]')!
+      expect(viewport.scrollTop, 'the list scrolled').toBeGreaterThan(0)
+      const box = last.getBoundingClientRect()
+      expect(box.bottom).toBeLessThanOrEqual(viewport.getBoundingClientRect().bottom + 1)
+    })
+
+    it('in a Field: named by the label, required, then invalid until a value is chosen', async () => {
+      setTheme(theme)
+      const { el } = await show(SelectWithField)
+      const t = trigger(el)
+      expect(t.getAttribute('aria-required')).toBe('true')
+      expect(t.getAttribute('aria-invalid')).toBeNull()
+      expect(document.getElementById(t.getAttribute('aria-describedby')!)?.textContent).toContain('Pick the role')
+      await expect.element(page.getByRole('combobox', { name: /Role/ })).toBeInTheDocument()
+
+      await userEvent.click(el.querySelector('button[type="submit"]')!)
+      await settle()
+      expect(t.getAttribute('aria-invalid')).toBe('true')
+      expect(el.querySelector('[role="alert"]')?.textContent).toContain('Choose a role')
+
+      await userEvent.click(t)
+      await settle(150)
+      await userEvent.click(options().find(o => o.textContent?.includes('Scout'))!)
+      await settle(200)
+      expect(t.getAttribute('aria-invalid')).toBeNull()
+      expect(el.querySelector('[role="alert"]')).toBeNull()
+      await userEvent.click(el.querySelector('button[type="submit"]')!)
+      await settle()
+      expect(el.textContent).toContain('Role saved: scout.')
+    })
+
+    it('sm trigger is shorter, and a disabled trigger cannot be focused or opened', async () => {
+      setTheme(theme)
+      const { el } = await show(SelectStates)
+      const [small, invalid, disabled] = [...el.querySelectorAll<HTMLButtonElement>('[role="combobox"]')]
+      expect(small!.getBoundingClientRect().height).toBe(32)
+      expect(invalid!.getBoundingClientRect().height).toBe(36)
+      expect(invalid!.getAttribute('aria-invalid')).toBe('true')
+      expect(disabled!.disabled).toBe(true)
+      await userEvent.tab()
+      await userEvent.tab()
+      await userEvent.tab()
+      expect(document.activeElement).not.toBe(disabled)
+      disabled!.click()
+      await settle(150)
+      expect(listbox()).toBeNull()
     })
   })
 

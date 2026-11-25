@@ -41,6 +41,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   checkbox: { title: 'Checkbox', description: 'Binary or indeterminate selection control built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('field')] },
   'radio-group': { title: 'Radio Group', description: 'Mutually exclusive options with arrow-key navigation, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'], registryDependencies: [dep('field')] },
   switch: { title: 'Switch', description: 'On/off setting with sm and default sizes, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
+  select: { title: 'Select', description: 'Dropdown to choose one value from a list, with groups, typeahead and scroll buttons, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('field')] },
   'visually-hidden': { title: 'Visually Hidden', description: 'Hides content visually while keeping it available to assistive technology.', dependencies: ['reka-ui'] },
 }
 

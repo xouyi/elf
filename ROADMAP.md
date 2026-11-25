@@ -145,7 +145,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** ElfLabel, ElfField
 - **Complexity:** M
 - **Novatron screens:** stock location and category pickers; courses `AdminFilterBar` filters; scout forms.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfSeparator
 

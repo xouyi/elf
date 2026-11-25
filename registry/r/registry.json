@@ -482,6 +482,68 @@
       ]
     },
     {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "Dropdown to choose one value from a list, with groups, typeahead and scroll buttons, built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core",
+        "@lucide/vue",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/field.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/select/Select.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/select/SelectContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/select/SelectGroup.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/select/SelectItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/select/SelectLabel.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/select/SelectScrollDownButton.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/select/SelectScrollUpButton.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/select/SelectSeparator.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/select/SelectTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/select/SelectValue.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/select/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "visually-hidden",
       "type": "registry:ui",
       "title": "Visually Hidden",
