@@ -24,6 +24,10 @@ import CheckboxDefault from '../../src/components/checkbox/examples/Default.vue'
 import CheckboxDisabled from '../../src/components/checkbox/examples/Disabled.vue'
 import CheckboxIndeterminate from '../../src/components/checkbox/examples/Indeterminate.vue'
 import CheckboxWithField from '../../src/components/checkbox/examples/WithField.vue'
+import RadioGroupDefault from '../../src/components/radio-group/examples/Default.vue'
+import RadioGroupDisabled from '../../src/components/radio-group/examples/Disabled.vue'
+import RadioGroupHorizontal from '../../src/components/radio-group/examples/Horizontal.vue'
+import RadioGroupWithField from '../../src/components/radio-group/examples/WithField.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -565,6 +569,97 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await userEvent.click(el.querySelector('button[type="submit"]')!)
       await settle()
       expect(el.textContent).toContain('Registration saved.')
+    })
+  })
+
+  describe('RadioGroup', () => {
+    const radios = (el: Element) => [...el.querySelectorAll<HTMLElement>('[role="radio"]')]
+    const checked = (el: Element) => radios(el).findIndex(r => r.getAttribute('aria-checked') === 'true')
+    // Reka checks a radio from a 0ms timeout that requires the arrow key to still be down, so hold the key briefly like a person does.
+    const arrow = async (key: string) => {
+      await userEvent.keyboard(`{${key}>}`)
+      await settle(30)
+      await userEvent.keyboard(`{/${key}}`)
+      await settle()
+    }
+
+    it('has one tab stop (the checked radio) and arrow keys move focus and selection, wrapping at the ends', async () => {
+      setTheme(theme)
+      const { el } = await show(RadioGroupDefault)
+      expect(el.querySelector('[role="radiogroup"]')?.getAttribute('aria-label')).toBe('Subteam')
+      expect(checked(el)).toBe(2)
+      await userEvent.tab()
+      expect(document.activeElement).toBe(radios(el)[2])
+      await arrow('ArrowDown')
+      expect(checked(el), 'wraps to the first radio').toBe(0)
+      expect(document.activeElement).toBe(radios(el)[0])
+      await arrow('ArrowDown')
+      expect(checked(el)).toBe(1)
+      await arrow('ArrowUp')
+      await arrow('ArrowUp')
+      expect(checked(el), 'ArrowUp wraps to the last radio').toBe(2)
+      await arrow('ArrowRight')
+      expect(checked(el)).toBe(0)
+      await userEvent.tab()
+      expect(el.contains(document.activeElement), 'Tab leaves the group in one step').toBe(false)
+    })
+
+    it('selects with a click on the label and exposes the accessible name', async () => {
+      setTheme(theme)
+      const { el } = await show(RadioGroupDefault)
+      await userEvent.click(el.querySelector('label[for="radio-mechanical"]')!)
+      expect(checked(el)).toBe(0)
+      await expect.element(page.getByRole('radio', { name: 'Mechanical' })).toBeChecked()
+      await expect.element(page.getByRole('radiogroup', { name: 'Subteam' })).toBeInTheDocument()
+    })
+
+    it('draws the checked dot only for the selected item and a focus ring on keyboard focus', async () => {
+      setTheme(theme)
+      const { el } = await show(RadioGroupHorizontal)
+      expect(el.querySelector('[role="radiogroup"]')?.getAttribute('aria-orientation')).toBe('horizontal')
+      await userEvent.tab()
+      const active = document.activeElement as HTMLElement
+      expect(active.getAttribute('role')).toBe('radio')
+      expect(getComputedStyle(active).boxShadow, 'focus ring').not.toBe('none')
+      expect(el.querySelectorAll('[data-slot="radio-group-indicator"]')).toHaveLength(1)
+    })
+
+    it('skips disabled items with the arrow keys', async () => {
+      setTheme(theme)
+      const { el } = await show(RadioGroupDisabled)
+      const first = el.querySelector<HTMLElement>('[role="radiogroup"]')!
+      const items = radios(first)
+      expect(items[1]!.hasAttribute('disabled')).toBe(true)
+      await userEvent.tab()
+      expect(document.activeElement).toBe(items[0])
+      await arrow('ArrowDown')
+      expect(items[0]!.getAttribute('aria-checked'), 'the disabled neighbour cannot be selected').toBe('true')
+      const locked = radios(el.querySelectorAll('[role="radiogroup"]')[1]!)
+      expect(locked.every(r => r.hasAttribute('disabled'))).toBe(true)
+    })
+
+    it('in a Field: named by the field label, required, then invalid until a choice is made', async () => {
+      setTheme(theme)
+      const { el } = await show(RadioGroupWithField)
+      const group = el.querySelector<HTMLElement>('[role="radiogroup"]')!
+      expect(group.getAttribute('aria-required')).toBe('true')
+      expect(group.getAttribute('aria-invalid')).toBeNull()
+      expect(document.getElementById(group.getAttribute('aria-labelledby')!)?.textContent).toContain('Priority')
+      await expect.element(page.getByRole('radiogroup', { name: /Priority/ })).toBeInTheDocument()
+
+      await userEvent.click(el.querySelector('button[type="submit"]')!)
+      await settle()
+      expect(group.getAttribute('aria-invalid')).toBe('true')
+      expect(el.querySelector('[role="alert"]')?.textContent).toContain('Choose a priority')
+      expect(group.getAttribute('aria-describedby')!.split(' ')).toHaveLength(2)
+
+      await userEvent.click(el.querySelector('label[for="field-priority-high"]')!)
+      await settle()
+      expect(group.getAttribute('aria-invalid')).toBeNull()
+      expect(el.querySelector('[role="alert"]')).toBeNull()
+      await userEvent.click(el.querySelector('button[type="submit"]')!)
+      await settle()
+      expect(el.textContent).toContain('Request sent with high priority.')
     })
   })
 

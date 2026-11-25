@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add `ElfRadioGroup` and `ElfRadioGroupItem`, built on the Reka UI RadioGroup primitive: `v-model`, `orientation`, `disabled`, `required`, `invalid`, roving arrow-key selection, and in `ElfField` the group is named by the field label and gets the described, invalid and required wiring.
 - Add `ElfCheckbox`, built on the Reka UI Checkbox primitive: `v-model` (`boolean | 'indeterminate'`), `invalid`, `disabled`, `required`, a custom indicator slot, and automatic id, `aria-describedby`, `aria-invalid` and required wiring inside `ElfField`.
 - Theme: the `elf` theme now uses pure black, neutral (zero-chroma) surfaces instead of purple-tinted near-black: background `#000000`, card `#0a0a0a`, popover `#0f0f0f`, muted `#171717`, secondary `#1c1c1c`, border `#262626`, input `#6b6b6b`. Violet stays the brand accent (`primary`, `ring`) and `accent` is a subtle violet for hover and selected states. All pairs still pass WCAG AA (`bun run contrast`). Visual baselines of the `elf` theme change.
 

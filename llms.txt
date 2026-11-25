@@ -27,6 +27,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [Textarea](https://xouyi.github.io/elfUI/docs/components/textarea): Multi-line text input with v-model and optional auto-grow. A native textarea: all native attributes fall through.
 - [Field](https://xouyi.github.io/elfUI/docs/components/field): Form row: label, one control, description and error wired through id, for, aria-describedby and aria-invalid. Wrap the control in ElfFieldControl; works with ElfInput, ElfTextarea and native controls.
 - [Checkbox](https://xouyi.github.io/elfUI/docs/components/checkbox): Binary or indeterminate selection control built on Reka UI Checkbox. v-model is boolean | 'indeterminate'. Pair it with ElfLabel; inside ElfField wrap it in ElfFieldControl.
+- [RadioGroup](https://xouyi.github.io/elfUI/docs/components/radio-group): Mutually exclusive options built on Reka UI RadioGroup. ElfRadioGroup holds the value (v-model); each ElfRadioGroupItem is one option. Pair every item with ElfLabel; inside ElfField wrap the group in ElfFieldControl.
 
 ## Reference
 
