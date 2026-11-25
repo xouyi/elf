@@ -5,8 +5,8 @@
     "": {
       "name": "elf-nuxt-demo",
       "dependencies": {
-        "@elf/ui": "github:xouyi/elfUI#v0.2.0",
         "@lucide/vue": "1.79.0",
+        "@xouyi/elfui": "^0.3.0",
         "nuxt": "4.7.0",
         "vue": "3.5.46",
         "vue-router": "5.5.1",
@@ -86,8 +86,6 @@
     "@dxup/nuxt": ["@dxup/nuxt@0.5.11", "", { "dependencies": { "@dxup/unimport": "^0.1.2", "@nuxt/kit": "^4.6.4", "@vue/compiler-dom": "^3.5.45", "chokidar": "^6.0.0", "knitwork": "^1.3.0", "magic-string": "^1.4.5", "pathe": "^2.0.3", "tinyglobby": "^0.2.17", "unplugin": "^3.7.0" } }, "sha512-J3Hq8IO1U5RoQrCH4Av/oOBmXg+2CvHzNjo+12ALhUlHpR6omQf02AVHY+IhEvf2iPeLFiEScQSzikJX7fXO8w=="],
 
     "@dxup/unimport": ["@dxup/unimport@0.1.2", "", {}, "sha512-/B8YJGPzaYq1NbsQmwgP8EZqg40NpTw4ZB3suuI0TplbxKHeK94jeaawLmVhCv+YwUnOpiWEz9U6SeThku/8JQ=="],
-
-    "@elf/ui": ["@elf/ui@github:xouyi/elfUI#12c6756", { "dependencies": { "@lucide/vue": "1.79.0", "@nuxt/kit": "4.7.0", "@vueuse/core": "15.1.0", "class-variance-authority": "0.7.1", "clsx": "2.1.1", "reka-ui": "2.11.0", "tailwind-merge": "3.7.1" }, "peerDependencies": { "@tailwindcss/vite": "^4.3.0", "nuxt": "^4.6.4", "tailwindcss": "^4.3.0", "typescript": ">=5.0.0", "vue": "^3.5.0" }, "optionalPeers": ["nuxt"] }, "xouyi-elfUI-12c6756", "sha512-uDgJp7053gabo2BefEtm6i2TUpZLgjcHEvdqQ/JBmUTw/JoJXUJW9/7MpKRkApQzQUWeOk/8MGP2PHbfKq+vZA=="],
 
     "@emnapi/core": ["@emnapi/core@2.0.0-beta.2", "", { "dependencies": { "@emnapi/wasi-threads": "2.2.0", "tslib": "^2.4.0" } }, "sha512-MzCVoWtcg4Pm2B3je5mMvYMvj3MmBKw+fU7vbsJc9/iT8ip6/eYIHo/Dsm/mr+wsHB6SEyJDuxB09Yy6r/8+4A=="],
 
@@ -416,6 +414,8 @@
     "@vueuse/metadata": ["@vueuse/metadata@15.1.0", "", {}, "sha512-yHKFelRTdQdp7vdjXXEw68Wh9v8OgyxWm1v1aHbGM6Z4qbqHhB6QgB8MTNB76pZYh22wPeALCdr8qjShlxPBHA=="],
 
     "@vueuse/shared": ["@vueuse/shared@15.1.0", "", { "peerDependencies": { "vue": "^3.5.0" } }, "sha512-JAbQLO+vOULt8MPR4oRbvstBuztTTMIX4LOfCGeBvp9JSgj5OppZDing3gKDrmlyUQvYYFSPIX4dxkfJgdsxWQ=="],
+
+    "@xouyi/elfui": ["@xouyi/elfui@0.3.0", "", { "dependencies": { "@lucide/vue": "1.79.0", "@nuxt/kit": "4.7.0", "@vueuse/core": "15.1.0", "class-variance-authority": "0.7.1", "clsx": "2.1.1", "reka-ui": "2.11.0", "tailwind-merge": "3.7.1" }, "peerDependencies": { "@tailwindcss/vite": "^4.3.0", "nuxt": ">=4.0.0", "tailwindcss": "^4.0.0", "typescript": ">=5.0.0 <7.0.0", "vue": "^3.5.0" }, "optionalPeers": ["nuxt"], "bin": { "elfui": "dist/cli.mjs" } }, "sha512-pjboMyCD1Zexch6fzUdgw65SXI/6k7fKLCGdhOUABJWS3nnZMGqUOWO4tBEmang5zHc/HYIrUs1rWjpQORJ+DQ=="],
 
     "abbrev": ["abbrev@3.0.1", "", {}, "sha512-AO2ac6pjRB3SJmGJo+v5/aK6Omggp6fsLrs6wN9bd35ulu4cCwaAU9+7ZhXjeqHVkaHThLuzH0nZr0YpCDhygg=="],
 
