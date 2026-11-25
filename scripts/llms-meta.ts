@@ -206,6 +206,24 @@ export const components: ComponentMeta[] = [
     slots: ['ElfField default: exactly one ElfFieldControl wrapping the control', 'ElfField label / description / error: rich content instead of the props'],
     a11y: ['Wrap exactly one control in ElfFieldControl; it merges id, aria-describedby, aria-invalid, aria-required and disabled onto the child.', 'Do not render errors on first load: the error has role=alert and is announced when it appears.'],
   },
+  {
+    dir: 'checkbox',
+    name: 'Checkbox',
+    summary: 'Binary or indeterminate selection control built on Reka UI Checkbox. v-model is boolean | \'indeterminate\'. Pair it with ElfLabel; inside ElfField wrap it in ElfFieldControl.',
+    parts: ['ElfCheckbox'],
+    props: [
+      { name: 'modelValue', type: 'boolean | \'indeterminate\'', description: 'Bound with v-model.' },
+      { name: 'defaultValue', type: 'boolean | \'indeterminate\'', description: 'Initial state when uncontrolled.' },
+      { name: 'disabled', type: 'boolean', default: 'false', description: 'Prevents interaction and dims the control.' },
+      { name: 'required', type: 'boolean', default: 'false', description: 'Marks the checkbox required (aria-required; form validation). Inherited from ElfField required.' },
+      { name: 'invalid', type: 'boolean', default: 'false', description: 'Sets aria-invalid="true" and the destructive border and ring.' },
+      { name: 'name', type: 'string', description: 'Form field name; renders a hidden input inside a form.' },
+      { name: 'value', type: 'string', default: 'on', description: 'Value submitted with the form when checked.' },
+      { name: 'class', type: 'string | array | object', description: 'Merged with base classes.' },
+    ],
+    slots: ['default: custom indicator content, receives { modelValue, state }'],
+    a11y: ['Always give it a visible label (ElfLabel for= the checkbox id) or an aria-label.', 'Space toggles; an indeterminate checkbox becomes checked.', 'Use a Switch for settings that apply immediately and a RadioGroup for exclusive choices.'],
+  },
 ]
 
 export const rules = [

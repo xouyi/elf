@@ -1,0 +1,28 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "checkbox",
+  "title": "Checkbox",
+  "description": "Binary or indeterminate selection control built on Reka UI.",
+  "dependencies": [
+    "reka-ui",
+    "@vueuse/core",
+    "@lucide/vue"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json",
+    "https://xouyi.github.io/elfUI/r/field.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/checkbox/Checkbox.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { CheckboxRootEmits, CheckboxRootProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { Check, Minus } from '@lucide/vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from 'reka-ui'\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { useFieldContext } from '@/components/ui/field'\n\nconst props = defineProps<CheckboxRootProps & {\n  /** Marks the checkbox as invalid: sets `aria-invalid=\"true\"` and the destructive border and ring. */\n  invalid?: boolean\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}>()\nconst emits = defineEmits<CheckboxRootEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class', 'invalid')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n\n// Inside an ElfField the checkbox also reports the field's required state (aria-required and form validation).\nconst field = useFieldContext()\nconst required = computed(() => props.required || Boolean(field?.required.value))\n</script>\n\n<template>\n  <CheckboxRoot\n    v-slot=\"slotProps\"\n    data-slot=\"checkbox\"\n    v-bind=\"forwarded\"\n    :required=\"required\"\n    :aria-invalid=\"props.invalid ? 'true' : undefined\"\n    :class=\"cn(\n      'peer size-4 shrink-0 rounded-[max(0px,calc(var(--elf-radius)-6px))] border border-input bg-transparent text-primary-foreground transition-[color,box-shadow] outline-none',\n      'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',\n      'disabled:cursor-not-allowed disabled:opacity-50',\n      'aria-invalid:border-destructive aria-invalid:ring-destructive/30',\n      'data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=indeterminate]:border-primary data-[state=indeterminate]:bg-primary',\n      props.class,\n    )\"\n  >\n    <CheckboxIndicator data-slot=\"checkbox-indicator\" class=\"flex items-center justify-center text-current\">\n      <slot v-bind=\"slotProps\">\n        <Minus v-if=\"slotProps.state === 'indeterminate'\" class=\"size-3.5\" />\n        <Check v-else class=\"size-3.5\" />\n      </slot>\n    </CheckboxIndicator>\n  </CheckboxRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/checkbox/index.ts",
+      "content": "export { default as Checkbox } from './Checkbox.vue'\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
