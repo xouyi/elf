@@ -55,5 +55,7 @@ export type { SpinnerProps, SpinnerVariants } from './components/spinner'
 export { Skeleton as ElfSkeleton } from './components/skeleton'
 export type { SkeletonProps } from './components/skeleton'
 
+export { Textarea as ElfTextarea } from './components/textarea'
+
 export const elfThemes = ['elf', 'novatron'] as const
 export type ElfTheme = (typeof elfThemes)[number]

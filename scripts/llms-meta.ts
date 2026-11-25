@@ -170,6 +170,22 @@ export const components: ComponentMeta[] = [
     props: [{ name: 'class', type: 'string | array | object', description: 'Size and shape (h-4 w-40, size-10 rounded-full); merged with base classes.' }],
     a11y: ['Skeletons are aria-hidden: mark the loading region with aria-busy and render a visually hidden role=status message.', 'The pulse stops under prefers-reduced-motion.'],
   },
+  {
+    dir: 'textarea',
+    name: 'Textarea',
+    summary: 'Multi-line text input with v-model and optional auto-grow. A native textarea: all native attributes fall through.',
+    parts: ['ElfTextarea'],
+    props: [
+      { name: 'modelValue', type: 'string', description: 'Bound with v-model.' },
+      { name: 'defaultValue', type: 'string', description: 'Initial value when uncontrolled.' },
+      { name: 'autoResize', type: 'boolean', default: 'false', description: 'Grow and shrink with the content (attribute: auto-resize). Cap with a max-h-* class.' },
+      { name: 'invalid', type: 'boolean', default: 'false', description: 'Sets aria-invalid="true" and the destructive border and ring.' },
+      { name: 'rows', type: 'number', default: '3', description: 'Visible lines; the minimum height with autoResize.' },
+      { name: 'maxlength', type: 'number', description: 'Maximum number of characters.' },
+      { name: 'class', type: 'string | array | object', description: 'Merged with base classes.' },
+    ],
+    a11y: ['Always provide a visible label (ElfLabel for=) or aria-label; a placeholder is not a label.', 'Describe errors in text and link them with aria-describedby (ElfField does this).'],
+  },
 ]
 
 export const rules = [

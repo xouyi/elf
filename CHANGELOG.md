@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add `ElfTextarea`: native textarea with `v-model`, `autoResize`, `invalid`, `rows` and `maxlength`, sharing the `ElfInput` styles.
 - Add `ElfSkeleton`: a decorative placeholder block (`aria-hidden`, reduced-motion aware).
 - Add `ElfSpinner`: an SVG busy indicator with `size` and an announced `label` (`role="status"`), reduced-motion aware.
 - Add `ElfKbd` and `ElfKbdGroup`, composed from the native `kbd` element.

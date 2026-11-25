@@ -339,6 +339,28 @@
       ]
     },
     {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "description": "Multi-line text input with v-model and optional auto-grow.",
+      "dependencies": [
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/textarea/Textarea.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/textarea/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "visually-hidden",
       "type": "registry:ui",
       "title": "Visually Hidden",

@@ -101,7 +101,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** forum `PostForm`, `CommentForm`; courses `AssignmentForm`, `CourseChat`.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.3)
 
 #### ElfCheckbox
 
