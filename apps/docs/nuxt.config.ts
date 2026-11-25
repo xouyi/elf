@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
@@ -6,6 +6,13 @@ import tailwindcss from '@tailwindcss/vite'
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, '..', '..')
 const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')) as { version: string }
+
+// One isolated route per example (src/components/<dir>/examples/<File>.vue) for the visual regression tests.
+const exampleRoutes = readdirSync(join(root, 'src/components'), { withFileTypes: true })
+  .filter(d => d.isDirectory() && existsSync(join(root, 'src/components', d.name, 'examples')))
+  .flatMap(d => readdirSync(join(root, 'src/components', d.name, 'examples'))
+    .filter(f => f.endsWith('.vue'))
+    .map(f => `/__examples/${d.name}/${f.replace('.vue', '').replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()}`))
 
 const site = 'https://xouyi.github.io/elfUI'
 const repo = 'https://github.com/xouyi/elfUI'
@@ -50,7 +57,7 @@ export default defineNuxtConfig({
     },
   },
   nitro: {
-    prerender: { crawlLinks: true, routes: ['/', '/docs', '/sitemap.xml', '/search.json', '/404.html'], failOnError: true },
+    prerender: { crawlLinks: true, routes: ['/', '/docs', '/sitemap.xml', '/search.json', '/404.html', ...exampleRoutes], failOnError: true },
   },
   experimental: { payloadExtraction: true },
   telemetry: false,

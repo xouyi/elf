@@ -8,7 +8,7 @@ never npm, pnpm or yarn. Code, comments and docs are in English.
 
 ```sh
 bun install                              # also installs the pre-push hook
-bunx playwright install chromium         # once; used by the browser tests and the OG image script
+bunx playwright install chromium         # once; used by the browser tests, the visual tests and the OG image script
 bun run docs:dev                         # docs site with live previews on :3000
 ```
 
@@ -20,6 +20,8 @@ runs on Bun's runtime (`bunx --bun nuxt`), so it needs no native SQLite module.
 | Path | What lives there |
 | :--- | :--- |
 | `src/components/<name>/` | Component SFCs, `index.ts`, `examples/*.vue`, unit test. |
+| `tests/browser/` | Vitest browser-mode tests (real Chromium): axe over every example in both themes, interaction tests. |
+| `tests/visual/` | Playwright visual regression tests and the committed baselines in `__screenshots__/`. |
 | `src/themes/`, `src/styles.css` | Theme token files and the Tailwind v4 mapping. |
 | `apps/docs/` | The documentation site (Nuxt 4 + Nuxt Content, built with ElfUI). Markdown pages in `content/docs/`. |
 | `apps/playground/` | Nuxt 4 integration app linked to the live sources. |
@@ -36,7 +38,7 @@ Create `src/components/<name>/` with:
 | `<Name>.vue` | The component. Reka UI primitive + `cva()` variants + `cn()`. Use relative imports in `src`. Document every prop with a JSDoc comment; the docs API table is generated from them. |
 | `index.ts` | Public exports, the `cva` factory and prop types. |
 | `examples/<Example>.vue` | One single-file component per example (`Default`, `Variants`, `Sizes`, `WithIcon`, `Disabled`, ...). Import components from `'@elf/ui'` exactly as a consumer would. These files are the live previews and the code tabs on the docs site, and the fixtures the browser tests mount. |
-| `<Name>.test.ts` | Unit tests (Vitest + `@vue/test-utils`): rendering, variants, emitted events, keyboard behavior. |
+| `<Name>.test.ts` | Unit tests (Vitest + `@vue/test-utils`): rendering, variants, emitted events, ARIA attributes. |
 
 Then wire it into the rest of the repository:
 
@@ -47,6 +49,9 @@ Then wire it into the rest of the repository:
    The code samples in `llms-full.txt` are read from your `examples/` folder.
 4. Write the docs page `apps/docs/content/docs/2.components/NN.<name>.md` (see below).
 5. Add an entry to the Unreleased section of `CHANGELOG.md`.
+6. Cover the behavior: examples are tested automatically (axe, both themes, plus a visual baseline each); add interaction
+   tests to `tests/browser/interactions.test.ts` for keyboard, focus and state behavior. Then create the baselines (see
+   "Visual regression").
 
 Design rules: 100% dark UI, tokens only (never hard-coded colors), works in both the `elf` and `novatron` themes,
 keyboard accessible, no `class*='size-'` selectors with escaped quotes (use `[class*=size-]`).
@@ -79,30 +84,54 @@ keyboard accessible, no `class*='size-'` selectors with escaped quotes (use `[cl
 
 1. `typecheck`: `vue-tsc` over sources, examples, scripts and tests.
 2. `lint`: ESLint with `@antfu/eslint-config` (Vue + TypeScript). `bun run lint:fix` autofixes.
-3. `test`: Vitest unit project (happy-dom): `src/**/*.test.ts`. Browser (axe, interaction) tests in real Chromium are
-   being rebuilt on top of the examples and will join this step.
+3. `test`: Vitest with two projects. `unit` (happy-dom, `src/**/*.test.ts`) and `browser` (real Chromium through
+   Playwright, `tests/browser/**/*.test.ts`): every example mounted in both themes with `axe-core`, and keyboard,
+   focus and `v-model` interaction tests.
 4. `contrast`: WCAG contrast of every theme token pair.
 5. `registry:check`: rebuilds the registry and fails if the committed `registry.json` / `registry/r` differ.
 6. `llms:check`: fails if `llms.txt` / `llms-full.txt` are stale (`bun run llms` regenerates them).
 7. `docs:typecheck` (vue-tsc over the docs app), `docs:build` (a full `nuxt generate`, which fails on a broken example
    or component reference) and `playground:build`.
 
-Run subsets while developing: `bun run test:unit`, `bun run docs:dev`.
+Run subsets while developing: `bun run test:unit`, `bun run test:browser`, `bun run docs:dev`.
 
-### Visual regression (being rebuilt)
+### How tests work
 
-The Storybook-based screenshot tests were removed together with Storybook. They are being replaced by Playwright tests
-that screenshot each example in isolation on the docs site, in both themes. Baselines will be created **only** in the
-official Playwright Docker image (`mcr.microsoft.com/playwright:v1.64.0-noble`, the same image the CI `visual` job
-uses) because screenshots depend on the operating system's fonts and rasterizer. Until the new tests land, the CI
-**Visual regression** job builds the docs site inside that image and `bun run test:visual` is a no-op.
+| Layer | Where | Command |
+| :--- | :--- | :--- |
+| Unit | `src/components/<name>/<Name>.test.ts` | `bun run test:unit` |
+| Browser (axe + interaction) | `tests/browser/` | `bun run test:browser` |
+| Visual regression | `tests/visual/` | `bun run test:visual` (CI image only) |
+
+The browser project discovers every `src/components/*/examples/*.vue`, mounts it in both themes and requires zero axe
+violations, so a new example is covered without writing a test. Behavior (focus trap, keyboard navigation, `v-model`)
+goes into `tests/browser/interactions.test.ts`. The full explanation is on the docs site under Resources, Testing.
+
+### Visual regression
+
+The docs site renders each example alone at `/__examples/<component>/<example>?theme=elf|novatron` (noindex, not in the
+sitemap or search). `tests/visual/examples.spec.ts` screenshots every example in both themes at 1280 and 360 px and
+compares them with `tests/visual/__screenshots__/<component>/<example>-<theme>-<width>.png`.
+
+Baselines depend on the operating system's fonts and rasterizer, so they are created **only** in the official Playwright
+Docker image (`mcr.microsoft.com/playwright:v1.64.0-noble`), by the **Visual baselines** workflow. Never commit PNGs
+generated on your machine. To update baselines after an intentional visual change:
+
+1. Open a pull request with the change. The **Visual regression** job fails and uploads the `visual-report` artifact.
+2. Run **Actions - Visual baselines - Run workflow** on the pull request branch. It commits the changed PNGs to the branch.
+3. Review the PNG diff in the pull request's **Files changed** tab; every changed image must be explained by the change.
+4. Push an empty commit (pushes by the workflow do not start CI) so the required checks run, then merge.
+
+A new example fails with "A snapshot doesn't exist" until the workflow has run once for it. Delete the PNGs of removed
+examples in the same pull request. To debug the harness locally, `bun run docs:build` and
+`VISUAL_PORT=4390 bun run test:visual`; screenshot comparisons will not match CI there.
 
 ## Git hooks and CI
 
 - **pre-push** (installed by `bun install` through `simple-git-hooks`): `bun run prepush` = typecheck + lint + unit tests.
   Fast on purpose; bypass only in emergencies with `git push --no-verify`.
-- **CI** (`.github/workflows/ci.yml`, on push and pull request to `main`, Bun + Node 22): the full `bun run check`, plus
-  the Playwright visual job. The built docs site is uploaded as an artifact. The docs site (`apps/docs`), the registry and
+- **CI** (`.github/workflows/ci.yml`, on push and pull request to `main`, Bun + Node 22): the full `bun run check`
+  (**Check**, includes the browser tests), the blocking Playwright **Visual regression** job, and **Build example**. The built docs site is uploaded as an artifact. The docs site (`apps/docs`), the registry and
   the llms files are deployed to GitHub Pages at `https://xouyi.github.io/elfUI/` only after CI succeeds on `main`. A separate workflow builds `examples/nuxt-demo` from the published tag.
 
 Commits are small and in English, written in the imperative mood ("Add Tooltip component").
