@@ -18,7 +18,7 @@ Status legend: **done** (shipped), **planned** (not started). Complexity: **S** 
 
 ## Where we are
 
-Shipped in 0.2.0: **Button, Input, Badge, Card, Dialog, Tabs**, the `elf` (violet) and `novatron` (gold, 0px radius) themes, the Nuxt module, the shadcn-vue registry and `llms.txt`. Built on Reka UI 2.11, class-variance-authority, tailwind-merge and Tailwind CSS v4.
+Shipped in 0.2.0: **Button, Input, Badge, Card, Dialog, Tabs**, the `elf` (black with violet accents) and `novatron` (gold, 0px radius) themes, the Nuxt module, the shadcn-vue registry and `llms.txt`. Built on Reka UI 2.11, class-variance-authority, tailwind-merge and Tailwind CSS v4.
 
 Reka UI 2.11 (the version in this repo) already ships primitives for almost everything below: Accordion, AlertDialog, AspectRatio, Autocomplete, Avatar, Calendar, Checkbox, Collapsible, Combobox, ContextMenu, DatePicker, DateRangePicker, Dialog, Drawer, DropdownMenu, Editable, Field, Form, HoverCard, Label, Listbox, Menubar, NavigationMenu, NumberField, Pagination, PinInput, Popover, Progress, RadioGroup, RangeCalendar, Rating, ScrollArea, Select, Separator, Slider, Splitter, Stepper, Switch, Tabs, TagsInput, TimeField, Toast, Toggle, ToggleGroup, Toolbar, Tooltip, Tree and VisuallyHidden. What it does not provide, and ElfUI must compose itself, is Table, Data Table, Sidebar, Breadcrumb, Command (partly), Chart, Code Block, Skeleton, Spinner, Alert, Empty, Kbd, Input Group, File Upload and the toast queue.
 

@@ -10,7 +10,7 @@ ElfUI is a dark-only design system for Vue 3 and Nuxt 4. Components are built on
 CSS-variable theming) and styled with Tailwind CSS v4.
 
 - Components: Button, Input, Badge, Card, Dialog, Tabs (all prefixed `Elf` in Vue, for example `<ElfButton>`)
-- Themes: `elf` (violet, rounded, default) and `novatron` (gold on obsidian, sharp corners)
+- Themes: `elf` (pure black with violet accents, rounded, default) and `novatron` (gold on obsidian, sharp corners)
 - Distribution: the npm package [`@xouyi/elfui`](https://www.npmjs.com/package/@xouyi/elfui) (with its own CLI), plus a registry for copying components into your project
 - Docs: a Nuxt Content site built with ElfUI itself, published at https://xouyi.github.io/elfUI/ (`bun run docs:dev` locally)
 - AI assistants: `llms.txt` and `llms-full.txt`, generated from the sources (`bun run llms`)

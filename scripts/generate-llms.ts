@@ -134,7 +134,7 @@ const installPlain = [
   'Set `<html data-theme="elf">` (or `novatron`).',
 ]
 
-const intro = 'ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (violet, rounded) and novatron (gold on obsidian, sharp corners).'
+const intro = 'ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (pure black with violet accents, rounded) and novatron (gold on obsidian, sharp corners).'
 
 const links = [
   `- [Documentation site](${SITE}/): guides and a page per component with live previews, API tables and accessibility notes`,
