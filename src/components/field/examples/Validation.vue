@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfButton, ElfField, ElfFieldControl, ElfInput, ElfTextarea } from 'elfui'
+import { ElfButton, ElfField, ElfFieldControl, ElfInput, ElfTextarea } from '@xouyi/elfui'
 import { computed, reactive, ref } from 'vue'
 
 const form = reactive({ email: '', message: '' })

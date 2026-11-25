@@ -24,14 +24,14 @@ const manual = (project: Project, theme: Theme) => project.framework === 'nuxt'
       'Edit nuxt.config.ts by hand:',
       '  import tailwindcss from \'@tailwindcss/vite\'',
       '  export default defineNuxtConfig({',
-      '    modules: [\'elfui/nuxt\'],',
+      '    modules: [\'@xouyi/elfui/nuxt\'],',
       `    elfui: { theme: '${theme}' },`,
       '    css: [\'~/assets/css/main.css\'],',
       '    vite: { plugins: [tailwindcss()] },',
       '  })',
       'and put these two lines in that CSS file:',
       '  @import \'tailwindcss\';',
-      '  @import \'elfui/styles.css\';',
+      '  @import \'@xouyi/elfui/styles.css\';',
     ].join('\n')
   : [
       'Edit vite.config.ts by hand:',
@@ -39,15 +39,15 @@ const manual = (project: Project, theme: Theme) => project.framework === 'nuxt'
       '  export default defineConfig({ plugins: [vue(), tailwindcss()] })',
       'and put these lines in your main CSS file:',
       '  @import \'tailwindcss\';',
-      '  @import \'elfui/styles.css\';',
-      `  @import 'elfui/themes/${theme}.css';`,
+      '  @import \'@xouyi/elfui/styles.css\';',
+      `  @import '@xouyi/elfui/themes/${theme}.css';`,
     ].join('\n')
 
 function installDependencies(ctx: Ctx, project: Project, noInstall: boolean): void {
   const have = (n: string) => hasDependency(project.pkg, n)
   const spec = process.env.ELFUI_PACKAGE
   const runtime = [
-    ...(have('elfui') ? [] : [spec || 'elfui']),
+    ...(have('@xouyi/elfui') ? [] : [spec || '@xouyi/elfui']),
     ...(have('tailwindcss') ? [] : ['tailwindcss']),
     ...(have('@tailwindcss/vite') ? [] : ['@tailwindcss/vite']),
   ]
@@ -68,8 +68,8 @@ function patchCss(ctx: Ctx, file: string, theme: Theme, withTheme: boolean): voi
   const existing = readIfExists(file)
   const wanted = [
     { re: TAILWIND_RE, line: '@import \'tailwindcss\';' },
-    { re: /@import\s+['"]elfui\/styles\.css['"]/, line: '@import \'elfui/styles.css\';' },
-    ...(withTheme ? [{ re: new RegExp(`@import\\s+['"]elfui/themes/${theme}\\.css['"]`), line: `@import 'elfui/themes/${theme}.css';` }] : []),
+    { re: /@import\s+['"]@xouyi\/elfui\/styles\.css['"]/, line: '@import \'@xouyi/elfui/styles.css\';' },
+    ...(withTheme ? [{ re: new RegExp(`@import\\s+['"]@xouyi\\/elfui\\/themes\\/${theme}\\.css['"]`), line: `@import '@xouyi/elfui/themes/${theme}.css';` }] : []),
   ]
   const { css, changed } = ensureCssImports(existing ?? '', wanted)
   if (existing === null) writeFile(ctx, file, `${css.trimEnd()}\n`, 'create')
@@ -150,6 +150,6 @@ export async function init(args: ParsedArgs, ctx: Ctx): Promise<number> {
   else initVite(ctx, project, theme)
 
   const run = runnerCommand(project.pm)
-  log.info(`\nDone. Add components with:\n  ${run} elfui add button dialog\nor import them from the package:\n  import { ElfButton } from 'elfui'${project.framework === 'nuxt' ? ' (auto-imported in Nuxt)' : ''}`)
+  log.info(`\nDone. Add components with:\n  ${run} elfui add button dialog\nor import them from the package:\n  import { ElfButton } from '@xouyi/elfui'${project.framework === 'nuxt' ? ' (auto-imported in Nuxt)' : ''}`)
   return 0
 }

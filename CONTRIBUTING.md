@@ -143,9 +143,9 @@ Commits are small and in English, written in the imperative mood ("Add Tooltip c
 2. Run `bun run release x.y.z` (`x.y.z-beta.N` for a prerelease). It refuses unless the working tree is clean, you are on `main`, the changelog has the
    section, and `bun run check` passes. It then bumps `package.json`, commits `Release vx.y.z` and creates the tag `vx.y.z`. It never pushes.
 3. Publish: `git push origin main --follow-tags`. The **Release** workflow (`.github/workflows/release.yml`) then verifies that the tag equals
-   the `package.json` version, runs `bun run check`, publishes `elfui` to npm with provenance and creates the GitHub Release from the changelog section.
-   Prereleases are published with the `next` dist-tag, so `bun add elfui` keeps resolving to the last stable version.
-4. After the first npm release, switch `examples/nuxt-demo` to `"elfui": "^x.y.z"` (see its README).
+   the `package.json` version, runs `bun run check`, publishes `@xouyi/elfui` to npm with provenance and creates the GitHub Release from the changelog section.
+   Prereleases are published with the `next` dist-tag, so `bun add @xouyi/elfui` keeps resolving to the last stable version.
+4. After the first npm release, switch `examples/nuxt-demo` to `"@xouyi/elfui": "^x.y.z"` (see its README).
 
 ## Publishing to npm (one-time setup)
 
@@ -153,7 +153,7 @@ CI publishes with npm Trusted Publishing (OIDC): there is no `NPM_TOKEN` secret.
 that already exists, so the very first version is published by hand.
 
 1. Create an npm account at npmjs.com, verify the e-mail and enable two-factor authentication (authenticator app or security key).
-2. First publish from a clean checkout of the release tag (this claims the name `elfui`). `bunx npm` is used because Bun has no `login`/OIDC flow
+2. First publish from a clean checkout of the release tag (this claims the name `@xouyi/elfui`). `bunx npm` is used because Bun has no `login`/OIDC flow
    and `npm publish` is the only client that can attach provenance:
 
    ```bash
@@ -165,7 +165,7 @@ that already exists, so the very first version is published by hand.
    ```
 
    Provenance cannot be generated from a laptop, so this first version has none; later ones do.
-3. On npmjs.com open **elfui > Settings > Trusted publishing > GitHub Actions** and enter owner `xouyi`, repository `elfUI`, workflow filename `release.yml`
+3. On npmjs.com open **@xouyi/elfui > Settings > Trusted publishing > GitHub Actions** and enter owner `xouyi`, repository `elfUI`, workflow filename `release.yml`
    (leave the environment empty). Save.
 4. Optional hardening: under **Settings > Publishing access** choose "Require two-factor authentication and disallow tokens".
 5. From then on, releases are `bun run release x.y.z` plus `git push origin main --follow-tags`.

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfButton, ElfKbd } from 'elfui'
+import { ElfButton, ElfKbd } from '@xouyi/elfui'
 </script>
 
 <template>

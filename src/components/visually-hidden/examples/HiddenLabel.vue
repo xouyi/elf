@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfInput, ElfVisuallyHidden } from 'elfui'
+import { ElfInput, ElfVisuallyHidden } from '@xouyi/elfui'
 </script>
 
 <template>

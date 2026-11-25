@@ -5,8 +5,8 @@ GitHub tag, not from a workspace link. It is the proof that a published tag work
 
 > **Temporary GitHub install.** The pinned tag `v0.2.0` predates the rename, so this app still depends on `@elf/ui`
 > (package name inside that tag) and uses `@elf/ui/nuxt`, `@elf/ui/styles.css` and the `elf:` config key. After the first
-> npm release it switches to `"elfui": "^0.3.0"`, `modules: ['elfui/nuxt']`, `@import 'elfui/styles.css'` and an
-> `elfui:` config key (`bun remove @elf/ui && bun add elfui`).
+> npm release it switches to `"@xouyi/elfui": "^0.3.0"`, `modules: ['@xouyi/elfui/nuxt']`, `@import '@xouyi/elfui/styles.css'`
+> and an `elfui:` config key (`bun remove @elf/ui && bun add @xouyi/elfui`).
 
 - Dashboard: stat cards, badges, filterable list (`app/pages/index.vue`)
 - Members: form inside a dialog with inline validation (`app/pages/members.vue`)

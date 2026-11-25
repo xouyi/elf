@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from 'elfui'
+import { ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from '@xouyi/elfui'
 import { ref } from 'vue'
 
 const tab = ref('code')

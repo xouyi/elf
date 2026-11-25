@@ -11,7 +11,7 @@ CSS-variable theming) and styled with Tailwind CSS v4.
 
 - Components: Button, Input, Badge, Card, Dialog, Tabs (all prefixed `Elf` in Vue, for example `<ElfButton>`)
 - Themes: `elf` (violet, rounded, default) and `novatron` (gold on obsidian, sharp corners)
-- Distribution: the npm package [`elfui`](https://www.npmjs.com/package/elfui) (with its own CLI), plus a registry for copying components into your project
+- Distribution: the npm package [`@xouyi/elfui`](https://www.npmjs.com/package/@xouyi/elfui) (with its own CLI), plus a registry for copying components into your project
 - Docs: a Nuxt Content site built with ElfUI itself, published at https://xouyi.github.io/elfUI/ (`bun run docs:dev` locally)
 - AI assistants: `llms.txt` and `llms-full.txt`, generated from the sources (`bun run llms`)
 - Example: [`examples/nuxt-demo`](examples/nuxt-demo) consumes ElfUI like a real project
@@ -23,16 +23,16 @@ Requirements: Bun, Nuxt 4 (or Vue 3 + Vite), Tailwind CSS v4 with `@tailwindcss/
 ## Quick start
 
 ```bash
-bunx elfui@latest init            # Nuxt 4 or Vite + Vue: installs deps, patches config and CSS (safe to re-run)
-bunx elfui add button dialog      # optional: copy components into your project instead of importing them
+bunx @xouyi/elfui@latest init            # Nuxt 4 or Vite + Vue: installs deps, patches config and CSS (safe to re-run)
+bunx @xouyi/elfui add button dialog      # optional: copy components into your project instead of importing them
 ```
 
-`init` detects your framework and package manager, installs `elfui`, `tailwindcss`, `@tailwindcss/vite` and `typescript@5` when missing, and refuses to touch a config it does not recognize (it prints the manual steps). See [the CLI docs](https://xouyi.github.io/elfUI/docs/getting-started/cli).
+`init` detects your framework and package manager, installs `@xouyi/elfui`, `tailwindcss`, `@tailwindcss/vite` and `typescript@5` when missing, and refuses to touch a config it does not recognize (it prints the manual steps). See [the CLI docs](https://xouyi.github.io/elfUI/docs/getting-started/cli).
 
 ## Install in a Nuxt 4 app (by hand)
 
 ```bash
-bun add elfui tailwindcss @tailwindcss/vite
+bun add @xouyi/elfui tailwindcss @tailwindcss/vite
 bun add -d typescript@5
 ```
 
@@ -42,9 +42,9 @@ bun add -d typescript@5
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
-  modules: ['elfui/nuxt'],
+  modules: ['@xouyi/elfui/nuxt'],
   css: ['~/assets/css/main.css'],
-  elfui: { theme: 'novatron' }, // 'elf' | 'novatron'; optional: themes: ['elf'] to bundle extra themes
+  elfui: { theme: 'novatron' }, // the config key stays `elfui`; 'elf' | 'novatron'; optional: themes: ['elf'] to bundle extra themes
   vite: { plugins: [tailwindcss()] },
 })
 ```
@@ -53,7 +53,7 @@ export default defineNuxtConfig({
 
 ```css
 @import 'tailwindcss';
-@import 'elfui/styles.css';
+@import '@xouyi/elfui/styles.css';
 ```
 
 Use the components (auto-imported with the `Elf` prefix):
@@ -65,26 +65,26 @@ Use the components (auto-imported with the `Elf` prefix):
 </ElfCard>
 ```
 
-`elfui/styles.css` maps ElfUI tokens to Tailwind colors and radii and tells Tailwind to scan the
+`@xouyi/elfui/styles.css` maps ElfUI tokens to Tailwind colors and radii and tells Tailwind to scan the
 ElfUI component sources. The Nuxt module adds the theme token CSS and sets `data-theme` on `<html>`.
 
 ### Without Nuxt
 
 ```ts
-import { ElfButton } from 'elfui'
+import { ElfButton } from '@xouyi/elfui'
 ```
 
 ```css
 @import 'tailwindcss';
-@import 'elfui/styles.css';
-@import 'elfui/themes/elf.css';
+@import '@xouyi/elfui/styles.css';
+@import '@xouyi/elfui/themes/elf.css';
 ```
 
 Set `<html data-theme="elf">` (or `novatron`).
 
 ### Install from GitHub (advanced)
 
-An unreleased tag or commit can be installed with `bun add github:xouyi/elfUI#<tag-or-sha>`. The package name is still `elfui`.
+An unreleased tag or commit can be installed with `bun add github:xouyi/elfUI#<tag-or-sha>`. The package name is still `@xouyi/elfui`.
 
 ## Theming
 
@@ -99,7 +99,7 @@ element: `<div data-theme="elf">`.
 ## Registry (copy a component into your project)
 
 ```bash
-bunx elfui add button dialog
+bunx @xouyi/elfui add button dialog
 ```
 
 The CLI copies the sources, rewrites imports to your aliases and installs dependencies; it never overwrites your files without `--overwrite`. The registry is also a standard shadcn-vue registry. Register the namespace in `components.json`:
@@ -146,7 +146,7 @@ bun run release x.y.z
 git push origin main --follow-tags
 ```
 
-Consumers install with `bun add elfui` (see CONTRIBUTING.md, "Publishing to npm", for the one-time setup).
+Consumers install with `bun add @xouyi/elfui` (see CONTRIBUTING.md, "Publishing to npm", for the one-time setup).
 
 ## Structure
 

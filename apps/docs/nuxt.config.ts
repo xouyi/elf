@@ -21,15 +21,15 @@ const baseURL = process.env.DOCS_BASE_URL ?? (process.env.NODE_ENV === 'developm
 
 export default defineNuxtConfig({
   compatibilityDate: '2026-11-01',
-  modules: ['elfui/nuxt', '@nuxt/content'],
+  modules: ['@xouyi/elfui/nuxt', '@nuxt/content'],
   css: ['~/assets/css/main.css'],
   // The docs dogfood ElfUI: both themes are bundled so the switcher and the per-example previews can use either.
   elfui: { theme: 'elf', themes: ['novatron'] },
   vite: {
     plugins: [tailwindcss()],
     resolve: {
-      // Examples import from 'elfui' (what a consumer writes); resolve it to the live sources.
-      alias: [{ find: /^elfui$/, replacement: join(root, 'src/index.ts') }],
+      // Examples import from '@xouyi/elfui' (what a consumer writes); resolve it to the live sources.
+      alias: [{ find: /^@xouyi\/elfui$/, replacement: join(root, 'src/index.ts') }],
     },
     server: { fs: { allow: [root] } },
   },

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfLabel } from 'elfui'
+import { ElfLabel } from '@xouyi/elfui'
 import { ref } from 'vue'
 
 const accepted = ref(false)

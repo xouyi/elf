@@ -2,7 +2,7 @@
 
 > ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (violet, rounded) and novatron (gold on obsidian, sharp corners).
 
-ElfUI is source-distributed and published on npm as `elfui` (currently 0.2.0). Install with `bun add elfui` or `bunx elfui@latest init`. All Vue components use the `Elf` prefix. Use Bun for every command.
+ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.2.0). Install with `bun add @xouyi/elfui` or `bunx @xouyi/elfui@latest init`. All Vue components use the `Elf` prefix. Use Bun for every command.
 
 ## Docs
 
@@ -10,8 +10,8 @@ ElfUI is source-distributed and published on npm as `elfui` (currently 0.2.0). I
 - [Installation (Nuxt)](https://xouyi.github.io/elfUI/docs/getting-started/installation-nuxt): install in a Nuxt 4 app
 - [Installation (Vite + Vue)](https://xouyi.github.io/elfUI/docs/getting-started/installation-vite): Vite and Vue setup
 - [Theming](https://xouyi.github.io/elfUI/docs/getting-started/theming): tokens, data-theme, creating a theme
-- [CLI](https://xouyi.github.io/elfUI/docs/getting-started/cli): bunx elfui init, add, list, diff
-- [Registry](https://xouyi.github.io/elfUI/docs/getting-started/registry): copy components with bunx elfui add (or the shadcn-vue CLI)
+- [CLI](https://xouyi.github.io/elfUI/docs/getting-started/cli): bunx @xouyi/elfui init, add, list, diff
+- [Registry](https://xouyi.github.io/elfUI/docs/getting-started/registry): copy components with bunx @xouyi/elfui add (or the shadcn-vue CLI)
 - [Button](https://xouyi.github.io/elfUI/docs/components/button): Triggers an action. Renders a native button; use as-child to render a link or other element.
 - [Input](https://xouyi.github.io/elfUI/docs/components/input): Single-line text input with v-model. A native input: all native attributes fall through.
 - [Badge](https://xouyi.github.io/elfUI/docs/components/badge): Small pill for status and labels. Static text unless rendered as a link or button with as-child.
@@ -42,11 +42,11 @@ ElfUI is source-distributed and published on npm as `elfui` (currently 0.2.0). I
 - Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).
 - ElfUI is dark only: do not add light-mode styles or dark: variants.
 - Do not override border radius with arbitrary values; radii derive from the theme (novatron is sharp, 0px).
-- Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "elfui".
+- Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.
 - Dialogs need a title and description; tabs lists need an aria-label.
 - Keep exactly one primary (default variant) button per view; use destructive only for irreversible actions.
-- Install from npm (`bun add elfui`, or `bunx elfui@latest init` to set up a project); typescript 5 or 6 (not 7) must be installed in the consumer project.
+- Install from npm (`bun add @xouyi/elfui`, or `bunx @xouyi/elfui@latest init` to set up a project); typescript 5 or 6 (not 7) must be installed in the consumer project.
 - Use Bun for all package commands (bun add, bun run, bunx), never npm, pnpm or yarn.
 
 ## Optional

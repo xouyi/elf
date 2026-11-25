@@ -2,7 +2,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
   compatibilityDate: '2026-11-01',
-  modules: ['elfui/nuxt'],
+  modules: ['@xouyi/elfui/nuxt'],
   css: ['~/assets/css/main.css'],
   elfui: { theme: 'novatron', themes: ['elf'] },
   vite: { plugins: [tailwindcss()] },

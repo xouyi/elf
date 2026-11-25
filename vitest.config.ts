@@ -23,7 +23,7 @@ export default defineConfig({
         // Real Chromium: every example in both themes (axe) plus keyboard/focus behavior. Needs `bunx playwright install chromium`.
         extends: true,
         plugins: [vue(), tailwindcss()],
-        resolve: { alias: [{ find: /^elfui$/, replacement: entry }] },
+        resolve: { alias: [{ find: /^@xouyi\/elfui$/, replacement: entry }] },
         test: {
           name: 'browser',
           include: ['tests/browser/**/*.test.ts'],

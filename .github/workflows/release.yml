@@ -1,6 +1,6 @@
 name: Release
 
-# Publishes `elfui` to npm and creates the GitHub Release when a version tag is pushed
+# Publishes `@xouyi/elfui` to npm and creates the GitHub Release when a version tag is pushed
 # (`bun run release x.y.z`, then `git push origin main --follow-tags`).
 #
 # Authentication is npm Trusted Publishing (OIDC): no NPM_TOKEN secret exists. The package must be linked to this
@@ -63,8 +63,8 @@ jobs:
           if [ "${PRERELEASE}" = "true" ]; then TAG="--tag next"; else TAG=""; fi
           # Idempotent: a version that already exists on npm (e.g. the first, manually published release) is skipped,
           # so the GitHub Release step still runs.
-          if bunx npm@latest view "elfui@${VERSION}" version >/dev/null 2>&1; then
-            echo "elfui@${VERSION} is already on npm; skipping publish."
+          if bunx npm@latest view "@xouyi/elfui@${VERSION}" version >/dev/null 2>&1; then
+            echo "@xouyi/elfui@${VERSION} is already on npm; skipping publish."
           else
             bunx npm@latest publish --provenance --access public ${TAG}
           fi

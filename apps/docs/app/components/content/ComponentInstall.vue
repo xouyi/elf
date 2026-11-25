@@ -10,9 +10,9 @@ const data = (meta as unknown as Record<string, Meta>)[props.component]
 if (!data) throw new Error(`ComponentInstall: unknown component "${props.component}"`)
 
 const names = data.parts.map(p => p.name).join(', ')
-const importSnippet = `import { ${names} } from 'elfui'`
+const importSnippet = `import { ${names} } from '@xouyi/elfui'`
 const registryUrl = `${config.public.site}/r/${data.registry.name}.json`
-const registryCommand = `bunx elfui add ${data.registry.name}`
+const registryCommand = `bunx @xouyi/elfui add ${data.registry.name}`
 const shadcnCommand = `bunx shadcn-vue@latest add ${registryUrl}`
 const shortCommand = `bunx shadcn-vue@latest add @elf/${data.registry.name}`
 </script>
@@ -29,7 +29,7 @@ const shortCommand = `bunx shadcn-vue@latest add @elf/${data.registry.name}`
         </ElfTabsTrigger>
       </ElfTabsList>
       <ElfTabsContent value="package" class="doc-content">
-        <p>Installed with <code>elfui</code> (see <NuxtLink class="text-primary underline-offset-4 hover:underline" to="/docs/getting-started/installation-nuxt">Installation</NuxtLink>). In Nuxt the module auto-imports every part, so no import is needed. Elsewhere:</p>
+        <p>Installed with <code>@xouyi/elfui</code> (see <NuxtLink class="text-primary underline-offset-4 hover:underline" to="/docs/getting-started/installation-nuxt">Installation</NuxtLink>). In Nuxt the module auto-imports every part, so no import is needed. Elsewhere:</p>
         <CodeSnippet :code="importSnippet" lang="ts" />
       </ElfTabsContent>
       <ElfTabsContent value="registry" class="doc-content">

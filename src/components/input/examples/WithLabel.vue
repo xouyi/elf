@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfInput } from 'elfui'
+import { ElfInput } from '@xouyi/elfui'
 import { ref } from 'vue'
 
 const email = ref('')

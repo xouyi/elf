@@ -13,10 +13,10 @@ export const VERSION = typeof __ELFUI_VERSION__ === 'string' ? __ELFUI_VERSION__
 export const HELP = `${c.bold('elfui')} ${VERSION}: set up ElfUI and copy its components into your project.
 
 ${c.bold('Usage')}
-  elfui <command> [options]
+  elfui <command> [options]            (installed bin; or: bunx @xouyi/elfui <command>)
 
 ${c.bold('Commands')}
-  init                  Install elfui + Tailwind CSS v4, patch your Nuxt or Vite config and main CSS (safe to re-run)
+  init                  Install @xouyi/elfui + Tailwind CSS v4, patch your Nuxt or Vite config and main CSS (safe to re-run)
   add <component...>    Copy components (and what they depend on) from the registry into your project
   list                  Show every component in the registry
   diff <component...>   Compare your local copy of a component with the registry version
@@ -36,10 +36,10 @@ ${c.bold('Options')}
   -h, --help               Print this help
 
 ${c.bold('Examples')}
-  bunx elfui@latest init --theme novatron --yes
-  bunx elfui add button dialog
-  bunx elfui add field --path components/ui --overwrite
-  bunx elfui diff button
+  bunx @xouyi/elfui@latest init --theme novatron --yes
+  bunx @xouyi/elfui add button dialog
+  bunx @xouyi/elfui add field --path components/ui --overwrite
+  bunx @xouyi/elfui diff button
   elfui list --registry ./registry/r
 
 ${c.bold('Docs')}  https://xouyi.github.io/elfUI/docs/getting-started/cli`

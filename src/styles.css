@@ -2,9 +2,9 @@
  * Elf styles. Import AFTER Tailwind in the consumer's main CSS:
  *
  *   @import "tailwindcss";
- *   @import "elfui/styles.css";
+ *   @import "@xouyi/elfui/styles.css";
  *
- * Theme token files (elfui/themes/*.css) are added by the Nuxt module,
+ * Theme token files (@xouyi/elfui/themes/*.css) are added by the Nuxt module,
  * or imported manually in non-Nuxt setups.
  */
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfButton } from 'elfui'
+import { ElfButton } from '@xouyi/elfui'
 import { Plus } from '@lucide/vue'
 
 const sizes = ['sm', 'default', 'lg'] as const

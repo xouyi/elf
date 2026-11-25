@@ -14,7 +14,7 @@ const LOCKFILES: [string, PackageManager][] = [
   ['npm-shrinkwrap.json', 'npm'],
 ]
 
-/** Lockfile first, then the invoking package manager (`bunx elfui`), then Bun. */
+/** Lockfile first, then the invoking package manager (`bunx @xouyi/elfui`), then Bun. */
 export function detectPackageManager(cwd: string, userAgent = process.env.npm_config_user_agent): PackageManager {
   for (const [file, pm] of LOCKFILES) {
     if (existsSync(join(cwd, file))) return pm

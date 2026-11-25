@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfSeparator } from 'elfui'
+import { ElfSeparator } from '@xouyi/elfui'
 </script>
 
 <template>

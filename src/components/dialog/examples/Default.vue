@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfButton, ElfDialog, ElfDialogClose, ElfDialogContent, ElfDialogDescription, ElfDialogFooter, ElfDialogHeader, ElfDialogTitle, ElfDialogTrigger, ElfInput } from 'elfui'
+import { ElfButton, ElfDialog, ElfDialogClose, ElfDialogContent, ElfDialogDescription, ElfDialogFooter, ElfDialogHeader, ElfDialogTitle, ElfDialogTrigger, ElfInput } from '@xouyi/elfui'
 </script>
 
 <template>

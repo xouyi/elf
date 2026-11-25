@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfTextarea } from 'elfui'
+import { ElfTextarea } from '@xouyi/elfui'
 </script>
 
 <template>

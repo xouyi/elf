@@ -2,7 +2,7 @@
  * Release helper: `bun run release <x.y.z>`.
  * Refuses unless the tree is clean, the branch is main, CHANGELOG.md has a section for the version and
  * `bun run check` passes. Then bumps package.json, commits and creates the annotated tag. It never pushes.
- * Pushing the tag starts .github/workflows/release.yml, which publishes `elfui` to npm (Trusted Publishing) and creates
+ * Pushing the tag starts .github/workflows/release.yml, which publishes `@xouyi/elfui` to npm (Trusted Publishing) and creates
  * the GitHub Release. Versions with a prerelease suffix (`1.0.0-beta.1`) are published under the `next` dist-tag.
  */
 import { readFileSync, writeFileSync } from 'node:fs'
@@ -49,5 +49,5 @@ if (!run(['git', 'commit', '-m', `Release v${version}`], { inherit: true }).ok) 
 if (!run(['git', 'tag', '-a', `v${version}`, '-m', `v${version}`], { inherit: true }).ok) fail('tag failed')
 console.log(`\nCreated commit and tag v${version}. Nothing was pushed or published. To release:
   git push origin main --follow-tags
-The Release workflow then runs the gate again, publishes elfui@${version} to npm${version.includes('-') ? ' (dist-tag next)' : ''} with provenance
+The Release workflow then runs the gate again, publishes @xouyi/elfui@${version} to npm${version.includes('-') ? ' (dist-tag next)' : ''} with provenance
 and creates the GitHub Release. Watch it under Actions > Release.`)

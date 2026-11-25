@@ -11,16 +11,16 @@ Version 0.2.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com
 - Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).
 - ElfUI is dark only: do not add light-mode styles or dark: variants.
 - Do not override border radius with arbitrary values; radii derive from the theme (novatron is sharp, 0px).
-- Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "elfui".
+- Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.
 - Dialogs need a title and description; tabs lists need an aria-label.
 - Keep exactly one primary (default variant) button per view; use destructive only for irreversible actions.
-- Install from npm (`bun add elfui`, or `bunx elfui@latest init` to set up a project); typescript 5 or 6 (not 7) must be installed in the consumer project.
+- Install from npm (`bun add @xouyi/elfui`, or `bunx @xouyi/elfui@latest init` to set up a project); typescript 5 or 6 (not 7) must be installed in the consumer project.
 - Use Bun for all package commands (bun add, bun run, bunx), never npm, pnpm or yarn.
 
 ### Novatron theme rules
 
-- Use data-theme="novatron" (or elfui: { theme: "novatron" } in nuxt.config) for anything representing Novatron Robotics (FRC Team 10202).
+- Use data-theme="novatron" (or the `elfui: { theme: "novatron" }` option in nuxt.config; the config key stays `elfui`) for anything representing Novatron Robotics (FRC Team 10202).
 - Palette: obsidian black background (#050505 / #09090b) and Novatron gold (#ffcc00) primary. 100% dark mode.
 - Geometry is sharp: 0px border radius everywhere. Never add rounded-* overrides or rounded arbitrary values.
 - Downstream user-facing copy for Novatron apps is Turkish; code, identifiers and comments are English.
@@ -31,10 +31,10 @@ Requirements: Bun, Nuxt 4, Tailwind CSS v4 with @tailwindcss/vite, typescript 5 
 
 ```bash
 # automatic: installs, patches nuxt.config and the main CSS (idempotent)
-bunx elfui@latest init --theme novatron --yes
+bunx @xouyi/elfui@latest init --theme novatron --yes
 
 # or by hand
-bun add elfui tailwindcss @tailwindcss/vite
+bun add @xouyi/elfui tailwindcss @tailwindcss/vite
 bun add -d typescript@5
 ```
 
@@ -43,9 +43,9 @@ bun add -d typescript@5
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
-  modules: ['elfui/nuxt'],
+  modules: ['@xouyi/elfui/nuxt'],
   css: ['~/assets/css/main.css'],
-  elfui: { theme: 'novatron', themes: ['elf'] }, // theme: 'elf' | 'novatron'
+  elfui: { theme: 'novatron', themes: ['elf'] }, // config key stays elfui; theme: 'elf' | 'novatron'
   vite: { plugins: [tailwindcss()] },
 })
 ```
@@ -53,28 +53,28 @@ export default defineNuxtConfig({
 ```css
 /* app/assets/css/main.css */
 @import 'tailwindcss';
-@import 'elfui/styles.css';
+@import '@xouyi/elfui/styles.css';
 ```
 
 Components are auto-imported with the Elf prefix. Module options: `theme` ('elf' | 'novatron', default 'elf'), `themes` (extra theme CSS to bundle), `prefix` (default 'Elf').
 
-Upgrade: `bun update elfui`. Advanced: an unreleased commit can be installed with `bun add github:xouyi/elfUI#<tag-or-sha>`.
+Upgrade: `bun update @xouyi/elfui`. Advanced: an unreleased commit can be installed with `bun add github:xouyi/elfUI#<tag-or-sha>`.
 
 ## Install (Vue + Vite, no Nuxt)
 
 ```bash
-bunx elfui@latest init --yes   # or: bun add elfui tailwindcss @tailwindcss/vite && bun add -d typescript@5
+bunx @xouyi/elfui@latest init --yes   # or: bun add @xouyi/elfui tailwindcss @tailwindcss/vite && bun add -d typescript@5
 ```
 
 ```css
 @import 'tailwindcss';
-@import 'elfui/styles.css';
-@import 'elfui/themes/elf.css';
-@import 'elfui/themes/novatron.css';
+@import '@xouyi/elfui/styles.css';
+@import '@xouyi/elfui/themes/elf.css';
+@import '@xouyi/elfui/themes/novatron.css';
 ```
 
 ```ts
-import { ElfButton } from 'elfui'
+import { ElfButton } from '@xouyi/elfui'
 ```
 
 Set `<html data-theme="elf">` (or `novatron`).
@@ -82,10 +82,10 @@ Set `<html data-theme="elf">` (or `novatron`).
 ## CLI and registry (copy components)
 
 ```bash
-bunx elfui add button dialog          # copies sources, rewrites imports to your alias, installs deps
-bunx elfui list                       # all components
-bunx elfui diff button                # compare your copy with the registry
-bunx elfui add button --overwrite     # replace a changed local copy (never done without the flag)
+bunx @xouyi/elfui add button dialog          # copies sources, rewrites imports to your alias, installs deps
+bunx @xouyi/elfui list                       # all components
+bunx @xouyi/elfui diff button                # compare your copy with the registry
+bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (never done without the flag)
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
@@ -165,7 +165,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfButton } from 'elfui'
+import { ElfButton } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -179,7 +179,7 @@ import { ElfButton } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton } from 'elfui'
+import { ElfButton } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -191,7 +191,7 @@ import { ElfButton } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton } from 'elfui'
+import { ElfButton } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -205,7 +205,7 @@ import { ElfButton } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton } from 'elfui'
+import { ElfButton } from '@xouyi/elfui'
 import { Plus } from '@lucide/vue'
 
 const sizes = ['sm', 'default', 'lg'] as const
@@ -227,7 +227,7 @@ const sizes = ['sm', 'default', 'lg'] as const
 
 ```vue
 <script setup lang="ts">
-import { ElfButton } from 'elfui'
+import { ElfButton } from '@xouyi/elfui'
 
 const variants = ['default', 'secondary', 'outline', 'ghost', 'destructive', 'link'] as const
 </script>
@@ -245,7 +245,7 @@ const variants = ['default', 'secondary', 'outline', 'ghost', 'destructive', 'li
 
 ```vue
 <script setup lang="ts">
-import { ElfButton } from 'elfui'
+import { ElfButton } from '@xouyi/elfui'
 import { Plus } from '@lucide/vue'
 </script>
 
@@ -279,7 +279,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfInput } from 'elfui'
+import { ElfInput } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -291,7 +291,7 @@ import { ElfInput } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfInput } from 'elfui'
+import { ElfInput } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -303,7 +303,7 @@ import { ElfInput } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfInput } from 'elfui'
+import { ElfInput } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -315,7 +315,7 @@ import { ElfInput } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfInput } from 'elfui'
+import { ElfInput } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -332,7 +332,7 @@ import { ElfInput } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfInput } from 'elfui'
+import { ElfInput } from '@xouyi/elfui'
 import { ref } from 'vue'
 
 const email = ref('')
@@ -378,7 +378,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfBadge } from 'elfui'
+import { ElfBadge } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -390,7 +390,7 @@ import { ElfBadge } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfBadge } from 'elfui'
+import { ElfBadge } from '@xouyi/elfui'
 
 const variants = ['default', 'secondary', 'outline', 'destructive', 'success', 'warning'] as const
 </script>
@@ -430,7 +430,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfBadge, ElfButton, ElfCard, ElfCardAction, ElfCardContent, ElfCardDescription, ElfCardFooter, ElfCardHeader, ElfCardTitle } from 'elfui'
+import { ElfBadge, ElfButton, ElfCard, ElfCardAction, ElfCardContent, ElfCardDescription, ElfCardFooter, ElfCardHeader, ElfCardTitle } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -488,7 +488,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfDialog, ElfDialogContent, ElfDialogDescription, ElfDialogHeader, ElfDialogTitle } from 'elfui'
+import { ElfButton, ElfDialog, ElfDialogContent, ElfDialogDescription, ElfDialogHeader, ElfDialogTitle } from '@xouyi/elfui'
 import { ref } from 'vue'
 
 const open = ref(false)
@@ -516,7 +516,7 @@ const open = ref(false)
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfDialog, ElfDialogClose, ElfDialogContent, ElfDialogDescription, ElfDialogFooter, ElfDialogHeader, ElfDialogTitle, ElfDialogTrigger, ElfInput } from 'elfui'
+import { ElfButton, ElfDialog, ElfDialogClose, ElfDialogContent, ElfDialogDescription, ElfDialogFooter, ElfDialogHeader, ElfDialogTitle, ElfDialogTrigger, ElfInput } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -549,7 +549,7 @@ import { ElfButton, ElfDialog, ElfDialogClose, ElfDialogContent, ElfDialogDescri
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfDialog, ElfDialogContent, ElfDialogDescription, ElfDialogFooter, ElfDialogHeader, ElfDialogTitle, ElfDialogTrigger } from 'elfui'
+import { ElfButton, ElfDialog, ElfDialogContent, ElfDialogDescription, ElfDialogFooter, ElfDialogHeader, ElfDialogTitle, ElfDialogTrigger } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -597,7 +597,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from 'elfui'
+import { ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from '@xouyi/elfui'
 import { ref } from 'vue'
 
 const tab = ref('code')
@@ -630,7 +630,7 @@ const tab = ref('code')
 
 ```vue
 <script setup lang="ts">
-import { ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from 'elfui'
+import { ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -687,7 +687,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfVisuallyHidden } from 'elfui'
+import { ElfButton, ElfVisuallyHidden } from '@xouyi/elfui'
 import { Trash2 } from '@lucide/vue'
 </script>
 
@@ -703,7 +703,7 @@ import { Trash2 } from '@lucide/vue'
 
 ```vue
 <script setup lang="ts">
-import { ElfInput, ElfVisuallyHidden } from 'elfui'
+import { ElfInput, ElfVisuallyHidden } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -720,7 +720,7 @@ import { ElfInput, ElfVisuallyHidden } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfVisuallyHidden } from 'elfui'
+import { ElfVisuallyHidden } from '@xouyi/elfui'
 
 const rows = [
   { name: 'Ayşe Demir', role: 'Captain', status: 'Active' },
@@ -792,7 +792,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfInput, ElfLabel } from 'elfui'
+import { ElfInput, ElfLabel } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -809,7 +809,7 @@ import { ElfInput, ElfLabel } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfInput, ElfLabel } from 'elfui'
+import { ElfInput, ElfLabel } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -827,7 +827,7 @@ import { ElfInput, ElfLabel } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfInput, ElfLabel } from 'elfui'
+import { ElfInput, ElfLabel } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -845,7 +845,7 @@ import { ElfInput, ElfLabel } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfLabel } from 'elfui'
+import { ElfLabel } from '@xouyi/elfui'
 import { ref } from 'vue'
 
 const accepted = ref(false)
@@ -885,7 +885,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfSeparator } from 'elfui'
+import { ElfSeparator } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -910,7 +910,7 @@ import { ElfSeparator } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfSeparator } from 'elfui'
+import { ElfSeparator } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -929,7 +929,7 @@ import { ElfSeparator } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfSeparator } from 'elfui'
+import { ElfSeparator } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -947,7 +947,7 @@ import { ElfSeparator } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfSeparator } from 'elfui'
+import { ElfButton, ElfSeparator } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -992,7 +992,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfKbd } from 'elfui'
+import { ElfKbd } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -1009,7 +1009,7 @@ import { ElfKbd } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfKbd, ElfKbdGroup } from 'elfui'
+import { ElfKbd, ElfKbdGroup } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -1029,7 +1029,7 @@ import { ElfKbd, ElfKbdGroup } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfKbd } from 'elfui'
+import { ElfButton, ElfKbd } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -1048,7 +1048,7 @@ import { ElfButton, ElfKbd } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfKbd, ElfKbdGroup, ElfVisuallyHidden } from 'elfui'
+import { ElfKbd, ElfKbdGroup, ElfVisuallyHidden } from '@xouyi/elfui'
 import { ArrowDown, ArrowUp, CornerDownLeft } from '@lucide/vue'
 </script>
 
@@ -1104,7 +1104,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfSpinner } from 'elfui'
+import { ElfSpinner } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -1116,7 +1116,7 @@ import { ElfSpinner } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfSpinner } from 'elfui'
+import { ElfButton, ElfSpinner } from '@xouyi/elfui'
 import { ref } from 'vue'
 
 const saving = ref(false)
@@ -1144,7 +1144,7 @@ function save() {
 
 ```vue
 <script setup lang="ts">
-import { ElfSpinner } from 'elfui'
+import { ElfSpinner } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -1161,7 +1161,7 @@ import { ElfSpinner } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfSpinner } from 'elfui'
+import { ElfSpinner } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -1195,7 +1195,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfCard, ElfCardContent, ElfCardHeader, ElfSkeleton, ElfVisuallyHidden } from 'elfui'
+import { ElfCard, ElfCardContent, ElfCardHeader, ElfSkeleton, ElfVisuallyHidden } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -1219,7 +1219,7 @@ import { ElfCard, ElfCardContent, ElfCardHeader, ElfSkeleton, ElfVisuallyHidden 
 
 ```vue
 <script setup lang="ts">
-import { ElfSkeleton } from 'elfui'
+import { ElfSkeleton } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -1237,7 +1237,7 @@ import { ElfSkeleton } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfSkeleton } from 'elfui'
+import { ElfSkeleton } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -1257,7 +1257,7 @@ import { ElfSkeleton } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfSkeleton, ElfVisuallyHidden } from 'elfui'
+import { ElfButton, ElfSkeleton, ElfVisuallyHidden } from '@xouyi/elfui'
 import { ref } from 'vue'
 
 const loading = ref(true)
@@ -1316,7 +1316,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfLabel, ElfTextarea } from 'elfui'
+import { ElfLabel, ElfTextarea } from '@xouyi/elfui'
 import { ref } from 'vue'
 
 const notes = ref('Swerve module 3 drifts under load.\nCheck the encoder offset before the next match.')
@@ -1339,7 +1339,7 @@ const notes = ref('Swerve module 3 drifts under load.\nCheck the encoder offset 
 
 ```vue
 <script setup lang="ts">
-import { ElfLabel, ElfTextarea } from 'elfui'
+import { ElfLabel, ElfTextarea } from '@xouyi/elfui'
 import { computed, ref } from 'vue'
 
 const max = 140
@@ -1370,7 +1370,7 @@ const remaining = computed(() => max - post.value.length)
 
 ```vue
 <script setup lang="ts">
-import { ElfTextarea } from 'elfui'
+import { ElfTextarea } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -1382,7 +1382,7 @@ import { ElfTextarea } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfTextarea } from 'elfui'
+import { ElfTextarea } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -1394,7 +1394,7 @@ import { ElfTextarea } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfLabel, ElfTextarea } from 'elfui'
+import { ElfLabel, ElfTextarea } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -1451,7 +1451,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfField, ElfFieldControl, ElfInput } from 'elfui'
+import { ElfField, ElfFieldControl, ElfInput } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -1467,7 +1467,7 @@ import { ElfField, ElfFieldControl, ElfInput } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfField, ElfFieldControl, ElfInput } from 'elfui'
+import { ElfField, ElfFieldControl, ElfInput } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -1490,7 +1490,7 @@ import { ElfField, ElfFieldControl, ElfInput } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfField, ElfFieldControl, ElfInput } from 'elfui'
+import { ElfField, ElfFieldControl, ElfInput } from '@xouyi/elfui'
 </script>
 
 <template>
@@ -1506,7 +1506,7 @@ import { ElfField, ElfFieldControl, ElfInput } from 'elfui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfField, ElfFieldControl, ElfInput, ElfTextarea } from 'elfui'
+import { ElfButton, ElfField, ElfFieldControl, ElfInput, ElfTextarea } from '@xouyi/elfui'
 import { computed, reactive, ref } from 'vue'
 
 const form = reactive({ email: '', message: '' })
@@ -1550,7 +1550,7 @@ function submit() {
 
 ```vue
 <script setup lang="ts">
-import { ElfField, ElfFieldControl, ElfTextarea } from 'elfui'
+import { ElfField, ElfFieldControl, ElfTextarea } from '@xouyi/elfui'
 import { ref } from 'vue'
 
 const bio = ref('Hi')
@@ -1570,7 +1570,7 @@ const bio = ref('Hi')
 </template>
 ```
 
-## Exports from "elfui"
+## Exports from "@xouyi/elfui"
 
 - Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`

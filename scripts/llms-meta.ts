@@ -214,16 +214,16 @@ export const rules = [
   'Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).',
   'ElfUI is dark only: do not add light-mode styles or dark: variants.',
   'Do not override border radius with arbitrary values; radii derive from the theme (novatron is sharp, 0px).',
-  'Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "elfui".',
+  'Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".',
   'Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.',
   'Dialogs need a title and description; tabs lists need an aria-label.',
   'Keep exactly one primary (default variant) button per view; use destructive only for irreversible actions.',
-  'Install from npm (`bun add elfui`, or `bunx elfui@latest init` to set up a project); typescript 5 or 6 (not 7) must be installed in the consumer project.',
+  'Install from npm (`bun add @xouyi/elfui`, or `bunx @xouyi/elfui@latest init` to set up a project); typescript 5 or 6 (not 7) must be installed in the consumer project.',
   'Use Bun for all package commands (bun add, bun run, bunx), never npm, pnpm or yarn.',
 ]
 
 export const novatronRules = [
-  'Use data-theme="novatron" (or elfui: { theme: "novatron" } in nuxt.config) for anything representing Novatron Robotics (FRC Team 10202).',
+  'Use data-theme="novatron" (or the `elfui: { theme: "novatron" }` option in nuxt.config; the config key stays `elfui`) for anything representing Novatron Robotics (FRC Team 10202).',
   'Palette: obsidian black background (#050505 / #09090b) and Novatron gold (#ffcc00) primary. 100% dark mode.',
   'Geometry is sharp: 0px border radius everywhere. Never add rounded-* overrides or rounded arbitrary values.',
   'Downstream user-facing copy for Novatron apps is Turkish; code, identifiers and comments are English.',

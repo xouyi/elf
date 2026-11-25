@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfLabel, ElfTextarea } from 'elfui'
+import { ElfLabel, ElfTextarea } from '@xouyi/elfui'
 import { ref } from 'vue'
 
 const notes = ref('Swerve module 3 drifts under load.\nCheck the encoder offset before the next match.')

@@ -2,7 +2,7 @@ import { addToArrayProp, ensureDefaultImport, ensureVitePlugin, findConfigObject
 
 export type PatchResult = { ok: true, src: string, changed: boolean } | { ok: false, reason: string }
 
-const MODULE_RE = /['"]elfui\/nuxt['"]/
+const MODULE_RE = /['"]@xouyi\/elfui\/nuxt['"]/
 
 /**
  * Patches `export default defineNuxtConfig({ ... })`: adds the module, the `elfui` options and the Tailwind Vite plugin.
@@ -21,13 +21,13 @@ export function patchNuxtConfig(input: string, opts: { theme: string, defaultCss
 
   const modulesProp = objectProps(src, open())?.props.find(p => p.key === 'modules')
   if (modulesProp) {
-    const r = addToArrayProp(src, open(), 'modules', '\'elfui/nuxt\'', MODULE_RE)
+    const r = addToArrayProp(src, open(), 'modules', '\'@xouyi/elfui/nuxt\'', MODULE_RE)
     if (!r) return unknown('`modules`')
     src = r.src
     changed ||= r.changed
   }
   else {
-    src = insertProp(src, open(), 'modules: [\'elfui/nuxt\']')
+    src = insertProp(src, open(), 'modules: [\'@xouyi/elfui/nuxt\']')
     changed = true
   }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfKbd, ElfKbdGroup } from 'elfui'
+import { ElfKbd, ElfKbdGroup } from '@xouyi/elfui'
 </script>
 
 <template>

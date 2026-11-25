@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfButton, ElfSpinner } from 'elfui'
+import { ElfButton, ElfSpinner } from '@xouyi/elfui'
 import { ref } from 'vue'
 
 const saving = ref(false)

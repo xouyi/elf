@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfBadge } from 'elfui'
+import { ElfBadge } from '@xouyi/elfui'
 </script>
 
 <template>

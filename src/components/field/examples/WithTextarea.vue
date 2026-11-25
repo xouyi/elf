@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfField, ElfFieldControl, ElfTextarea } from 'elfui'
+import { ElfField, ElfFieldControl, ElfTextarea } from '@xouyi/elfui'
 import { ref } from 'vue'
 
 const bio = ref('Hi')
