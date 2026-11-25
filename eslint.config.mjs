@@ -5,7 +5,11 @@ export default antfu({
   typescript: true,
   markdown: false,
   ignores: [
-    'storybook-static',
+    '_site',
+    '**/.nuxt',
+    '**/.output',
+    'apps/docs/app/generated',
+    'apps/docs/content',
     'registry',
     'examples',
     'playwright-report',
@@ -14,7 +18,6 @@ export default antfu({
     'llms.txt',
     'llms-full.txt',
     '**/*.md',
-    '**/*.mdx',
   ],
 }, {
   // Keep the preset's correctness rules; drop purely cosmetic ordering/newline opinions.

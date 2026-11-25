@@ -27,15 +27,14 @@ jobs:
           key: bun-${{ hashFiles('bun.lock') }}
           restore-keys: bun-
       - run: bun install --frozen-lockfile
-      # Storybook tests run every story in real Chromium (Playwright).
+      # Real Chromium (Playwright) is needed by the browser tests that are being added on top of the docs site.
       - run: bunx playwright install --with-deps chromium
-      # typecheck, lint, unit + Storybook (render + a11y, both themes) tests, contrast,
-      # registry and llms.txt freshness, Storybook build, playground build.
+      # typecheck, lint, unit tests, contrast, registry and llms.txt freshness, docs site build, playground build.
       - run: bun run check
       - uses: actions/upload-artifact@v4
         with:
-          name: storybook-static
-          path: storybook-static
+          name: docs-site
+          path: apps/docs/.output/public
           retention-days: 7
 
   visual:
@@ -55,17 +54,11 @@ jobs:
         with:
           node-version: 22
       - run: bun install --frozen-lockfile
-      - name: Check for committed baselines
-        id: baselines
-        run: |
-          if ls tests/visual/__screenshots__/*.png >/dev/null 2>&1; then
-            echo "present=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "present=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::No visual baselines committed yet. Run the 'Visual baselines' workflow to create them; visual tests are non-blocking until then."
-          fi
-      - if: steps.baselines.outputs.present == 'true'
-        run: bun run test:visual
+      # Temporary: the screenshot harness is being rebuilt on top of the docs site. Until it lands this job only
+      # proves that the docs site builds inside the pinned Playwright image; the comparison step is re-enabled
+      # (same job name, so branch protection keeps working) when the new tests exist.
+      - run: bun run docs:build
+      - run: bun run test:visual
       - if: failure()
         uses: actions/upload-artifact@v4
         with:

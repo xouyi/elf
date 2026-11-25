@@ -25,6 +25,7 @@ jobs:
         with:
           node-version: 22
       - run: bun install --frozen-lockfile
+      # The harness is being rebuilt on the docs site; this script is a no-op until then.
       - run: bun run test:visual:update
       - uses: actions/upload-artifact@v4
         with:
