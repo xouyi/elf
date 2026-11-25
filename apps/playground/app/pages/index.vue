@@ -3,17 +3,21 @@ import { Plus } from '@lucide/vue'
 
 const variants = ['default', 'secondary', 'outline', 'ghost', 'destructive', 'link'] as const
 const badges = ['default', 'secondary', 'outline', 'destructive', 'success', 'warning'] as const
-const theme = ref<'novatron' | 'elf'>('novatron')
-watchEffect(() => {
-  if (import.meta.client) document.documentElement.dataset.theme = theme.value
+// useElfTheme and isElfTheme are auto-imported by the module. The cookie lets the server render the stored theme.
+const cookie = useCookie<string>('elfui-theme', { maxAge: 60 * 60 * 24 * 365, sameSite: 'lax' })
+const { theme, cycle } = useElfTheme({
+  defaultTheme: 'novatron',
+  initial: isElfTheme(cookie.value) ? cookie.value : undefined,
+  storage: 'cookie',
 })
+useHead({ htmlAttrs: { 'data-theme': theme } })
 </script>
 
 <template>
   <main class="mx-auto flex max-w-3xl flex-col gap-8 p-6">
     <header class="flex items-center justify-between">
       <h1 class="text-2xl font-semibold">ElfUI playground</h1>
-      <ElfButton variant="outline" size="sm" @click="theme = theme === 'novatron' ? 'elf' : 'novatron'">
+      <ElfButton variant="outline" size="sm" @click="cycle">
         Theme: {{ theme }}
       </ElfButton>
     </header>

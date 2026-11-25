@@ -91,7 +91,7 @@ An unreleased tag or commit can be installed with `bun add github:xouyi/elfUI#<t
 Each theme is one CSS file in `src/themes/` that defines `--elf-*` tokens under `[data-theme='<name>']`:
 `background`, `foreground`, `card`, `popover`, `primary`, `secondary`, `muted`, `accent`, `destructive`,
 `success`, `warning` (each with a `-foreground`), `destructive-text` (readable error text), `border`, `input`, `ring`, `radius`, `radius-pill`.
-Switch at runtime with `document.documentElement.dataset.theme = 'elf'`. Tokens can also be scoped to any
+Switch at runtime with `document.documentElement.dataset.theme = 'elf'`, or with the SSR-safe `useElfTheme()` composable (`theme`, `setTheme`, `cycle`, optional cookie or localStorage persistence). Tokens can also be scoped to any
 element: `<div data-theme="elf">`.
 
 `bun run contrast` checks WCAG AA (4.5:1 text pairs, 3:1 for input border and focus ring) for every theme.
