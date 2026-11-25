@@ -224,6 +224,27 @@ export const components: ComponentMeta[] = [
     slots: ['default: custom indicator content, receives { modelValue, state }'],
     a11y: ['Always give it a visible label (ElfLabel for= the checkbox id) or an aria-label.', 'Space toggles; an indeterminate checkbox becomes checked.', 'Use a Switch for settings that apply immediately and a RadioGroup for exclusive choices.'],
   },
+  {
+    dir: 'radio-group',
+    name: 'RadioGroup',
+    summary: 'Mutually exclusive options built on Reka UI RadioGroup. ElfRadioGroup holds the value (v-model); each ElfRadioGroupItem is one option. Pair every item with ElfLabel; inside ElfField wrap the group in ElfFieldControl.',
+    parts: ['ElfRadioGroup', 'ElfRadioGroupItem'],
+    props: [
+      { name: 'ElfRadioGroup modelValue', type: 'string | number | boolean', description: 'Value of the checked item, bound with v-model.' },
+      { name: 'ElfRadioGroup defaultValue', type: 'string | number | boolean', description: 'Initially checked value when uncontrolled.' },
+      { name: 'ElfRadioGroup orientation', type: '\'horizontal\' | \'vertical\'', default: 'vertical', description: 'Layout and arrow-key direction hint (aria-orientation).' },
+      { name: 'ElfRadioGroup disabled', type: 'boolean', default: 'false', description: 'Disables every item.' },
+      { name: 'ElfRadioGroup required', type: 'boolean', default: 'false', description: 'aria-required on the group. Inherited from ElfField required.' },
+      { name: 'ElfRadioGroup invalid', type: 'boolean', default: 'false', description: 'aria-invalid="true" and destructive borders.' },
+      { name: 'ElfRadioGroup name', type: 'string', description: 'Form field name; renders hidden inputs.' },
+      { name: 'ElfRadioGroup loop', type: 'boolean', default: 'true', description: 'Arrow keys wrap from the last item to the first.' },
+      { name: 'ElfRadioGroupItem value', type: 'string | number | boolean', description: 'Required. Value of this option.' },
+      { name: 'ElfRadioGroupItem disabled', type: 'boolean', default: 'false', description: 'Disables this option.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by both parts; merged with base classes.' },
+    ],
+    slots: ['ElfRadioGroup default: the ElfRadioGroupItem options with their labels'],
+    a11y: ['Name the group with aria-label, aria-labelledby or an ElfField label, and label every item.', 'Tab enters the group on the checked item; arrow keys move and check; Space checks the focused item.', 'Use a Checkbox for multi-select and a Select for long lists.'],
+  },
 ]
 
 export const rules = [

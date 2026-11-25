@@ -89,7 +89,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -1758,8 +1758,226 @@ function submit() {
 </template>
 ```
 
+### RadioGroup
+
+Mutually exclusive options built on Reka UI RadioGroup. ElfRadioGroup holds the value (v-model); each ElfRadioGroupItem is one option. Pair every item with ElfLabel; inside ElfField wrap the group in ElfFieldControl.
+
+Components: `ElfRadioGroup`, `ElfRadioGroupItem`
+
+Props:
+
+- `ElfRadioGroup modelValue` (string | number | boolean): Value of the checked item, bound with v-model.
+- `ElfRadioGroup defaultValue` (string | number | boolean): Initially checked value when uncontrolled.
+- `ElfRadioGroup orientation` ('horizontal' | 'vertical', default vertical): Layout and arrow-key direction hint (aria-orientation).
+- `ElfRadioGroup disabled` (boolean, default false): Disables every item.
+- `ElfRadioGroup required` (boolean, default false): aria-required on the group. Inherited from ElfField required.
+- `ElfRadioGroup invalid` (boolean, default false): aria-invalid="true" and destructive borders.
+- `ElfRadioGroup name` (string): Form field name; renders hidden inputs.
+- `ElfRadioGroup loop` (boolean, default true): Arrow keys wrap from the last item to the first.
+- `ElfRadioGroupItem value` (string | number | boolean): Required. Value of this option.
+- `ElfRadioGroupItem disabled` (boolean, default false): Disables this option.
+- `class` (string | array | object): Accepted by both parts; merged with base classes.
+
+Slots:
+
+- ElfRadioGroup default: the ElfRadioGroupItem options with their labels
+
+Accessibility:
+
+- Name the group with aria-label, aria-labelledby or an ElfField label, and label every item.
+- Tab enters the group on the checked item; arrow keys move and check; Space checks the focused item.
+- Use a Checkbox for multi-select and a Select for long lists.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfLabel, ElfRadioGroup, ElfRadioGroupItem } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const subteam = ref('software')
+</script>
+
+<template>
+  <ElfRadioGroup v-model="subteam" aria-label="Subteam">
+    <div class="flex items-center gap-3">
+      <ElfRadioGroupItem id="radio-mechanical" value="mechanical" />
+      <ElfLabel for="radio-mechanical">
+        Mechanical
+      </ElfLabel>
+    </div>
+    <div class="flex items-center gap-3">
+      <ElfRadioGroupItem id="radio-electrical" value="electrical" />
+      <ElfLabel for="radio-electrical">
+        Electrical
+      </ElfLabel>
+    </div>
+    <div class="flex items-center gap-3">
+      <ElfRadioGroupItem id="radio-software" value="software" />
+      <ElfLabel for="radio-software">
+        Software
+      </ElfLabel>
+    </div>
+  </ElfRadioGroup>
+</template>
+```
+
+#### Disabled
+
+```vue
+<script setup lang="ts">
+import { ElfLabel, ElfRadioGroup, ElfRadioGroupItem } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid gap-6">
+    <ElfRadioGroup default-value="a" aria-label="One option disabled">
+      <div class="flex items-center gap-3">
+        <ElfRadioGroupItem id="radio-dis-a" value="a" />
+        <ElfLabel for="radio-dis-a">
+          Available
+        </ElfLabel>
+      </div>
+      <div class="flex items-center gap-3">
+        <ElfRadioGroupItem id="radio-dis-b" value="b" disabled />
+        <ElfLabel for="radio-dis-b">
+          Sold out
+        </ElfLabel>
+      </div>
+    </ElfRadioGroup>
+    <ElfRadioGroup default-value="c" disabled aria-label="Whole group disabled">
+      <div class="flex items-center gap-3">
+        <ElfRadioGroupItem id="radio-dis-c" value="c" />
+        <ElfLabel for="radio-dis-c">
+          Locked choice
+        </ElfLabel>
+      </div>
+      <div class="flex items-center gap-3">
+        <ElfRadioGroupItem id="radio-dis-d" value="d" />
+        <ElfLabel for="radio-dis-d">
+          Other locked choice
+        </ElfLabel>
+      </div>
+    </ElfRadioGroup>
+  </div>
+</template>
+```
+
+#### Horizontal
+
+```vue
+<script setup lang="ts">
+import { ElfLabel, ElfRadioGroup, ElfRadioGroupItem } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const size = ref('m')
+const sizes = ['S', 'M', 'L', 'XL']
+</script>
+
+<template>
+  <ElfRadioGroup v-model="size" orientation="horizontal" aria-label="Shirt size">
+    <div v-for="s in sizes" :key="s" class="flex items-center gap-2">
+      <ElfRadioGroupItem :id="`radio-size-${s}`" :value="s.toLowerCase()" />
+      <ElfLabel :for="`radio-size-${s}`">
+        {{ s }}
+      </ElfLabel>
+    </div>
+  </ElfRadioGroup>
+</template>
+```
+
+#### With Descriptions
+
+```vue
+<script setup lang="ts">
+import { ElfLabel, ElfRadioGroup, ElfRadioGroupItem } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const plan = ref('standard')
+const plans = [
+  { value: 'standard', label: 'Standard', text: 'Practice sessions on weekdays after school.' },
+  { value: 'extended', label: 'Extended', text: 'Weekdays plus Saturday build days.' },
+  { value: 'competition', label: 'Competition', text: 'Everything above, plus travel to events.' },
+]
+</script>
+
+<template>
+  <ElfRadioGroup v-model="plan" aria-label="Attendance plan" class="w-96">
+    <div v-for="item in plans" :key="item.value" class="flex items-start gap-3">
+      <ElfRadioGroupItem
+        :id="`radio-plan-${item.value}`"
+        :value="item.value"
+        :aria-describedby="`radio-plan-${item.value}-text`"
+        class="mt-0.5"
+      />
+      <div class="grid gap-1.5">
+        <ElfLabel :for="`radio-plan-${item.value}`">
+          {{ item.label }}
+        </ElfLabel>
+        <p :id="`radio-plan-${item.value}-text`" class="text-sm text-muted-foreground">
+          {{ item.text }}
+        </p>
+      </div>
+    </div>
+  </ElfRadioGroup>
+</template>
+```
+
+#### With Field
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfField, ElfFieldControl, ElfLabel, ElfRadioGroup, ElfRadioGroupItem } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const priority = ref('')
+const submitted = ref(false)
+const sent = ref(false)
+const options = [
+  { value: 'low', label: 'Low' },
+  { value: 'normal', label: 'Normal' },
+  { value: 'high', label: 'High' },
+]
+
+function submit() {
+  submitted.value = true
+  sent.value = priority.value !== ''
+}
+</script>
+
+<template>
+  <form class="grid w-80 gap-5" novalidate @submit.prevent="submit">
+    <ElfField
+      label="Priority"
+      description="How soon does the part need to ship?"
+      required
+      :error="submitted && !priority ? 'Choose a priority.' : ''"
+    >
+      <ElfFieldControl>
+        <ElfRadioGroup v-model="priority">
+          <div v-for="option in options" :key="option.value" class="flex items-center gap-3">
+            <ElfRadioGroupItem :id="`field-priority-${option.value}`" :value="option.value" />
+            <ElfLabel :for="`field-priority-${option.value}`">
+              {{ option.label }}
+            </ElfLabel>
+          </div>
+        </ElfRadioGroup>
+      </ElfFieldControl>
+    </ElfField>
+    <ElfButton type="submit" class="w-fit">
+      Request part
+    </ElfButton>
+    <p v-if="sent" role="status" class="text-sm text-muted-foreground">
+      Request sent with {{ priority }} priority.
+    </p>
+  </form>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

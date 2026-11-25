@@ -71,5 +71,7 @@ export type { FieldContext, FieldDescriptionProps, FieldErrorProps, FieldLabelPr
 
 export { Checkbox as ElfCheckbox } from './components/checkbox'
 
+export { RadioGroup as ElfRadioGroup, RadioGroupItem as ElfRadioGroupItem } from './components/radio-group'
+
 export const elfThemes = ['elf', 'novatron'] as const
 export type ElfTheme = (typeof elfThemes)[number]
