@@ -479,8 +479,6 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
     })
   })
 
-  // @@NEW-INTERACTIONS@@
-
   describe('Tabs fixture sanity', () => {
     it('supports an inline Tabs composition', async () => {
       setTheme(theme)
