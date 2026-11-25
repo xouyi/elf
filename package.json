@@ -1,7 +1,26 @@
 {
-  "name": "@elf/ui",
+  "name": "elfui",
   "version": "0.2.0",
   "description": "ElfUI: a Vue 3 / Nuxt 4 design system built on Reka UI and Tailwind CSS v4.",
+  "keywords": [
+    "vue",
+    "nuxt",
+    "nuxt-module",
+    "ui",
+    "design-system",
+    "components",
+    "tailwindcss",
+    "tailwind-v4",
+    "reka-ui",
+    "shadcn-vue",
+    "accessible",
+    "dark-mode",
+    "cli"
+  ],
+  "homepage": "https://xouyi.github.io/elfUI/",
+  "bugs": {
+    "url": "https://github.com/xouyi/elfUI/issues"
+  },
   "license": "MIT",
   "type": "module",
   "repository": {
@@ -15,6 +34,7 @@
     "src",
     "!src/**/examples",
     "!src/**/*.test.ts",
+    "dist",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
@@ -62,7 +82,10 @@
     "docs:build": "bun run --cwd apps/docs generate",
     "docs:preview": "bun scripts/serve-static.ts apps/docs/.output/public 4173 /elfUI/",
     "test:visual:update": "playwright test --update-snapshots",
-    "docs:typecheck": "bun run --cwd apps/docs typecheck"
+    "docs:typecheck": "bun run --cwd apps/docs typecheck",
+    "build:cli": "bun scripts/build-cli.ts",
+    "test:cli": "vitest run --project cli",
+    "prepack": "bun run build:cli"
   },
   "dependencies": {
     "@lucide/vue": "1.79.0",
@@ -75,8 +98,8 @@
   },
   "peerDependencies": {
     "@tailwindcss/vite": "^4.3.0",
-    "nuxt": "^4.6.4",
-    "tailwindcss": "^4.3.0",
+    "nuxt": ">=4.0.0",
+    "tailwindcss": "^4.0.0",
     "typescript": ">=5.0.0 <7.0.0",
     "vue": "^3.5.0"
   },
@@ -115,8 +138,11 @@
   "simple-git-hooks": {
     "pre-push": "bun run prepush"
   },
-  "homepage": "https://xouyi.github.io/elfUI/",
-  "bugs": {
-    "url": "https://github.com/xouyi/elfUI/issues"
+  "bin": {
+    "elfui": "./dist/cli.mjs"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }

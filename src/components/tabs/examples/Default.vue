@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from '@elf/ui'
+import { ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from 'elfui'
 </script>
 
 <template>

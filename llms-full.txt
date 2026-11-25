@@ -11,7 +11,7 @@ Version 0.2.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com
 - Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).
 - ElfUI is dark only: do not add light-mode styles or dark: variants.
 - Do not override border radius with arbitrary values; radii derive from the theme (novatron is sharp, 0px).
-- Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@elf/ui".
+- Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "elfui".
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.
 - Dialogs need a title and description; tabs lists need an aria-label.
 - Keep exactly one primary (default variant) button per view; use destructive only for irreversible actions.
@@ -20,7 +20,7 @@ Version 0.2.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com
 
 ### Novatron theme rules
 
-- Use data-theme="novatron" (or elf: { theme: "novatron" } in nuxt.config) for anything representing Novatron Robotics (FRC Team 10202).
+- Use data-theme="novatron" (or elfui: { theme: "novatron" } in nuxt.config) for anything representing Novatron Robotics (FRC Team 10202).
 - Palette: obsidian black background (#050505 / #09090b) and Novatron gold (#ffcc00) primary. 100% dark mode.
 - Geometry is sharp: 0px border radius everywhere. Never add rounded-* overrides or rounded arbitrary values.
 - Downstream user-facing copy for Novatron apps is Turkish; code, identifiers and comments are English.
@@ -39,9 +39,9 @@ bun add -d typescript@5
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
-  modules: ['@elf/ui/nuxt'],
+  modules: ['elfui/nuxt'],
   css: ['~/assets/css/main.css'],
-  elf: { theme: 'novatron', themes: ['elf'] }, // theme: 'elf' | 'novatron'
+  elfui: { theme: 'novatron', themes: ['elf'] }, // theme: 'elf' | 'novatron'
   vite: { plugins: [tailwindcss()] },
 })
 ```
@@ -49,24 +49,24 @@ export default defineNuxtConfig({
 ```css
 /* app/assets/css/main.css */
 @import 'tailwindcss';
-@import '@elf/ui/styles.css';
+@import 'elfui/styles.css';
 ```
 
 Components are auto-imported with the Elf prefix. Module options: `theme` ('elf' | 'novatron', default 'elf'), `themes` (extra theme CSS to bundle), `prefix` (default 'Elf').
 
-Upgrade: `bun remove @elf/ui && bun add github:xouyi/elfUI#vX.Y.Z`.
+Upgrade: `bun remove elfui && bun add github:xouyi/elfUI#vX.Y.Z`.
 
 ## Install (Vue + Vite, no Nuxt)
 
 ```css
 @import 'tailwindcss';
-@import '@elf/ui/styles.css';
-@import '@elf/ui/themes/elf.css';
-@import '@elf/ui/themes/novatron.css';
+@import 'elfui/styles.css';
+@import 'elfui/themes/elf.css';
+@import 'elfui/themes/novatron.css';
 ```
 
 ```ts
-import { ElfButton } from '@elf/ui'
+import { ElfButton } from 'elfui'
 ```
 
 Set `<html data-theme="elf">` (or `novatron`).
@@ -153,7 +153,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfButton } from '@elf/ui'
+import { ElfButton } from 'elfui'
 </script>
 
 <template>
@@ -167,7 +167,7 @@ import { ElfButton } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton } from '@elf/ui'
+import { ElfButton } from 'elfui'
 </script>
 
 <template>
@@ -179,7 +179,7 @@ import { ElfButton } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton } from '@elf/ui'
+import { ElfButton } from 'elfui'
 </script>
 
 <template>
@@ -193,7 +193,7 @@ import { ElfButton } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton } from '@elf/ui'
+import { ElfButton } from 'elfui'
 import { Plus } from '@lucide/vue'
 
 const sizes = ['sm', 'default', 'lg'] as const
@@ -215,7 +215,7 @@ const sizes = ['sm', 'default', 'lg'] as const
 
 ```vue
 <script setup lang="ts">
-import { ElfButton } from '@elf/ui'
+import { ElfButton } from 'elfui'
 
 const variants = ['default', 'secondary', 'outline', 'ghost', 'destructive', 'link'] as const
 </script>
@@ -233,7 +233,7 @@ const variants = ['default', 'secondary', 'outline', 'ghost', 'destructive', 'li
 
 ```vue
 <script setup lang="ts">
-import { ElfButton } from '@elf/ui'
+import { ElfButton } from 'elfui'
 import { Plus } from '@lucide/vue'
 </script>
 
@@ -267,7 +267,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfInput } from '@elf/ui'
+import { ElfInput } from 'elfui'
 </script>
 
 <template>
@@ -279,7 +279,7 @@ import { ElfInput } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfInput } from '@elf/ui'
+import { ElfInput } from 'elfui'
 </script>
 
 <template>
@@ -291,7 +291,7 @@ import { ElfInput } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfInput } from '@elf/ui'
+import { ElfInput } from 'elfui'
 </script>
 
 <template>
@@ -303,7 +303,7 @@ import { ElfInput } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfInput } from '@elf/ui'
+import { ElfInput } from 'elfui'
 </script>
 
 <template>
@@ -320,7 +320,7 @@ import { ElfInput } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfInput } from '@elf/ui'
+import { ElfInput } from 'elfui'
 import { ref } from 'vue'
 
 const email = ref('')
@@ -366,7 +366,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfBadge } from '@elf/ui'
+import { ElfBadge } from 'elfui'
 </script>
 
 <template>
@@ -378,7 +378,7 @@ import { ElfBadge } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfBadge } from '@elf/ui'
+import { ElfBadge } from 'elfui'
 
 const variants = ['default', 'secondary', 'outline', 'destructive', 'success', 'warning'] as const
 </script>
@@ -418,7 +418,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfBadge, ElfButton, ElfCard, ElfCardAction, ElfCardContent, ElfCardDescription, ElfCardFooter, ElfCardHeader, ElfCardTitle } from '@elf/ui'
+import { ElfBadge, ElfButton, ElfCard, ElfCardAction, ElfCardContent, ElfCardDescription, ElfCardFooter, ElfCardHeader, ElfCardTitle } from 'elfui'
 </script>
 
 <template>
@@ -476,7 +476,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfDialog, ElfDialogContent, ElfDialogDescription, ElfDialogHeader, ElfDialogTitle } from '@elf/ui'
+import { ElfButton, ElfDialog, ElfDialogContent, ElfDialogDescription, ElfDialogHeader, ElfDialogTitle } from 'elfui'
 import { ref } from 'vue'
 
 const open = ref(false)
@@ -504,7 +504,7 @@ const open = ref(false)
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfDialog, ElfDialogClose, ElfDialogContent, ElfDialogDescription, ElfDialogFooter, ElfDialogHeader, ElfDialogTitle, ElfDialogTrigger, ElfInput } from '@elf/ui'
+import { ElfButton, ElfDialog, ElfDialogClose, ElfDialogContent, ElfDialogDescription, ElfDialogFooter, ElfDialogHeader, ElfDialogTitle, ElfDialogTrigger, ElfInput } from 'elfui'
 </script>
 
 <template>
@@ -537,7 +537,7 @@ import { ElfButton, ElfDialog, ElfDialogClose, ElfDialogContent, ElfDialogDescri
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfDialog, ElfDialogContent, ElfDialogDescription, ElfDialogFooter, ElfDialogHeader, ElfDialogTitle, ElfDialogTrigger } from '@elf/ui'
+import { ElfButton, ElfDialog, ElfDialogContent, ElfDialogDescription, ElfDialogFooter, ElfDialogHeader, ElfDialogTitle, ElfDialogTrigger } from 'elfui'
 </script>
 
 <template>
@@ -585,7 +585,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from '@elf/ui'
+import { ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from 'elfui'
 import { ref } from 'vue'
 
 const tab = ref('code')
@@ -618,7 +618,7 @@ const tab = ref('code')
 
 ```vue
 <script setup lang="ts">
-import { ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from '@elf/ui'
+import { ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from 'elfui'
 </script>
 
 <template>
@@ -675,7 +675,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfVisuallyHidden } from '@elf/ui'
+import { ElfButton, ElfVisuallyHidden } from 'elfui'
 import { Trash2 } from '@lucide/vue'
 </script>
 
@@ -691,7 +691,7 @@ import { Trash2 } from '@lucide/vue'
 
 ```vue
 <script setup lang="ts">
-import { ElfInput, ElfVisuallyHidden } from '@elf/ui'
+import { ElfInput, ElfVisuallyHidden } from 'elfui'
 </script>
 
 <template>
@@ -708,7 +708,7 @@ import { ElfInput, ElfVisuallyHidden } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfVisuallyHidden } from '@elf/ui'
+import { ElfVisuallyHidden } from 'elfui'
 
 const rows = [
   { name: 'Ayşe Demir', role: 'Captain', status: 'Active' },
@@ -780,7 +780,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfInput, ElfLabel } from '@elf/ui'
+import { ElfInput, ElfLabel } from 'elfui'
 </script>
 
 <template>
@@ -797,7 +797,7 @@ import { ElfInput, ElfLabel } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfInput, ElfLabel } from '@elf/ui'
+import { ElfInput, ElfLabel } from 'elfui'
 </script>
 
 <template>
@@ -815,7 +815,7 @@ import { ElfInput, ElfLabel } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfInput, ElfLabel } from '@elf/ui'
+import { ElfInput, ElfLabel } from 'elfui'
 </script>
 
 <template>
@@ -833,7 +833,7 @@ import { ElfInput, ElfLabel } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfLabel } from '@elf/ui'
+import { ElfLabel } from 'elfui'
 import { ref } from 'vue'
 
 const accepted = ref(false)
@@ -873,7 +873,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfSeparator } from '@elf/ui'
+import { ElfSeparator } from 'elfui'
 </script>
 
 <template>
@@ -898,7 +898,7 @@ import { ElfSeparator } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfSeparator } from '@elf/ui'
+import { ElfSeparator } from 'elfui'
 </script>
 
 <template>
@@ -917,7 +917,7 @@ import { ElfSeparator } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfSeparator } from '@elf/ui'
+import { ElfSeparator } from 'elfui'
 </script>
 
 <template>
@@ -935,7 +935,7 @@ import { ElfSeparator } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfSeparator } from '@elf/ui'
+import { ElfButton, ElfSeparator } from 'elfui'
 </script>
 
 <template>
@@ -980,7 +980,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfKbd } from '@elf/ui'
+import { ElfKbd } from 'elfui'
 </script>
 
 <template>
@@ -997,7 +997,7 @@ import { ElfKbd } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfKbd, ElfKbdGroup } from '@elf/ui'
+import { ElfKbd, ElfKbdGroup } from 'elfui'
 </script>
 
 <template>
@@ -1017,7 +1017,7 @@ import { ElfKbd, ElfKbdGroup } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfKbd } from '@elf/ui'
+import { ElfButton, ElfKbd } from 'elfui'
 </script>
 
 <template>
@@ -1036,7 +1036,7 @@ import { ElfButton, ElfKbd } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfKbd, ElfKbdGroup, ElfVisuallyHidden } from '@elf/ui'
+import { ElfKbd, ElfKbdGroup, ElfVisuallyHidden } from 'elfui'
 import { ArrowDown, ArrowUp, CornerDownLeft } from '@lucide/vue'
 </script>
 
@@ -1092,7 +1092,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfSpinner } from '@elf/ui'
+import { ElfSpinner } from 'elfui'
 </script>
 
 <template>
@@ -1104,7 +1104,7 @@ import { ElfSpinner } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfSpinner } from '@elf/ui'
+import { ElfButton, ElfSpinner } from 'elfui'
 import { ref } from 'vue'
 
 const saving = ref(false)
@@ -1132,7 +1132,7 @@ function save() {
 
 ```vue
 <script setup lang="ts">
-import { ElfSpinner } from '@elf/ui'
+import { ElfSpinner } from 'elfui'
 </script>
 
 <template>
@@ -1149,7 +1149,7 @@ import { ElfSpinner } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfSpinner } from '@elf/ui'
+import { ElfSpinner } from 'elfui'
 </script>
 
 <template>
@@ -1183,7 +1183,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfCard, ElfCardContent, ElfCardHeader, ElfSkeleton, ElfVisuallyHidden } from '@elf/ui'
+import { ElfCard, ElfCardContent, ElfCardHeader, ElfSkeleton, ElfVisuallyHidden } from 'elfui'
 </script>
 
 <template>
@@ -1207,7 +1207,7 @@ import { ElfCard, ElfCardContent, ElfCardHeader, ElfSkeleton, ElfVisuallyHidden 
 
 ```vue
 <script setup lang="ts">
-import { ElfSkeleton } from '@elf/ui'
+import { ElfSkeleton } from 'elfui'
 </script>
 
 <template>
@@ -1225,7 +1225,7 @@ import { ElfSkeleton } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfSkeleton } from '@elf/ui'
+import { ElfSkeleton } from 'elfui'
 </script>
 
 <template>
@@ -1245,7 +1245,7 @@ import { ElfSkeleton } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfSkeleton, ElfVisuallyHidden } from '@elf/ui'
+import { ElfButton, ElfSkeleton, ElfVisuallyHidden } from 'elfui'
 import { ref } from 'vue'
 
 const loading = ref(true)
@@ -1304,7 +1304,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfLabel, ElfTextarea } from '@elf/ui'
+import { ElfLabel, ElfTextarea } from 'elfui'
 import { ref } from 'vue'
 
 const notes = ref('Swerve module 3 drifts under load.\nCheck the encoder offset before the next match.')
@@ -1327,7 +1327,7 @@ const notes = ref('Swerve module 3 drifts under load.\nCheck the encoder offset 
 
 ```vue
 <script setup lang="ts">
-import { ElfLabel, ElfTextarea } from '@elf/ui'
+import { ElfLabel, ElfTextarea } from 'elfui'
 import { computed, ref } from 'vue'
 
 const max = 140
@@ -1358,7 +1358,7 @@ const remaining = computed(() => max - post.value.length)
 
 ```vue
 <script setup lang="ts">
-import { ElfTextarea } from '@elf/ui'
+import { ElfTextarea } from 'elfui'
 </script>
 
 <template>
@@ -1370,7 +1370,7 @@ import { ElfTextarea } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfTextarea } from '@elf/ui'
+import { ElfTextarea } from 'elfui'
 </script>
 
 <template>
@@ -1382,7 +1382,7 @@ import { ElfTextarea } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfLabel, ElfTextarea } from '@elf/ui'
+import { ElfLabel, ElfTextarea } from 'elfui'
 </script>
 
 <template>
@@ -1439,7 +1439,7 @@ Examples:
 
 ```vue
 <script setup lang="ts">
-import { ElfField, ElfFieldControl, ElfInput } from '@elf/ui'
+import { ElfField, ElfFieldControl, ElfInput } from 'elfui'
 </script>
 
 <template>
@@ -1455,7 +1455,7 @@ import { ElfField, ElfFieldControl, ElfInput } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfField, ElfFieldControl, ElfInput } from '@elf/ui'
+import { ElfField, ElfFieldControl, ElfInput } from 'elfui'
 </script>
 
 <template>
@@ -1478,7 +1478,7 @@ import { ElfField, ElfFieldControl, ElfInput } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfField, ElfFieldControl, ElfInput } from '@elf/ui'
+import { ElfField, ElfFieldControl, ElfInput } from 'elfui'
 </script>
 
 <template>
@@ -1494,7 +1494,7 @@ import { ElfField, ElfFieldControl, ElfInput } from '@elf/ui'
 
 ```vue
 <script setup lang="ts">
-import { ElfButton, ElfField, ElfFieldControl, ElfInput, ElfTextarea } from '@elf/ui'
+import { ElfButton, ElfField, ElfFieldControl, ElfInput, ElfTextarea } from 'elfui'
 import { computed, reactive, ref } from 'vue'
 
 const form = reactive({ email: '', message: '' })
@@ -1538,7 +1538,7 @@ function submit() {
 
 ```vue
 <script setup lang="ts">
-import { ElfField, ElfFieldControl, ElfTextarea } from '@elf/ui'
+import { ElfField, ElfFieldControl, ElfTextarea } from 'elfui'
 import { ref } from 'vue'
 
 const bio = ref('Hi')
@@ -1558,7 +1558,7 @@ const bio = ref('Hi')
 </template>
 ```
 
-## Exports from "@elf/ui"
+## Exports from "elfui"
 
 - Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`

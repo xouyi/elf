@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfCard, ElfCardContent, ElfCardHeader, ElfSkeleton, ElfVisuallyHidden } from '@elf/ui'
+import { ElfCard, ElfCardContent, ElfCardHeader, ElfSkeleton, ElfVisuallyHidden } from 'elfui'
 </script>
 
 <template>

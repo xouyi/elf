@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElfButton, ElfDialog, ElfDialogContent, ElfDialogDescription, ElfDialogHeader, ElfDialogTitle } from '@elf/ui'
+import { ElfButton, ElfDialog, ElfDialogContent, ElfDialogDescription, ElfDialogHeader, ElfDialogTitle } from 'elfui'
 import { ref } from 'vue'
 
 const open = ref(false)
