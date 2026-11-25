@@ -1,6 +1,6 @@
 name: Docs
 
-# Publishes Storybook, the shadcn-vue registry and llms.txt to GitHub Pages after CI passes on main.
+# Publishes the docs site (apps/docs, served at /elfUI/), the shadcn-vue registry and llms.txt to GitHub Pages after CI passes on main.
 on:
   workflow_run:
     workflows: [CI]

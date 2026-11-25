@@ -4,7 +4,6 @@ dist
 .output
 .nitro
 .data
-storybook-static
 *.log
 .DS_Store
 .env*
