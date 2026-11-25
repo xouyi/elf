@@ -218,7 +218,7 @@ export const rules = [
   'Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.',
   'Dialogs need a title and description; tabs lists need an aria-label.',
   'Keep exactly one primary (default variant) button per view; use destructive only for irreversible actions.',
-  'Install from a pinned GitHub tag (github:xouyi/elfUI#vX.Y.Z); typescript 5 or 6 (not 7) must be installed in the consumer project.',
+  'Install from npm (`bun add elfui`, or `bunx elfui@latest init` to set up a project); typescript 5 or 6 (not 7) must be installed in the consumer project.',
   'Use Bun for all package commands (bun add, bun run, bunx), never npm, pnpm or yarn.',
 ]
 

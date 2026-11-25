@@ -12,7 +12,8 @@ if (!data) throw new Error(`ComponentInstall: unknown component "${props.compone
 const names = data.parts.map(p => p.name).join(', ')
 const importSnippet = `import { ${names} } from 'elfui'`
 const registryUrl = `${config.public.site}/r/${data.registry.name}.json`
-const registryCommand = `bunx shadcn-vue@latest add ${registryUrl}`
+const registryCommand = `bunx elfui add ${data.registry.name}`
+const shadcnCommand = `bunx shadcn-vue@latest add ${registryUrl}`
 const shortCommand = `bunx shadcn-vue@latest add @elf/${data.registry.name}`
 </script>
 
@@ -32,11 +33,12 @@ const shortCommand = `bunx shadcn-vue@latest add @elf/${data.registry.name}`
         <CodeSnippet :code="importSnippet" lang="ts" />
       </ElfTabsContent>
       <ElfTabsContent value="registry" class="doc-content">
-        <p>Copy the source into your project with the shadcn-vue CLI. Dependencies and registry items are installed for you.</p>
+        <p>Copy the source into your project with the elfui CLI. Dependencies and registry items are installed for you.</p>
         <CodeSnippet :code="registryCommand" lang="bash" />
         <p>
-          With the <code>@elf</code> namespace registered in <code>components.json</code> (<NuxtLink class="text-primary underline-offset-4 hover:underline" to="/docs/getting-started/registry">Registry</NuxtLink>):
+          The shadcn-vue CLI reads the same registry (<NuxtLink class="text-primary underline-offset-4 hover:underline" to="/docs/getting-started/registry">Registry</NuxtLink>):
         </p>
+        <CodeSnippet :code="shadcnCommand" lang="bash" />
         <CodeSnippet :code="shortCommand" lang="bash" />
         <p v-if="data.registry.dependencies.length || data.registry.registryDependencies.length">
           <template v-if="data.registry.dependencies.length">

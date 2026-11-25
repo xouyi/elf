@@ -1,7 +1,12 @@
 # Elf Nuxt demo
 
-A realistic Nuxt 4 app that consumes Elf **exactly like a real project**: it installs `@elf/ui` from the public
+A realistic Nuxt 4 app that consumes Elf **exactly like a real project**: it installs ElfUI from the public
 GitHub tag, not from a workspace link. It is the proof that a published tag works end to end.
+
+> **Temporary GitHub install.** The pinned tag `v0.2.0` predates the rename, so this app still depends on `@elf/ui`
+> (package name inside that tag) and uses `@elf/ui/nuxt`, `@elf/ui/styles.css` and the `elf:` config key. After the first
+> npm release it switches to `"elfui": "^0.3.0"`, `modules: ['elfui/nuxt']`, `@import 'elfui/styles.css'` and an
+> `elfui:` config key (`bun remove @elf/ui && bun add elfui`).
 
 - Dashboard: stat cards, badges, filterable list (`app/pages/index.vue`)
 - Members: form inside a dialog with inline validation (`app/pages/members.vue`)
