@@ -58,9 +58,16 @@ jobs:
       - name: Publish
         env:
           PRERELEASE: ${{ steps.version.outputs.prerelease }}
+          VERSION: ${{ steps.version.outputs.version }}
         run: |
           if [ "${PRERELEASE}" = "true" ]; then TAG="--tag next"; else TAG=""; fi
-          bunx npm@latest publish --provenance --access public ${TAG}
+          # Idempotent: a version that already exists on npm (e.g. the first, manually published release) is skipped,
+          # so the GitHub Release step still runs.
+          if bunx npm@latest view "elfui@${VERSION}" version >/dev/null 2>&1; then
+            echo "elfui@${VERSION} is already on npm; skipping publish."
+          else
+            bunx npm@latest publish --provenance --access public ${TAG}
+          fi
 
       - name: Extract release notes
         run: bun scripts/changelog-section.ts "${{ steps.version.outputs.version }}" > release-notes.md

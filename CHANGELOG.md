@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.0
+
 - **Breaking rename: `@elf/ui` is now `elfui`.** The package is published on npm as `elfui` (unscoped). Imports become `from 'elfui'`, `elfui/nuxt`, `elfui/styles.css`, `elfui/themes/*.css` and `elfui/lib/utils`, and the Nuxt module option key becomes `elfui:` (was `elf:`). The `Elf` component prefix is unchanged. No compatibility shim: `@elf/ui` was never published to npm. Upgrade from a GitHub install: `bun remove @elf/ui && bun add elfui`, then rename the imports and the `elf:` config key.
 - Add the `elfui` CLI (`bunx elfui@latest init | add | list | diff`): sets up Nuxt or Vite + Vue projects idempotently and copies registry components with import rewriting, never overwriting without `--overwrite`. Zero runtime dependencies, built to `dist/cli.mjs`; unit and end-to-end tests run in `bun run check`.
 - Release: pushing a `vX.Y.Z` tag publishes to npm with Trusted Publishing (OIDC, provenance, `-beta.N` goes to the `next` tag) and creates the GitHub Release from this changelog.
