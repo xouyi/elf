@@ -24,3 +24,4 @@ _site
 # Test output
 playwright-report
 test-results
+.vitest/
