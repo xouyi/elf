@@ -15,6 +15,9 @@ import KbdWithIcons from '../../src/components/kbd/examples/WithIcons.vue'
 import SpinnerInButton from '../../src/components/spinner/examples/InButton.vue'
 import SpinnerSizes from '../../src/components/spinner/examples/Sizes.vue'
 import SkeletonLoadingState from '../../src/components/skeleton/examples/LoadingState.vue'
+import TextareaAutoResize from '../../src/components/textarea/examples/AutoResize.vue'
+import TextareaCharacterCount from '../../src/components/textarea/examples/CharacterCount.vue'
+import TextareaInvalid from '../../src/components/textarea/examples/Invalid.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -361,6 +364,55 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(region.getAttribute('aria-busy')).toBe('false')
       expect(el.querySelector('[data-slot="skeleton"]')).toBeNull()
       expect(region.textContent).toContain('Ayşe Demir')
+    })
+  })
+
+  describe('Textarea', () => {
+    it('auto-resize grows with new lines up to max-h, then scrolls, and shrinks again', async () => {
+      setTheme(theme)
+      const { el } = await show(TextareaAutoResize)
+      const area = el.querySelector('textarea')!
+      const initial = area.getBoundingClientRect().height
+      expect(area.scrollHeight, 'initial content fits without scrolling').toBeLessThanOrEqual(area.clientHeight)
+
+      await userEvent.click(area)
+      await userEvent.keyboard('{Control>}{End}{/Control}{Enter}Line three{Enter}Line four')
+      await settle()
+      const grown = area.getBoundingClientRect().height
+      expect(grown).toBeGreaterThan(initial)
+
+      for (let i = 0; i < 20; i++)
+        await userEvent.keyboard('{Enter}more')
+      await settle()
+      const capped = area.getBoundingClientRect().height
+      expect(capped, 'capped at max-h-48 (192px)').toBeLessThanOrEqual(192)
+      expect(area.scrollHeight).toBeGreaterThan(area.clientHeight)
+
+      await userEvent.clear(area)
+      await settle()
+      expect(area.getBoundingClientRect().height).toBeLessThan(grown)
+    })
+
+    it('keeps v-model in sync, treats Enter as a new line and enforces maxlength', async () => {
+      setTheme(theme)
+      const { el } = await show(TextareaCharacterCount)
+      const area = el.querySelector('textarea')!
+      await userEvent.click(area)
+      await userEvent.keyboard('Hi{Enter}there')
+      expect(area.value).toBe('Hi\nthere')
+      expect(el.textContent).toContain('132 characters left')
+      await userEvent.keyboard('x'.repeat(200))
+      expect(area.value.length).toBe(140)
+      expect(el.textContent).toContain('0 characters left')
+    })
+
+    it('exposes the invalid state to assistive technology with the error described', async () => {
+      setTheme(theme)
+      const { el } = await show(TextareaInvalid)
+      const area = el.querySelector('textarea')!
+      expect(area.getAttribute('aria-invalid')).toBe('true')
+      expect(document.getElementById(area.getAttribute('aria-describedby')!)?.textContent).toContain('at least 20')
+      await expect.element(page.getByRole('textbox', { name: 'Bio' })).toBeInTheDocument()
     })
   })
 

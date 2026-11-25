@@ -36,6 +36,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   kbd: { title: 'Kbd', description: 'Keyboard key hint with a group for shortcuts.', dependencies: ['reka-ui'] },
   spinner: { title: 'Spinner', description: 'Indeterminate busy indicator announced through role status.', dependencies: ['class-variance-authority'], registryDependencies: [dep('visually-hidden')] },
   skeleton: { title: 'Skeleton', description: 'Placeholder block shown while content loads.', dependencies: [] },
+  textarea: { title: 'Textarea', description: 'Multi-line text input with v-model and optional auto-grow.', dependencies: ['@vueuse/core'] },
   'visually-hidden': { title: 'Visually Hidden', description: 'Hides content visually while keeping it available to assistive technology.', dependencies: ['reka-ui'] },
 }
 

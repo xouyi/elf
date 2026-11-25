@@ -77,7 +77,7 @@ Set `<html data-theme="elf">` (or `novatron`).
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-Or register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+Or register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -1277,8 +1277,134 @@ const loading = ref(true)
 </template>
 ```
 
+### Textarea
+
+Multi-line text input with v-model and optional auto-grow. A native textarea: all native attributes fall through.
+
+Components: `ElfTextarea`
+
+Props:
+
+- `modelValue` (string): Bound with v-model.
+- `defaultValue` (string): Initial value when uncontrolled.
+- `autoResize` (boolean, default false): Grow and shrink with the content (attribute: auto-resize). Cap with a max-h-* class.
+- `invalid` (boolean, default false): Sets aria-invalid="true" and the destructive border and ring.
+- `rows` (number, default 3): Visible lines; the minimum height with autoResize.
+- `maxlength` (number): Maximum number of characters.
+- `class` (string | array | object): Merged with base classes.
+
+Accessibility:
+
+- Always provide a visible label (ElfLabel for=) or aria-label; a placeholder is not a label.
+- Describe errors in text and link them with aria-describedby (ElfField does this).
+
+Examples:
+
+#### Auto Resize
+
+```vue
+<script setup lang="ts">
+import { ElfLabel, ElfTextarea } from '@elf/ui'
+import { ref } from 'vue'
+
+const notes = ref('Swerve module 3 drifts under load.\nCheck the encoder offset before the next match.')
+</script>
+
+<template>
+  <div class="grid w-80 gap-2">
+    <ElfLabel for="textarea-notes">
+      Pit notes
+    </ElfLabel>
+    <ElfTextarea id="textarea-notes" v-model="notes" auto-resize :rows="2" class="max-h-48" />
+    <p class="text-sm text-muted-foreground">
+      Grows with the text up to 12rem, then scrolls.
+    </p>
+  </div>
+</template>
+```
+
+#### Character Count
+
+```vue
+<script setup lang="ts">
+import { ElfLabel, ElfTextarea } from '@elf/ui'
+import { computed, ref } from 'vue'
+
+const max = 140
+const post = ref('')
+const remaining = computed(() => max - post.value.length)
+</script>
+
+<template>
+  <div class="grid w-80 gap-2">
+    <ElfLabel for="textarea-post">
+      Post
+    </ElfLabel>
+    <ElfTextarea
+      id="textarea-post"
+      v-model="post"
+      :maxlength="max"
+      placeholder="What happened at the event?"
+      aria-describedby="textarea-post-count"
+    />
+    <p id="textarea-post-count" class="text-sm text-muted-foreground">
+      {{ remaining }} characters left
+    </p>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfTextarea } from '@elf/ui'
+</script>
+
+<template>
+  <ElfTextarea aria-label="Message" placeholder="Write a message to the team" class="w-80" />
+</template>
+```
+
+#### Disabled
+
+```vue
+<script setup lang="ts">
+import { ElfTextarea } from '@elf/ui'
+</script>
+
+<template>
+  <ElfTextarea disabled aria-label="Archived note" model-value="This note is archived and can no longer be edited." class="w-80" />
+</template>
+```
+
+#### Invalid
+
+```vue
+<script setup lang="ts">
+import { ElfLabel, ElfTextarea } from '@elf/ui'
+</script>
+
+<template>
+  <div class="grid w-80 gap-2">
+    <ElfLabel for="textarea-bio">
+      Bio
+    </ElfLabel>
+    <ElfTextarea
+      id="textarea-bio"
+      invalid
+      model-value="Hi"
+      aria-describedby="textarea-bio-error"
+    />
+    <p id="textarea-bio-error" class="text-sm text-[color-mix(in_oklab,var(--color-destructive)_55%,white)]">
+      Write at least 20 characters.
+    </p>
+  </div>
+</template>
+```
+
 ## Exports from "@elf/ui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`
