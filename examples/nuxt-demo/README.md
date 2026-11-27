@@ -7,7 +7,7 @@ published release works end to end; CI builds it on every push and pull request.
 - Dashboard: stat cards, badges, filterable list (`app/pages/index.vue`)
 - Members: form inside a dialog with inline validation (`app/pages/members.vue`)
 - Settings: tabs, forms and a destructive confirmation (`app/pages/settings.vue`)
-- Theme switcher (`novatron` / `elf`) in the header, persisted in a cookie (`app/composables/useElfTheme.ts`)
+- Theme switcher (`nova` / `elf` / `elfwood`) in the header, persisted in a cookie (`app/composables/useDemoTheme.ts`)
 
 ## How to try ElfUI
 
@@ -25,7 +25,7 @@ Requires Bun and Node 22+. Tailwind CSS v4 and `typescript@5` are installed as t
 ```ts
 // nuxt.config.ts
 modules: ['@xouyi/elfui/nuxt'],
-elfui: { theme: 'novatron', themes: ['elf'] },
+elfui: { theme: 'nova', themes: ['elf', 'elfwood'] },
 ```
 
 ```css

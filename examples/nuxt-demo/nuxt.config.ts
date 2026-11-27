@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   modules: ['@xouyi/elfui/nuxt'],
   css: ['~/assets/css/main.css'],
   // `themes` bundles both token files so the switcher can change theme at runtime.
-  elfui: { theme: 'novatron', themes: ['elf'] },
+  elfui: { theme: 'nova', themes: ['elf', 'elfwood'] },
   vite: { plugins: [tailwindcss()] },
   app: { head: { title: 'Elf demo', htmlAttrs: { lang: 'en' } } },
 })
