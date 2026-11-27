@@ -9,7 +9,7 @@ const props = defineProps<AvatarGroupProps>()
   <div
     data-slot="avatar-group"
     role="group"
-    :class="cn('flex items-center -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background', props.class)"
+    :class="cn('flex items-center -space-x-1.5 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background', props.class)"
   >
     <slot />
   </div>

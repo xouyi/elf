@@ -24,7 +24,7 @@ const initials = computed(() => {
     data-slot="avatar-fallback"
     v-bind="forwardedProps"
     :class="cn(
-      'flex size-full items-center justify-center bg-muted font-medium text-muted-foreground',
+      'flex size-full items-center justify-center bg-muted font-medium tracking-tight text-muted-foreground',
       'text-xs group-data-[size=sm]/avatar:text-[0.625rem] group-data-[size=lg]/avatar:text-sm group-data-[size=xl]/avatar:text-lg',
       props.class,
     )"
