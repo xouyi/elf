@@ -1,6 +1,7 @@
 import type { PopoverContentProps as RekaPopoverContentProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 
+export { popoverPanelClass } from './styles'
 export { default as Popover } from './Popover.vue'
 export { default as PopoverAnchor } from './PopoverAnchor.vue'
 export { default as PopoverClose } from './PopoverClose.vue'

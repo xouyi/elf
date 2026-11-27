@@ -90,7 +90,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, tooltip, popover, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, tooltip, popover, hover-card, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -3106,8 +3106,121 @@ const sides = ['top', 'right', 'bottom', 'left'] as const
 </template>
 ```
 
+### HoverCard
+
+Rich preview shown when a link is hovered or focused, built on Reka UI HoverCard. Compose ElfHoverCard > ElfHoverCardTrigger (as-child around a real link) + ElfHoverCardContent. Supplementary only: never opens on touch and is not announced.
+
+Components: `ElfHoverCard`, `ElfHoverCardTrigger`, `ElfHoverCardContent`
+
+Props:
+
+- `ElfHoverCard open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfHoverCard openDelay` (number, default 700): Milliseconds before opening (attribute: open-delay).
+- `ElfHoverCard closeDelay` (number, default 300): Milliseconds before closing after the pointer leaves (attribute: close-delay).
+- `ElfHoverCardContent side` ('top' | 'right' | 'bottom' | 'left', default bottom): Preferred side; flips when there is no room.
+- `ElfHoverCardContent align` ('start' | 'center' | 'end', default center): Alignment against the trigger.
+- `class` (string | array | object): Accepted by ElfHoverCardContent; merged with base classes (default width w-72).
+
+Slots:
+
+- ElfHoverCardTrigger default: a link (use as-child)
+- ElfHoverCardContent default: non-interactive preview content
+
+Accessibility:
+
+- The trigger must be a real link that works without the card; the card is an enhancement for pointer users.
+- Opens on keyboard focus and closes on Escape. Put no essential information or interactive elements in it.
+- Use a popover for interactive content.
+
+Examples:
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfHoverCard, ElfHoverCardContent, ElfHoverCardTrigger } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfHoverCard v-model:open="open">
+      <ElfHoverCardTrigger as-child>
+        <a href="#team" class="text-sm text-primary underline underline-offset-4 outline-none focus-visible:ring-3 focus-visible:ring-ring/50">Team Novatron</a>
+      </ElfHoverCardTrigger>
+      <ElfHoverCardContent class="w-64">
+        <p class="text-sm">
+          FRC Team 10202, Istanbul.
+        </p>
+      </ElfHoverCardContent>
+    </ElfHoverCard>
+    <p class="text-sm text-muted-foreground">
+      open = {{ open }}
+    </p>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfAvatar, ElfAvatarFallback, ElfHoverCard, ElfHoverCardContent, ElfHoverCardTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <p class="text-sm">
+    Reviewed by
+    <ElfHoverCard>
+      <ElfHoverCardTrigger as-child>
+        <a href="#ayse" class="font-medium text-primary underline underline-offset-4 outline-none focus-visible:ring-3 focus-visible:ring-ring/50">Ayşe Demir</a>
+      </ElfHoverCardTrigger>
+      <ElfHoverCardContent>
+        <div class="flex gap-3">
+          <ElfAvatar>
+            <ElfAvatarFallback name="Ayşe Demir" />
+          </ElfAvatar>
+          <div class="grid gap-1">
+            <p class="text-sm font-medium">
+              Ayşe Demir
+            </p>
+            <p class="text-sm text-muted-foreground">
+              Software lead. Joined in 2025.
+            </p>
+          </div>
+        </div>
+      </ElfHoverCardContent>
+    </ElfHoverCard>
+    on Friday.
+  </p>
+</template>
+```
+
+#### Delays
+
+```vue
+<script setup lang="ts">
+import { ElfHoverCard, ElfHoverCardContent, ElfHoverCardTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfHoverCard :open-delay="100" :close-delay="100">
+    <ElfHoverCardTrigger as-child>
+      <a href="#quick" class="text-sm text-primary underline underline-offset-4 outline-none focus-visible:ring-3 focus-visible:ring-ring/50">Quick preview</a>
+    </ElfHoverCardTrigger>
+    <ElfHoverCardContent side="top" class="w-64">
+      <p class="text-sm">
+        Opens after 100 ms and closes 100 ms after the pointer leaves.
+      </p>
+    </ElfHoverCardContent>
+  </ElfHoverCard>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

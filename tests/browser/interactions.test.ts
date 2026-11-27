@@ -54,6 +54,9 @@ import DialogControlled from '../../src/components/dialog/examples/Controlled.vu
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
 import TabsControlled from '../../src/components/tabs/examples/Controlled.vue'
 import TabsDefault from '../../src/components/tabs/examples/Default.vue'
+import HoverCardControlled from '../../src/components/hover-card/examples/Controlled.vue'
+import HoverCardDefault from '../../src/components/hover-card/examples/Default.vue'
+import HoverCardDelays from '../../src/components/hover-card/examples/Delays.vue'
 import PopoverControlled from '../../src/components/popover/examples/Controlled.vue'
 import PopoverDefault from '../../src/components/popover/examples/Default.vue'
 import PopoverModal from '../../src/components/popover/examples/Modal.vue'
@@ -1088,6 +1091,48 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       const [a, b] = [avatars[0]!.getBoundingClientRect(), avatars[1]!.getBoundingClientRect()]
       expect(b.left, 'each avatar overlaps the previous one').toBeLessThan(a.right)
       expect(getComputedStyle(avatars[0]!).boxShadow).not.toBe('none')
+    })
+  })
+
+  describe('HoverCard', () => {
+    const card = () => document.querySelector<HTMLElement>('[data-slot="hover-card-content"]')
+
+    it('opens on keyboard focus of the link and Escape closes it without losing focus', async () => {
+      setTheme(theme)
+      const { el } = await show(HoverCardDefault)
+      const link = el.querySelector<HTMLElement>('a')!
+      await userEvent.tab()
+      expect(document.activeElement).toBe(link)
+      await settle(1000)
+      expect(card()?.textContent).toContain('Software lead')
+      await userEvent.keyboard('{Escape}')
+      await settle(200)
+      expect(card()).toBeNull()
+      expect(document.activeElement).toBe(link)
+    })
+
+    it('opens after the open delay on hover and closes after the close delay on leave', async () => {
+      setTheme(theme)
+      const { el } = await show(HoverCardDelays)
+      const link = el.querySelector<HTMLElement>('a')!
+      await userEvent.hover(link)
+      await settle(400)
+      expect(card()).not.toBeNull()
+      await userEvent.unhover(link)
+      await settle(500)
+      expect(card()).toBeNull()
+    })
+
+    it('v-model:open follows the card state', async () => {
+      setTheme(theme)
+      const { el } = await show(HoverCardControlled)
+      expect(el.textContent).toContain('open = false')
+      await userEvent.tab()
+      await settle(1000)
+      expect(el.textContent).toContain('open = true')
+      await userEvent.keyboard('{Escape}')
+      await settle(200)
+      expect(el.textContent).toContain('open = false')
     })
   })
 

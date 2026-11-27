@@ -28,7 +28,7 @@
     },
     {
       "path": "registry/_generated/ui/popover/PopoverContent.vue",
-      "content": "<script setup lang=\"ts\">\nimport type { PopoverContentEmits } from 'reka-ui'\nimport type { PopoverContentProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { PopoverContent, PopoverPortal, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ndefineOptions({\n  inheritAttrs: false,\n})\n\nconst props = withDefaults(defineProps<PopoverContentProps>(), {\n  sideOffset: 4,\n  align: 'center',\n})\nconst emits = defineEmits<PopoverContentEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <PopoverPortal>\n    <PopoverContent\n      data-slot=\"popover-content\"\n      v-bind=\"{ ...$attrs, ...forwarded }\"\n      :class=\"cn(\n        'z-50 max-h-(--reka-popover-content-available-height) w-72 max-w-[calc(100vw-1rem)] origin-(--reka-popover-content-transform-origin) overflow-y-auto rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden',\n        'data-[state=closed]:animate-[elf-fade-out_100ms_ease-in_forwards] data-[state=open]:animate-[elf-zoom-in_120ms_ease-out] motion-reduce:animate-none!',\n        props.class,\n      )\"\n    >\n      <slot />\n    </PopoverContent>\n  </PopoverPortal>\n</template>\n",
+      "content": "<script setup lang=\"ts\">\nimport type { PopoverContentEmits } from 'reka-ui'\nimport type { PopoverContentProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { PopoverContent, PopoverPortal, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { popoverPanelClass } from './styles'\n\ndefineOptions({\n  inheritAttrs: false,\n})\n\nconst props = withDefaults(defineProps<PopoverContentProps>(), {\n  sideOffset: 4,\n  align: 'center',\n})\nconst emits = defineEmits<PopoverContentEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <PopoverPortal>\n    <PopoverContent\n      data-slot=\"popover-content\"\n      v-bind=\"{ ...$attrs, ...forwarded }\"\n      :class=\"cn(\n        popoverPanelClass,\n        'max-h-(--reka-popover-content-available-height) w-72 origin-(--reka-popover-content-transform-origin)',\n        props.class,\n      )\"\n    >\n      <slot />\n    </PopoverContent>\n  </PopoverPortal>\n</template>\n",
       "type": "registry:ui"
     },
     {
@@ -38,7 +38,12 @@
     },
     {
       "path": "registry/_generated/ui/popover/index.ts",
-      "content": "import type { PopoverContentProps as RekaPopoverContentProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\n\nexport { default as Popover } from './Popover.vue'\nexport { default as PopoverAnchor } from './PopoverAnchor.vue'\nexport { default as PopoverClose } from './PopoverClose.vue'\nexport { default as PopoverContent } from './PopoverContent.vue'\nexport { default as PopoverTrigger } from './PopoverTrigger.vue'\n\nexport interface PopoverContentProps extends RekaPopoverContentProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "content": "import type { PopoverContentProps as RekaPopoverContentProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\n\nexport { popoverPanelClass } from './styles'\nexport { default as Popover } from './Popover.vue'\nexport { default as PopoverAnchor } from './PopoverAnchor.vue'\nexport { default as PopoverClose } from './PopoverClose.vue'\nexport { default as PopoverContent } from './PopoverContent.vue'\nexport { default as PopoverTrigger } from './PopoverTrigger.vue'\n\nexport interface PopoverContentProps extends RekaPopoverContentProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/popover/styles.ts",
+      "content": "/** Classes shared by every floating panel that looks like a popover (Popover, HoverCard). */\nexport const popoverPanelClass = 'z-50 max-w-[calc(100vw-1rem)] overflow-y-auto rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden data-[state=closed]:animate-[elf-fade-out_100ms_ease-in_forwards] data-[state=open]:animate-[elf-zoom-in_120ms_ease-out] motion-reduce:animate-none!'\n",
       "type": "registry:ui"
     }
   ],

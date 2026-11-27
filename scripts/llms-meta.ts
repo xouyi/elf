@@ -370,6 +370,22 @@ export const components: ComponentMeta[] = [
     slots: ['ElfPopoverTrigger default: the toggle (use as-child)', 'ElfPopoverContent default: the panel content'],
     a11y: ['The panel is role=dialog; focus moves in on open and returns to the trigger on close; Escape closes.', 'Name the panel with aria-label or aria-labelledby when it has no visible heading.', 'Use a tooltip for non-interactive hints and a dialog or sheet for long content.'],
   },
+  {
+    dir: 'hover-card',
+    name: 'HoverCard',
+    summary: 'Rich preview shown when a link is hovered or focused, built on Reka UI HoverCard. Compose ElfHoverCard > ElfHoverCardTrigger (as-child around a real link) + ElfHoverCardContent. Supplementary only: never opens on touch and is not announced.',
+    parts: ['ElfHoverCard', 'ElfHoverCardTrigger', 'ElfHoverCardContent'],
+    props: [
+      { name: 'ElfHoverCard open / defaultOpen', type: 'boolean', description: 'Controlled (v-model:open) or initial open state.' },
+      { name: 'ElfHoverCard openDelay', type: 'number', default: '700', description: 'Milliseconds before opening (attribute: open-delay).' },
+      { name: 'ElfHoverCard closeDelay', type: 'number', default: '300', description: 'Milliseconds before closing after the pointer leaves (attribute: close-delay).' },
+      { name: 'ElfHoverCardContent side', type: '\'top\' | \'right\' | \'bottom\' | \'left\'', default: 'bottom', description: 'Preferred side; flips when there is no room.' },
+      { name: 'ElfHoverCardContent align', type: '\'start\' | \'center\' | \'end\'', default: 'center', description: 'Alignment against the trigger.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by ElfHoverCardContent; merged with base classes (default width w-72).' },
+    ],
+    slots: ['ElfHoverCardTrigger default: a link (use as-child)', 'ElfHoverCardContent default: non-interactive preview content'],
+    a11y: ['The trigger must be a real link that works without the card; the card is an enhancement for pointer users.', 'Opens on keyboard focus and closes on Escape. Put no essential information or interactive elements in it.', 'Use a popover for interactive content.'],
+  },
 ]
 
 export const rules = [

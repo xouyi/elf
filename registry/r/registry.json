@@ -635,6 +635,38 @@
       ]
     },
     {
+      "name": "hover-card",
+      "type": "registry:ui",
+      "title": "Hover Card",
+      "description": "Rich preview on hover or focus of a link, built on Reka UI and sharing the Popover panel styles.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/popover.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/hover-card/HoverCard.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/hover-card/HoverCardContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/hover-card/HoverCardTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/hover-card/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "popover",
       "type": "registry:ui",
       "title": "Popover",
@@ -669,6 +701,10 @@
         },
         {
           "path": "registry/_generated/ui/popover/index.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/popover/styles.ts",
           "type": "registry:ui"
         }
       ]

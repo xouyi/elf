@@ -270,7 +270,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfPopover (shared styles)
 - **Complexity:** S
 - **Novatron screens:** forum author cards in `CommentNode`, `PostCard`.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfDropdownMenu
 

@@ -45,7 +45,7 @@ describe.each(themes)('examples in the %s theme', (theme) => {
     const hint = mounted.el.querySelector<HTMLElement>('[data-slot="tooltip-trigger"], [data-slot="hover-card-trigger"]')
     if (hint) {
       hint.focus()
-      await settle(300)
+      await settle(hint.dataset.slot === 'hover-card-trigger' ? 1000 : 300) // hover cards open after their 700 ms delay
       expect(document.querySelector('[role="tooltip"], [data-slot="hover-card-content"]'), 'focus did not open the floating content').not.toBeNull()
     }
 

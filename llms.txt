@@ -36,6 +36,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [Avatar](https://xouyi.github.io/elfUI/docs/components/avatar): Person or team image with an initials fallback, built on Reka UI Avatar. ElfAvatar (size) contains ElfAvatarImage and ElfAvatarFallback; ElfAvatarGroup overlaps several.
 - [Tooltip](https://xouyi.github.io/elfUI/docs/components/tooltip): Short non-interactive hint on hover or keyboard focus, built on Reka UI Tooltip. Compose ElfTooltip > ElfTooltipTrigger (as-child around a button) + ElfTooltipContent. Wrap related tooltips in one ElfTooltipProvider to share the open delay.
 - [Popover](https://xouyi.github.io/elfUI/docs/components/popover): Anchored interactive panel, built on Reka UI Popover. Compose ElfPopover > ElfPopoverTrigger (as-child around a button) + ElfPopoverContent; ElfPopoverClose closes it, ElfPopoverAnchor anchors it elsewhere. Non-modal by default; modal traps focus.
+- [HoverCard](https://xouyi.github.io/elfUI/docs/components/hover-card): Rich preview shown when a link is hovered or focused, built on Reka UI HoverCard. Compose ElfHoverCard > ElfHoverCardTrigger (as-child around a real link) + ElfHoverCardContent. Supplementary only: never opens on touch and is not announced.
 
 ## Reference
 

@@ -128,3 +128,10 @@ export {
   PopoverTrigger as ElfPopoverTrigger,
 } from './components/popover'
 export type { PopoverContentProps } from './components/popover'
+
+export {
+  HoverCard as ElfHoverCard,
+  HoverCardContent as ElfHoverCardContent,
+  HoverCardTrigger as ElfHoverCardTrigger,
+} from './components/hover-card'
+export type { HoverCardContentProps } from './components/hover-card'
