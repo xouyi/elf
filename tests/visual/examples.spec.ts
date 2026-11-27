@@ -42,6 +42,14 @@ for (const theme of ['elf', 'nova', 'elfwood'] as const) {
             await trigger.click()
             await page.locator('[role="dialog"], [role="alertdialog"]').first().waitFor()
           }
+          // Navigation menus open their first flyout; it hangs below the example frame, so the whole page is captured.
+          const navTrigger = page.locator('#example-frame [data-slot="navigation-menu-trigger"]').first()
+          const flyout = (await navTrigger.count()) > 0
+          if (flyout) {
+            await navTrigger.click()
+            await page.locator('[data-slot="navigation-menu-content"]').first().waitFor()
+            await page.waitForTimeout(400)
+          }
           // Let focus and layout settle after the optional open.
           await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))))
 
@@ -51,7 +59,7 @@ for (const theme of ['elf', 'nova', 'elfwood'] as const) {
           expect(errors).toEqual([])
 
           const shot = [ex.dir, `${ex.name}-${theme}-${vp.label}.png`]
-          if (overlay) await expect(page).toHaveScreenshot(shot)
+          if (overlay || flyout) await expect(page).toHaveScreenshot(shot)
           else await expect(page.locator('#example-frame')).toHaveScreenshot(shot)
         })
       }

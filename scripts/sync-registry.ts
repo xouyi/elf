@@ -70,6 +70,8 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   table: { title: 'Table', description: 'Semantic styled table with caption, density, sticky header, sortable header affordance and a stacked-card mode on small screens.', dependencies: ['@vueuse/core'] },
   empty: { title: 'Empty', description: 'Empty state with media, title, description and action parts.', dependencies: ['reka-ui', 'class-variance-authority'] },
   'stat-card': { title: 'Stat Card', description: 'KPI tile with label, value, hint, trend, tone, loading state and an optional stretched link.', dependencies: ['reka-ui', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('skeleton'), dep('visually-hidden')] },
+  'navigation-menu': { title: 'Navigation Menu', description: 'Top-level site navigation with flyout panels, a shared animated viewport, an optional indicator and link styles, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'] },
+  menubar: { title: 'Menubar', description: 'Desktop-style horizontal menu bar with the same item parts and styles as the Dropdown Menu, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('dropdown-menu')] },
 }
 
 const items: unknown[] = [
