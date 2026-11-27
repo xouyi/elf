@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ArrowRight, Contrast, Palette, ShieldCheck, Sparkles } from '@lucide/vue'
 
-const config = useRuntimeConfig()
+const site = useSite()
 useSeoMeta({
   title: 'ElfUI - a themeable design system for Vue and Nuxt',
   description: 'Accessible Vue 3 and Nuxt 4 components on Reka UI and Tailwind CSS v4, with three themes, a shadcn-vue registry and llms.txt.',
 })
 useHead({ titleTemplate: '%s' })
 
-const install = `bun add github:xouyi/elfUI#v${config.public.version} tailwindcss @tailwindcss/vite\nbun add -d typescript`
+const install = `bun add ${site.name} tailwindcss @tailwindcss/vite\nbun add -d typescript@5`
 const features = [
   { icon: ShieldCheck, title: 'Accessible by default', text: 'Reka UI primitives handle focus, keyboard and ARIA. Every example is checked with axe in every theme.' },
   { icon: Palette, title: 'Three themes, one file each', text: 'Elf (violet on black), Nova (gold, sharp corners) and Elfwood (green on white). Add your own with a block of CSS variables.' },
@@ -23,7 +23,7 @@ const components = ['button', 'input', 'badge', 'card', 'dialog', 'tabs']
     <section class="mx-auto grid w-full max-w-[90rem] gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:py-24">
       <div class="flex min-w-0 flex-col items-start gap-6">
         <ElfBadge variant="outline">
-          v{{ config.public.version }} - Vue 3, Nuxt 4, Tailwind CSS v4
+          v{{ site.version }} - Vue 3, Nuxt 4, Tailwind CSS v4
         </ElfBadge>
         <h1 class="text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
           A themeable design system for Vue and Nuxt.

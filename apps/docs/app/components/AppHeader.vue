@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Search } from '@lucide/vue'
 
-const config = useRuntimeConfig()
+const site = useSite()
 const { open: searchOpen, shortcut } = useSearchState()
 </script>
 
@@ -13,7 +13,7 @@ const { open: searchOpen, shortcut } = useSearchState()
         <AppLogo />
       </NuxtLink>
       <ElfBadge variant="outline" class="hidden sm:inline-flex">
-        v{{ config.public.version }}
+        v{{ site.version }}
       </ElfBadge>
       <nav aria-label="Main" class="ml-4 hidden items-center gap-1 text-sm md:flex">
         <ElfButton as-child variant="ghost" size="sm">
@@ -40,7 +40,7 @@ const { open: searchOpen, shortcut } = useSearchState()
         </ElfButton>
         <ThemeSwitcher />
         <ElfButton as-child variant="ghost" size="icon" class="hidden sm:inline-flex">
-          <a :href="config.public.repo" target="_blank" rel="noopener" aria-label="ElfUI on GitHub"><GithubIcon /></a>
+          <a :href="site.repo" target="_blank" rel="noopener" aria-label="ElfUI on GitHub"><GithubIcon /></a>
         </ElfButton>
       </div>
     </div>

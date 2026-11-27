@@ -20,6 +20,10 @@ export default defineConfig({
         test: { name: 'cli', environment: 'node', include: ['cli/**/*.test.ts'], testTimeout: 60_000 },
       },
       {
+        // Docs site sources: the single source for name/version/URLs and the no-hard-coded-values check.
+        test: { name: 'docs', environment: 'node', include: ['tests/docs/**/*.test.ts'] },
+      },
+      {
         // Real Chromium: every example in both themes (axe) plus keyboard/focus behavior. Needs `bunx playwright install chromium`.
         extends: true,
         plugins: [vue(), tailwindcss()],

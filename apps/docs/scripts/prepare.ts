@@ -7,18 +7,31 @@
  *   app/generated/tokens.json           every theme' tokens as hex plus the WCAG contrast ratios
  *   content/docs/3.resources/*.md       CHANGELOG.md, CONTRIBUTING.md and ROADMAP.md rendered as pages
  *
+   .data/site-stamp.json              invalidates the Nuxt Content cache when name, version or URLs change
+ *
  * Run by `bun run docs:prepare` (and automatically before dev, build and generate).
  */
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { codeToHtml } from 'shiki'
 import { createChecker } from 'vue-component-meta'
+import { site } from '../lib/site'
 import { NON_COLOR_TOKENS, ratio, readThemes, textPairs, toHex, uiPairs } from '../../../scripts/lib/color'
 
 const docsRoot = join(import.meta.dirname, '..')
 const root = join(docsRoot, '..', '..')
 const out = join(docsRoot, 'app', 'generated')
 mkdirSync(out, { recursive: true })
+
+// @nuxt/content caches parsed pages by file checksum, so a version or URL change in package.json would otherwise keep
+// stale `{{version}}` replacements. Drop the cache whenever the single source of truth changes.
+const stampFile = join(docsRoot, '.data', 'site-stamp.json')
+const stamp = JSON.stringify(site)
+if (!existsSync(stampFile) || readFileSync(stampFile, 'utf8') !== stamp) {
+  rmSync(join(docsRoot, '.data', 'content'), { recursive: true, force: true })
+  mkdirSync(join(docsRoot, '.data'), { recursive: true })
+  writeFileSync(stampFile, stamp)
+}
 
 const byCodePoint = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0)
 const read = (p: string) => readFileSync(join(root, p), 'utf8')
@@ -119,7 +132,7 @@ for (const dir of componentDirs) {
 writeJson('examples.json', examples)
 
 // ---------------------------------------------------------------- repository markdown rendered as pages
-const github = 'https://github.com/xouyi/elfUI'
+const github = site.repo
 const resources = join(docsRoot, 'content/docs/3.resources')
 mkdirSync(resources, { recursive: true })
 

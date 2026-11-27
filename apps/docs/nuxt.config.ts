@@ -1,11 +1,11 @@
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
+import { applyPlaceholders, site } from './lib/site'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const root = join(here, '..', '..')
-const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')) as { version: string }
 
 // One isolated route per example (src/components/<dir>/examples/<File>.vue) for the visual regression tests.
 const exampleRoutes = readdirSync(join(root, 'src/components'), { withFileTypes: true })
@@ -14,8 +14,6 @@ const exampleRoutes = readdirSync(join(root, 'src/components'), { withFileTypes:
     .filter(f => f.endsWith('.vue'))
     .map(f => `/__examples/${d.name}/${f.replace('.vue', '').replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()}`))
 
-const site = 'https://xouyi.github.io/elfUI'
-const repo = 'https://github.com/xouyi/elfUI'
 // GitHub Pages serves the site under /elfUI/. `nuxt dev` uses '/'; override with DOCS_BASE_URL.
 const baseURL = process.env.DOCS_BASE_URL ?? (process.env.NODE_ENV === 'development' ? '/' : '/elfUI/')
 
@@ -44,7 +42,20 @@ export default defineNuxtConfig({
       },
     },
   },
-  runtimeConfig: { public: { version: pkg.version, site, repo } },
+  // name, version, repo, site and registry URLs come from package.json (apps/docs/lib/site.ts); read them with `useSite()`.
+  appConfig: { site },
+  // Only the sitemap server route reads this (Nitro has no app config).
+  runtimeConfig: { public: { site: site.site } },
+  hooks: {
+    // Fill {{pkg}}, {{version}}, {{repo}}, {{site}}, {{registry}}, ... in raw Markdown, fenced code blocks included, so Shiki
+    // highlights the real values. CHANGELOG, CONTRIBUTING and ROADMAP are history/meta pages and stay verbatim.
+    'content:file:beforeParse': (ctx: { file: { id?: string, path?: string, body?: string } }) => {
+      const id = `${ctx.file.id ?? ctx.file.path ?? ''}`
+      if (!/\.md$/.test(id) || typeof ctx.file.body !== 'string') return
+      if (/3\.resources\/[234]\./.test(id)) return
+      ctx.file.body = applyPlaceholders(ctx.file.body)
+    },
+  },
   app: {
     baseURL,
     head: {

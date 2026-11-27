@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<{
   align?: 'center' | 'start'
 }>(), { align: 'center' })
 
-const config = useRuntimeConfig()
+const site = useSite()
 const example = (examples as Record<string, ExampleData>)[props.name]
 if (!example) throw new Error(`ComponentPreview: no example "${props.name}". Add src/components/<dir>/examples/<Name>.vue.`)
 
@@ -28,7 +28,7 @@ const Live = defineAsyncComponent(loaders[props.name] as () => Promise<Component
 const theme = useDisplayTheme()
 const local = ref<SiteTheme | null>(null)
 const effective = computed(() => local.value ?? theme.value)
-const sourceUrl = `${config.public.repo}/blob/main/${example.file}`
+const sourceUrl = `${site.repo}/blob/main/${example.file}`
 const tab = ref('preview')
 const uid = useId()
 </script>

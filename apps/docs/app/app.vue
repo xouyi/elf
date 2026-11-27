@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const config = useRuntimeConfig()
+const site = useSite()
 const route = useRoute()
 const { theme } = useSiteTheme()
 
@@ -8,14 +8,14 @@ useHead({
   htmlAttrs: { 'data-theme': theme },
   titleTemplate: title => (title && title !== 'ElfUI' ? `${title} - ElfUI` : 'ElfUI'),
   script: [{ innerHTML: themeBootScript, tagPosition: 'head' }],
-  link: [{ rel: 'canonical', href: computed(() => `${config.public.site}${route.path === '/' ? '/' : route.path.replace(/\/$/, '')}`) }],
+  link: [{ rel: 'canonical', href: computed(() => `${site.site}${route.path === '/' ? '/' : route.path.replace(/\/$/, '')}`) }],
 })
 useSeoMeta({
   ogSiteName: 'ElfUI',
   ogType: 'website',
-  ogImage: `${config.public.site}/og.png`,
+  ogImage: `${site.site}/og.png`,
   twitterCard: 'summary_large_image',
-  twitterImage: `${config.public.site}/og.png`,
+  twitterImage: `${site.site}/og.png`,
 })
 
 // The isolated example harness (/__examples/**) renders without site chrome so screenshots contain only the example.
