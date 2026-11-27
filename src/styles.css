@@ -74,6 +74,31 @@
   to { opacity: 0; scale: 0.96; }
 }
 
+@keyframes elf-slide-in-right {
+  from { translate: 100% 0; }
+}
+@keyframes elf-slide-out-right {
+  to { translate: 100% 0; }
+}
+@keyframes elf-slide-in-left {
+  from { translate: -100% 0; }
+}
+@keyframes elf-slide-out-left {
+  to { translate: -100% 0; }
+}
+@keyframes elf-slide-in-top {
+  from { translate: 0 -100%; }
+}
+@keyframes elf-slide-out-top {
+  to { translate: 0 -100%; }
+}
+@keyframes elf-slide-in-bottom {
+  from { translate: 0 100%; }
+}
+@keyframes elf-slide-out-bottom {
+  to { translate: 0 100%; }
+}
+
 @keyframes elf-progress-indeterminate {
   from { transform: translateX(-100%); }
   to { transform: translateX(250%); }
@@ -83,7 +108,9 @@
   [data-slot='dialog-overlay'],
   [data-slot='dialog-content'],
   [data-slot='alert-dialog-overlay'],
-  [data-slot='alert-dialog-content'] {
+  [data-slot='alert-dialog-content'],
+  [data-slot='sheet-overlay'],
+  [data-slot='sheet-content'] {
     animation: none !important;
   }
 }

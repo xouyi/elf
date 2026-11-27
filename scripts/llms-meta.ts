@@ -351,6 +351,22 @@ export const components: ComponentMeta[] = [
     slots: ['ElfAlertDialogTrigger: use as-child with an ElfButton', 'ElfAlertDialogAction and ElfAlertDialogCancel both close the dialog; handle the decision with @click on the action'],
     a11y: ['Always include ElfAlertDialogTitle and ElfAlertDialogDescription.', 'Name the action after what it does ("Delete"), never "OK".', 'Use ElfDialog instead when the content is a form or can be dismissed by clicking outside.'],
   },
+  {
+    dir: 'sheet',
+    name: 'Sheet',
+    summary: 'Edge-anchored modal panel on Reka UI Dialog: side sheets for forms and navigation, and a bottom sheet for mobile. Same focus trap, Escape and focus restore as ElfDialog; an outside click closes it.',
+    parts: ['ElfSheet', 'ElfSheetTrigger', 'ElfSheetContent', 'ElfSheetHeader', 'ElfSheetTitle', 'ElfSheetDescription', 'ElfSheetFooter', 'ElfSheetClose'],
+    variants: 'sheetVariants',
+    props: [
+      { name: 'ElfSheet open / defaultOpen', type: 'boolean', description: 'Controlled (v-model:open) or initial open state.' },
+      { name: 'ElfSheetContent side', type: '\'top\' | \'right\' | \'bottom\' | \'left\'', default: 'right', description: 'Edge the sheet slides in from. bottom is the mobile pattern (safe-area padding).' },
+      { name: 'ElfSheetContent size', type: '\'sm\' | \'default\' | \'lg\' | \'full\'', default: 'default', description: 'Maximum width (left, right) or height (top, bottom); full fills the viewport.' },
+      { name: 'ElfSheetContent showCloseButton', type: 'boolean', default: 'true', description: 'Show the corner close button (attribute: show-close-button).' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part; merged with base classes.' },
+    ],
+    slots: ['ElfSheetTrigger and ElfSheetClose: use as-child with an ElfButton'],
+    a11y: ['Always include ElfSheetTitle and ElfSheetDescription (hide the description with class="sr-only" if needed).', 'Use ElfAlertDialog, not a sheet, for confirmations.', 'Animations stop under prefers-reduced-motion.'],
+  },
 ]
 
 export const rules = [

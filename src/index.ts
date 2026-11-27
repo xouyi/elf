@@ -124,3 +124,16 @@ export {
   AlertDialogTrigger as ElfAlertDialogTrigger,
 } from './components/alert-dialog'
 export type { AlertDialogActionProps, AlertDialogCancelProps } from './components/alert-dialog'
+
+export {
+  Sheet as ElfSheet,
+  SheetClose as ElfSheetClose,
+  SheetContent as ElfSheetContent,
+  SheetDescription as ElfSheetDescription,
+  SheetFooter as ElfSheetFooter,
+  SheetHeader as ElfSheetHeader,
+  sheetVariants,
+  SheetTitle as ElfSheetTitle,
+  SheetTrigger as ElfSheetTrigger,
+} from './components/sheet'
+export type { SheetContentExtraProps, SheetVariants } from './components/sheet'

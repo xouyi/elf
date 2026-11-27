@@ -90,7 +90,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, alert-dialog, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, alert-dialog, sheet, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -2926,8 +2926,206 @@ import { ElfAlertDialog, ElfAlertDialogAction, ElfAlertDialogCancel, ElfAlertDia
 </template>
 ```
 
+### Sheet
+
+Edge-anchored modal panel on Reka UI Dialog: side sheets for forms and navigation, and a bottom sheet for mobile. Same focus trap, Escape and focus restore as ElfDialog; an outside click closes it.
+
+Components: `ElfSheet`, `ElfSheetTrigger`, `ElfSheetContent`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetClose`
+
+- side options: `right`, `left`, `top`, `bottom` (default `right`)
+- size options: `sm`, `default`, `lg`, `full` (default `default`)
+
+Props:
+
+- `ElfSheet open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfSheetContent side` ('top' | 'right' | 'bottom' | 'left', default right): Edge the sheet slides in from. bottom is the mobile pattern (safe-area padding).
+- `ElfSheetContent size` ('sm' | 'default' | 'lg' | 'full', default default): Maximum width (left, right) or height (top, bottom); full fills the viewport.
+- `ElfSheetContent showCloseButton` (boolean, default true): Show the corner close button (attribute: show-close-button).
+- `class` (string | array | object): Accepted by every part; merged with base classes.
+
+Slots:
+
+- ElfSheetTrigger and ElfSheetClose: use as-child with an ElfButton
+
+Accessibility:
+
+- Always include ElfSheetTitle and ElfSheetDescription (hide the description with class="sr-only" if needed).
+- Use ElfAlertDialog, not a sheet, for confirmations.
+- Animations stop under prefers-reduced-motion.
+
+Examples:
+
+#### Bottom Sheet
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfSheet, ElfSheetClose, ElfSheetContent, ElfSheetDescription, ElfSheetFooter, ElfSheetHeader, ElfSheetTitle, ElfSheetTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfSheet>
+    <ElfSheetTrigger as-child>
+      <ElfButton variant="outline">
+        Set quantity
+      </ElfButton>
+    </ElfSheetTrigger>
+    <!-- The bottom sheet spans the screen and keeps its content above the home indicator (safe-area padding). -->
+    <ElfSheetContent side="bottom">
+      <ElfSheetHeader>
+        <ElfSheetTitle>Set quantity</ElfSheetTitle>
+        <ElfSheetDescription>How many units are on the shelf?</ElfSheetDescription>
+      </ElfSheetHeader>
+      <div class="flex gap-2">
+        <ElfSheetClose v-for="n in [1, 2, 5, 10]" :key="n" as-child>
+          <ElfButton variant="secondary" class="h-10 flex-1">
+            {{ n }}
+          </ElfButton>
+        </ElfSheetClose>
+      </div>
+      <ElfSheetFooter>
+        <ElfSheetClose as-child>
+          <ElfButton variant="outline" class="max-sm:h-10">
+            Cancel
+          </ElfButton>
+        </ElfSheetClose>
+      </ElfSheetFooter>
+    </ElfSheetContent>
+  </ElfSheet>
+</template>
+```
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfSheet, ElfSheetContent, ElfSheetDescription, ElfSheetHeader, ElfSheetTitle } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <ElfButton variant="outline" @click="open = true">
+      Open filters
+    </ElfButton>
+    <span class="text-sm text-muted-foreground">open = {{ open }}</span>
+    <ElfSheet v-model:open="open">
+      <ElfSheetContent side="left">
+        <ElfSheetHeader>
+          <ElfSheetTitle>Filters</ElfSheetTitle>
+          <ElfSheetDescription>The open state lives in your component.</ElfSheetDescription>
+        </ElfSheetHeader>
+      </ElfSheetContent>
+    </ElfSheet>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfField, ElfFieldControl, ElfInput, ElfSheet, ElfSheetClose, ElfSheetContent, ElfSheetDescription, ElfSheetFooter, ElfSheetHeader, ElfSheetTitle, ElfSheetTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfSheet>
+    <ElfSheetTrigger as-child>
+      <ElfButton variant="outline">
+        Edit item
+      </ElfButton>
+    </ElfSheetTrigger>
+    <ElfSheetContent>
+      <ElfSheetHeader>
+        <ElfSheetTitle>Edit item</ElfSheetTitle>
+        <ElfSheetDescription>Change the name and quantity. Save when you are done.</ElfSheetDescription>
+      </ElfSheetHeader>
+      <ElfField label="Name">
+        <ElfFieldControl>
+          <ElfInput default-value="Swerve module" />
+        </ElfFieldControl>
+      </ElfField>
+      <ElfField label="Quantity">
+        <ElfFieldControl>
+          <ElfInput type="number" default-value="4" />
+        </ElfFieldControl>
+      </ElfField>
+      <ElfSheetFooter>
+        <ElfSheetClose as-child>
+          <ElfButton variant="outline">
+            Cancel
+          </ElfButton>
+        </ElfSheetClose>
+        <ElfButton>Save</ElfButton>
+      </ElfSheetFooter>
+    </ElfSheetContent>
+  </ElfSheet>
+</template>
+```
+
+#### Sides
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfSheet, ElfSheetContent, ElfSheetDescription, ElfSheetHeader, ElfSheetTitle, ElfSheetTrigger } from '@xouyi/elfui'
+
+const sides = ['top', 'right', 'bottom', 'left'] as const
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-2">
+    <ElfSheet v-for="side in sides" :key="side">
+      <ElfSheetTrigger as-child>
+        <ElfButton variant="outline" class="capitalize">
+          {{ side }}
+        </ElfButton>
+      </ElfSheetTrigger>
+      <ElfSheetContent :side="side">
+        <ElfSheetHeader>
+          <ElfSheetTitle class="capitalize">
+            {{ side }} sheet
+          </ElfSheetTitle>
+          <ElfSheetDescription>The panel slides in from the {{ side }} edge.</ElfSheetDescription>
+        </ElfSheetHeader>
+      </ElfSheetContent>
+    </ElfSheet>
+  </div>
+</template>
+```
+
+#### Sizes
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfSheet, ElfSheetContent, ElfSheetDescription, ElfSheetHeader, ElfSheetTitle, ElfSheetTrigger } from '@xouyi/elfui'
+
+const sizes = ['sm', 'default', 'lg', 'full'] as const
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-2">
+    <ElfSheet v-for="size in sizes" :key="size">
+      <ElfSheetTrigger as-child>
+        <ElfButton variant="outline" class="capitalize">
+          {{ size }}
+        </ElfButton>
+      </ElfSheetTrigger>
+      <ElfSheetContent :size="size">
+        <ElfSheetHeader>
+          <ElfSheetTitle class="capitalize">
+            {{ size }} sheet
+          </ElfSheetTitle>
+          <ElfSheetDescription>On a phone every side sheet leaves a strip of the page visible; from the sm breakpoint the size sets the maximum width.</ElfSheetDescription>
+        </ElfSheetHeader>
+      </ElfSheetContent>
+    </ElfSheet>
+  </div>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

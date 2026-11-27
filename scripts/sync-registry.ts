@@ -47,6 +47,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   avatar: { title: 'Avatar', description: 'Image with initials fallback, four sizes and an overlapping group, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
   'visually-hidden': { title: 'Visually Hidden', description: 'Hides content visually while keeping it available to assistive technology.', dependencies: ['reka-ui'] },
   'alert-dialog': { title: 'Alert Dialog', description: 'Modal that demands a decision, with Cancel and Action parts and initial focus on Cancel, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'], registryDependencies: [dep('button'), dep('dialog')] },
+  sheet: { title: 'Sheet', description: 'Edge-anchored modal panel (top, right, bottom, left) with a mobile-friendly bottom sheet, built on Reka UI Dialog.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('dialog')] },
 }
 
 const items: unknown[] = [

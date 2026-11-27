@@ -55,6 +55,10 @@ import AlertDialogDefault from '../../src/components/alert-dialog/examples/Defau
 import AlertDialogDestructive from '../../src/components/alert-dialog/examples/Destructive.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
+import SheetBottom from '../../src/components/sheet/examples/BottomSheet.vue'
+import SheetControlled from '../../src/components/sheet/examples/Controlled.vue'
+import SheetDefault from '../../src/components/sheet/examples/Default.vue'
+import SheetSides from '../../src/components/sheet/examples/Sides.vue'
 import TabsControlled from '../../src/components/tabs/examples/Controlled.vue'
 import TabsDefault from '../../src/components/tabs/examples/Default.vue'
 import { mountComponent, settle, setTheme, themes } from './support'
@@ -200,6 +204,89 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       const destructive = getComputedStyle(probe).backgroundColor
       probe.remove()
       expect(getComputedStyle(action).backgroundColor).toBe(destructive)
+    })
+  })
+
+  describe('Sheet', () => {
+    const sheet = () => document.querySelector<HTMLElement>('[data-slot="sheet-content"]')
+
+    it('moves focus in, traps Tab, closes on Escape and returns focus to the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(SheetDefault)
+      const trigger = el.querySelector<HTMLElement>('[aria-haspopup="dialog"]')!
+      await userEvent.click(trigger)
+      await settle(300)
+      const dialog = sheet()!
+      expect(dialog.contains(document.activeElement), 'focus moved into the sheet').toBe(true)
+      for (let i = 0; i < 10; i++) {
+        await userEvent.tab()
+        expect(dialog.contains(document.activeElement), `focus stayed inside after Tab #${i + 1}`).toBe(true)
+      }
+      await userEvent.keyboard('{Escape}')
+      await settle(300)
+      expect(sheet()).toBeNull()
+      expect(document.activeElement, 'focus returned to the trigger').toBe(trigger)
+    })
+
+    it('closes on an outside click and from Cancel', async () => {
+      setTheme(theme)
+      const { el } = await show(SheetDefault)
+      const trigger = el.querySelector<HTMLElement>('[aria-haspopup="dialog"]')!
+      await userEvent.click(trigger)
+      await settle(300)
+      await userEvent.click(document.querySelector<HTMLElement>('[data-slot="sheet-overlay"]')!, { position: { x: 4, y: 4 } })
+      await settle(300)
+      expect(sheet()).toBeNull()
+
+      await userEvent.click(trigger)
+      await settle(300)
+      await userEvent.click([...document.querySelectorAll<HTMLElement>('[data-slot="sheet-content"] button')].find(b => b.textContent?.trim() === 'Cancel')!)
+      await settle(300)
+      expect(sheet()).toBeNull()
+    })
+
+    it('anchors each side to its viewport edge', async () => {
+      setTheme(theme)
+      const { el } = await show(SheetSides)
+      const triggers = [...el.querySelectorAll<HTMLElement>('[aria-haspopup="dialog"]')]
+      expect(triggers).toHaveLength(4)
+      for (const trigger of triggers) {
+        await userEvent.click(trigger)
+        await settle(300)
+        const dialog = sheet()!
+        const side = dialog.getAttribute('data-side')
+        const rect = dialog.getBoundingClientRect()
+        if (side === 'top') expect(rect.top).toBe(0)
+        if (side === 'left') expect(rect.left).toBe(0)
+        if (side === 'right') expect(Math.round(rect.right)).toBe(document.documentElement.clientWidth)
+        if (side === 'bottom') expect(Math.round(rect.bottom)).toBe(document.documentElement.clientHeight)
+        await userEvent.keyboard('{Escape}')
+        await settle(300)
+        expect(sheet()).toBeNull()
+      }
+    })
+
+    it('the bottom sheet spans the width and stays inside the viewport', async () => {
+      setTheme(theme)
+      const { el } = await show(SheetBottom)
+      await userEvent.click(el.querySelector<HTMLElement>('[aria-haspopup="dialog"]')!)
+      await settle(300)
+      const rect = sheet()!.getBoundingClientRect()
+      expect(Math.round(rect.width)).toBe(document.documentElement.clientWidth)
+      expect(rect.height).toBeLessThanOrEqual(window.innerHeight)
+    })
+
+    it('v-model:open reflects the state', async () => {
+      setTheme(theme)
+      const { el } = await show(SheetControlled)
+      expect(el.textContent).toContain('open = false')
+      await userEvent.click(el.querySelector<HTMLElement>('button')!)
+      await settle(300)
+      expect(el.textContent).toContain('open = true')
+      expect(sheet()).not.toBeNull()
+      await userEvent.keyboard('{Escape}')
+      await settle(300)
+      expect(el.textContent).toContain('open = false')
     })
   })
 

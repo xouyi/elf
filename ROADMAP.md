@@ -314,7 +314,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfDialog internals, ElfButton
 - **Complexity:** M
 - **Novatron screens:** stock `ui/Sheet`, `QuantitySheet`, `ItemEditSheet`; mobile filter panels.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfToaster + useToast
 

@@ -35,6 +35,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [Progress](https://xouyi.github.io/elfUI/docs/components/progress): Progress bar built on Reka UI Progress (role=progressbar). Determinate with v-model (0..max) or indeterminate with a null value. Always give it a name with label, aria-label or aria-labelledby.
 - [Avatar](https://xouyi.github.io/elfUI/docs/components/avatar): Person or team image with an initials fallback, built on Reka UI Avatar. ElfAvatar (size) contains ElfAvatarImage and ElfAvatarFallback; ElfAvatarGroup overlaps several.
 - [AlertDialog](https://xouyi.github.io/elfUI/docs/components/alert-dialog): Modal that demands a decision (destructive confirmation), built on Reka UI AlertDialog. Role alertdialog: focus starts on Cancel, Escape cancels, an outside click never dismisses it.
+- [Sheet](https://xouyi.github.io/elfUI/docs/components/sheet): Edge-anchored modal panel on Reka UI Dialog: side sheets for forms and navigation, and a bottom sheet for mobile. Same focus trap, Escape and focus restore as ElfDialog; an outside click closes it.
 
 ## Reference
 

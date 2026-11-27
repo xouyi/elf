@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Add `ElfAlertDialog` with `ElfAlertDialogTrigger`, `ElfAlertDialogContent`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogCancel` and `ElfAlertDialogAction`, built on the Reka UI AlertDialog primitive: role `alertdialog`, initial focus on Cancel, never dismissed by an outside click, a destructive action variant, and the same surface as `ElfDialog` (its overlay and content classes are now shared through `dialogOverlayClass` and `dialogContentClass`).
+- Add `ElfSheet` with `ElfSheetTrigger`, `ElfSheetContent`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetDescription`, `ElfSheetFooter` and `ElfSheetClose` (`sheetVariants`), built on the Reka UI Dialog primitive: `side` (`top` | `right` | `bottom` | `left`), `size` (`sm` | `default` | `lg` | `full`), a mobile-friendly bottom sheet with safe-area padding, a 40px close button on small screens, slide animations with a reduced-motion fallback. Adds the `elf-slide-*` keyframes to `styles.css`.
 
 ## 0.4.0
 
