@@ -1,6 +1,6 @@
 {
   "name": "@xouyi/elfui",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "ElfUI: a Vue 3 / Nuxt 4 design system built on Reka UI and Tailwind CSS v4.",
   "keywords": [
     "vue",
