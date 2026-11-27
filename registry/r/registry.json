@@ -21,6 +21,38 @@
       ]
     },
     {
+      "name": "elf-themes",
+      "type": "registry:lib",
+      "title": "Theme names",
+      "description": "The names of the shipped themes (elfThemes, ElfTheme, isElfTheme).",
+      "files": [
+        {
+          "path": "registry/_generated/lib/themes.ts",
+          "type": "registry:lib",
+          "target": "lib/themes.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-elf-theme",
+      "type": "registry:lib",
+      "title": "useElfTheme",
+      "description": "SSR-safe composable and createElfTheme() plugin to read, set and persist the active theme.",
+      "dependencies": [
+        "vue"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/elf-themes.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/lib/use-elf-theme.ts",
+          "type": "registry:lib",
+          "target": "lib/use-elf-theme.ts"
+        }
+      ]
+    },
+    {
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
@@ -1190,6 +1222,33 @@
         },
         {
           "path": "registry/_generated/ui/accordion/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "theme-switcher",
+      "type": "registry:ui",
+      "title": "Theme Switcher",
+      "description": "Ready-made control to switch themes as a select, a segmented radio group or one toggle button, driven by useElfTheme.",
+      "dependencies": [
+        "reka-ui",
+        "@lucide/vue",
+        "vue"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/button.json",
+        "https://xouyi.github.io/elfUI/r/select.json",
+        "https://xouyi.github.io/elfUI/r/use-elf-theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/theme-switcher/ThemeSwitcher.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/theme-switcher/index.ts",
           "type": "registry:ui"
         }
       ]

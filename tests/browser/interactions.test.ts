@@ -91,6 +91,11 @@ import PopoverModal from '../../src/components/popover/examples/Modal.vue'
 import TooltipControlled from '../../src/components/tooltip/examples/Controlled.vue'
 import TooltipDefault from '../../src/components/tooltip/examples/Default.vue'
 import TooltipIconButtons from '../../src/components/tooltip/examples/IconButtons.vue'
+import ThemeSwitcherButtons from '../../src/components/theme-switcher/examples/Buttons.vue'
+import ThemeSwitcherDefault from '../../src/components/theme-switcher/examples/Default.vue'
+import ThemeSwitcherLabels from '../../src/components/theme-switcher/examples/Labels.vue'
+import ThemeSwitcherToggle from '../../src/components/theme-switcher/examples/Toggle.vue'
+import ThemeSwitcherTwoThemes from '../../src/components/theme-switcher/examples/TwoThemes.vue'
 import { axeViolations, mountComponent, settle, setTheme, themes } from './support'
 
 let unmount: (() => void) | undefined
@@ -2087,6 +2092,125 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await userEvent.keyboard('{Escape}')
       await settle(150)
       expect(el.textContent).toContain('open = false')
+    })
+  })
+
+  describe('ThemeSwitcher', () => {
+    // The switcher starts on the theme the page already has (here: `theme`) and changes data-theme on <html> like a visitor would.
+    const order = ['elf', 'nova', 'elfwood']
+    const names = ['Elf', 'Nova', 'Elfwood']
+    const start = order.indexOf(theme)
+    const at = (offset: number) => (start + offset + order.length) % order.length
+    const active = () => document.documentElement.dataset.theme
+    // Reka checks a radio from a 0ms timeout that requires the arrow key to still be down, so hold the key briefly like a person does.
+    const press = async (key: string) => {
+      const name = key.slice(1, -1)
+      await userEvent.keyboard(`{${name}>}`)
+      await settle(30)
+      await userEvent.keyboard(`{/${name}}`)
+      await settle()
+    }
+
+    it('buttons: a named radiogroup with the active theme checked', async () => {
+      setTheme(theme)
+      const { el } = await show(ThemeSwitcherButtons)
+      await expect.element(page.getByRole('radiogroup', { name: 'Theme' })).toBeInTheDocument()
+      const radios = [...el.querySelectorAll<HTMLElement>('[role="radio"]')]
+      expect(radios.map(r => r.textContent?.trim())).toEqual(names)
+      expect(radios.map(r => r.getAttribute('aria-checked'))).toEqual(order.map(name => String(name === theme)))
+    })
+
+    it('buttons: arrow keys select the next and previous theme, wrap around, and change data-theme', async () => {
+      setTheme(theme)
+      const { el } = await show(ThemeSwitcherButtons)
+      const radios = [...el.querySelectorAll<HTMLElement>('[role="radio"]')]
+      await userEvent.tab()
+      expect(document.activeElement).toBe(radios[start])
+      await press('{ArrowRight}')
+      expect(document.activeElement).toBe(radios[at(1)])
+      expect(radios[at(1)]!.getAttribute('aria-checked')).toBe('true')
+      expect(active()).toBe(order[at(1)])
+      await press('{ArrowDown}')
+      expect(active()).toBe(order[at(2)])
+      await press('{ArrowRight}')
+      expect(active(), 'wraps around').toBe(theme)
+      await press('{ArrowLeft}')
+      expect(active(), 'wraps backwards').toBe(order[at(2)])
+      await press('{ArrowUp}')
+      expect(active()).toBe(order[at(1)])
+      expect(radios.filter(r => r.getAttribute('aria-checked') === 'true')).toEqual([radios[at(1)]])
+    })
+
+    it('buttons: a click selects a theme and keyboard focus shows a ring', async () => {
+      setTheme(theme)
+      const { el } = await show(ThemeSwitcherButtons)
+      const radios = [...el.querySelectorAll<HTMLElement>('[role="radio"]')]
+      await userEvent.click(radios[at(1)]!)
+      expect(active()).toBe(order[at(1)])
+      expect(radios[at(1)]!.getAttribute('aria-checked')).toBe('true')
+      await userEvent.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(radios[at(2)])
+      expect(getComputedStyle(radios[at(2)]!).boxShadow, 'focus ring').not.toBe('none')
+    })
+
+    it('toggle: Enter and Space switch to the next theme and the name follows the state', async () => {
+      setTheme(theme)
+      const { el } = await show(ThemeSwitcherToggle)
+      const button = el.querySelector<HTMLElement>('button')!
+      expect(button.getAttribute('aria-label')).toBe(`Theme: ${names[start]}`)
+      await userEvent.tab()
+      expect(document.activeElement).toBe(button)
+      await userEvent.keyboard('{Enter}')
+      expect(active()).toBe(order[at(1)])
+      expect(button.getAttribute('aria-label')).toBe(`Theme: ${names[at(1)]}`)
+      await userEvent.keyboard(' ')
+      expect(active()).toBe(order[at(2)])
+      await userEvent.keyboard('{Enter}')
+      expect(active(), 'wraps around').toBe(theme)
+      expect(getComputedStyle(button).boxShadow, 'focus ring').not.toBe('none')
+    })
+
+    it('select: opens with Enter, moves with the arrows, selects with Enter and returns focus to the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(ThemeSwitcherDefault)
+      const trigger = el.querySelector<HTMLElement>('[role="combobox"]')!
+      await expect.element(page.getByRole('combobox', { name: 'Theme' })).toBeInTheDocument()
+      await userEvent.tab()
+      expect(document.activeElement).toBe(trigger)
+      await userEvent.keyboard('{Enter}')
+      await settle(150)
+      expect(document.querySelectorAll('[role="option"]')).toHaveLength(3)
+      // The highlight starts on the active theme: one ArrowDown reaches the next (or wraps to the first from the last).
+      await userEvent.keyboard(start === order.length - 1 ? '{Home}{Enter}' : '{ArrowDown}{Enter}')
+      await settle(150)
+      expect(active()).toBe(order[start === order.length - 1 ? 0 : at(1)])
+      const chosen = active()
+      expect(trigger.textContent).toContain(names[order.indexOf(chosen!)])
+      expect(document.activeElement).toBe(trigger)
+      await userEvent.keyboard('{Enter}')
+      await settle(150)
+      await userEvent.keyboard('{Escape}')
+      await settle(150)
+      expect(document.querySelector('[role="listbox"]')).toBeNull()
+      expect(active(), 'Escape leaves the theme unchanged').toBe(chosen)
+    })
+
+    it('labels rename the themes and the name of the control; themes limits the choices', async () => {
+      setTheme(theme)
+      const labelled = await show(ThemeSwitcherLabels)
+      await expect.element(page.getByRole('radiogroup', { name: 'Color scheme' })).toBeInTheDocument()
+      expect([...labelled.el.querySelectorAll('[role="radio"]')].map(r => r.textContent?.trim())).toEqual(['Violet', 'Gold', 'Light'])
+      labelled.unmount()
+      const subset = await show(ThemeSwitcherTwoThemes)
+      expect([...subset.el.querySelectorAll('[role="radio"]')].map(r => r.textContent?.trim())).toEqual(['Dark', 'Light'])
+    })
+
+    it('has no axe violations with the select open', async () => {
+      setTheme(theme)
+      const { el } = await show(ThemeSwitcherDefault)
+      await userEvent.click(el.querySelector('[role="combobox"]')!)
+      await settle(400)
+      expect(await axeViolations(document, { menuOpen: true })).toEqual([])
     })
   })
 

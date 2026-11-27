@@ -241,3 +241,6 @@ export {
   AccordionItem as ElfAccordionItem,
   AccordionTrigger as ElfAccordionTrigger,
 } from './components/accordion'
+
+export { ThemeSwitcher as ElfThemeSwitcher } from './components/theme-switcher'
+export type { ThemeSwitcherProps, ThemeSwitcherVariant } from './components/theme-switcher'
