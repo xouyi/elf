@@ -81,7 +81,9 @@ body {
   tab-size: 2;
 }
 .code-block pre code, .doc-code pre code { display: block; width: max-content; min-width: 100%; background: none; border: 0; padding: 0; font-size: inherit; }
-.code-block pre code .line { display: inline-block; min-width: 100%; }
+/* Lines stay inline: the `\n` that ends each line (a text node, or the end of the last token once Nuxt Content has compressed
+   the Markdown AST) is what breaks them under `white-space: pre`. An inline-block line with `min-width: 100%` inside a
+   `width: max-content` code element is circular and lays every line side by side as ONE long line. */
 .code-block pre code .line.highlight, .code-block pre code .highlight { background: var(--elf-accent); }
 .code-block pre:focus-visible, .doc-code pre:focus-visible { outline-offset: -2px; }
 

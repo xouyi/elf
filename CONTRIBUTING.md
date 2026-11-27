@@ -115,7 +115,8 @@ keyboard accessible, no `class*='size-'` selectors with escaped quotes (use `[cl
 5. `registry:check`: rebuilds the registry and fails if the committed `registry.json` / `registry/r` differ.
 6. `llms:check`: fails if `llms.txt` / `llms-full.txt` are stale (`bun run llms` regenerates them).
 7. `docs:typecheck` (vue-tsc over the docs app), `docs:build` (a full `nuxt generate`, which fails on a broken example
-   or component reference) and `playground:build`.
+   or component reference), `docs:verify` (headless Chromium over every built docs page: multi-line code blocks must render
+   line by line and no placeholder may survive) and `playground:build`.
 
 Run subsets while developing: `bun run test:unit`, `bun run test:browser`, `bun run docs:dev`.
 
