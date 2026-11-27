@@ -21,6 +21,38 @@
       ]
     },
     {
+      "name": "elf-themes",
+      "type": "registry:lib",
+      "title": "Theme names",
+      "description": "The names of the shipped themes (elfThemes, ElfTheme, isElfTheme).",
+      "files": [
+        {
+          "path": "registry/_generated/lib/themes.ts",
+          "type": "registry:lib",
+          "target": "lib/themes.ts"
+        }
+      ]
+    },
+    {
+      "name": "use-elf-theme",
+      "type": "registry:lib",
+      "title": "useElfTheme",
+      "description": "SSR-safe composable and createElfTheme() plugin to read, set and persist the active theme.",
+      "dependencies": [
+        "vue"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/elf-themes.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/lib/use-elf-theme.ts",
+          "type": "registry:lib",
+          "target": "lib/use-elf-theme.ts"
+        }
+      ]
+    },
+    {
       "name": "button",
       "type": "registry:ui",
       "title": "Button",
@@ -956,6 +988,61 @@
       ]
     },
     {
+      "name": "toggle",
+      "type": "registry:ui",
+      "title": "Toggle",
+      "description": "Pressable toggle button and a single or multiple toggle group with default and outline variants, built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/toggle/Toggle.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/toggle/ToggleGroup.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/toggle/ToggleGroupItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/toggle/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "aspect-ratio",
+      "type": "registry:ui",
+      "title": "Aspect Ratio",
+      "description": "Fixed-ratio frame for images, video and placeholders, built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/aspect-ratio/AspectRatio.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/aspect-ratio/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "visually-hidden",
       "type": "registry:ui",
       "title": "Visually Hidden",
@@ -1190,6 +1277,587 @@
         },
         {
           "path": "registry/_generated/ui/accordion/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "theme-switcher",
+      "type": "registry:ui",
+      "title": "Theme Switcher",
+      "description": "Ready-made control to switch themes as a select, a segmented radio group or one toggle button, driven by useElfTheme.",
+      "dependencies": [
+        "reka-ui",
+        "@lucide/vue",
+        "vue"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/button.json",
+        "https://xouyi.github.io/elfUI/r/select.json",
+        "https://xouyi.github.io/elfUI/r/use-elf-theme.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/theme-switcher/ThemeSwitcher.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/theme-switcher/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:ui",
+      "title": "Breadcrumb",
+      "description": "Hierarchical location trail with list, item, link, page, separator and ellipsis parts, composed from native elements.",
+      "dependencies": [
+        "reka-ui",
+        "@lucide/vue"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/breadcrumb/Breadcrumb.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/breadcrumb/BreadcrumbEllipsis.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/breadcrumb/BreadcrumbItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/breadcrumb/BreadcrumbLink.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/breadcrumb/BreadcrumbList.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/breadcrumb/BreadcrumbPage.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/breadcrumb/BreadcrumbSeparator.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/breadcrumb/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "description": "Page navigation with numbers, ellipsis, first, previous, next and last, plus a simple previous/next bar, built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core",
+        "@lucide/vue"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/button.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/pagination/Pagination.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/pagination/PaginationContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/pagination/PaginationEllipsis.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/pagination/PaginationFirst.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/pagination/PaginationItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/pagination/PaginationLast.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/pagination/PaginationNext.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/pagination/PaginationPrev.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/pagination/SimplePagination.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/pagination/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "description": "Semantic styled table with caption, density, sticky header, sortable header affordance and a stacked-card mode on small screens.",
+      "dependencies": [
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/table/Table.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/table/TableBody.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/table/TableCaption.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/table/TableCell.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/table/TableFooter.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/table/TableHead.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/table/TableHeader.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/table/TableRow.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/table/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "empty",
+      "type": "registry:ui",
+      "title": "Empty",
+      "description": "Empty state with media, title, description and action parts.",
+      "dependencies": [
+        "reka-ui",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/empty/Empty.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/empty/EmptyContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/empty/EmptyDescription.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/empty/EmptyHeader.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/empty/EmptyMedia.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/empty/EmptyTitle.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/empty/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "stat-card",
+      "type": "registry:ui",
+      "title": "Stat Card",
+      "description": "KPI tile with label, value, hint, trend, tone, loading state and an optional stretched link.",
+      "dependencies": [
+        "reka-ui",
+        "@lucide/vue",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/skeleton.json",
+        "https://xouyi.github.io/elfUI/r/visually-hidden.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/stat-card/StatCard.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/stat-card/StatCardLink.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/stat-card/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "navigation-menu",
+      "type": "registry:ui",
+      "title": "Navigation Menu",
+      "description": "Top-level site navigation with flyout panels, a shared animated viewport, an optional indicator and link styles, built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core",
+        "@lucide/vue",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenu.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenuContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenuIndicator.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenuItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenuLink.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenuList.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenuTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenuViewport.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/index.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/styles.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "menubar",
+      "type": "registry:ui",
+      "title": "Menubar",
+      "description": "Desktop-style horizontal menu bar with the same item parts and styles as the Dropdown Menu, built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core",
+        "@lucide/vue"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/dropdown-menu.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/menubar/Menubar.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/menubar/MenubarCheckboxItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/menubar/MenubarContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/menubar/MenubarGroup.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/menubar/MenubarItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/menubar/MenubarLabel.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/menubar/MenubarMenu.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/menubar/MenubarRadioGroup.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/menubar/MenubarRadioItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/menubar/MenubarSeparator.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/menubar/MenubarShortcut.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/menubar/MenubarSub.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/menubar/MenubarSubContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/menubar/MenubarSubTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/menubar/MenubarTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/menubar/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "sidebar",
+      "type": "registry:ui",
+      "title": "Sidebar",
+      "description": "Collapsible app navigation: groups, menu buttons with active state and badges, icon-collapsed mode with tooltips, rail, keyboard shortcut and an off-canvas sheet on phones, composed from Sheet, Tooltip, Separator and ScrollArea.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core",
+        "@lucide/vue",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/button.json",
+        "https://xouyi.github.io/elfUI/r/sheet.json",
+        "https://xouyi.github.io/elfUI/r/tooltip.json",
+        "https://xouyi.github.io/elfUI/r/separator.json",
+        "https://xouyi.github.io/elfUI/r/scroll-area.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/sidebar/Sidebar.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarFooter.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarGroup.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarGroupContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarGroupLabel.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarHeader.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarInset.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarMenu.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarMenuBadge.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarMenuButton.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarMenuItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarMenuSub.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarMenuSubButton.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarMenuSubItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarProvider.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarRail.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarSeparator.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/context.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "stepper",
+      "type": "registry:ui",
+      "title": "Stepper",
+      "description": "Multi-step progress and wizard header, linear or free, horizontal or vertical, built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core",
+        "@lucide/vue"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/stepper/Stepper.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/stepper/StepperDescription.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/stepper/StepperIndicator.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/stepper/StepperItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/stepper/StepperSeparator.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/stepper/StepperTitle.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/stepper/StepperTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/stepper/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "data-table",
+      "type": "registry:ui",
+      "title": "Data Table",
+      "description": "Table with sorting, global search, column visibility, row selection, pagination, loading and empty states and a server-driven mode, composed on Table with TanStack Table Vue.",
+      "dependencies": [
+        "@tanstack/vue-table",
+        "@lucide/vue"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/button.json",
+        "https://xouyi.github.io/elfUI/r/checkbox.json",
+        "https://xouyi.github.io/elfUI/r/dropdown-menu.json",
+        "https://xouyi.github.io/elfUI/r/empty.json",
+        "https://xouyi.github.io/elfUI/r/input.json",
+        "https://xouyi.github.io/elfUI/r/pagination.json",
+        "https://xouyi.github.io/elfUI/r/skeleton.json",
+        "https://xouyi.github.io/elfUI/r/table.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/data-table/DataTable.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/data-table/features.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/data-table/index.ts",
           "type": "registry:ui"
         }
       ]

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "breadcrumb",
+  "title": "Breadcrumb",
+  "description": "Hierarchical location trail with list, item, link, page, separator and ellipsis parts, composed from native elements.",
+  "dependencies": [
+    "reka-ui",
+    "@lucide/vue"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/breadcrumb/Breadcrumb.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { BreadcrumbProps } from './index'\nimport { cn } from '@/lib/utils'\n\nconst props = withDefaults(defineProps<BreadcrumbProps>(), {\n  ariaLabel: 'Breadcrumb',\n})\n</script>\n\n<template>\n  <nav\n    data-slot=\"breadcrumb\"\n    :aria-label=\"props.ariaLabel\"\n    :class=\"cn(props.class)\"\n  >\n    <slot />\n  </nav>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/breadcrumb/BreadcrumbEllipsis.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { BreadcrumbEllipsisProps } from './index'\nimport { Ellipsis } from '@lucide/vue'\nimport { cn } from '@/lib/utils'\n\nconst props = withDefaults(defineProps<BreadcrumbEllipsisProps>(), {\n  label: 'More',\n})\n</script>\n\n<template>\n  <span\n    data-slot=\"breadcrumb-ellipsis\"\n    :class=\"cn('inline-flex size-9 items-center justify-center', props.class)\"\n  >\n    <slot>\n      <Ellipsis class=\"size-4\" aria-hidden=\"true\" />\n    </slot>\n    <span class=\"sr-only\">{{ props.label }}</span>\n  </span>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/breadcrumb/BreadcrumbItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { BreadcrumbItemProps } from './index'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<BreadcrumbItemProps>()\n</script>\n\n<template>\n  <li\n    data-slot=\"breadcrumb-item\"\n    :class=\"cn('inline-flex items-center gap-1.5', props.class)\"\n  >\n    <slot />\n  </li>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/breadcrumb/BreadcrumbLink.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { BreadcrumbLinkProps } from './index'\nimport { Primitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = withDefaults(defineProps<BreadcrumbLinkProps>(), {\n  as: 'a',\n})\n</script>\n\n<template>\n  <Primitive\n    data-slot=\"breadcrumb-link\"\n    :as=\"props.as\"\n    :as-child=\"props.asChild\"\n    :class=\"cn('rounded-sm transition-colors outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50', props.class)\"\n  >\n    <slot />\n  </Primitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/breadcrumb/BreadcrumbList.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { BreadcrumbListProps } from './index'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<BreadcrumbListProps>()\n</script>\n\n<template>\n  <ol\n    data-slot=\"breadcrumb-list\"\n    :class=\"cn('flex flex-wrap items-center gap-1.5 text-sm wrap-break-word text-muted-foreground sm:gap-2.5', props.class)\"\n  >\n    <slot />\n  </ol>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/breadcrumb/BreadcrumbPage.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { BreadcrumbPageProps } from './index'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<BreadcrumbPageProps>()\n</script>\n\n<template>\n  <span\n    data-slot=\"breadcrumb-page\"\n    role=\"link\"\n    aria-disabled=\"true\"\n    aria-current=\"page\"\n    :class=\"cn('font-normal text-foreground', props.class)\"\n  >\n    <slot />\n  </span>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/breadcrumb/BreadcrumbSeparator.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { BreadcrumbSeparatorProps } from './index'\nimport { ChevronRight } from '@lucide/vue'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<BreadcrumbSeparatorProps>()\n</script>\n\n<template>\n  <li\n    data-slot=\"breadcrumb-separator\"\n    role=\"presentation\"\n    aria-hidden=\"true\"\n    :class=\"cn('inline-flex items-center [&>svg]:size-3.5', props.class)\"\n  >\n    <slot>\n      <ChevronRight class=\"rtl:rotate-180\" />\n    </slot>\n  </li>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/breadcrumb/index.ts",
+      "content": "import type { PrimitiveProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\n\nexport { default as Breadcrumb } from './Breadcrumb.vue'\nexport { default as BreadcrumbEllipsis } from './BreadcrumbEllipsis.vue'\nexport { default as BreadcrumbItem } from './BreadcrumbItem.vue'\nexport { default as BreadcrumbLink } from './BreadcrumbLink.vue'\nexport { default as BreadcrumbList } from './BreadcrumbList.vue'\nexport { default as BreadcrumbPage } from './BreadcrumbPage.vue'\nexport { default as BreadcrumbSeparator } from './BreadcrumbSeparator.vue'\n\nexport interface BreadcrumbProps {\n  /** Accessible name of the navigation landmark. Translate it, and make it unique when a page has several trails. */\n  ariaLabel?: string\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface BreadcrumbListProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface BreadcrumbItemProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface BreadcrumbLinkProps extends PrimitiveProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface BreadcrumbPageProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface BreadcrumbSeparatorProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface BreadcrumbEllipsisProps {\n  /** Screen reader text for the ellipsis (the visible content is an icon). */\n  label?: string\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

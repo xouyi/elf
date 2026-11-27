@@ -1,6 +1,6 @@
 import { ElfButton, ElfInput, ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger, ElfToaster, toast } from '@xouyi/elfui'
 import { page, userEvent } from 'vitest/browser'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 import VisuallyHiddenDefault from '../../src/components/visually-hidden/examples/Default.vue'
 import VisuallyHiddenTable from '../../src/components/visually-hidden/examples/TableCaption.vue'
@@ -77,6 +77,12 @@ import ScrollAreaHorizontal from '../../src/components/scroll-area/examples/Hori
 import ContextMenuDefault from '../../src/components/context-menu/examples/Default.vue'
 import ContextMenuOptions from '../../src/components/context-menu/examples/Options.vue'
 import DropdownMenuCheckboxes from '../../src/components/dropdown-menu/examples/Checkboxes.vue'
+import BreadcrumbCollapsed from '../../src/components/breadcrumb/examples/Collapsed.vue'
+import BreadcrumbDefault from '../../src/components/breadcrumb/examples/Default.vue'
+import PaginationDefault from '../../src/components/pagination/examples/Default.vue'
+import PaginationDisabled from '../../src/components/pagination/examples/Disabled.vue'
+import PaginationSimple from '../../src/components/pagination/examples/Simple.vue'
+import PaginationWithEdges from '../../src/components/pagination/examples/WithEdges.vue'
 import DropdownMenuControlled from '../../src/components/dropdown-menu/examples/Controlled.vue'
 import DropdownMenuDefault from '../../src/components/dropdown-menu/examples/Default.vue'
 import DropdownMenuRadioItems from '../../src/components/dropdown-menu/examples/RadioItems.vue'
@@ -91,7 +97,41 @@ import PopoverModal from '../../src/components/popover/examples/Modal.vue'
 import TooltipControlled from '../../src/components/tooltip/examples/Controlled.vue'
 import TooltipDefault from '../../src/components/tooltip/examples/Default.vue'
 import TooltipIconButtons from '../../src/components/tooltip/examples/IconButtons.vue'
+import ThemeSwitcherButtons from '../../src/components/theme-switcher/examples/Buttons.vue'
+import ThemeSwitcherDefault from '../../src/components/theme-switcher/examples/Default.vue'
+import ThemeSwitcherLabels from '../../src/components/theme-switcher/examples/Labels.vue'
+import ThemeSwitcherToggle from '../../src/components/theme-switcher/examples/Toggle.vue'
+import ThemeSwitcherTwoThemes from '../../src/components/theme-switcher/examples/TwoThemes.vue'
+import ToggleDefault from '../../src/components/toggle/examples/Default.vue'
+import ToggleDisabled from '../../src/components/toggle/examples/Disabled.vue'
+import ToggleGroupMultiple from '../../src/components/toggle/examples/GroupMultiple.vue'
+import ToggleGroupSingle from '../../src/components/toggle/examples/GroupSingle.vue'
+import ToggleWithText from '../../src/components/toggle/examples/WithText.vue'
+import AspectRatioDefault from '../../src/components/aspect-ratio/examples/Default.vue'
+import AspectRatioRatios from '../../src/components/aspect-ratio/examples/Ratios.vue'
+import TableDefault from '../../src/components/table/examples/Default.vue'
+import TableSortable from '../../src/components/table/examples/SortableHeader.vue'
+import TableStack from '../../src/components/table/examples/StackOnMobile.vue'
+import TableSticky from '../../src/components/table/examples/StickyHeader.vue'
+import EmptyDefault from '../../src/components/empty/examples/Default.vue'
+import StatCardAsLink from '../../src/components/stat-card/examples/AsLink.vue'
+import StatCardLoading from '../../src/components/stat-card/examples/Loading.vue'
+import StatCardTones from '../../src/components/stat-card/examples/Tones.vue'
+import StepperControlled from '../../src/components/stepper/examples/Controlled.vue'
+import StepperDefault from '../../src/components/stepper/examples/Default.vue'
+import StepperDisabled from '../../src/components/stepper/examples/Disabled.vue'
+import StepperNonLinear from '../../src/components/stepper/examples/NonLinear.vue'
+import StepperVertical from '../../src/components/stepper/examples/Vertical.vue'
+import DataTableDefault from '../../src/components/data-table/examples/Default.vue'
+import DataTableFiltering from '../../src/components/data-table/examples/FilteringAndColumns.vue'
+import DataTableSelection from '../../src/components/data-table/examples/Selection.vue'
+import DataTableServerSide from '../../src/components/data-table/examples/ServerSide.vue'
 import { axeViolations, mountComponent, settle, setTheme, themes } from './support'
+import NavigationMenuDefault from '../../src/components/navigation-menu/examples/Default.vue'
+import NavigationMenuLinksOnly from '../../src/components/navigation-menu/examples/LinksOnly.vue'
+import NavigationMenuWithoutViewport from '../../src/components/navigation-menu/examples/WithoutViewport.vue'
+import MenubarDefault from '../../src/components/menubar/examples/Default.vue'
+import MenubarOptions from '../../src/components/menubar/examples/Options.vue'
 
 let unmount: (() => void) | undefined
 afterEach(() => {
@@ -351,8 +391,9 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       toast.success('Success')
       toast.warning('Warning')
       toast.error('Destructive', { action: { label: 'Retry' } })
-      await settle(300)
-      expect(await axeViolations()).toEqual([])
+      await expect.poll(() => toasts().length, { message: 'every variant is rendered' }).toBe(4)
+      await expect.poll(() => toasts().every(t => t.getAttribute('data-state') === 'open')).toBe(true)
+      expect(await axeViolations()).toEqual([]) // waits for the slide-in animations to finish
     })
 
     it('runs an action from the keyboard and closes the toast', async () => {
@@ -1598,6 +1639,12 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
   })
 
   describe('ScrollArea', () => {
+    /** True once the scroll offset has not moved for two animation frames (smooth scrolling finished). */
+    async function scrollStable(vp: HTMLElement, key: 'scrollTop' | 'scrollLeft') {
+      const before = vp[key]
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+      return before === vp[key]
+    }
     const viewport = (el: Element) => el.querySelector<HTMLElement>('[data-slot="scroll-area-viewport"]')!
 
     it('is a named, keyboard focusable region that scrolls with arrows, Page Down, End and Home', async () => {
@@ -1610,19 +1657,17 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await userEvent.tab()
       expect(document.activeElement).toBe(vp)
       expect(vp.scrollTop).toBe(0)
+      // Chromium animates keyboard scrolling (smooth scroll): poll until the position has landed instead of sleeping.
       await userEvent.keyboard('{ArrowDown}')
-      await settle(100)
+      await expect.poll(() => vp.scrollTop, { message: 'ArrowDown scrolls' }).toBeGreaterThan(0)
+      await expect.poll(() => scrollStable(vp, 'scrollTop')).toBe(true)
       const afterArrow = vp.scrollTop
-      expect(afterArrow, 'ArrowDown scrolls').toBeGreaterThan(0)
       await userEvent.keyboard('{PageDown}')
-      await settle(150)
-      expect(vp.scrollTop, 'PageDown scrolls further').toBeGreaterThan(afterArrow)
+      await expect.poll(() => vp.scrollTop, { message: 'PageDown scrolls further' }).toBeGreaterThan(afterArrow)
       await userEvent.keyboard('{End}')
-      await settle(150)
-      expect(vp.scrollTop + vp.clientHeight).toBeGreaterThanOrEqual(vp.scrollHeight - 1)
+      await expect.poll(() => vp.scrollTop + vp.clientHeight, { message: 'End reaches the bottom' }).toBeGreaterThanOrEqual(vp.scrollHeight - 1)
       await userEvent.keyboard('{Home}')
-      await settle(150)
-      expect(vp.scrollTop).toBe(0)
+      await expect.poll(() => vp.scrollTop, { message: 'Home returns to the top' }).toBe(0)
     })
 
     it('scrolls a horizontal area with ArrowRight and ArrowLeft', async () => {
@@ -1633,11 +1678,10 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await userEvent.tab()
       expect(document.activeElement).toBe(vp)
       await userEvent.keyboard('{ArrowRight}')
-      await settle(100)
-      expect(vp.scrollLeft).toBeGreaterThan(0)
+      await expect.poll(() => vp.scrollLeft).toBeGreaterThan(0)
+      await expect.poll(() => scrollStable(vp, 'scrollLeft')).toBe(true)
       await userEvent.keyboard('{ArrowLeft}')
-      await settle(150)
-      expect(vp.scrollLeft, 'ArrowLeft scrolls back').toBe(0)
+      await expect.poll(() => vp.scrollLeft, { message: 'ArrowLeft scrolls back' }).toBe(0)
     })
 
     it('renders both scrollbars and the corner for orientation both, and the table stays readable', async () => {
@@ -1648,9 +1692,8 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(vp.scrollWidth).toBeGreaterThan(vp.clientWidth)
       await userEvent.tab()
       await userEvent.keyboard('{ArrowDown}{ArrowRight}')
-      await settle(150)
-      expect(vp.scrollTop).toBeGreaterThan(0)
-      expect(vp.scrollLeft).toBeGreaterThan(0)
+      await expect.poll(() => vp.scrollTop).toBeGreaterThan(0)
+      await expect.poll(() => vp.scrollLeft).toBeGreaterThan(0)
       expect(el.querySelector('table caption')?.textContent).toContain('Match scores')
     })
   })
@@ -2050,31 +2093,42 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(document.activeElement).toBe(trigger)
     })
 
+    // The delay is the point of these two tests, so the page's timers are faked: the clock is advanced by exact amounts
+    // instead of sleeping and hoping a loaded machine fires its timers on time. Only timers are faked; Vue, rAF and the
+    // animation clock stay real.
+    const fakeClock = () => vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    afterEach(() => vi.useRealTimers())
+
     it('opens after the hover delay and closes when the pointer leaves', async () => {
       setTheme(theme)
       const { el } = await show(TooltipDefault)
       const trigger = el.querySelector<HTMLElement>('button')!
+      fakeClock()
       await userEvent.hover(trigger)
-      await settle(700)
-      expect(tip()).not.toBeNull()
+      await vi.advanceTimersByTimeAsync(200)
+      expect(tip(), 'still closed inside the delay').toBeNull()
+      await vi.advanceTimersByTimeAsync(300) // the provider default is 400 ms
+      await expect.poll(tip).not.toBeNull()
       await userEvent.unhover(trigger)
-      await settle(400)
-      expect(tip()).toBeNull()
+      await vi.advanceTimersByTimeAsync(100)
+      vi.useRealTimers()
+      await expect.poll(tip).toBeNull()
     })
 
     it('shares the delay of a provider: the second tooltip opens at once after the first', async () => {
       setTheme(theme)
       const { el } = await show(TooltipIconButtons)
       const [bold, italic] = [...el.querySelectorAll<HTMLElement>('button')]
+      fakeClock()
       await userEvent.hover(bold!)
-      await settle(600)
-      expect(tip()?.textContent).toContain('Bold')
+      await vi.advanceTimersByTimeAsync(350) // this provider waits 300 ms for the first tooltip
+      await expect.poll(() => tip()?.textContent).toContain('Bold')
       await userEvent.hover(italic!)
       // A real mouse keeps moving; the second move happens once the pointer has left the first tooltip's grace area.
-      await settle(60)
       await userEvent.hover(italic!, { position: { x: 6, y: 6 } })
-      await settle(120)
-      expect(tip()?.textContent, 'no second delay inside the skip window').toContain('Italic')
+      // No clock advance past the 300 ms delay: inside the 500 ms skip window the second tooltip must already be open.
+      await vi.advanceTimersByTimeAsync(50)
+      await expect.poll(() => tip()?.textContent, { message: 'no second delay inside the skip window' }).toContain('Italic')
     })
 
     it('v-model:open follows the tooltip state', async () => {
@@ -2087,6 +2141,125 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await userEvent.keyboard('{Escape}')
       await settle(150)
       expect(el.textContent).toContain('open = false')
+    })
+  })
+
+  describe('ThemeSwitcher', () => {
+    // The switcher starts on the theme the page already has (here: `theme`) and changes data-theme on <html> like a visitor would.
+    const order = ['elf', 'nova', 'elfwood']
+    const names = ['Elf', 'Nova', 'Elfwood']
+    const start = order.indexOf(theme)
+    const at = (offset: number) => (start + offset + order.length) % order.length
+    const active = () => document.documentElement.dataset.theme
+    // Reka checks a radio from a 0ms timeout that requires the arrow key to still be down, so hold the key briefly like a person does.
+    const press = async (key: string) => {
+      const name = key.slice(1, -1)
+      await userEvent.keyboard(`{${name}>}`)
+      await settle(30)
+      await userEvent.keyboard(`{/${name}}`)
+      await settle()
+    }
+
+    it('buttons: a named radiogroup with the active theme checked', async () => {
+      setTheme(theme)
+      const { el } = await show(ThemeSwitcherButtons)
+      await expect.element(page.getByRole('radiogroup', { name: 'Theme' })).toBeInTheDocument()
+      const radios = [...el.querySelectorAll<HTMLElement>('[role="radio"]')]
+      expect(radios.map(r => r.textContent?.trim())).toEqual(names)
+      expect(radios.map(r => r.getAttribute('aria-checked'))).toEqual(order.map(name => String(name === theme)))
+    })
+
+    it('buttons: arrow keys select the next and previous theme, wrap around, and change data-theme', async () => {
+      setTheme(theme)
+      const { el } = await show(ThemeSwitcherButtons)
+      const radios = [...el.querySelectorAll<HTMLElement>('[role="radio"]')]
+      await userEvent.tab()
+      expect(document.activeElement).toBe(radios[start])
+      await press('{ArrowRight}')
+      expect(document.activeElement).toBe(radios[at(1)])
+      expect(radios[at(1)]!.getAttribute('aria-checked')).toBe('true')
+      expect(active()).toBe(order[at(1)])
+      await press('{ArrowDown}')
+      expect(active()).toBe(order[at(2)])
+      await press('{ArrowRight}')
+      expect(active(), 'wraps around').toBe(theme)
+      await press('{ArrowLeft}')
+      expect(active(), 'wraps backwards').toBe(order[at(2)])
+      await press('{ArrowUp}')
+      expect(active()).toBe(order[at(1)])
+      expect(radios.filter(r => r.getAttribute('aria-checked') === 'true')).toEqual([radios[at(1)]])
+    })
+
+    it('buttons: a click selects a theme and keyboard focus shows a ring', async () => {
+      setTheme(theme)
+      const { el } = await show(ThemeSwitcherButtons)
+      const radios = [...el.querySelectorAll<HTMLElement>('[role="radio"]')]
+      await userEvent.click(radios[at(1)]!)
+      expect(active()).toBe(order[at(1)])
+      expect(radios[at(1)]!.getAttribute('aria-checked')).toBe('true')
+      await userEvent.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(radios[at(2)])
+      expect(getComputedStyle(radios[at(2)]!).boxShadow, 'focus ring').not.toBe('none')
+    })
+
+    it('toggle: Enter and Space switch to the next theme and the name follows the state', async () => {
+      setTheme(theme)
+      const { el } = await show(ThemeSwitcherToggle)
+      const button = el.querySelector<HTMLElement>('button')!
+      expect(button.getAttribute('aria-label')).toBe(`Theme: ${names[start]}`)
+      await userEvent.tab()
+      expect(document.activeElement).toBe(button)
+      await userEvent.keyboard('{Enter}')
+      expect(active()).toBe(order[at(1)])
+      expect(button.getAttribute('aria-label')).toBe(`Theme: ${names[at(1)]}`)
+      await userEvent.keyboard(' ')
+      expect(active()).toBe(order[at(2)])
+      await userEvent.keyboard('{Enter}')
+      expect(active(), 'wraps around').toBe(theme)
+      expect(getComputedStyle(button).boxShadow, 'focus ring').not.toBe('none')
+    })
+
+    it('select: opens with Enter, moves with the arrows, selects with Enter and returns focus to the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(ThemeSwitcherDefault)
+      const trigger = el.querySelector<HTMLElement>('[role="combobox"]')!
+      await expect.element(page.getByRole('combobox', { name: 'Theme' })).toBeInTheDocument()
+      await userEvent.tab()
+      expect(document.activeElement).toBe(trigger)
+      await userEvent.keyboard('{Enter}')
+      await settle(150)
+      expect(document.querySelectorAll('[role="option"]')).toHaveLength(3)
+      // The highlight starts on the active theme: one ArrowDown reaches the next (or wraps to the first from the last).
+      await userEvent.keyboard(start === order.length - 1 ? '{Home}{Enter}' : '{ArrowDown}{Enter}')
+      await settle(150)
+      expect(active()).toBe(order[start === order.length - 1 ? 0 : at(1)])
+      const chosen = active()
+      expect(trigger.textContent).toContain(names[order.indexOf(chosen!)])
+      expect(document.activeElement).toBe(trigger)
+      await userEvent.keyboard('{Enter}')
+      await settle(150)
+      await userEvent.keyboard('{Escape}')
+      await settle(150)
+      expect(document.querySelector('[role="listbox"]')).toBeNull()
+      expect(active(), 'Escape leaves the theme unchanged').toBe(chosen)
+    })
+
+    it('labels rename the themes and the name of the control; themes limits the choices', async () => {
+      setTheme(theme)
+      const labelled = await show(ThemeSwitcherLabels)
+      await expect.element(page.getByRole('radiogroup', { name: 'Color scheme' })).toBeInTheDocument()
+      expect([...labelled.el.querySelectorAll('[role="radio"]')].map(r => r.textContent?.trim())).toEqual(['Violet', 'Gold', 'Light'])
+      labelled.unmount()
+      const subset = await show(ThemeSwitcherTwoThemes)
+      expect([...subset.el.querySelectorAll('[role="radio"]')].map(r => r.textContent?.trim())).toEqual(['Dark', 'Light'])
+    })
+
+    it('has no axe violations with the select open', async () => {
+      setTheme(theme)
+      const { el } = await show(ThemeSwitcherDefault)
+      await userEvent.click(el.querySelector('[role="combobox"]')!)
+      await settle(400)
+      expect(await axeViolations(document, { menuOpen: true })).toEqual([])
     })
   })
 
@@ -2124,6 +2297,441 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
     })
   })
 
+  describe('Breadcrumb', () => {
+    it('is a labelled landmark whose links are Tab stops and whose current page is not', async () => {
+      setTheme(theme)
+      const { el } = await show(BreadcrumbDefault)
+      const nav = el.querySelector<HTMLElement>('nav[aria-label="Breadcrumb"]')!
+      expect(nav).not.toBeNull()
+      const links = [...nav.querySelectorAll<HTMLElement>('a[href]')]
+      expect(links.length).toBe(2)
+      await userEvent.tab()
+      expect(document.activeElement).toBe(links[0])
+      await userEvent.tab()
+      expect(document.activeElement).toBe(links[1])
+      await userEvent.tab()
+      expect(nav.contains(document.activeElement), 'the current page must not take focus').toBe(false)
+      expect(nav.querySelector('[aria-current="page"]')?.textContent).toBe('Breadcrumb')
+    })
+
+    it('has a visible focus ring on links', async () => {
+      setTheme(theme)
+      const { el } = await show(BreadcrumbDefault)
+      const first = el.querySelector<HTMLElement>('[data-slot="breadcrumb-link"]')!
+      first.focus()
+      await userEvent.keyboard('{Tab}{Shift>}{Tab}{/Shift}') // keyboard modality, so :focus-visible matches
+      const link = document.activeElement as HTMLElement
+      expect(link).toBe(first)
+      const style = getComputedStyle(link)
+      expect(style.boxShadow !== 'none' || style.outlineStyle !== 'none', 'focus indicator is drawn').toBe(true)
+      expect(el.contains(link)).toBe(true)
+    })
+
+    it('opens the collapsed levels from the ellipsis, navigates with arrows and returns focus on Escape', async () => {
+      setTheme(theme)
+      const { el } = await show(BreadcrumbCollapsed)
+      const trigger = el.querySelector<HTMLElement>('[aria-haspopup="menu"]')!
+      trigger.focus()
+      await userEvent.keyboard('{Enter}')
+      await settle(400)
+      const items = () => [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')]
+      expect(items().length).toBe(3)
+      expect(document.activeElement).toBe(items()[0])
+      await userEvent.keyboard('{ArrowDown}')
+      expect(document.activeElement).toBe(items()[1])
+      await userEvent.keyboard('{Escape}')
+      await settle(300)
+      expect(document.querySelector('[role="menu"]')).toBeNull()
+      expect(document.activeElement).toBe(trigger)
+    })
+  })
+
+  describe('Pagination', () => {
+    const buttons = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('nav button:not([disabled])')]
+    const current = (el: HTMLElement) => el.querySelector<HTMLElement>('[aria-current="page"]')!.textContent
+
+    it('is a labelled landmark with a Tab stop per enabled button and the current page marked', async () => {
+      setTheme(theme)
+      const { el } = await show(PaginationDefault)
+      expect(el.querySelector('nav[aria-label="Pagination"]')).not.toBeNull()
+      expect(current(el)).toBe('5')
+      await userEvent.tab()
+      expect(document.activeElement).toBe(buttons(el)[0])
+      await userEvent.tab()
+      expect(document.activeElement).toBe(buttons(el)[1])
+    })
+
+    it('changes page with Enter and Space and updates v-model', async () => {
+      setTheme(theme)
+      const { el } = await show(PaginationDefault)
+      const page = (n: string) => buttons(el).find(b => b.textContent?.trim() === n)!
+      page('6').focus()
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(current(el)).toBe('6')
+      expect(el.textContent).toContain('Page 6 of 10')
+      page('7').focus()
+      await userEvent.keyboard(' ')
+      await settle()
+      expect(current(el)).toBe('7')
+    })
+
+    it('previous and next move one page and are disabled at the ends', async () => {
+      setTheme(theme)
+      const { el } = await show(PaginationWithEdges)
+      const prev = () => el.querySelector<HTMLButtonElement>('[data-slot="pagination-prev"]')!
+      const next = () => el.querySelector<HTMLButtonElement>('[data-slot="pagination-next"]')!
+      expect(prev().disabled).toBe(true)
+      expect(el.querySelector<HTMLButtonElement>('[data-slot="pagination-first"]')!.disabled).toBe(true)
+      next().focus()
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(current(el)).toBe('2')
+      expect(prev().disabled).toBe(false)
+      el.querySelector<HTMLElement>('[data-slot="pagination-last"]')!.focus()
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(current(el)).toBe('50')
+      expect(next().disabled).toBe(true)
+    })
+
+    it('does not make disabled controls focusable', async () => {
+      setTheme(theme)
+      const { el } = await show(PaginationDisabled)
+      expect(el.querySelectorAll('nav button:not([disabled])').length).toBe(0)
+      await userEvent.tab()
+      expect(el.contains(document.activeElement)).toBe(false)
+    })
+
+    it('simple pagination steps through pages and shows the status', async () => {
+      setTheme(theme)
+      const { el } = await show(PaginationSimple)
+      const status = () => el.querySelector('[data-slot="simple-pagination-status"]')!.textContent?.trim()
+      expect(status()).toBe('Page 1 of 5')
+      el.querySelector<HTMLElement>('[data-slot="simple-pagination-next"]')!.focus()
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(status()).toBe('Page 2 of 5')
+    })
+
+    it('draws a visible focus indicator on a page button', async () => {
+      setTheme(theme)
+      const { el } = await show(PaginationDefault)
+      await userEvent.tab()
+      const style = getComputedStyle(document.activeElement as HTMLElement)
+      expect(style.boxShadow !== 'none' || style.outlineStyle !== 'none', 'focus indicator is drawn').toBe(true)
+      expect(el.contains(document.activeElement)).toBe(true)
+    })
+  })
+
+  describe('Toggle', () => {
+    it('presses with Space and Enter and reflects aria-pressed', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleDefault)
+      const toggle = el.querySelector<HTMLElement>('[data-slot="toggle"]')!
+      expect(toggle.getAttribute('aria-pressed')).toBe('false')
+      toggle.focus()
+      await userEvent.keyboard(' ')
+      await settle()
+      expect(toggle.getAttribute('aria-pressed')).toBe('true')
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(toggle.getAttribute('aria-pressed')).toBe('false')
+    })
+
+    it('v-model drives the pressed state and the label', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleWithText)
+      expect(el.textContent).toContain('Notifications are off')
+      await userEvent.click(el.querySelector<HTMLElement>('[data-slot="toggle"]')!)
+      await settle()
+      expect(el.textContent).toContain('Notifications are on')
+    })
+
+    it('shows a distinct pressed background and a visible focus ring', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleWithText)
+      const toggle = el.querySelector<HTMLElement>('[data-slot="toggle"]')!
+      const off = getComputedStyle(toggle).backgroundColor
+      await userEvent.click(toggle)
+      await settle(250)
+      expect(getComputedStyle(toggle).backgroundColor).not.toBe(off)
+      toggle.blur()
+      await userEvent.tab()
+      await settle()
+      expect(document.activeElement).toBe(toggle)
+      expect(getComputedStyle(toggle).boxShadow).not.toBe('none')
+    })
+
+    it('does not respond while disabled and is skipped by Tab', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleDisabled)
+      const toggles = [...el.querySelectorAll<HTMLButtonElement>('[data-slot="toggle"]')]
+      expect(toggles.every(t => t.disabled)).toBe(true)
+      expect(toggles[1]!.getAttribute('aria-pressed')).toBe('true')
+      await userEvent.tab()
+      expect(el.contains(document.activeElement) && document.activeElement !== document.body).toBe(false)
+    })
+  })
+
+  describe('ToggleGroup', () => {
+    const items = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('[data-slot="toggle-group-item"]')]
+
+    it('single: is one tab stop; arrows, Home and End move focus (roving) and Space selects', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleGroupSingle)
+      expect(el.querySelector('[data-slot="toggle-group"]')!.getAttribute('aria-label')).toBe('Sort posts')
+      items(el)[0]!.focus()
+      await userEvent.tab()
+      expect(el.contains(document.activeElement), 'the group is one tab stop').toBe(false)
+      items(el)[0]!.focus()
+      await userEvent.keyboard('{ArrowRight}')
+      await settle()
+      expect(document.activeElement).toBe(items(el)[1])
+      await userEvent.keyboard(' ')
+      await settle()
+      expect(el.textContent).toContain('Sorted by: top')
+      await userEvent.keyboard('{End}')
+      expect(document.activeElement).toBe(items(el)[2])
+      await userEvent.keyboard('{Home}')
+      expect(document.activeElement).toBe(items(el)[0])
+      await userEvent.keyboard('{ArrowLeft}')
+      expect(document.activeElement, 'wraps to the last item').toBe(items(el)[2])
+    })
+
+    it('single: pressing the active item clears the value', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleGroupSingle)
+      await userEvent.click(items(el)[0]!)
+      await settle()
+      expect(el.textContent).toContain('Sorted by: nothing')
+      expect(items(el).every(i => i.getAttribute('data-state') === 'off')).toBe(true)
+    })
+
+    it('multiple: items toggle independently by keyboard', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleGroupMultiple)
+      expect(el.textContent).toContain('Active: bold')
+      items(el)[0]!.focus()
+      await userEvent.keyboard('{ArrowRight}')
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(el.textContent).toContain('Active: bold, italic')
+      await userEvent.keyboard('{ArrowLeft}')
+      await userEvent.keyboard(' ')
+      await settle()
+      expect(el.textContent).toContain('Active: italic')
+      expect(items(el).map(i => i.getAttribute('aria-pressed'))).toEqual(['false', 'true', 'false'])
+    })
+  })
+
+  describe('AspectRatio', () => {
+    it('keeps the frame at the requested width to height ratio', async () => {
+      setTheme(theme)
+      const { el } = await show(AspectRatioDefault)
+      const frame = el.querySelector<HTMLElement>('[data-slot="aspect-ratio"]')!
+      const rect = frame.getBoundingClientRect()
+      expect(rect.width).toBeGreaterThan(100)
+      expect(rect.width / rect.height).toBeCloseTo(16 / 9, 1)
+      const img = frame.querySelector('img')!
+      expect(img.getBoundingClientRect().height).toBeCloseTo(rect.height, 0)
+    })
+
+    it('supports several ratios side by side', async () => {
+      setTheme(theme)
+      const { el } = await show(AspectRatioRatios)
+      const ratios = [...el.querySelectorAll<HTMLElement>('[data-slot="aspect-ratio"]')].map((f) => {
+        const r = f.getBoundingClientRect()
+        return r.width / r.height
+      })
+      expect(ratios[0]).toBeCloseTo(1, 1)
+      expect(ratios[1]).toBeCloseTo(4 / 3, 1)
+      expect(ratios[2]).toBeCloseTo(16 / 9, 1)
+      expect(ratios[3]).toBeCloseTo(21 / 9, 1)
+    })
+  })
+
+  describe('NavigationMenu', () => {
+    const triggers = (el: Element) => [...el.querySelectorAll<HTMLElement>('[data-slot="navigation-menu-trigger"]')]
+    const panel = () => document.querySelector<HTMLElement>('[data-slot="navigation-menu-content"]')
+
+    it('opens a flyout from the keyboard, moves into its links with Tab and closes with Escape back to the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(NavigationMenuDefault)
+      const [first, second] = triggers(el)
+      expect(el.querySelector('nav')).not.toBeNull()
+      await userEvent.tab()
+      expect(document.activeElement).toBe(first)
+      expect(first!.getAttribute('aria-expanded')).toBe('false')
+      expect(panel()).toBeNull()
+      await userEvent.keyboard('{Enter}')
+      await settle(300)
+      expect(first!.getAttribute('aria-expanded')).toBe('true')
+      expect(panel()?.textContent).toContain('Installation')
+      expect(document.querySelector('[data-slot="navigation-menu-viewport"]')?.contains(panel())).toBe(true)
+      await userEvent.tab()
+      expect((document.activeElement as HTMLElement).textContent).toContain('Installation')
+      await userEvent.keyboard('{Escape}')
+      await settle(300)
+      expect(panel()).toBeNull()
+      expect(first!.getAttribute('aria-expanded')).toBe('false')
+      expect(document.activeElement, 'focus returned to the trigger').toBe(first)
+      await userEvent.keyboard('{ArrowRight}')
+      expect(document.activeElement, 'ArrowRight moves along the top level').toBe(second)
+    })
+
+    it('opens on click, switches panels when another trigger is used and Escape closes it', async () => {
+      setTheme(theme)
+      const { el } = await show(NavigationMenuDefault)
+      const [first, second] = triggers(el)
+      await userEvent.click(first!)
+      await settle(300)
+      expect(first!.getAttribute('aria-expanded')).toBe('true')
+      await userEvent.click(second!)
+      await settle(300)
+      expect(first!.getAttribute('aria-expanded')).toBe('false')
+      expect(second!.getAttribute('aria-expanded')).toBe('true')
+      expect(panel()?.textContent).toContain('Dialog')
+      await userEvent.keyboard('{Escape}')
+      await settle(300)
+      expect(second!.getAttribute('aria-expanded')).toBe('false')
+    })
+
+    it('keeps each panel under its own item without a viewport', async () => {
+      setTheme(theme)
+      const { el } = await show(NavigationMenuWithoutViewport)
+      expect(el.querySelector('[data-slot="navigation-menu"]')!.getAttribute('data-viewport')).toBe('false')
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(300)
+      expect(el.querySelector('[data-slot="navigation-menu-item"] [data-slot="navigation-menu-content"]')).not.toBeNull()
+      expect(document.querySelector('[data-slot="navigation-menu-viewport"]')).toBeNull()
+    })
+
+    it('marks the active link as the current page and gives top-level links a visible focus ring', async () => {
+      setTheme(theme)
+      const { el } = await show(NavigationMenuLinksOnly)
+      const current = el.querySelector<HTMLElement>('[aria-current="page"]')!
+      expect(current.textContent).toContain('Home')
+      await userEvent.tab()
+      expect(document.activeElement).toBe(current)
+      expect(getComputedStyle(current).boxShadow, 'focus ring').not.toBe('none')
+    })
+  })
+
+  describe('Menubar', () => {
+    const triggers = (el: Element) => [...el.querySelectorAll<HTMLElement>('[data-slot="menubar-trigger"]')]
+    const menu = () => document.querySelector<HTMLElement>('[role="menu"]')
+    const active = () => document.activeElement as HTMLElement
+    const label = (e: HTMLElement) => e.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+
+    it('is one tab stop; arrow keys move along the bar and wrap around', async () => {
+      setTheme(theme)
+      const { el } = await show(MenubarDefault)
+      const [file, edit, help] = triggers(el)
+      expect(el.querySelector('[role="menubar"]')).not.toBeNull()
+      await userEvent.tab()
+      expect(document.activeElement).toBe(file)
+      await userEvent.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(edit)
+      await userEvent.keyboard('{ArrowRight}{ArrowRight}')
+      expect(document.activeElement, 'wraps to the first trigger').toBe(file)
+      await userEvent.keyboard('{ArrowLeft}')
+      expect(document.activeElement).toBe(help)
+      await userEvent.keyboard('{Home}')
+      expect(document.activeElement).toBe(file)
+    })
+
+    it('opens with Enter, Space and ArrowDown, focuses the first item and Escape returns focus to the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(MenubarDefault)
+      const [file] = triggers(el)
+      await userEvent.tab()
+      expect(file!.getAttribute('aria-expanded')).toBe('false')
+      for (const key of ['{Enter}', ' ', '{ArrowDown}']) {
+        await userEvent.keyboard(key)
+        await settle(200)
+        expect(menu(), `${key} opens the menu`).not.toBeNull()
+        expect(file!.getAttribute('aria-expanded')).toBe('true')
+        expect(label(active())).toContain('New lesson')
+        await userEvent.keyboard('{Escape}')
+        await settle(200)
+        expect(menu()).toBeNull()
+        expect(document.activeElement, 'focus returned to the trigger').toBe(file)
+      }
+    })
+
+    it('ArrowRight and ArrowLeft inside an open menu switch to the neighbouring menu; sub menus open with ArrowRight', async () => {
+      setTheme(theme)
+      const { el } = await show(MenubarDefault)
+      const [file] = triggers(el)
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      await userEvent.keyboard('{ArrowDown}{ArrowDown}')
+      expect(label(active())).toContain('Export')
+      await userEvent.keyboard('{ArrowRight}')
+      await settle(200)
+      expect(label(active())).toContain('Markdown')
+      await userEvent.keyboard('{ArrowLeft}')
+      await settle(200)
+      expect(label(active())).toContain('Export')
+      expect(file!.getAttribute('aria-expanded')).toBe('true')
+      await userEvent.keyboard('{Home}{ArrowLeft}')
+      await settle(200)
+      expect(triggers(el)[2]!.getAttribute('aria-expanded'), 'ArrowLeft from the first menu wraps to the last').toBe('true')
+      expect(file!.getAttribute('aria-expanded')).toBe('false')
+    })
+
+    it('skips disabled items, supports typeahead and Enter activates and closes', async () => {
+      setTheme(theme)
+      const { el } = await show(MenubarDefault)
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      await userEvent.keyboard('{End}')
+      expect(label(active()), 'the disabled Print item is skipped').toContain('Export')
+      await userEvent.keyboard('{Home}sa')
+      await settle(100)
+      expect(label(active())).toContain('Save')
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(menu()).toBeNull()
+      expect(document.activeElement).toBe(triggers(el)[0])
+    })
+
+    it('opens on click and then follows the pointer between triggers while a menu is open', async () => {
+      setTheme(theme)
+      const { el } = await show(MenubarDefault)
+      const [file, edit] = triggers(el)
+      await userEvent.click(file!)
+      await settle(200)
+      expect(file!.getAttribute('aria-expanded')).toBe('true')
+      await userEvent.hover(edit!)
+      await settle(200)
+      expect(edit!.getAttribute('aria-expanded')).toBe('true')
+      expect(file!.getAttribute('aria-expanded')).toBe('false')
+    })
+
+    it('toggles a checkbox item with Enter (closing the menu) and selects a radio item', async () => {
+      setTheme(theme)
+      const { el } = await show(MenubarOptions)
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      const checks = [...document.querySelectorAll<HTMLElement>('[role="menuitemcheckbox"]')]
+      expect(checks.map(c => c.getAttribute('aria-checked'))).toEqual(['true', 'false'])
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(el.textContent).toContain('Preview off')
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      await userEvent.click([...document.querySelectorAll<HTMLElement>('[role="menuitemradio"]')][0]!)
+      await settle(200)
+      expect(el.textContent).toContain('layout editor')
+    })
+  })
+
   describe('Tabs fixture sanity', () => {
     it('supports an inline Tabs composition', async () => {
       setTheme(theme)
@@ -2137,6 +2745,382 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await settle()
       expect(el.textContent).toContain('Panel B')
       expect(el.textContent).not.toContain('Panel A')
+    })
+  })
+
+  describe('Table', () => {
+    it('is a native table named by its caption', async () => {
+      setTheme(theme)
+      const { el } = await show(TableDefault)
+      const table = el.querySelector('table')!
+      expect(table.caption?.textContent).toBe('Qualification matches')
+      expect(el.querySelectorAll('th[scope="col"]').length).toBe(4)
+      expect(el.querySelector('tfoot')).not.toBeNull()
+    })
+
+    it('puts a scrollable table in the tab order only while it overflows', async () => {
+      setTheme(theme)
+      const wrapper = document.createElement('div')
+      wrapper.style.width = '200px'
+      document.body.append(wrapper)
+      const mounted = await mountComponent(TableDefault)
+      wrapper.append(mounted.el)
+      await settle(100)
+      unmount = () => {
+        mounted.unmount()
+        wrapper.remove()
+      }
+      const container = mounted.el.querySelector<HTMLElement>('[data-slot="table-container"]')!
+      expect(container.scrollWidth).toBeGreaterThan(container.clientWidth)
+      expect(container.getAttribute('tabindex')).toBe('0')
+      expect(container.getAttribute('role')).toBe('region')
+      expect(container.getAttribute('aria-label')).toBe('Qualification matches')
+      await userEvent.tab()
+      expect(document.activeElement).toBe(container)
+      wrapper.style.width = '1000px'
+      await settle(100)
+      expect(container.hasAttribute('tabindex')).toBe(false)
+    })
+
+    it('keeps the header sticky inside a height-limited container', async () => {
+      setTheme(theme)
+      const { el } = await show(TableSticky)
+      const head = el.querySelector<HTMLElement>('th')!
+      expect(getComputedStyle(head).position).toBe('sticky')
+      const container = el.querySelector<HTMLElement>('[data-slot="table-container"]')!
+      container.scrollTop = 200
+      await settle(50)
+      const top = container.getBoundingClientRect().top
+      expect(Math.abs(head.getBoundingClientRect().top - top)).toBeLessThan(3)
+    })
+
+    it('sorts from a keyboard-operable header button and updates aria-sort', async () => {
+      setTheme(theme)
+      const { el } = await show(TableSortable)
+      const heads = [...el.querySelectorAll<HTMLElement>('th')]
+      const cells = () => [...el.querySelectorAll('tbody tr td:first-child')].map(c => c.textContent?.trim())
+      expect(heads[0]!.getAttribute('aria-sort')).toBe('ascending')
+      expect(heads[1]!.getAttribute('aria-sort')).toBe('none')
+      expect(cells()).toEqual(['Climber', 'Intake', 'Swerve drive'])
+      await userEvent.tab()
+      expect(document.activeElement).toBe(heads[0]!.querySelector('button'))
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(heads[0]!.getAttribute('aria-sort')).toBe('descending')
+      expect(cells()).toEqual(['Swerve drive', 'Intake', 'Climber'])
+      await userEvent.tab()
+      await userEvent.keyboard(' ')
+      await settle()
+      expect(heads[0]!.getAttribute('aria-sort')).toBe('none')
+      expect(heads[1]!.getAttribute('aria-sort')).toBe('ascending')
+      expect(cells()).toEqual(['Intake', 'Climber', 'Swerve drive'])
+    })
+
+    it('stacks rows as cards below the sm breakpoint only', async () => {
+      setTheme(theme)
+      const { el } = await show(TableStack)
+      const row = el.querySelector<HTMLElement>('tbody tr')!
+      const stacked = window.innerWidth < 640
+      expect(getComputedStyle(row).display).toBe(stacked ? 'block' : 'table-row')
+      expect(el.querySelector('table')!.getAttribute('role')).toBe('table')
+      expect(el.querySelector('td')!.getAttribute('data-label')).toBe('Name')
+    })
+  })
+
+  describe('Empty', () => {
+    it('shows the title as a heading and keeps the actions reachable by keyboard', async () => {
+      setTheme(theme)
+      const { el } = await show(EmptyDefault)
+      expect(el.querySelector('h3')?.textContent).toBe('No projects yet')
+      const buttons = [...el.querySelectorAll('button')]
+      await userEvent.tab()
+      expect(document.activeElement).toBe(buttons[0])
+      await userEvent.tab()
+      expect(document.activeElement).toBe(buttons[1])
+      expect(getComputedStyle(el.querySelector('[data-slot="empty"]')!).borderTopStyle).toBe('dashed')
+    })
+  })
+
+  describe('StatCard', () => {
+    it('makes the whole card clickable through the stretched link and shows focus on the card', async () => {
+      setTheme(theme)
+      const { el } = await show(StatCardAsLink)
+      const card = el.querySelector<HTMLElement>('[data-slot="stat-card"]')!
+      const link = el.querySelector<HTMLAnchorElement>('a')!
+      await userEvent.tab()
+      expect(document.activeElement).toBe(link)
+      expect(getComputedStyle(card).boxShadow).not.toBe('none')
+      const box = card.getBoundingClientRect()
+      const linkBox = link.getBoundingClientRect()
+      expect(linkBox.width).toBeLessThan(box.width)
+      const after = getComputedStyle(link, '::after')
+      expect(after.position).toBe('absolute')
+    })
+
+    it('marks loading cards busy and announces the loading label', async () => {
+      setTheme(theme)
+      const { el } = await show(StatCardLoading)
+      const cards = el.querySelectorAll('[data-slot="stat-card"]')
+      expect(cards.length).toBe(2)
+      for (const c of cards) {
+        expect(c.getAttribute('aria-busy')).toBe('true')
+        expect(c.querySelector('[role="status"]')?.textContent).toContain('Loading')
+        expect(c.querySelector('[data-slot="stat-card-value"]')).toBeNull()
+      }
+    })
+
+    it('colors the trend of a toned card with the readable text tokens', async () => {
+      setTheme(theme)
+      const { el } = await show(StatCardTones)
+      const trend = (tone: string) => getComputedStyle(el.querySelector(`[data-tone="${tone}"] [data-slot="stat-card-trend"]`)!).color
+      const probe = (token: string) => {
+        const d = document.createElement('div')
+        d.style.color = `var(--elf-${token})`
+        el.append(d)
+        const c = getComputedStyle(d).color
+        d.remove()
+        return c
+      }
+      expect(trend('success')).toBe(probe('success-text'))
+      expect(trend('warning')).toBe(probe('warning-text'))
+      expect(trend('destructive')).toBe(probe('destructive-text'))
+    })
+  })
+
+  describe('Stepper', () => {
+    const triggers = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('[data-slot="stepper-trigger"]')]
+    const states = (el: HTMLElement) => [...el.querySelectorAll('[data-slot="stepper-item"]')].map(i => i.getAttribute('data-state'))
+    const buttons = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('button')].filter(b => !b.matches('[data-slot="stepper-trigger"]'))
+
+    it('lists the steps as a labelled group with the active one marked', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperDefault)
+      const root = el.querySelector<HTMLElement>('[data-slot="stepper"]')!
+      expect(root.getAttribute('role')).toBe('group')
+      expect(root.getAttribute('aria-label')).toBe('New item')
+      expect(states(el)).toEqual(['completed', 'active', 'inactive'])
+      expect(el.querySelectorAll('[aria-current="true"]')).toHaveLength(1)
+    })
+
+    it('moves focus between triggers with the arrow keys and stops at the ends', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperNonLinear)
+      const [first, second, third] = triggers(el)
+      first!.focus()
+      await userEvent.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(second)
+      await userEvent.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(third)
+      await userEvent.keyboard('{ArrowRight}')
+      expect(document.activeElement, 'does not wrap').toBe(third)
+      await userEvent.keyboard('{ArrowLeft}')
+      expect(document.activeElement).toBe(second)
+    })
+
+    it('vertical orientation uses the up and down arrow keys', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperVertical)
+      const [first, second] = triggers(el)
+      first!.focus()
+      await userEvent.keyboard('{ArrowDown}')
+      expect(document.activeElement).toBe(second)
+      await userEvent.keyboard('{ArrowUp}')
+      expect(document.activeElement).toBe(first)
+    })
+
+    it('Enter and Space select the focused step; Tab leaves the stepper', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperNonLinear)
+      const [, second, third] = triggers(el)
+      second!.focus()
+      await userEvent.keyboard('{Enter}')
+      expect(states(el)).toEqual(['completed', 'active', 'inactive'])
+      third!.focus()
+      await userEvent.keyboard(' ')
+      expect(states(el)).toEqual(['completed', 'completed', 'active'])
+      await userEvent.keyboard('{Tab}')
+      expect(triggers(el).includes(document.activeElement as HTMLElement)).toBe(false)
+    })
+
+    it('linear: a step more than one ahead cannot be reached, the next one can', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperControlled)
+      const [first, second, third] = triggers(el)
+      expect(third!.hasAttribute('disabled')).toBe(true)
+      await userEvent.click(second!)
+      expect(el.textContent).toContain('step = 2')
+      await userEvent.click(third!)
+      expect(el.textContent).toContain('step = 3')
+      await userEvent.click(first!)
+      expect(el.textContent).toContain('step = 1')
+    })
+
+    it('non-linear skips nothing but disabled steps stay unselectable', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperDisabled)
+      const [first, locked, last] = triggers(el)
+      expect(locked!.hasAttribute('disabled')).toBe(true)
+      first!.focus()
+      await userEvent.click(locked!, { force: true }).catch(() => {})
+      expect(states(el)[1]).not.toBe('active')
+      await userEvent.click(last!)
+      expect(states(el)[2]).toBe('active')
+    })
+
+    it('Back and Next buttons move through the steps', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperDefault)
+      const [back, next] = buttons(el)
+      await userEvent.click(next!)
+      expect(states(el)).toEqual(['completed', 'completed', 'active'])
+      expect(next!.hasAttribute('disabled')).toBe(true)
+      await userEvent.click(back!)
+      await userEvent.click(back!)
+      expect(states(el)).toEqual(['active', 'inactive', 'inactive'])
+      expect(back!.hasAttribute('disabled')).toBe(true)
+    })
+
+    it('announces the position in a status region', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperDefault)
+      await settle(50)
+      expect(el.querySelector('[role="status"]')!.textContent?.trim()).toBe('Step 2 of 3')
+    })
+
+    it('shows a focus ring on the trigger and fits a 360px screen', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperDefault)
+      triggers(el)[0]!.focus()
+      await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+      await userEvent.keyboard('{Tab}')
+      expect(getComputedStyle(document.activeElement!).boxShadow).not.toBe('none')
+      expect(el.scrollWidth).toBeLessThanOrEqual(el.clientWidth + 1)
+    })
+  })
+
+  describe('DataTable', () => {
+    const headerButton = (el: HTMLElement, name: string) => [...el.querySelectorAll<HTMLButtonElement>('thead th button')].find(b => b.textContent?.trim() === name)!
+    const firstColumn = (el: HTMLElement) => [...el.querySelectorAll('tbody tr')].map(tr => tr.querySelector('td')?.textContent?.trim())
+    /** Both paginations are in the DOM; the one for the current width is displayed. */
+    const visibleNav = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('nav')].find(n => n.getClientRects().length > 0)!
+
+    it('sorts from the keyboard with Enter and Space and keeps aria-sort on the th in sync', async () => {
+      setTheme(theme)
+      const { el } = await show(DataTableDefault)
+      const button = headerButton(el, 'Part')
+      const th = button.closest('th')!
+      expect(button.tagName).toBe('BUTTON')
+      expect(th.getAttribute('aria-sort')).toBe('none')
+      expect(el.querySelector('thead th:nth-child(3)')!.getAttribute('aria-sort')).toBe('descending')
+
+      button.focus()
+      await userEvent.keyboard('{Enter}')
+      expect(th.getAttribute('aria-sort')).toBe('ascending')
+      expect(el.querySelector('thead th:nth-child(3)')!.getAttribute('aria-sort')).toBe('none')
+      expect(firstColumn(el)[0]).toBe('Battery mount')
+      expect(document.activeElement, 'focus stays on the sort button').toBe(button)
+
+      await userEvent.keyboard(' ')
+      expect(th.getAttribute('aria-sort')).toBe('descending')
+      expect(firstColumn(el)[0]).toBe('Wrist gearbox')
+    })
+
+    it('selects all rows of the page with the header checkbox and single rows with Space', async () => {
+      setTheme(theme)
+      const { el } = await show(DataTableSelection)
+      const all = el.querySelector<HTMLElement>('[aria-label="Select all rows"]')!
+      const rows = () => [...el.querySelectorAll<HTMLElement>('tbody [aria-label="Select row"]')]
+      expect(rows()).toHaveLength(5)
+      expect(all.getAttribute('aria-checked'), 'one row is preselected').toBe('mixed')
+
+      await userEvent.click(all)
+      expect(all.getAttribute('aria-checked')).toBe('true')
+      expect(rows().every(r => r.getAttribute('aria-checked') === 'true')).toBe(true)
+      expect(el.textContent).toContain('5 of 5 row(s) selected')
+      expect(el.textContent).toMatch(/Selected ids: (m\d(, )?){5}/)
+
+      await userEvent.click(all)
+      expect(all.getAttribute('aria-checked')).toBe('false')
+      expect(el.textContent).toContain('0 of 5 row(s) selected')
+
+      rows()[2]!.focus()
+      await userEvent.keyboard(' ')
+      expect(rows()[2]!.getAttribute('aria-checked')).toBe('true')
+      expect(el.querySelectorAll('tbody tr')[2]!.getAttribute('data-state')).toBe('selected')
+      expect(all.getAttribute('aria-checked')).toBe('mixed')
+    })
+
+    it('moves between pages with the pagination controls', async () => {
+      setTheme(theme)
+      const { el } = await show(DataTableDefault)
+      const first = firstColumn(el)
+      expect(first).toHaveLength(5)
+      const nav = visibleNav(el)
+      const next = nav.querySelector<HTMLElement>('[data-slot="pagination-next"], [data-slot="simple-pagination-next"]')!
+      const prev = nav.querySelector<HTMLElement>('[data-slot="pagination-prev"], [data-slot="simple-pagination-prev"]')!
+      expect(prev.hasAttribute('disabled')).toBe(true)
+
+      await userEvent.click(next)
+      expect(firstColumn(el)).not.toEqual(first)
+      expect(firstColumn(el)).toHaveLength(5)
+      expect(prev.hasAttribute('disabled')).toBe(false)
+
+      await userEvent.click(next)
+      expect(firstColumn(el)).toHaveLength(2)
+      expect(next.hasAttribute('disabled')).toBe(true)
+
+      await userEvent.click(prev)
+      await userEvent.click(prev)
+      expect(firstColumn(el)).toEqual(first)
+    })
+
+    it('filters with the search input, toggles columns from a menu that stays open, and fits 360px', async () => {
+      setTheme(theme)
+      const { el } = await show(DataTableFiltering)
+      const headers = () => [...el.querySelectorAll('thead th')].map(th => th.textContent?.trim())
+      expect(headers()).toEqual(['Match', 'Opponent', 'Result', 'Score'])
+
+      const search = el.querySelector<HTMLInputElement>('input[type="search"]')!
+      await userEvent.fill(search, 'team 1')
+      await expect.poll(() => firstColumn(el)).toEqual(['Q24', 'P2', 'P5'])
+
+      await userEvent.click([...el.querySelectorAll<HTMLElement>('button')].find(b => b.textContent?.includes('Columns'))!)
+      await expect.poll(() => document.querySelector('[role="menu"]')).not.toBeNull()
+      const items = [...document.querySelectorAll<HTMLElement>('[role="menuitemcheckbox"]')]
+      expect(items.map(i => i.textContent?.trim())).toEqual(['Match', 'Event', 'Opponent', 'Result', 'Score'])
+      expect(items.map(i => i.getAttribute('aria-checked'))).toEqual(['true', 'false', 'true', 'true', 'true'])
+
+      await userEvent.click(items[1]!)
+      expect(headers()).toContain('Event')
+      expect(document.querySelector('[role="menu"]'), 'the menu stays open after a choice').not.toBeNull()
+      await userEvent.keyboard('{Escape}')
+      await expect.poll(() => document.querySelector('[role="menu"]')).toBeNull()
+
+      expect(el.scrollWidth).toBeLessThanOrEqual(el.clientWidth + 1)
+    })
+
+    it('shows the loading state with aria-busy, then the server page', async () => {
+      setTheme(theme)
+      const { el } = await show(DataTableServerSide)
+      expect(el.querySelector('[data-slot="table-container"]')!.getAttribute('aria-busy')).toBe('true')
+      expect(el.querySelectorAll('[data-slot="data-table-skeleton-row"]').length).toBeGreaterThan(0)
+      await expect.poll(() => el.querySelector('[aria-busy="true"]')).toBeNull()
+      expect(firstColumn(el)).toHaveLength(8)
+
+      // Sorting asks the "server" again; page two and the search do too.
+      await userEvent.click(headerButton(el, 'Amount (TRY)'))
+      await expect.poll(() => el.querySelector('thead th:nth-child(2)')!.getAttribute('aria-sort')).toBe('descending')
+      await expect.poll(() => el.querySelector('[aria-busy="true"]')).toBeNull()
+      const sorted = [...el.querySelectorAll('tbody tr')].map(tr => Number(tr.querySelectorAll('td')[1]?.textContent))
+      expect(sorted).toEqual([...sorted].sort((a, b) => b - a))
+
+      const nav = visibleNav(el)
+      await userEvent.click(nav.querySelector<HTMLElement>('[data-slot="pagination-next"], [data-slot="simple-pagination-next"]')!)
+      await expect.poll(() => el.querySelector('[aria-busy="true"]')).toBeNull()
+      expect(visibleNav(el).textContent).toMatch(/2/)
+
+      await userEvent.fill(el.querySelector<HTMLInputElement>('input[type="search"]')!, 'sponsor a1')
+      await expect.poll(() => firstColumn(el)).toEqual(['Sponsor A1'])
     })
   })
 })

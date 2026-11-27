@@ -239,12 +239,23 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 
 - **Purpose:** Composable to read and set the active theme (`elf`, `nova`) and persist it; works with and without Nuxt.
 - **Built on:** utility
-- **Key props, variants and parts:** `theme`, `setTheme`, `cycle`, `themes`; options `themes`, `defaultTheme`, `initial`, `storage` (`cookie` | `localStorage` | `none`), `storageKey`; `elfThemeBootScript()` for no-flash loads.
+- **Key props, variants and parts:** `theme`, `setTheme`, `cycle`, `toggle`, `themes`; options `themes`, `defaultTheme`, `initial`, `storage` (`cookie` | `localStorage` | `none`), `storageKey`; `elfThemeBootScript()` for no-flash loads. Zero-argument use: the Nuxt module options `themes`/`persist` or the `createElfTheme()` Vue plugin supply the defaults.
 - **Accessibility:** Native semantics; no dedicated APG pattern. Keyboard and ARIA covered by the Definition of Done.
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** Docs site switcher; every app that exposes a theme choice.
-- **Status:** shipped (v0.4.0)
+- **Status:** shipped (v0.4.0); `toggle()`, module `persist` option and `createElfTheme()` shipped (unreleased, v0.5)
+
+#### ElfThemeSwitcher
+
+- **Purpose:** Ready-made control to switch themes, driven by `useElfTheme`.
+- **Built on:** composed (`select`, `button`, Reka UI RadioGroup)
+- **Key props, variants and parts:** `variant` (`select` | `buttons` | `toggle`), `label`, `labels`, `themes`, `class`.
+- **Accessibility:** WAI-ARIA Radio Group (`buttons`), Select-only Combobox (`select`), plain button (`toggle`). Keyboard and ARIA covered by the Definition of Done.
+- **Depends on:** `select`, `button`, `useElfTheme`
+- **Complexity:** S
+- **Novatron screens:** Docs site switcher; every app that exposes a theme choice.
+- **Status:** shipped (unreleased, v0.5)
 
 ### v0.4: Overlays and disclosure
 
@@ -384,7 +395,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfDropdownMenu (ellipsis)
 - **Complexity:** S
 - **Novatron screens:** courses `LessonShell`, admin page headers (`AdminPageHeader`); stock locations.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfPagination
 
@@ -395,7 +406,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfButton
 - **Complexity:** S
 - **Novatron screens:** courses/stock `AdminPagination`.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfToggleGroup / ElfToggle
 
@@ -406,7 +417,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfButton styles
 - **Complexity:** S
 - **Novatron screens:** courses/stock `AdminChips`; forum feed sort; `UpvoteButton`.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfTable
 
@@ -417,7 +428,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfVisuallyHidden
 - **Complexity:** M
 - **Novatron screens:** courses/stock `AdminTable`; activity logs; HQ audit log.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfDataTable
 
@@ -428,7 +439,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfTable, ElfPagination, ElfCheckbox, ElfDropdownMenu, ElfInput, ElfSkeleton, ElfEmpty
 - **Complexity:** L
 - **Novatron screens:** courses `AdminTable` + `AdminFilterBar` + `AdminPagination` combined; stock `admin/*`; HQ members, audit log.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfEmpty
 
@@ -439,7 +450,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfButton
 - **Complexity:** S
 - **Novatron screens:** courses/stock `AdminEmpty`; search with no results.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfStatCard
 
@@ -450,7 +461,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfCard, ElfSkeleton
 - **Complexity:** S
 - **Novatron screens:** courses/stock `AdminStatCard`; forum `StatTile`; HQ dashboards.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfAspectRatio
 
@@ -461,7 +472,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** stock `Thumb`, `PhotoSlot`; course cards.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfSidebar
 
@@ -472,7 +483,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfSheet, ElfTooltip, ElfCollapsible, ElfSeparator, ElfScrollArea
 - **Complexity:** L
 - **Novatron screens:** `AppNav` in courses/stock/forum; HQ shell; scout.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfNavigationMenu
 
@@ -483,7 +494,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** none
 - **Complexity:** M
 - **Novatron screens:** Docs top bar; marketing pages (not required by current apps).
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfStepper
 
@@ -494,7 +505,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfButton
 - **Complexity:** M
 - **Novatron screens:** stock `add.vue` (photo, name, details) flow; courses onboarding; HQ provisioning.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfMenubar
 
@@ -505,7 +516,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfDropdownMenu styles
 - **Complexity:** M
 - **Novatron screens:** Rich editors (courses `LessonMarkdownEditor`), docs tooling; low priority.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 ### v0.6: Advanced inputs
 

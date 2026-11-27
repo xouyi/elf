@@ -15,6 +15,7 @@ rmSync(out, { recursive: true, force: true })
 const rewrite = (s: string) =>
   s
     .replaceAll(/from '\.\.\/\.\.\/lib\/utils'/g, 'from \'@/lib/utils\'')
+    .replaceAll(/from '\.\.\/\.\.\/composables\/use-elf-theme'/g, 'from \'@/lib/use-elf-theme\'')
     .replaceAll(/from '\.\.\/([a-z-]+)'/g, 'from \'@/components/ui/$1\'')
 
 // Primary host is GitHub Pages; https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r is the fallback.
@@ -23,6 +24,9 @@ const dep = (name: string) => `${REGISTRY}/${name}.json`
 
 mkdirSync(join(out, 'lib'), { recursive: true })
 writeFileSync(join(out, 'lib', 'utils.ts'), readFileSync(join(root, 'src/lib/utils.ts'), 'utf8'))
+writeFileSync(join(out, 'lib', 'themes.ts'), readFileSync(join(root, 'src/lib/themes.ts'), 'utf8'))
+// The theme composable lives in src/composables; in a project it is a lib file so that the CLI's `@/lib/*` rewrite resolves it.
+writeFileSync(join(out, 'lib', 'use-elf-theme.ts'), readFileSync(join(root, 'src/composables/use-elf-theme.ts'), 'utf8').replaceAll(/from '\.\.\/lib\/themes'/g, 'from \'@/lib/themes\''))
 
 const meta: Record<string, { title: string, description: string, dependencies: string[], registryDependencies?: string[] }> = {
   button: { title: 'Button', description: 'Button with default, secondary, outline, ghost, destructive and link variants.', dependencies: ['reka-ui', 'class-variance-authority'] },
@@ -52,12 +56,25 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   'hover-card': { title: 'Hover Card', description: 'Rich preview on hover or focus of a link, built on Reka UI and sharing the Popover panel styles.', dependencies: ['reka-ui', '@vueuse/core'], registryDependencies: [dep('popover')] },
   popover: { title: 'Popover', description: 'Anchored interactive panel with trigger, anchor and close parts, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
   tooltip: { title: 'Tooltip', description: 'Short non-interactive hint on hover or focus with a shared delay provider, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
+  toggle: { title: 'Toggle', description: 'Pressable toggle button and a single or multiple toggle group with default and outline variants, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
+  'aspect-ratio': { title: 'Aspect Ratio', description: 'Fixed-ratio frame for images, video and placeholders, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
   'visually-hidden': { title: 'Visually Hidden', description: 'Hides content visually while keeping it available to assistive technology.', dependencies: ['reka-ui'] },
   'alert-dialog': { title: 'Alert Dialog', description: 'Modal that demands a decision, with Cancel and Action parts and initial focus on Cancel, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'], registryDependencies: [dep('button'), dep('dialog')] },
   sheet: { title: 'Sheet', description: 'Edge-anchored modal panel (top, right, bottom, left) with a mobile-friendly bottom sheet, built on Reka UI Dialog.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('dialog')] },
   toast: { title: 'Toast', description: 'Toaster and useToast(): a queue of transient notifications with variants, actions, promise toasts, swipe to dismiss and an F8 hotkey, built on Reka UI Toast.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('button')] },
   collapsible: { title: 'Collapsible', description: 'Single show and hide region with an animated height, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
   accordion: { title: 'Accordion', description: 'Stacked collapsible sections, single or multiple, with arrow-key navigation, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('collapsible')] },
+  'theme-switcher': { title: 'Theme Switcher', description: 'Ready-made control to switch themes as a select, a segmented radio group or one toggle button, driven by useElfTheme.', dependencies: ['reka-ui', '@lucide/vue', 'vue'], registryDependencies: [dep('button'), dep('select'), dep('use-elf-theme')] },
+  breadcrumb: { title: 'Breadcrumb', description: 'Hierarchical location trail with list, item, link, page, separator and ellipsis parts, composed from native elements.', dependencies: ['reka-ui', '@lucide/vue'] },
+  pagination: { title: 'Pagination', description: 'Page navigation with numbers, ellipsis, first, previous, next and last, plus a simple previous/next bar, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('button')] },
+  table: { title: 'Table', description: 'Semantic styled table with caption, density, sticky header, sortable header affordance and a stacked-card mode on small screens.', dependencies: ['@vueuse/core'] },
+  empty: { title: 'Empty', description: 'Empty state with media, title, description and action parts.', dependencies: ['reka-ui', 'class-variance-authority'] },
+  'stat-card': { title: 'Stat Card', description: 'KPI tile with label, value, hint, trend, tone, loading state and an optional stretched link.', dependencies: ['reka-ui', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('skeleton'), dep('visually-hidden')] },
+  'navigation-menu': { title: 'Navigation Menu', description: 'Top-level site navigation with flyout panels, a shared animated viewport, an optional indicator and link styles, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'] },
+  menubar: { title: 'Menubar', description: 'Desktop-style horizontal menu bar with the same item parts and styles as the Dropdown Menu, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('dropdown-menu')] },
+  sidebar: { title: 'Sidebar', description: 'Collapsible app navigation: groups, menu buttons with active state and badges, icon-collapsed mode with tooltips, rail, keyboard shortcut and an off-canvas sheet on phones, composed from Sheet, Tooltip, Separator and ScrollArea.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('button'), dep('sheet'), dep('tooltip'), dep('separator'), dep('scroll-area')] },
+  stepper: { title: 'Stepper', description: 'Multi-step progress and wizard header, linear or free, horizontal or vertical, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'] },
+  'data-table': { title: 'Data Table', description: 'Table with sorting, global search, column visibility, row selection, pagination, loading and empty states and a server-driven mode, composed on Table with TanStack Table Vue.', dependencies: ['@tanstack/vue-table', '@lucide/vue'], registryDependencies: [dep('button'), dep('checkbox'), dep('dropdown-menu'), dep('empty'), dep('input'), dep('pagination'), dep('skeleton'), dep('table')] },
 }
 
 const items: unknown[] = [
@@ -68,6 +85,22 @@ const items: unknown[] = [
     description: 'clsx + tailwind-merge class helper.',
     dependencies: ['clsx', 'tailwind-merge'],
     files: [{ path: 'registry/_generated/lib/utils.ts', type: 'registry:lib', target: 'lib/utils.ts' }],
+  },
+  {
+    name: 'elf-themes',
+    type: 'registry:lib',
+    title: 'Theme names',
+    description: 'The names of the shipped themes (elfThemes, ElfTheme, isElfTheme).',
+    files: [{ path: 'registry/_generated/lib/themes.ts', type: 'registry:lib', target: 'lib/themes.ts' }],
+  },
+  {
+    name: 'use-elf-theme',
+    type: 'registry:lib',
+    title: 'useElfTheme',
+    description: 'SSR-safe composable and createElfTheme() plugin to read, set and persist the active theme.',
+    dependencies: ['vue'],
+    registryDependencies: [dep('elf-themes')],
+    files: [{ path: 'registry/_generated/lib/use-elf-theme.ts', type: 'registry:lib', target: 'lib/use-elf-theme.ts' }],
   },
 ]
 

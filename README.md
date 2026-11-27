@@ -9,7 +9,7 @@ ElfUI is a themeable design system for Vue 3 and Nuxt 4. Components are built on
 [Reka UI](https://reka-ui.com) primitives with shadcn-vue style structure (CVA variants, `cn()`,
 CSS-variable theming) and styled with Tailwind CSS v4.
 
-- Components: Button, Input, Textarea, Label, Field, Checkbox, Radio Group, Switch, Select, Badge, Alert, Progress, Avatar, Card, Skeleton, Spinner, Separator, Kbd, Visually Hidden, Tabs, Dialog, Alert Dialog, Sheet, Tooltip, Popover, Hover Card, Dropdown Menu, Context Menu, Scroll Area, Toaster (`useToast`), Collapsible, Accordion and Gradient Text (all prefixed `Elf` in Vue, for example `<ElfButton>`)
+- Components: Button, Input, Textarea, Label, Field, Checkbox, Radio Group, Switch, Select, Badge, Alert, Progress, Avatar, Card, Skeleton, Spinner, Separator, Kbd, Visually Hidden, Tabs, Dialog, Alert Dialog, Sheet, Tooltip, Popover, Hover Card, Dropdown Menu, Context Menu, Scroll Area, Toaster (`useToast`), Collapsible, Accordion, Breadcrumb, Pagination, Toggle, Toggle Group, Aspect Ratio, Table, Empty, Stat Card, Sidebar, Navigation Menu, Menubar, Stepper, Data Table, Theme Switcher and Gradient Text (all prefixed `Elf` in Vue, for example `<ElfButton>`)
 - Themes: `elf` (pure black with violet accents, rounded, default), `nova` (gold on obsidian, sharp corners) and `elfwood` (light: green on white)
 - Distribution: the npm package [`@xouyi/elfui`](https://www.npmjs.com/package/@xouyi/elfui) (with its own CLI), plus a registry for copying components into your project
 - Docs: a Nuxt Content site built with ElfUI itself, published at https://xouyi.github.io/elfUI/ (`bun run docs:dev` locally)
@@ -91,7 +91,7 @@ An unreleased tag or commit can be installed with `bun add github:xouyi/elfUI#<t
 Each theme is one CSS file in `src/themes/` that defines `--elf-*` tokens under `[data-theme='<name>']`:
 `background`, `foreground`, `card`, `popover`, `primary`, `secondary`, `muted`, `accent`, `destructive`,
 `success`, `warning` (each with a `-foreground`), `destructive-text`, `success-text`, `warning-text` (readable status text), `border`, `input`, `ring`, `radius`, `radius-pill`.
-Switch at runtime with `document.documentElement.dataset.theme = 'elf'`, or with the SSR-safe `useElfTheme()` composable (`theme`, `setTheme`, `cycle`, optional cookie or localStorage persistence). Tokens can also be scoped to any
+Switch at runtime in one line: in Nuxt list the themes in the module options (`elfui: { theme: 'elf', themes: ['nova', 'elfwood'] }`, cookie persistence and SSR included), in Vite add `app.use(createElfTheme({ themes: [...] }))`, then call `useElfTheme()` with no arguments (`theme`, `setTheme`, `cycle`, `toggle`). Tokens can also be scoped to any
 element: `<div data-theme="elf">`.
 
 `bun run contrast` checks WCAG AA (4.5:1 text pairs, 3:1 for input border and focus ring) for every theme.

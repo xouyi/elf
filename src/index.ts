@@ -112,8 +112,8 @@ export type { AvatarFallbackProps, AvatarGroupProps, AvatarImageProps, AvatarPro
 export { elfThemes, isElfTheme } from './lib/themes'
 export type { ElfTheme } from './lib/themes'
 
-export { elfThemeBootScript, useElfTheme } from './composables/use-elf-theme'
-export type { ElfThemeBootScriptOptions, ElfThemeStorage, UseElfThemeOptions, UseElfThemeReturn } from './composables/use-elf-theme'
+export { createElfTheme, elfThemeBootScript, provideElfTheme, useElfTheme } from './composables/use-elf-theme'
+export type { ElfThemeBootScriptOptions, ElfThemeConfig, ElfThemePersist, ElfThemeStorage, UseElfThemeOptions, UseElfThemeReturn } from './composables/use-elf-theme'
 
 export {
   Tooltip as ElfTooltip,
@@ -241,3 +241,136 @@ export {
   AccordionItem as ElfAccordionItem,
   AccordionTrigger as ElfAccordionTrigger,
 } from './components/accordion'
+
+export { ThemeSwitcher as ElfThemeSwitcher } from './components/theme-switcher'
+export type { ThemeSwitcherProps, ThemeSwitcherVariant } from './components/theme-switcher'
+
+export {
+  Breadcrumb as ElfBreadcrumb,
+  BreadcrumbEllipsis as ElfBreadcrumbEllipsis,
+  BreadcrumbItem as ElfBreadcrumbItem,
+  BreadcrumbLink as ElfBreadcrumbLink,
+  BreadcrumbList as ElfBreadcrumbList,
+  BreadcrumbPage as ElfBreadcrumbPage,
+  BreadcrumbSeparator as ElfBreadcrumbSeparator,
+} from './components/breadcrumb'
+export type { BreadcrumbEllipsisProps, BreadcrumbItemProps, BreadcrumbLinkProps, BreadcrumbListProps, BreadcrumbPageProps, BreadcrumbProps, BreadcrumbSeparatorProps } from './components/breadcrumb'
+
+export {
+  Pagination as ElfPagination,
+  PaginationContent as ElfPaginationContent,
+  PaginationEllipsis as ElfPaginationEllipsis,
+  PaginationFirst as ElfPaginationFirst,
+  PaginationItem as ElfPaginationItem,
+  PaginationLast as ElfPaginationLast,
+  PaginationNext as ElfPaginationNext,
+  PaginationPrev as ElfPaginationPrev,
+  SimplePagination as ElfSimplePagination,
+} from './components/pagination'
+export type { PaginationEllipsisProps, PaginationFirstProps, PaginationItemProps, PaginationLastProps, PaginationNextProps, PaginationPrevProps, PaginationProps, SimplePaginationProps } from './components/pagination'
+export {
+  Toggle as ElfToggle,
+  ToggleGroup as ElfToggleGroup,
+  ToggleGroupItem as ElfToggleGroupItem,
+  toggleGroupKey,
+  toggleVariants,
+} from './components/toggle'
+export type { ToggleGroupContext, ToggleGroupItemExtraProps, ToggleGroupProps, ToggleProps, ToggleVariants } from './components/toggle'
+
+export { AspectRatio as ElfAspectRatio } from './components/aspect-ratio'
+export type { AspectRatioProps } from './components/aspect-ratio'
+export {
+  Table as ElfTable,
+  TableBody as ElfTableBody,
+  TableCaption as ElfTableCaption,
+  TableCell as ElfTableCell,
+  TableFooter as ElfTableFooter,
+  TableHead as ElfTableHead,
+  TableHeader as ElfTableHeader,
+  TableRow as ElfTableRow,
+} from './components/table'
+export type { TableCaptionProps, TableCellProps, TableDensity, TableHeadProps, TableProps, TableRowProps, TableSectionProps, TableSort } from './components/table'
+
+export {
+  Empty as ElfEmpty,
+  EmptyContent as ElfEmptyContent,
+  EmptyDescription as ElfEmptyDescription,
+  EmptyHeader as ElfEmptyHeader,
+  EmptyMedia as ElfEmptyMedia,
+  emptyMediaVariants,
+  EmptyTitle as ElfEmptyTitle,
+} from './components/empty'
+export type { EmptyMediaProps, EmptyMediaVariants, EmptyPartProps, EmptyProps, EmptyTitleProps } from './components/empty'
+
+export { StatCard as ElfStatCard, StatCardLink as ElfStatCardLink, statCardVariants } from './components/stat-card'
+export type { StatCardLinkProps, StatCardProps, StatCardTrendDirection, StatCardVariants } from './components/stat-card'
+export {
+  NavigationMenu as ElfNavigationMenu,
+  NavigationMenuContent as ElfNavigationMenuContent,
+  NavigationMenuIndicator as ElfNavigationMenuIndicator,
+  NavigationMenuItem as ElfNavigationMenuItem,
+  NavigationMenuLink as ElfNavigationMenuLink,
+  NavigationMenuList as ElfNavigationMenuList,
+  navigationMenuItemLinkClass,
+  navigationMenuTriggerStyle,
+  NavigationMenuTrigger as ElfNavigationMenuTrigger,
+  NavigationMenuViewport as ElfNavigationMenuViewport,
+} from './components/navigation-menu'
+export type { NavigationMenuContentProps, NavigationMenuIndicatorProps, NavigationMenuItemProps, NavigationMenuLinkProps, NavigationMenuListProps, NavigationMenuProps, NavigationMenuTriggerProps, NavigationMenuViewportProps } from './components/navigation-menu'
+
+export {
+  Menubar as ElfMenubar,
+  MenubarCheckboxItem as ElfMenubarCheckboxItem,
+  MenubarContent as ElfMenubarContent,
+  MenubarGroup as ElfMenubarGroup,
+  MenubarItem as ElfMenubarItem,
+  MenubarLabel as ElfMenubarLabel,
+  MenubarMenu as ElfMenubarMenu,
+  MenubarRadioGroup as ElfMenubarRadioGroup,
+  MenubarRadioItem as ElfMenubarRadioItem,
+  MenubarSeparator as ElfMenubarSeparator,
+  MenubarShortcut as ElfMenubarShortcut,
+  MenubarSub as ElfMenubarSub,
+  MenubarSubContent as ElfMenubarSubContent,
+  MenubarSubTrigger as ElfMenubarSubTrigger,
+  MenubarTrigger as ElfMenubarTrigger,
+} from './components/menubar'
+export type { MenubarCheckboxItemProps, MenubarContentProps, MenubarItemProps, MenubarLabelProps, MenubarProps, MenubarRadioItemProps, MenubarSeparatorProps, MenubarShortcutProps, MenubarSubContentProps, MenubarSubTriggerProps, MenubarTriggerProps } from './components/menubar'
+export {
+  Sidebar as ElfSidebar,
+  SIDEBAR_MOBILE_BREAKPOINT,
+  SidebarContent as ElfSidebarContent,
+  SidebarFooter as ElfSidebarFooter,
+  SidebarGroup as ElfSidebarGroup,
+  SidebarGroupContent as ElfSidebarGroupContent,
+  SidebarGroupLabel as ElfSidebarGroupLabel,
+  SidebarHeader as ElfSidebarHeader,
+  SidebarInset as ElfSidebarInset,
+  SidebarMenu as ElfSidebarMenu,
+  SidebarMenuBadge as ElfSidebarMenuBadge,
+  SidebarMenuButton as ElfSidebarMenuButton,
+  sidebarMenuButtonVariants,
+  SidebarMenuItem as ElfSidebarMenuItem,
+  SidebarMenuSub as ElfSidebarMenuSub,
+  SidebarMenuSubButton as ElfSidebarMenuSubButton,
+  SidebarMenuSubItem as ElfSidebarMenuSubItem,
+  SidebarProvider as ElfSidebarProvider,
+  SidebarRail as ElfSidebarRail,
+  SidebarSeparator as ElfSidebarSeparator,
+  SidebarTrigger as ElfSidebarTrigger,
+  useSidebar,
+} from './components/sidebar'
+export type { SidebarCollapsible, SidebarContext, SidebarMenuButtonProps, SidebarMenuButtonVariants, SidebarMenuSubButtonProps, SidebarProps, SidebarProviderProps, SidebarSide, SidebarState, SidebarTriggerProps } from './components/sidebar'
+export type { StepperProps } from './components/stepper'
+export {
+  Stepper as ElfStepper,
+  StepperDescription as ElfStepperDescription,
+  StepperIndicator as ElfStepperIndicator,
+  StepperItem as ElfStepperItem,
+  StepperSeparator as ElfStepperSeparator,
+  StepperTitle as ElfStepperTitle,
+  StepperTrigger as ElfStepperTrigger,
+} from './components/stepper'
+
+export { createDataTableColumnHelper, DataTable as ElfDataTable, dataTableFeatures } from './components/data-table'
+export type { DataTableColumn, DataTableColumnInstance, DataTableColumnVisibility, DataTableFeatures, DataTableLabels, DataTablePagination, DataTableProps, DataTableRow, DataTableSelection, DataTableSorting } from './components/data-table'

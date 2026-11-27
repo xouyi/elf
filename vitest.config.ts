@@ -32,8 +32,15 @@ export default defineConfig({
           name: 'browser',
           include: ['tests/browser/**/*.test.ts'],
           setupFiles: ['tests/browser/setup.ts'],
+          // One file at a time. Parallel files run in sibling iframes of ONE page that shares a single real mouse, keyboard
+          // focus and compositor: a hover or click in one file moved the pointer under another file's example, and a
+          // background iframe is throttled (the "iframe not ready" / dropped connection failures under load).
+          fileParallelism: false,
+          // Polled conditions (a menu opening, a hover card after its delay) get room on a loaded machine; they still return the moment they hold.
+          expect: { poll: { timeout: 8000 } },
           browser: {
             enabled: true,
+            connectTimeout: 180_000,
             headless: true,
             provider: playwright(),
             instances: [{ browser: 'chromium' }],

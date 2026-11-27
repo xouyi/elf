@@ -56,6 +56,7 @@ export const textPairs: Array<[string, string]> = [
   ['card-foreground', 'card'],
   ['popover-foreground', 'popover'],
   ['primary-foreground', 'primary'],
+  ['primary-foreground', 'primary-hover'], // text on a hovered primary button or badge
   ['secondary-foreground', 'secondary'],
   ['muted-foreground', 'muted'],
   ['muted-foreground', 'background'],

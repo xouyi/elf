@@ -1,13 +1,20 @@
 import type { ElfTheme } from '../lib/themes'
-import { addComponentsDir, addImports, createResolver, defineNuxtModule } from '@nuxt/kit'
+import type { ElfThemePersist } from '../composables/use-elf-theme'
+import { addComponentsDir, addImports, addPlugin, createResolver, defineNuxtModule } from '@nuxt/kit'
+import { elfThemeBootScript } from '../composables/use-elf-theme'
 
-export type { ElfTheme }
+export type { ElfTheme, ElfThemePersist }
 
 export interface ModuleOptions {
-  /** Theme applied through `data-theme` on `<html>`. */
+  /** Default theme, applied through `data-theme` on `<html>` until a visitor chooses another. */
   theme: ElfTheme
-  /** Theme token files to bundle. Defaults to the selected theme only. */
+  /** Further themes to bundle and let `useElfTheme()` / `<ElfThemeSwitcher>` switch to. Defaults to the selected theme only. */
   themes?: ElfTheme[]
+  /**
+   * Where the visitor's choice is remembered: `'cookie'` (default; the server reads it, so the first HTML already has the
+   * right theme), `'localStorage'` (applied by a small inline script before the first paint) or `false`.
+   */
+  persist: ElfThemePersist
   /** Component name prefix. */
   prefix: string
 }
@@ -20,6 +27,7 @@ export default defineNuxtModule<ModuleOptions>({
   },
   defaults: {
     theme: 'elf',
+    persist: 'cookie',
     prefix: 'Elf',
   },
   setup(options, nuxt) {
@@ -51,6 +59,20 @@ export default defineNuxtModule<ModuleOptions>({
     const themes = new Set<ElfTheme>([options.theme, ...(options.themes ?? [])])
     for (const theme of themes) {
       nuxt.options.css.push(resolve(`../themes/${theme}.css`))
+    }
+
+    // The themes useElfTheme() accepts: the bundled ones, in the order given (the default first unless `themes` lists it).
+    const names = options.themes?.includes(options.theme) ? [...options.themes] : [...themes]
+    const storageKey = 'elfui-theme'
+    nuxt.options.runtimeConfig.public.elfui = { themes: names, defaultTheme: options.theme, persist: options.persist, storageKey }
+    addPlugin({ src: resolve('./runtime/plugin') })
+
+    // Prerendered pages cannot read the cookie on the server, so a tiny inline script applies the stored choice before the first paint.
+    if (options.persist) {
+      nuxt.options.app.head.script = [
+        ...(nuxt.options.app.head.script ?? []),
+        { innerHTML: elfThemeBootScript({ storage: options.persist, storageKey, themes: names }), tagPosition: 'head' },
+      ]
     }
 
     nuxt.options.app.head.htmlAttrs = {

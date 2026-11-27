@@ -28,7 +28,12 @@ useHead({
 })
 
 const ready = ref(false)
+const { setTheme } = useSiteTheme()
 onMounted(async () => {
+  // The reactive theme state owns <html data-theme> (Unhead re-applies it after hydration), so the query parameter has to
+  // go through it; the inline script above only avoids a flash of the wrong theme before that.
+  const wanted = new URLSearchParams(location.search).get('theme')
+  if (wanted === 'elf' || wanted === 'nova' || wanted === 'elfwood') setTheme(wanted)
   await nextTick()
   await document.fonts.ready
   // Two frames: lets Reka UI finish its mount-time layout work and the async example paint.

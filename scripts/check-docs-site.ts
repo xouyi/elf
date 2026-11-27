@@ -6,12 +6,23 @@
  * Run by `bun run docs:verify` (part of `bun run check`).
  */
 import { readdirSync, statSync } from 'node:fs'
+import { createServer } from 'node:net'
+import type { AddressInfo } from 'node:net'
 import { join, relative } from 'node:path'
 import { chromium } from 'playwright'
 import { placeholderNames } from '../apps/docs/lib/site'
 
 const out = join(import.meta.dirname, '..', 'apps/docs/.output/public')
-const port = 4399
+// Port of the static server: DOCS_VERIFY_PORT, or any free port when unset.
+const port = await (async () => {
+  const fromEnv = Number(process.env.DOCS_VERIFY_PORT)
+  if (Number.isInteger(fromEnv) && fromEnv > 0) return fromEnv
+  const probe = createServer()
+  await new Promise<void>(resolve => probe.listen(0, '127.0.0.1', resolve))
+  const { port } = probe.address() as AddressInfo
+  await new Promise(resolve => probe.close(resolve))
+  return port
+})()
 const base = '/elfUI/'
 
 function pages(dir: string, acc: string[] = []): string[] {

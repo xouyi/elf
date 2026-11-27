@@ -20,6 +20,7 @@
   --color-popover-foreground: var(--elf-popover-foreground);
   --color-primary: var(--elf-primary);
   --color-primary-foreground: var(--elf-primary-foreground);
+  --color-primary-hover: var(--elf-primary-hover, color-mix(in oklab, var(--elf-primary) 90%, transparent));
   --color-secondary: var(--elf-secondary);
   --color-secondary-foreground: var(--elf-secondary-foreground);
   --color-muted: var(--elf-muted);

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "toggle",
+  "title": "Toggle",
+  "description": "Pressable toggle button and a single or multiple toggle group with default and outline variants, built on Reka UI.",
+  "dependencies": [
+    "reka-ui",
+    "@vueuse/core",
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/toggle/Toggle.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ToggleEmits } from 'reka-ui'\nimport type { ToggleProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { Toggle, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { toggleVariants } from './index'\n\nconst props = withDefaults(defineProps<ToggleProps>(), {\n  variant: 'default',\n  size: 'default',\n  disabled: false,\n})\nconst emits = defineEmits<ToggleEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class', 'variant', 'size')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <Toggle\n    v-slot=\"slotProps\"\n    data-slot=\"toggle\"\n    :data-variant=\"props.variant\"\n    :data-size=\"props.size\"\n    v-bind=\"forwarded\"\n    :class=\"cn(toggleVariants({ variant: props.variant, size: props.size }), props.class)\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </Toggle>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/toggle/ToggleGroup.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ToggleGroupRootEmits } from 'reka-ui'\nimport type { ToggleGroupProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { ToggleGroupRoot, useForwardPropsEmits } from 'reka-ui'\nimport { provide } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { toggleGroupKey } from './index'\n\nconst props = withDefaults(defineProps<ToggleGroupProps>(), {\n  variant: 'default',\n  size: 'default',\n  joined: false,\n})\nconst emits = defineEmits<ToggleGroupRootEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class', 'variant', 'size', 'joined')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n\nprovide(toggleGroupKey, {\n  get variant() { return props.variant },\n  get size() { return props.size },\n  get joined() { return props.joined },\n})\n</script>\n\n<template>\n  <ToggleGroupRoot\n    v-slot=\"slotProps\"\n    data-slot=\"toggle-group\"\n    :data-variant=\"props.variant\"\n    :data-size=\"props.size\"\n    v-bind=\"forwarded\"\n    :class=\"cn('flex w-fit flex-wrap items-center', props.joined ? 'gap-0' : 'gap-1', props.class)\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </ToggleGroupRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/toggle/ToggleGroupItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ToggleGroupItemExtraProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { ToggleGroupItem, useForwardProps } from 'reka-ui'\nimport { computed, inject } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { toggleGroupKey, toggleVariants } from './index'\n\nconst props = defineProps<ToggleGroupItemExtraProps>()\n\nconst group = inject(toggleGroupKey, {})\nconst delegatedProps = reactiveOmit(props, 'class', 'variant', 'size')\nconst forwarded = useForwardProps(delegatedProps)\nconst variant = computed(() => props.variant ?? group.variant ?? 'default')\nconst size = computed(() => props.size ?? group.size ?? 'default')\n</script>\n\n<template>\n  <ToggleGroupItem\n    v-slot=\"slotProps\"\n    data-slot=\"toggle-group-item\"\n    :data-variant=\"variant\"\n    :data-size=\"size\"\n    v-bind=\"forwarded\"\n    :class=\"cn(\n      toggleVariants({ variant, size }),\n      group.joined && 'rounded-none first:rounded-s-md last:rounded-e-md focus-visible:z-10',\n      group.joined && variant === 'outline' && 'not-first:-ms-px',\n      props.class,\n    )\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </ToggleGroupItem>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/toggle/index.ts",
+      "content": "import type { VariantProps } from 'class-variance-authority'\nimport type { ToggleGroupItemProps, ToggleGroupRootProps, ToggleProps as RekaToggleProps } from 'reka-ui'\nimport type { HTMLAttributes, InjectionKey } from 'vue'\nimport { cva } from 'class-variance-authority'\n\nexport { default as Toggle } from './Toggle.vue'\nexport { default as ToggleGroup } from './ToggleGroup.vue'\nexport { default as ToggleGroupItem } from './ToggleGroupItem.vue'\n\nexport const toggleVariants = cva(\n  'inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-[color,background-color,box-shadow] outline-none hover:bg-muted hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-4',\n  {\n    variants: {\n      variant: {\n        default: 'bg-transparent',\n        outline: 'border border-input bg-transparent hover:bg-accent hover:text-accent-foreground',\n      },\n      size: {\n        default: 'h-9 min-w-9 px-2.5',\n        sm: 'h-8 min-w-8 px-2',\n        lg: 'h-10 min-w-10 px-3',\n      },\n    },\n    defaultVariants: {\n      variant: 'default',\n      size: 'default',\n    },\n  },\n)\n\nexport type ToggleVariants = VariantProps<typeof toggleVariants>\n\nexport interface ToggleProps extends RekaToggleProps {\n  /** Visual style: `default` is borderless, `outline` adds a border. */\n  variant?: ToggleVariants['variant']\n  /** Height and padding. */\n  size?: ToggleVariants['size']\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface ToggleGroupProps extends ToggleGroupRootProps {\n  /** Visual style shared by every item in the group. */\n  variant?: ToggleVariants['variant']\n  /** Size shared by every item in the group. */\n  size?: ToggleVariants['size']\n  /** Join the items into one segmented control (no gaps, shared borders) instead of separate buttons. */\n  joined?: boolean\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface ToggleGroupItemExtraProps extends ToggleGroupItemProps {\n  /** Overrides the group variant for this item. */\n  variant?: ToggleVariants['variant']\n  /** Overrides the group size for this item. */\n  size?: ToggleVariants['size']\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface ToggleGroupContext {\n  variant?: ToggleVariants['variant']\n  size?: ToggleVariants['size']\n  joined?: boolean\n}\n\nexport const toggleGroupKey: InjectionKey<ToggleGroupContext> = Symbol('elf-toggle-group')\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

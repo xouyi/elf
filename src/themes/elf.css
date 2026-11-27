@@ -9,6 +9,7 @@
   --elf-popover-foreground: #fafafa;
   --elf-primary: oklch(0.7 0.16 293);
   --elf-primary-foreground: oklch(0.15 0.03 295);
+  --elf-primary-hover: oklch(0.63 0.144 293);
   --elf-secondary: #1c1c1c;
   --elf-secondary-foreground: #fafafa;
   --elf-muted: #171717;
