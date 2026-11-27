@@ -103,7 +103,7 @@ const installNuxt = [
   'export default defineNuxtConfig({',
   '  modules: [\'@xouyi/elfui/nuxt\'],',
   '  css: [\'~/assets/css/main.css\'],',
-  '  elfui: { theme: \'nova\', themes: [\'elf\'] }, // config key stays elfui; theme: \'elf\' | \'nova\'',
+  '  elfui: { theme: \'nova\', themes: [\'elf\'] }, // config key stays elfui; theme: \'elf\' | \'nova\' | \'elfwood\'',
   '  vite: { plugins: [tailwindcss()] },',
   '})',
   '```',
@@ -131,10 +131,10 @@ const installPlain = [
   'import { ElfButton } from \'@xouyi/elfui\'',
   '```',
   '',
-  'Set `<html data-theme="elf">` (or `nova`).',
+  'Set `<html data-theme="elf">` (`nova` or `elfwood`).',
 ]
 
-const intro = 'ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (pure black with violet accents, rounded) and nova (gold on obsidian, sharp corners).'
+const intro = 'ElfUI is a themeable design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with three themes: elf (pure black with violet accents, rounded), nova (gold on obsidian, sharp corners) and elfwood (light, green on white).'
 
 const links = [
   `- [Documentation site](${SITE}/): guides and a page per component with live previews, API tables and accessibility notes`,
@@ -200,7 +200,7 @@ const full = [
   '',
   ...installNuxt,
   '',
-  'Components are auto-imported with the Elf prefix. Module options: `theme` (\'elf\' | \'nova\', default \'elf\'), `themes` (extra theme CSS to bundle), `prefix` (default \'Elf\').',
+  'Components are auto-imported with the Elf prefix. Module options: `theme` (\'elf\' | \'nova\' | \'elfwood\', default \'elf\'), `themes` (extra theme CSS to bundle), `prefix` (default \'Elf\').',
   '',
   'Upgrade: `bun update @xouyi/elfui`. Advanced: an unreleased commit can be installed with `bun add github:xouyi/elfUI#<tag-or-sha>`.',
   '',
@@ -222,7 +222,7 @@ const full = [
   '',
   '## Theming',
   '',
-  `Themes: ${themes.map(t => `\`${t}\``).join(', ')}. Select with \`data-theme\` on html or any element. Dark only.`,
+  `Themes: ${themes.map(t => `\`${t}\``).join(', ')}. Select with \`data-theme\` on html or any element.`,
   '',
   '```ts',
   'document.documentElement.dataset.theme = \'nova\'',

@@ -90,11 +90,12 @@ items.push({
   name: 'elf-theme',
   type: 'registry:file',
   title: 'Elf theme',
-  description: 'Tailwind v4 token mappings and the elf and nova theme files. Import elf.css after tailwindcss.',
+  description: 'Tailwind v4 token mappings and the elf, nova and elfwood theme files. Import elf.css after tailwindcss.',
   files: [
     { path: 'registry/_generated/css/elf.css', type: 'registry:file', target: 'assets/css/elf/elf.css' },
     { path: 'registry/_generated/css/themes/elf.css', type: 'registry:file', target: 'assets/css/elf/themes/elf.css' },
     { path: 'registry/_generated/css/themes/nova.css', type: 'registry:file', target: 'assets/css/elf/themes/nova.css' },
+    { path: 'registry/_generated/css/themes/elfwood.css', type: 'registry:file', target: 'assets/css/elf/themes/elfwood.css' },
   ],
 })
 

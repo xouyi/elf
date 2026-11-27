@@ -20,7 +20,7 @@ runs on Bun's runtime (`bunx --bun nuxt`), so it needs no native SQLite module.
 | Path | What lives there |
 | :--- | :--- |
 | `src/components/<name>/` | Component SFCs, `index.ts`, `examples/*.vue`, unit test. |
-| `tests/browser/` | Vitest browser-mode tests (real Chromium): axe over every example in both themes, interaction tests. |
+| `tests/browser/` | Vitest browser-mode tests (real Chromium): axe over every example in every theme, interaction tests. |
 | `tests/visual/` | Playwright visual regression tests and the committed baselines in `__screenshots__/`. |
 | `src/themes/`, `src/styles.css` | Theme token files and the Tailwind v4 mapping. |
 | `apps/docs/` | The documentation site (Nuxt 4 + Nuxt Content, built with ElfUI). Markdown pages in `content/docs/`. |
@@ -50,11 +50,11 @@ Then wire it into the rest of the repository:
    The code samples in `llms-full.txt` are read from your `examples/` folder.
 4. Write the docs page `apps/docs/content/docs/2.components/NN.<name>.md` (see below).
 5. Add an entry to the Unreleased section of `CHANGELOG.md`.
-6. Cover the behavior: examples are tested automatically (axe, both themes, plus a visual baseline each); add interaction
+6. Cover the behavior: examples are tested automatically (axe, every theme, plus a visual baseline each); add interaction
    tests to `tests/browser/interactions.test.ts` for keyboard, focus and state behavior. Then create the baselines (see
    "Visual regression").
 
-Design rules: 100% dark UI, tokens only (never hard-coded colors), works in both the `elf` and `nova` themes,
+Design rules: tokens only (never hard-coded colors, no `dark:` variants), works in the dark `elf` and `nova` themes and the light `elfwood` theme,
 keyboard accessible, no `class*='size-'` selectors with escaped quotes (use `[class*=size-]`).
 
 ### Writing the docs page
@@ -76,7 +76,7 @@ Generated data lives in `apps/docs/app/generated/` and the changelog, roadmap an
 repository root; both are produced by `bun run docs:prepare` (run automatically by `docs:dev` and `docs:build`) and are not
 committed. A missing example name or component directory fails the docs build, so broken pages cannot ship.
 
-Design rules: 100% dark UI, tokens only (never hard-coded colors), works in both the `elf` and `nova` themes,
+Design rules: tokens only (never hard-coded colors, no `dark:` variants), works in the dark `elf` and `nova` themes and the light `elfwood` theme,
 keyboard accessible, no `class*='size-'` selectors with escaped quotes (use `[class*=size-]`).
 
 ## The quality gate
@@ -86,7 +86,7 @@ keyboard accessible, no `class*='size-'` selectors with escaped quotes (use `[cl
 1. `typecheck`: `vue-tsc` over sources, examples, scripts and tests.
 2. `lint`: ESLint with `@antfu/eslint-config` (Vue + TypeScript). `bun run lint:fix` autofixes.
 3. `test`: Vitest with two projects. `unit` (happy-dom, `src/**/*.test.ts`) and `browser` (real Chromium through
-   Playwright, `tests/browser/**/*.test.ts`): every example mounted in both themes with `axe-core`, and keyboard,
+   Playwright, `tests/browser/**/*.test.ts`): every example mounted in every theme with `axe-core`, and keyboard,
    focus and `v-model` interaction tests.
 4. `contrast`: WCAG contrast of every theme token pair.
 5. `registry:check`: rebuilds the registry and fails if the committed `registry.json` / `registry/r` differ.
@@ -104,14 +104,14 @@ Run subsets while developing: `bun run test:unit`, `bun run test:browser`, `bun 
 | Browser (axe + interaction) | `tests/browser/` | `bun run test:browser` |
 | Visual regression | `tests/visual/` | `bun run test:visual` (CI image only) |
 
-The browser project discovers every `src/components/*/examples/*.vue`, mounts it in both themes and requires zero axe
+The browser project discovers every `src/components/*/examples/*.vue`, mounts it in every theme and requires zero axe
 violations, so a new example is covered without writing a test. Behavior (focus trap, keyboard navigation, `v-model`)
 goes into `tests/browser/interactions.test.ts`. The full explanation is on the docs site under Resources, Testing.
 
 ### Visual regression
 
-The docs site renders each example alone at `/__examples/<component>/<example>?theme=elf|nova` (noindex, not in the
-sitemap or search). `tests/visual/examples.spec.ts` screenshots every example in both themes at 1280 and 360 px and
+The docs site renders each example alone at `/__examples/<component>/<example>?theme=elf|nova|elfwood` (noindex, not in the
+sitemap or search). `tests/visual/examples.spec.ts` screenshots every example in every theme at 1280 and 360 px and
 compares them with `tests/visual/__screenshots__/<component>/<example>-<theme>-<width>.png`.
 
 Baselines depend on the operating system's fonts and rasterizer, so they are created **only** in the official Playwright

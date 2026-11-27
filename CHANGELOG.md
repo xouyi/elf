@@ -3,6 +3,8 @@
 ## Unreleased
 
 - **Breaking: the `novatron` theme is now `nova`.** `data-theme="novatron"` becomes `data-theme="nova"`, the file `@xouyi/elfui/themes/novatron.css` becomes `@xouyi/elfui/themes/nova.css`, the Nuxt option `elfui: { theme: 'novatron' }` becomes `theme: 'nova'` (also in `themes: [...]`), `elfui init --theme novatron` becomes `--theme nova`, and `useElfTheme` values stored as `novatron` (cookie or localStorage) must be migrated to `nova`. No compatibility alias. The tokens are unchanged. To migrate: search your project for `novatron` in HTML, CSS imports, `nuxt.config.ts` and stored theme values, and replace it with `nova`.
+- Add the `elfwood` theme, the first light theme: white and near-white surfaces, deep forest-green primary (`#15803d`), 0.5rem radius, `color-scheme: light`. Available as `data-theme="elfwood"`, `@xouyi/elfui/themes/elfwood.css`, the Nuxt `theme`/`themes` options, `elfui init --theme elfwood`, `elfThemes` and the docs switcher (with a light Shiki theme). Every example passes axe and every token pair passes `bun run contrast` in it.
+- Add the `--elf-success-text` and `--elf-warning-text` tokens and the `text-success-text` / `text-warning-text` utilities: readable status text and icons on `background`, `card` and `popover` (4.5:1, checked by `bun run contrast`). `ElfAlert` titles and icons use them. Custom themes must define both (copy `success` and `warning` for a dark theme).
 
 ## 0.4.0
 

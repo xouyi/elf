@@ -2,7 +2,7 @@ import { readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { expect, test } from '@playwright/test'
 
-// Every src/components/<dir>/examples/<File>.vue, in both themes, at desktop (1280) and mobile (360) width.
+// Every src/components/<dir>/examples/<File>.vue, in every theme, at desktop (1280) and mobile (360) width.
 // The page /__examples/<dir>/<example> (apps/docs) renders one example in isolation and sets <html data-ready>.
 const componentsDir = join(import.meta.dirname, '../../src/components')
 const kebab = (name: string) => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
@@ -22,7 +22,7 @@ const examples = readdirSync(componentsDir, { withFileTypes: true })
 
 const viewports = [{ label: '1280', width: 1280, height: 800 }, { label: '360', width: 360, height: 740 }]
 
-for (const theme of ['elf', 'nova'] as const) {
+for (const theme of ['elf', 'nova', 'elfwood'] as const) {
   for (const vp of viewports) {
     test.describe(`${theme} @ ${vp.label}`, () => {
       test.use({ viewport: { width: vp.width, height: vp.height } })

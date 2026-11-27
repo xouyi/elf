@@ -1,6 +1,6 @@
 # ElfUI
 
-> ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (pure black with violet accents, rounded) and nova (gold on obsidian, sharp corners).
+> ElfUI is a themeable design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with three themes: elf (pure black with violet accents, rounded), nova (gold on obsidian, sharp corners) and elfwood (light, green on white).
 
 ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.4.0). Install with `bun add @xouyi/elfui` or `bunx @xouyi/elfui@latest init`. All Vue components use the `Elf` prefix. Use Bun for every command.
 
@@ -49,7 +49,8 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - Choose appearance with props (variant, size), not custom classes or inline styles.
 - Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).
 - Use text-destructive-text for error messages and required markers; bg-destructive is a fill and is too dark for text.
-- ElfUI is dark only: do not add light-mode styles or dark: variants.
+- Use text-success-text and text-warning-text for status text and icons; bg-success and bg-warning are fills.
+- Themes decide light or dark (elf and nova are dark, elfwood is light): never add dark: variants or hard-coded colors.
 - Do not override border radius with arbitrary values; radii derive from the theme (nova is sharp, 0px).
 - Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.

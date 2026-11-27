@@ -33,6 +33,8 @@
   --color-success-foreground: var(--elf-success-foreground);
   --color-warning: var(--elf-warning);
   --color-warning-foreground: var(--elf-warning-foreground);
+  --color-success-text: var(--elf-success-text);
+  --color-warning-text: var(--elf-warning-text);
   --color-border: var(--elf-border);
   --color-input: var(--elf-input);
   --color-ring: var(--elf-ring);

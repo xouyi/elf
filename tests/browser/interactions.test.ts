@@ -1060,7 +1060,7 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(avatars.map(a => a.getAttribute('role'))).toEqual(['img', 'img', 'img', 'img'])
       await expect.element(page.getByRole('img', { name: 'Avatar, xl size' })).toBeInTheDocument()
       const radius = getComputedStyle(avatars[3]!).borderTopLeftRadius
-      expect(radius === '0px' ? theme === 'nova' : theme === 'elf', 'round in elf, square in nova').toBe(true)
+      expect(radius === '0px', 'round in elf and elfwood, square in nova').toBe(theme === 'nova')
       expect(getComputedStyle(avatars[3]!.firstElementChild!).backgroundColor).not.toBe('rgba(0, 0, 0, 0)')
     })
 

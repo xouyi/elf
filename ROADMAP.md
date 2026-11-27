@@ -26,14 +26,14 @@ Reka UI 2.11 (the version in this repo) already ships primitives for almost ever
 
 ## Principles
 
-1. **Accessibility is a release gate, not a goal.** Every component follows the matching [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/patterns/) pattern, is fully keyboard operable, has visible focus in both themes, respects `prefers-reduced-motion`, and reaches WCAG 2.2 AA contrast. axe-core must report zero violations for every example in both themes. A component with a documented keyboard table that is not tested is not done.
+1. **Accessibility is a release gate, not a goal.** Every component follows the matching [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/patterns/) pattern, is fully keyboard operable, has visible focus in every theme, respects `prefers-reduced-motion`, and reaches WCAG 2.2 AA contrast. axe-core must report zero violations for every example in every theme. A component with a documented keyboard table that is not tested is not done.
 2. **Reka first.** If Reka UI has a primitive, build on it. Do not reimplement focus management, typeahead, dismissal, collision handling or ARIA wiring. If Reka has no primitive, compose from native elements and `Primitive`, and say so in the docs page.
 3. **API conventions.** Every component: `data-slot` on every part, `data-variant`/`data-size` where applicable, `class` merged with `cn()` last, `asChild`/`as` where it renders an element, `v-model` (and `v-model:open`) for state with an uncontrolled default, a `<Name>Props` type exported from the component's `index.ts`, variants through `cva` and exported as `<name>Variants`, sub-parts named `<Parent><Part>`, relative imports inside `src` (the registry sync rewrites them to aliases). No component reaches for a global, a router or Nuxt auto-imports.
-4. **Tokens, not values.** Components use only semantic CSS variables (`--background`, `--foreground`, `--primary`, `--ring`, `--radius` and the additions listed in v0.8). No hard-coded colours or radii. A new theme needs only token values; the `nova` theme must keep working with `--radius: 0`. Themes stay dark only.
+4. **Tokens, not values.** Components use only semantic CSS variables (`--background`, `--foreground`, `--primary`, `--ring`, `--radius` and the additions listed in v0.8). No hard-coded colours or radii. A new theme needs only token values; the `nova` theme must keep working with `--radius: 0`. `elf` and `nova` are dark, `elfwood` is light: components must never assume a dark background.
 5. **One source of truth.** A component's props, emits and slots are read from its source by the docs build; examples are single-file components under `src/components/<name>/examples/` and feed docs previews, unit tests, a11y tests and visual baselines. Nothing is described twice.
 6. **Small, copyable, owned.** The package ships source (`@xouyi/elfui`) and a shadcn-vue registry. Avoid runtime dependencies beyond Reka UI, cva, tailwind-merge and `@vueuse/core` where justified. Heavy features (Chart, Code Block, Carousel, Markdown) use optional peer dependencies and lazy loading.
 7. **Frozen public API after 1.0.** Props, slots, emitted events, `data-slot` names and token names are public API. Breaking changes are announced in the changelog one minor release ahead and land only in a major.
-8. **Testing requirement.** Each component has unit tests for variant and logic, browser tests (axe in both themes, keyboard and focus behaviour), and visual baselines for its default examples at 1280px and 360px. See the Definition of Done.
+8. **Testing requirement.** Each component has unit tests for variant and logic, browser tests (axe in every theme, keyboard and focus behaviour), and visual baselines for its default examples at 1280px and 360px. See the Definition of Done.
 9. **Docs requirement.** A component without a docs page, live examples, generated API tables, an accessibility section (keyboard table plus ARIA roles) and a theming section is not released.
 10. **Right-to-left and locale.** Components must not assume left-to-right or English. Date, number and list components take a `locale` and are tested with Turkish (`tr-TR`) since all Novatron apps use Turkish copy. Strings inside components (such as "Close") are props or slots with English defaults.
 
@@ -829,7 +829,7 @@ The v0.9 composites (`ElfAdminPage`, `ElfLightbox`, `ElfCameraCapture`, `ElfQuiz
 
 ## Explicitly out of scope
 
-- **Light theme.** ElfUI is dark only; there is no `prefers-color-scheme` switch.
+- **Automatic light/dark switching.** `elfwood` is a light theme chosen with `data-theme`; there is no `prefers-color-scheme` switch.
 - **Layout components** (`Container`, `Stack`, `Grid`): documented as Tailwind recipes (v0.8).
 - **Rich text and Markdown editors**: render-only `ElfMarkdown`; editing stays in apps.
 - **Icon set**: ElfUI is icon-agnostic. Components take icons by slot; docs examples use `lucide-vue-next` or `@nuxt/icon`.
@@ -847,8 +847,8 @@ Copy this checklist into the pull request. All boxes are required unless marked 
 - [ ] **Examples.** `src/components/<name>/examples/*.vue`: at least `Default`, every variant, every size, `Disabled`, and one realistic composition. Examples are the single source for docs, tests and visual baselines.
 - [ ] **Docs page.** `apps/docs/content/components/<name>.md` with Installation (package and registry command), Usage, Examples via `<ComponentPreview>`, generated API reference (props, emits, slots), Accessibility (keyboard table and ARIA roles, with APG link), Theming (tokens used).
 - [ ] **Unit test.** Vitest (happy-dom): variant classes, `v-model`, `asChild`, props passthrough, edge cases.
-- [ ] **Browser a11y test.** Vitest browser mode: every example mounted in both themes, axe-core with zero violations; interaction tests for focus management, Escape, arrow-key behaviour, focus return and typeahead where the pattern defines them.
-- [ ] **Visual baselines.** Default examples captured by Playwright at 1280px and 360px in both themes, generated in the Playwright Docker image through the baselines workflow; PNG diff reviewed in the pull request.
+- [ ] **Browser a11y test.** Vitest browser mode: every example mounted in every theme, axe-core with zero violations; interaction tests for focus management, Escape, arrow-key behaviour, focus return and typeahead where the pattern defines them.
+- [ ] **Visual baselines.** Default examples captured by Playwright at 1280px and 360px in every theme, generated in the Playwright Docker image through the baselines workflow; PNG diff reviewed in the pull request.
 - [ ] **Registry item.** `registry.json` and `registry/r/<name>.json` regenerated (`bun run registry:build`), `registryDependencies` correct, installs into a clean project.
 - [ ] **llms entry.** `llms.txt` and `llms-full.txt` regenerated and `bun run llms:check` passes.
 - [ ] **Changelog.** One line under `Unreleased` in `CHANGELOG.md`; this roadmap entry status changed to **done** with the release version.

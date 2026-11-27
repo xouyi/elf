@@ -34,7 +34,7 @@ describe('useElfTheme', () => {
   it('starts with the first shipped theme and lists the accepted names', () => {
     const t = setup()
     expect(t.theme.value).toBe('elf')
-    expect(t.themes).toEqual(['elf', 'nova'])
+    expect(t.themes).toEqual(['elf', 'nova', 'elfwood'])
     expect(t.wrapper.text()).toBe('elf')
   })
 
@@ -60,6 +60,8 @@ describe('useElfTheme', () => {
     const t = setup()
     t.cycle()
     expect(t.theme.value).toBe('nova')
+    t.cycle()
+    expect(t.theme.value).toBe('elfwood')
     t.cycle()
     expect(t.theme.value).toBe('elf')
   })

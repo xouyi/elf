@@ -12,7 +12,7 @@ import { detectProject, hasDependency } from '../lib/project'
 import type { Project } from '../lib/project'
 import { ask, isInteractive } from '../lib/prompt'
 
-export const THEMES = ['elf', 'nova'] as const
+export const THEMES = ['elf', 'nova', 'elfwood'] as const
 type Theme = typeof THEMES[number]
 
 const TAILWIND_RE = /@import\s+(?:url\()?['"]tailwindcss['"]/

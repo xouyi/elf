@@ -4,7 +4,7 @@
  *   app/generated/component-meta.json   props, emits, slots, tokens used and registry data per component
  *                                       (vue-component-meta reads the real SFC sources and their TypeScript types)
  *   app/generated/examples.json         source and Shiki-highlighted HTML of every src/components/<dir>/examples/*.vue
- *   app/generated/tokens.json           both themes' tokens as hex plus the WCAG contrast ratios
+ *   app/generated/tokens.json           every theme' tokens as hex plus the WCAG contrast ratios
  *   content/docs/3.resources/*.md       CHANGELOG.md, CONTRIBUTING.md and ROADMAP.md rendered as pages
  *
  * Run by `bun run docs:prepare` (and automatically before dev, build and generate).
@@ -112,7 +112,7 @@ for (const dir of componentDirs) {
       title: file.replace('.vue', '').replace(/([a-z0-9])([A-Z])/g, '$1 $2'),
       file: `src/components/${dir}/examples/${file}`,
       code,
-      html: await codeToHtml(code, { lang: 'vue', theme: 'github-dark-default' }),
+      html: await codeToHtml(code, { lang: 'vue', themes: { dark: 'github-dark-default', elfwood: 'github-light-default' }, defaultColor: 'dark' }),
     }
   }
 }

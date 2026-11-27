@@ -85,6 +85,9 @@ body {
 .code-block pre code .line.highlight, .code-block pre code .highlight { background: var(--elf-accent); }
 .code-block pre:focus-visible, .doc-code pre:focus-visible { outline-offset: -2px; }
 
+/* Shiki emits the dark colors inline and the light ones as --shiki-elfwood; the light theme switches to them. */
+[data-theme='elfwood'] :is(.shiki, .shiki span) { color: var(--shiki-elfwood) !important; }
+
 /* Anchors of headings inside API sections */
 .api-heading { scroll-margin-top: 5rem; }
 

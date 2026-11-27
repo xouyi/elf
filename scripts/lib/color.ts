@@ -67,6 +67,12 @@ export const textPairs: Array<[string, string]> = [
   ['destructive-text', 'popover'],
   ['success-foreground', 'success'],
   ['warning-foreground', 'warning'],
+  ['success-text', 'background'], // success text and icons on the page, cards and popovers
+  ['success-text', 'card'],
+  ['success-text', 'popover'],
+  ['warning-text', 'background'], // warning text and icons on the page, cards and popovers
+  ['warning-text', 'card'],
+  ['warning-text', 'popover'],
   ['primary', 'background'], // primary used as text (link variant)
 ]
 

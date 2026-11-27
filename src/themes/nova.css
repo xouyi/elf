@@ -19,8 +19,10 @@
   --elf-destructive-text: #f87171;
   --elf-success: #22c55e;
   --elf-success-foreground: #050505;
+  --elf-success-text: #22c55e;
   --elf-warning: #f59e0b;
   --elf-warning-foreground: #050505;
+  --elf-warning-text: #f59e0b;
   --elf-border: #27272a;
   --elf-input: #71717a;
   --elf-ring: #ffcc00;

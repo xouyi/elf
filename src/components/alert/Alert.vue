@@ -29,7 +29,7 @@ const role = computed(() => {
       v-if="props.showIcon"
       data-slot="alert-icon"
       aria-hidden="true"
-      class="mt-0.5 shrink-0 group-data-[variant=destructive]/alert:text-destructive-text group-data-[variant=success]/alert:text-success group-data-[variant=warning]/alert:text-warning [&_svg]:size-4"
+      class="mt-0.5 shrink-0 group-data-[variant=destructive]/alert:text-destructive-text group-data-[variant=success]/alert:text-success-text group-data-[variant=warning]/alert:text-warning-text [&_svg]:size-4"
     >
       <slot name="icon">
         <component :is="icons[props.variant ?? 'default']" />

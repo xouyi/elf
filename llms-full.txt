@@ -1,6 +1,6 @@
 # ElfUI (full reference)
 
-> ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (pure black with violet accents, rounded) and nova (gold on obsidian, sharp corners).
+> ElfUI is a themeable design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with three themes: elf (pure black with violet accents, rounded), nova (gold on obsidian, sharp corners) and elfwood (light, green on white).
 
 Version 0.4.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com/xouyi/elfUI .
 
@@ -10,7 +10,8 @@ Version 0.4.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com
 - Choose appearance with props (variant, size), not custom classes or inline styles.
 - Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).
 - Use text-destructive-text for error messages and required markers; bg-destructive is a fill and is too dark for text.
-- ElfUI is dark only: do not add light-mode styles or dark: variants.
+- Use text-success-text and text-warning-text for status text and icons; bg-success and bg-warning are fills.
+- Themes decide light or dark (elf and nova are dark, elfwood is light): never add dark: variants or hard-coded colors.
 - Do not override border radius with arbitrary values; radii derive from the theme (nova is sharp, 0px).
 - Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.
@@ -46,7 +47,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineNuxtConfig({
   modules: ['@xouyi/elfui/nuxt'],
   css: ['~/assets/css/main.css'],
-  elfui: { theme: 'nova', themes: ['elf'] }, // config key stays elfui; theme: 'elf' | 'nova'
+  elfui: { theme: 'nova', themes: ['elf'] }, // config key stays elfui; theme: 'elf' | 'nova' | 'elfwood'
   vite: { plugins: [tailwindcss()] },
 })
 ```
@@ -57,7 +58,7 @@ export default defineNuxtConfig({
 @import '@xouyi/elfui/styles.css';
 ```
 
-Components are auto-imported with the Elf prefix. Module options: `theme` ('elf' | 'nova', default 'elf'), `themes` (extra theme CSS to bundle), `prefix` (default 'Elf').
+Components are auto-imported with the Elf prefix. Module options: `theme` ('elf' | 'nova' | 'elfwood', default 'elf'), `themes` (extra theme CSS to bundle), `prefix` (default 'Elf').
 
 Upgrade: `bun update @xouyi/elfui`. Advanced: an unreleased commit can be installed with `bun add github:xouyi/elfUI#<tag-or-sha>`.
 
@@ -78,7 +79,7 @@ bunx @xouyi/elfui@latest init --yes   # or: bun add @xouyi/elfui tailwindcss @ta
 import { ElfButton } from '@xouyi/elfui'
 ```
 
-Set `<html data-theme="elf">` (or `nova`).
+Set `<html data-theme="elf">` (`nova` or `elfwood`).
 
 ## CLI and registry (copy components)
 
@@ -94,7 +95,7 @@ The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/
 
 ## Theming
 
-Themes: `elf`, `nova`. Select with `data-theme` on html or any element. Dark only.
+Themes: `elf`, `elfwood`, `nova`. Select with `data-theme` on html or any element.
 
 ```ts
 document.documentElement.dataset.theme = 'nova'
@@ -109,34 +110,36 @@ setTheme('nova')
 
 Tokens (CSS variables `--elf-<name>`, Tailwind utilities `bg-<name>`, `text-<name>-foreground`, `border-border`, `ring-ring`):
 
-| Token | elf | nova |
-| :-- | :-- | :-- |
-| background | `#000000` | `#050505` |
-| foreground | `#fafafa` | `#fafafa` |
-| card | `#0a0a0a` | `#09090b` |
-| card-foreground | `#fafafa` | `#fafafa` |
-| popover | `#0f0f0f` | `#09090b` |
-| popover-foreground | `#fafafa` | `#fafafa` |
-| primary | `oklch(0.7 0.16 293)` | `#ffcc00` |
-| primary-foreground | `oklch(0.15 0.03 295)` | `#050505` |
-| secondary | `#1c1c1c` | `#18181b` |
-| secondary-foreground | `#fafafa` | `#fafafa` |
-| muted | `#171717` | `#18181b` |
-| muted-foreground | `#a3a3a3` | `#a1a1aa` |
-| accent | `oklch(0.27 0.06 293)` | `#27272a` |
-| accent-foreground | `#fafafa` | `#fafafa` |
-| destructive | `oklch(0.55 0.21 25)` | `#dc2626` |
-| destructive-foreground | `oklch(0.99 0 0)` | `#ffffff` |
-| destructive-text | `oklch(0.72 0.17 22)` | `#f87171` |
-| success | `oklch(0.72 0.17 150)` | `#22c55e` |
-| success-foreground | `oklch(0.15 0.03 150)` | `#050505` |
-| warning | `oklch(0.82 0.15 85)` | `#f59e0b` |
-| warning-foreground | `oklch(0.2 0.04 85)` | `#050505` |
-| border | `#262626` | `#27272a` |
-| input | `#6b6b6b` | `#71717a` |
-| ring | `oklch(0.7 0.16 293)` | `#ffcc00` |
-| radius | `0.625rem` | `0px` |
-| radius-pill | `9999px` | `0px` |
+| Token | elf | elfwood | nova |
+| :-- | :-- | :-- | :-- |
+| background | `#000000` | `#fbfdfb` | `#050505` |
+| foreground | `#fafafa` | `#0b1a10` | `#fafafa` |
+| card | `#0a0a0a` | `#ffffff` | `#09090b` |
+| card-foreground | `#fafafa` | `#0b1a10` | `#fafafa` |
+| popover | `#0f0f0f` | `#ffffff` | `#09090b` |
+| popover-foreground | `#fafafa` | `#0b1a10` | `#fafafa` |
+| primary | `oklch(0.7 0.16 293)` | `#15803d` | `#ffcc00` |
+| primary-foreground | `oklch(0.15 0.03 295)` | `#ffffff` | `#050505` |
+| secondary | `#1c1c1c` | `#e6f1e8` | `#18181b` |
+| secondary-foreground | `#fafafa` | `#0f2417` | `#fafafa` |
+| muted | `#171717` | `#eef5ef` | `#18181b` |
+| muted-foreground | `#a3a3a3` | `#4b6252` | `#a1a1aa` |
+| accent | `oklch(0.27 0.06 293)` | `#d9eddd` | `#27272a` |
+| accent-foreground | `#fafafa` | `#0b1a10` | `#fafafa` |
+| destructive | `oklch(0.55 0.21 25)` | `#dc2626` | `#dc2626` |
+| destructive-foreground | `oklch(0.99 0 0)` | `#ffffff` | `#ffffff` |
+| destructive-text | `oklch(0.72 0.17 22)` | `#b91c1c` | `#f87171` |
+| success | `oklch(0.72 0.17 150)` | `#15803d` | `#22c55e` |
+| success-foreground | `oklch(0.15 0.03 150)` | `#ffffff` | `#050505` |
+| success-text | `oklch(0.72 0.17 150)` | `#166534` | `#22c55e` |
+| warning | `oklch(0.82 0.15 85)` | `#f59e0b` | `#f59e0b` |
+| warning-foreground | `oklch(0.2 0.04 85)` | `#1c1200` | `#050505` |
+| warning-text | `oklch(0.82 0.15 85)` | `#92400e` | `#f59e0b` |
+| border | `#262626` | `#c8dbcc` | `#27272a` |
+| input | `#6b6b6b` | `#6f8a77` | `#71717a` |
+| ring | `oklch(0.7 0.16 293)` | `#15803d` | `#ffcc00` |
+| radius | `0.625rem` | `0.5rem` | `0px` |
+| radius-pill | `9999px` | `9999px` | `0px` |
 
 Create a theme: add a CSS file declaring every token under `[data-theme='name']`, import it after styles.css, then run `bun run contrast` (WCAG AA).
 

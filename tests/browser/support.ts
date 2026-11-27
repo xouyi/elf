@@ -2,8 +2,8 @@ import type { Component } from 'vue'
 import axe from 'axe-core'
 import { createApp } from 'vue'
 
-export type ThemeName = 'elf' | 'nova'
-export const themes: ThemeName[] = ['elf', 'nova']
+export type ThemeName = 'elf' | 'nova' | 'elfwood'
+export const themes: ThemeName[] = ['elf', 'nova', 'elfwood']
 
 export interface Example { id: string, dir: string, file: string, load: () => Promise<Component> }
 

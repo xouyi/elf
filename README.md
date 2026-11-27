@@ -5,12 +5,12 @@
 
 **[Documentation](https://xouyi.github.io/elfUI/)** · **[llms.txt](https://xouyi.github.io/elfUI/llms.txt)** (for AI assistants, [full version](https://xouyi.github.io/elfUI/llms-full.txt)) · **[Example app](examples/nuxt-demo)**
 
-ElfUI is a dark-only design system for Vue 3 and Nuxt 4. Components are built on
+ElfUI is a themeable design system for Vue 3 and Nuxt 4. Components are built on
 [Reka UI](https://reka-ui.com) primitives with shadcn-vue style structure (CVA variants, `cn()`,
 CSS-variable theming) and styled with Tailwind CSS v4.
 
 - Components: Button, Input, Badge, Card, Dialog, Tabs (all prefixed `Elf` in Vue, for example `<ElfButton>`)
-- Themes: `elf` (pure black with violet accents, rounded, default) and `nova` (gold on obsidian, sharp corners)
+- Themes: `elf` (pure black with violet accents, rounded, default), `nova` (gold on obsidian, sharp corners) and `elfwood` (light: green on white)
 - Distribution: the npm package [`@xouyi/elfui`](https://www.npmjs.com/package/@xouyi/elfui) (with its own CLI), plus a registry for copying components into your project
 - Docs: a Nuxt Content site built with ElfUI itself, published at https://xouyi.github.io/elfUI/ (`bun run docs:dev` locally)
 - AI assistants: `llms.txt` and `llms-full.txt`, generated from the sources (`bun run llms`)
@@ -44,7 +44,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineNuxtConfig({
   modules: ['@xouyi/elfui/nuxt'],
   css: ['~/assets/css/main.css'],
-  elfui: { theme: 'nova' }, // the config key stays `elfui`; 'elf' | 'nova'; optional: themes: ['elf'] to bundle extra themes
+  elfui: { theme: 'nova' }, // the config key stays `elfui`; 'elf' | 'nova' | 'elfwood'; optional: themes: ['elf'] to bundle extra themes
   vite: { plugins: [tailwindcss()] },
 })
 ```
@@ -80,7 +80,7 @@ import { ElfButton } from '@xouyi/elfui'
 @import '@xouyi/elfui/themes/elf.css';
 ```
 
-Set `<html data-theme="elf">` (or `nova`).
+Set `<html data-theme="elf">` (`nova` or `elfwood`).
 
 ### Install from GitHub (advanced)
 
@@ -90,7 +90,7 @@ An unreleased tag or commit can be installed with `bun add github:xouyi/elfUI#<t
 
 Each theme is one CSS file in `src/themes/` that defines `--elf-*` tokens under `[data-theme='<name>']`:
 `background`, `foreground`, `card`, `popover`, `primary`, `secondary`, `muted`, `accent`, `destructive`,
-`success`, `warning` (each with a `-foreground`), `destructive-text` (readable error text), `border`, `input`, `ring`, `radius`, `radius-pill`.
+`success`, `warning` (each with a `-foreground`), `destructive-text`, `success-text`, `warning-text` (readable status text), `border`, `input`, `ring`, `radius`, `radius-pill`.
 Switch at runtime with `document.documentElement.dataset.theme = 'elf'`, or with the SSR-safe `useElfTheme()` composable (`theme`, `setTheme`, `cycle`, optional cookie or localStorage persistence). Tokens can also be scoped to any
 element: `<div data-theme="elf">`.
 
