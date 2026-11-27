@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.4.0
 
 - **Breaking: the `novatron` theme is now `nova`.** `data-theme="novatron"` becomes `data-theme="nova"`, the file `@xouyi/elfui/themes/novatron.css` becomes `@xouyi/elfui/themes/nova.css`, the Nuxt option `elfui: { theme: 'novatron' }` becomes `theme: 'nova'` (also in `themes: [...]`), `elfui init --theme novatron` becomes `--theme nova`, and `useElfTheme` values stored as `novatron` (cookie or localStorage) must be migrated to `nova`. No compatibility alias. The tokens are unchanged. To migrate: search your project for `novatron` in HTML, CSS imports, `nuxt.config.ts` and stored theme values, and replace it with `nova`.
 - Add the `elfwood` theme, the first light theme: white and near-white surfaces, deep forest-green primary (`#15803d`), 0.5rem radius, `color-scheme: light`. Available as `data-theme="elfwood"`, `@xouyi/elfui/themes/elfwood.css`, the Nuxt `theme`/`themes` options, `elfui init --theme elfwood`, `elfThemes` and the docs switcher (with a light Shiki theme). Every example passes axe and every token pair passes `bun run contrast` in it.
@@ -20,8 +20,6 @@
 - Add `ElfAccordion`, `ElfAccordionItem`, `ElfAccordionTrigger` and `ElfAccordionContent`, built on the Reka UI Accordion primitive: `type` `single` (with `collapsible`) or `multiple`, `v-model`, disabled items, arrow-key, Home and End navigation, an animated height shared with `ElfCollapsible`, a rotating chevron (`icon` slot) and reduced-motion fallbacks.
 - Add the optional `--elf-overlay` theme token: the scrim colour behind `ElfDialog`, `ElfAlertDialog` and `ElfSheet` (default `rgb(0 0 0 / 0.8)`; `elfwood` uses a lighter green-black). The docs set `color-scheme` to `light dark` so light-theme visitors see no dark flash.
 - `ElfToaster` status icons use `text-success-text` and `text-warning-text`, so they stay readable on the light `elfwood` surfaces.
-
-## 0.4.0
 
 - Add the `useElfTheme()` composable (`theme`, `themes`, `setTheme`, `cycle`) and `elfThemeBootScript()`: reads and sets `data-theme` on `<html>`, SSR-safe (per-app state, no `document` access on the server), typed theme names with support for custom themes, optional persistence in a cookie or localStorage, auto-imported by the Nuxt module. `elfThemes`, `ElfTheme` and the new `isElfTheme()` now live in `src/lib/themes.ts` and are still exported from the package root.
 - Add the `--elf-destructive-text` token and the `text-destructive-text` utility: readable error text on `background`, `card` and `popover` (7.2:1 or better in both themes, checked by `bun run contrast`). `ElfFieldError`, the required marker of `ElfFieldLabel`, the Input, Textarea and Label examples and `ElfAlert` use it instead of mixing `destructive` with white. Custom themes must define `--elf-destructive-text`.

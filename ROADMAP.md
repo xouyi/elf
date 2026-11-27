@@ -112,7 +112,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** ElfLabel
 - **Complexity:** S
 - **Novatron screens:** courses `AudiencePicker`, admin tables (row select); stock filters.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfRadioGroup
 
@@ -123,7 +123,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** ElfLabel
 - **Complexity:** S
 - **Novatron screens:** courses `CourseRulesCard`; stock `WishlistForm` priority.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfSwitch
 
@@ -134,7 +134,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** ElfLabel
 - **Complexity:** S
 - **Novatron screens:** courses `CourseRulesCard`, `ChatAdmin`; HQ settings.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfSelect
 
@@ -145,7 +145,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** ElfLabel, ElfField
 - **Complexity:** M
 - **Novatron screens:** stock location and category pickers; courses `AdminFilterBar` filters; scout forms.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfSeparator
 
@@ -189,7 +189,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** `AdminErrorBox` in courses/stock; form-level errors.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfProgress
 
@@ -200,7 +200,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** courses `ProgressBar`, `CourseCard`, lesson progress.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfAvatar
 
@@ -211,7 +211,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** forum `UserAvatar`, comments, profile; HQ member lists.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfGradientText
 
@@ -222,7 +222,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** Marketing and landing headings (not required by current apps).
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfKbd
 
@@ -244,7 +244,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** Docs site switcher; every app that exposes a theme choice.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 ### v0.4: Overlays and disclosure
 
@@ -259,7 +259,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** Icon buttons in `AppNav`, `MobileTopBar`, row actions.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfPopover
 
@@ -270,7 +270,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** none
 - **Complexity:** M
 - **Novatron screens:** courses `AdminFilterBar` extra filters; stock filters.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfHoverCard
 
@@ -281,7 +281,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfPopover (shared styles)
 - **Complexity:** S
 - **Novatron screens:** forum author cards in `CommentNode`, `PostCard`.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfDropdownMenu
 
@@ -292,7 +292,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfKbd, ElfSeparator
 - **Complexity:** M
 - **Novatron screens:** Row action menus in `AdminTable`; stock `ItemRow` actions; user menu in nav.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfContextMenu
 
@@ -303,7 +303,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfDropdownMenu (shared styles)
 - **Complexity:** S
 - **Novatron screens:** stock item list rows (optional); HQ member rows.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfAlertDialog
 
@@ -314,7 +314,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfButton
 - **Complexity:** S
 - **Novatron screens:** courses/stock `ConfirmDialog`; forum `ReasonDialog`.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfSheet
 
@@ -325,7 +325,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfDialog internals, ElfButton
 - **Complexity:** M
 - **Novatron screens:** stock `ui/Sheet`, `QuantitySheet`, `ItemEditSheet`; mobile filter panels.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfToaster + useToast
 
@@ -336,7 +336,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfAlert (styles), ElfButton
 - **Complexity:** M
 - **Novatron screens:** courses/stock/forum `ToastHost` plus each app's `useToast`.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfCollapsible
 
@@ -347,7 +347,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** courses `LessonOutline`, filter groups.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfAccordion
 
@@ -358,7 +358,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfCollapsible styles
 - **Complexity:** S
 - **Novatron screens:** courses `CourseRulesCard`; docs FAQ; settings pages.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 #### ElfScrollArea
 
@@ -369,7 +369,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** courses `LessonShell` TOC, chat panel, command list.
-- **Status:** shipped (unreleased, v0.4)
+- **Status:** shipped (v0.4.0)
 
 ### v0.5: Navigation and data display
 
