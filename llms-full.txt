@@ -92,7 +92,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, theme-switcher, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, breadcrumb, pagination, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, theme-switcher, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, breadcrumb, pagination, toggle, aspect-ratio, table, empty, stat-card, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -5066,8 +5066,872 @@ const page = ref(1)
 </template>
 ```
 
+### Toggle
+
+Pressable on/off button (ElfToggle) and a group of them (ElfToggleGroup with ElfToggleGroupItem) in single or multiple mode, built on Reka UI Toggle and ToggleGroup. Use it for filter chips, sort selectors and formatting buttons.
+
+Components: `ElfToggle`, `ElfToggleGroup`, `ElfToggleGroupItem`
+
+- variant options: `default`, `outline` (default `default`)
+- size options: `default`, `sm`, `lg` (default `default`)
+
+Props:
+
+- `ElfToggle modelValue / defaultValue` (boolean): Pressed state; bind with v-model.
+- `ElfToggleGroup type` ('single' | 'multiple', default single): single keeps one value (string); multiple keeps an array.
+- `ElfToggleGroup modelValue / defaultValue` (string | string[]): Pressed item value(s); bind with v-model.
+- `variant` ('default' | 'outline', default default): On ElfToggle, or on the group (inherited by items, overridable per item).
+- `size` ('sm' | 'default' | 'lg', default default): On ElfToggle, or on the group (inherited by items, overridable per item).
+- `ElfToggleGroup joined` (boolean, default false): Renders the items as one segmented control with shared borders.
+- `ElfToggleGroupItem value` (string): Required unique value of the item.
+- `disabled` (boolean, default false): On ElfToggle, ElfToggleGroup or ElfToggleGroupItem.
+- `class` (string | array | object): Accepted by every part; merged with base classes.
+
+Slots:
+
+- default: the label or an icon (give icon-only toggles an aria-label)
+
+Accessibility:
+
+- A single toggle is a button with aria-pressed. In a single group items are radios in a radiogroup; in a multiple group they are toggle buttons in a group.
+- Name the group with aria-label and every icon-only item with aria-label.
+- Arrow keys, Home and End move focus inside a group; Space or Enter presses.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfToggle } from '@xouyi/elfui'
+import { Bold } from '@lucide/vue'
+</script>
+
+<template>
+  <ElfToggle aria-label="Toggle bold">
+    <Bold />
+  </ElfToggle>
+</template>
+```
+
+#### Disabled
+
+```vue
+<script setup lang="ts">
+import { ElfToggle } from '@xouyi/elfui'
+import { Bold } from '@lucide/vue'
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <ElfToggle disabled aria-label="Bold, disabled">
+      <Bold />
+    </ElfToggle>
+    <ElfToggle variant="outline" disabled default-value aria-label="Bold, on and disabled">
+      <Bold />
+    </ElfToggle>
+  </div>
+</template>
+```
+
+#### Group Joined
+
+```vue
+<script setup lang="ts">
+import { ElfToggleGroup, ElfToggleGroupItem } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfToggleGroup type="single" variant="outline" joined default-value="week" aria-label="Time range">
+    <ElfToggleGroupItem value="day">
+      Day
+    </ElfToggleGroupItem>
+    <ElfToggleGroupItem value="week">
+      Week
+    </ElfToggleGroupItem>
+    <ElfToggleGroupItem value="month">
+      Month
+    </ElfToggleGroupItem>
+    <ElfToggleGroupItem value="year" disabled>
+      Year
+    </ElfToggleGroupItem>
+  </ElfToggleGroup>
+</template>
+```
+
+#### Group Multiple
+
+```vue
+<script setup lang="ts">
+import { ElfToggleGroup, ElfToggleGroupItem } from '@xouyi/elfui'
+import { Bold, Italic, Underline } from '@lucide/vue'
+import { ref } from 'vue'
+
+const marks = ref<string[]>(['bold'])
+</script>
+
+<template>
+  <div class="flex flex-col items-start gap-3">
+    <ElfToggleGroup v-model="marks" type="multiple" aria-label="Text formatting">
+      <ElfToggleGroupItem value="bold" aria-label="Bold">
+        <Bold />
+      </ElfToggleGroupItem>
+      <ElfToggleGroupItem value="italic" aria-label="Italic">
+        <Italic />
+      </ElfToggleGroupItem>
+      <ElfToggleGroupItem value="underline" aria-label="Underline">
+        <Underline />
+      </ElfToggleGroupItem>
+    </ElfToggleGroup>
+    <p class="text-sm text-muted-foreground">
+      Active: {{ marks.length ? marks.join(', ') : 'none' }}
+    </p>
+  </div>
+</template>
+```
+
+#### Group Single
+
+```vue
+<script setup lang="ts">
+import { ElfToggleGroup, ElfToggleGroupItem } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const sort = ref('newest')
+</script>
+
+<template>
+  <div class="flex flex-col items-start gap-3">
+    <ElfToggleGroup v-model="sort" type="single" variant="outline" aria-label="Sort posts">
+      <ElfToggleGroupItem value="newest">
+        Newest
+      </ElfToggleGroupItem>
+      <ElfToggleGroupItem value="top">
+        Top
+      </ElfToggleGroupItem>
+      <ElfToggleGroupItem value="unanswered">
+        Unanswered
+      </ElfToggleGroupItem>
+    </ElfToggleGroup>
+    <p class="text-sm text-muted-foreground">
+      Sorted by: {{ sort || 'nothing' }}
+    </p>
+  </div>
+</template>
+```
+
+#### Group Sizes
+
+```vue
+<script setup lang="ts">
+import { ElfToggleGroup, ElfToggleGroupItem } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="flex flex-col items-start gap-3">
+    <ElfToggleGroup type="single" size="sm" default-value="a" aria-label="Small group">
+      <ElfToggleGroupItem value="a">
+        Small
+      </ElfToggleGroupItem>
+      <ElfToggleGroupItem value="b">
+        Group
+      </ElfToggleGroupItem>
+    </ElfToggleGroup>
+    <ElfToggleGroup type="single" size="lg" variant="outline" default-value="a" aria-label="Large group">
+      <ElfToggleGroupItem value="a">
+        Large
+      </ElfToggleGroupItem>
+      <ElfToggleGroupItem value="b">
+        Group
+      </ElfToggleGroupItem>
+    </ElfToggleGroup>
+  </div>
+</template>
+```
+
+#### Sizes
+
+```vue
+<script setup lang="ts">
+import { ElfToggle } from '@xouyi/elfui'
+import { Underline } from '@lucide/vue'
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <ElfToggle variant="outline" size="sm" aria-label="Underline, small">
+      <Underline />
+    </ElfToggle>
+    <ElfToggle variant="outline" aria-label="Underline, default">
+      <Underline />
+    </ElfToggle>
+    <ElfToggle variant="outline" size="lg" aria-label="Underline, large">
+      <Underline />
+    </ElfToggle>
+  </div>
+</template>
+```
+
+#### Variants
+
+```vue
+<script setup lang="ts">
+import { ElfToggle } from '@xouyi/elfui'
+import { Italic } from '@lucide/vue'
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <ElfToggle aria-label="Italic, default variant">
+      <Italic />
+    </ElfToggle>
+    <ElfToggle variant="outline" aria-label="Italic, outline variant">
+      <Italic />
+    </ElfToggle>
+  </div>
+</template>
+```
+
+#### With Text
+
+```vue
+<script setup lang="ts">
+import { ElfToggle } from '@xouyi/elfui'
+import { Bell } from '@lucide/vue'
+import { ref } from 'vue'
+
+const subscribed = ref(false)
+</script>
+
+<template>
+  <div class="flex flex-col items-start gap-3">
+    <ElfToggle v-model="subscribed" variant="outline">
+      <Bell />
+      Notify me
+    </ElfToggle>
+    <p class="text-sm text-muted-foreground">
+      Notifications are {{ subscribed ? 'on' : 'off' }}.
+    </p>
+  </div>
+</template>
+```
+
+### AspectRatio
+
+Fixed-ratio frame for media, built on Reka UI AspectRatio. Fills the width of its parent and keeps width / height equal to ratio; an img or video child is cropped to cover.
+
+Components: `ElfAspectRatio`
+
+Props:
+
+- `ratio` (number, default 1): Width divided by height, for example 16 / 9.
+- `class` (string | array | object): Merged with the frame classes (overflow-hidden, rounded corners, muted background).
+
+Slots:
+
+- default: the media or placeholder; it fills the frame
+
+Accessibility:
+
+- The frame is presentational. Give an img an alt, and give a non-image placeholder role="img" with an aria-label.
+- Constrain the width on the parent; the height follows from the ratio.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfAspectRatio } from '@xouyi/elfui'
+
+// A self-contained image so the example needs no network.
+const photo = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice"><rect width="160" height="90" fill="#7c5cd6"/><circle cx="118" cy="26" r="12" fill="#e9e3ff"/><path d="M0 90l44-44 30 30 22-18 64 32z" fill="#4b2fa0"/></svg>')}`
+</script>
+
+<template>
+  <div class="w-full max-w-sm">
+    <ElfAspectRatio :ratio="16 / 9">
+      <img :src="photo" alt="Purple hills under a pale sun">
+    </ElfAspectRatio>
+  </div>
+</template>
+```
+
+#### Placeholder
+
+```vue
+<script setup lang="ts">
+import { ElfAspectRatio } from '@xouyi/elfui'
+import { ImageOff } from '@lucide/vue'
+</script>
+
+<template>
+  <div class="w-40">
+    <ElfAspectRatio :ratio="3 / 4">
+      <div role="img" aria-label="No photo available" class="flex size-full items-center justify-center text-muted-foreground">
+        <ImageOff class="size-6" aria-hidden="true" />
+      </div>
+    </ElfAspectRatio>
+  </div>
+</template>
+```
+
+#### Ratios
+
+```vue
+<script setup lang="ts">
+import { ElfAspectRatio } from '@xouyi/elfui'
+
+const ratios = [
+  { label: '1 / 1', value: 1 },
+  { label: '4 / 3', value: 4 / 3 },
+  { label: '16 / 9', value: 16 / 9 },
+  { label: '21 / 9', value: 21 / 9 },
+]
+</script>
+
+<template>
+  <div class="grid w-full max-w-md grid-cols-2 items-start gap-3">
+    <ElfAspectRatio v-for="r in ratios" :key="r.label" :ratio="r.value" class="border border-border">
+      <div class="flex size-full items-center justify-center text-sm text-muted-foreground">
+        {{ r.label }}
+      </div>
+    </ElfAspectRatio>
+  </div>
+</template>
+```
+
+### Table
+
+Semantic styled table on a native table. ElfTable (required caption) wraps ElfTableHeader, ElfTableBody, ElfTableFooter, ElfTableRow, ElfTableHead (th, scope col) and ElfTableCell (td). It scrolls sideways inside its container; stackOnMobile turns rows into cards below sm. The parts are designed so a data table can be composed on them: put a sort button in ElfTableHead and set its sort prop (aria-sort).
+
+Components: `ElfTable`, `ElfTableCaption`, `ElfTableHeader`, `ElfTableBody`, `ElfTableFooter`, `ElfTableRow`, `ElfTableHead`, `ElfTableCell`
+
+Props:
+
+- `ElfTable caption` (string): Required accessible name, rendered as the table caption.
+- `ElfTable captionHidden` (boolean, default false): Hide the caption visually; screen readers still read it (attribute: caption-hidden).
+- `ElfTable density` ('compact' | 'default' | 'comfortable', default default): Row spacing.
+- `ElfTable stackOnMobile` (boolean, default false): Below sm, show rows as cards with label: value lines (attribute: stack-on-mobile). Give ElfTableCell a label.
+- `ElfTable stickyHeader` (boolean, default false): Keep the header visible while scrolling; limit the height with containerClass (attribute: sticky-header).
+- `ElfTable containerClass` (string | array | object): Classes for the scroll container (attribute: container-class). class goes to the table.
+- `ElfTableHead sort` ('ascending' | 'descending' | 'none' | 'other'): Renders aria-sort on the column header.
+- `ElfTableCell label` (string): Column name shown in stacked mode.
+- `ElfTableRow selected` (boolean, default false): Marks the row as selected (data-state).
+
+Slots:
+
+- ElfTable default: header, body and footer sections
+- ElfTable caption: replaces the caption element
+
+Accessibility:
+
+- Always give the table a caption; hide it visually with caption-hidden if a heading already names it.
+- A table that overflows its container becomes a focusable named region so keyboard users can scroll it.
+- Use for tabular data, not for layout.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfBadge, ElfTable, ElfTableBody, ElfTableCell, ElfTableFooter, ElfTableHead, ElfTableHeader, ElfTableRow } from '@xouyi/elfui'
+
+const matches = [
+  { id: 'Q12', opponent: 'Team 6328', score: 142, result: 'Won' },
+  { id: 'Q18', opponent: 'Team 254', score: 118, result: 'Lost' },
+  { id: 'Q24', opponent: 'Team 1678', score: 131, result: 'Won' },
+]
+</script>
+
+<template>
+  <ElfTable caption="Qualification matches" class="min-w-[28rem]">
+    <ElfTableHeader>
+      <ElfTableRow>
+        <ElfTableHead>Match</ElfTableHead>
+        <ElfTableHead>Opponent</ElfTableHead>
+        <ElfTableHead>Result</ElfTableHead>
+        <ElfTableHead class="text-right">
+          Score
+        </ElfTableHead>
+      </ElfTableRow>
+    </ElfTableHeader>
+    <ElfTableBody>
+      <ElfTableRow v-for="m in matches" :key="m.id">
+        <ElfTableCell class="font-medium">
+          {{ m.id }}
+        </ElfTableCell>
+        <ElfTableCell>{{ m.opponent }}</ElfTableCell>
+        <ElfTableCell>
+          <ElfBadge :variant="m.result === 'Won' ? 'success' : 'secondary'">
+            {{ m.result }}
+          </ElfBadge>
+        </ElfTableCell>
+        <ElfTableCell class="text-right">
+          {{ m.score }}
+        </ElfTableCell>
+      </ElfTableRow>
+    </ElfTableBody>
+    <ElfTableFooter>
+      <ElfTableRow>
+        <ElfTableCell :colspan="3">
+          Total points
+        </ElfTableCell>
+        <ElfTableCell class="text-right">
+          391
+        </ElfTableCell>
+      </ElfTableRow>
+    </ElfTableFooter>
+  </ElfTable>
+</template>
+```
+
+#### Density
+
+```vue
+<script setup lang="ts">
+import { ElfTable, ElfTableBody, ElfTableCell, ElfTableHead, ElfTableHeader, ElfTableRow } from '@xouyi/elfui'
+
+const densities = ['compact', 'default', 'comfortable'] as const
+const rows = [
+  { part: 'Swerve module', stock: 8 },
+  { part: 'Battery 12 V', stock: 14 },
+]
+</script>
+
+<template>
+  <div class="grid gap-6">
+    <ElfTable v-for="d in densities" :key="d" :caption="`Parts, ${d} density`" :density="d">
+      <ElfTableHeader>
+        <ElfTableRow>
+          <ElfTableHead>Part</ElfTableHead>
+          <ElfTableHead class="text-right">
+            In stock
+          </ElfTableHead>
+        </ElfTableRow>
+      </ElfTableHeader>
+      <ElfTableBody>
+        <ElfTableRow v-for="r in rows" :key="r.part">
+          <ElfTableCell>{{ r.part }}</ElfTableCell>
+          <ElfTableCell class="text-right">
+            {{ r.stock }}
+          </ElfTableCell>
+        </ElfTableRow>
+      </ElfTableBody>
+    </ElfTable>
+  </div>
+</template>
+```
+
+#### Hidden Caption
+
+```vue
+<script setup lang="ts">
+import { ElfTable, ElfTableBody, ElfTableCell, ElfTableHead, ElfTableHeader, ElfTableRow } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid gap-2">
+    <h3 class="text-sm font-medium">
+      Battery log
+    </h3>
+    <ElfTable caption="Battery log" caption-hidden>
+      <ElfTableHeader>
+        <ElfTableRow>
+          <ElfTableHead>Battery</ElfTableHead>
+          <ElfTableHead class="text-right">
+            Voltage
+          </ElfTableHead>
+        </ElfTableRow>
+      </ElfTableHeader>
+      <ElfTableBody>
+        <ElfTableRow selected>
+          <ElfTableCell>B-01</ElfTableCell>
+          <ElfTableCell class="text-right">
+            12.4 V
+          </ElfTableCell>
+        </ElfTableRow>
+        <ElfTableRow>
+          <ElfTableCell>B-02</ElfTableCell>
+          <ElfTableCell class="text-right">
+            12.1 V
+          </ElfTableCell>
+        </ElfTableRow>
+      </ElfTableBody>
+    </ElfTable>
+  </div>
+</template>
+```
+
+#### Sortable Header
+
+```vue
+<script setup lang="ts">
+import type { TableSort } from '@xouyi/elfui'
+import { ArrowDown, ArrowUp, ChevronsUpDown } from '@lucide/vue'
+import { computed, ref } from 'vue'
+import { ElfButton, ElfTable, ElfTableBody, ElfTableCell, ElfTableHead, ElfTableHeader, ElfTableRow } from '@xouyi/elfui'
+
+type Key = 'name' | 'points'
+const rows = [
+  { name: 'Swerve drive', points: 40 },
+  { name: 'Climber', points: 25 },
+  { name: 'Intake', points: 18 },
+]
+const key = ref<Key>('name')
+const asc = ref(true)
+
+const sorted = computed(() => [...rows].sort((a, b) => {
+  const d = a[key.value] > b[key.value] ? 1 : a[key.value] < b[key.value] ? -1 : 0
+  return asc.value ? d : -d
+}))
+
+function sortOf(k: Key): TableSort {
+  return key.value === k ? (asc.value ? 'ascending' : 'descending') : 'none'
+}
+function toggle(k: Key) {
+  if (key.value === k) {
+    asc.value = !asc.value
+  }
+  else {
+    key.value = k
+    asc.value = true
+  }
+}
+</script>
+
+<template>
+  <ElfTable caption="Subsystems by points">
+    <ElfTableHeader>
+      <ElfTableRow>
+        <ElfTableHead :sort="sortOf('name')">
+          <ElfButton variant="ghost" size="sm" class="-ml-3" @click="toggle('name')">
+            Subsystem
+            <ArrowUp v-if="sortOf('name') === 'ascending'" aria-hidden="true" />
+            <ArrowDown v-else-if="sortOf('name') === 'descending'" aria-hidden="true" />
+            <ChevronsUpDown v-else aria-hidden="true" />
+          </ElfButton>
+        </ElfTableHead>
+        <ElfTableHead :sort="sortOf('points')" class="text-right">
+          <ElfButton variant="ghost" size="sm" class="-mr-3" @click="toggle('points')">
+            Points
+            <ArrowUp v-if="sortOf('points') === 'ascending'" aria-hidden="true" />
+            <ArrowDown v-else-if="sortOf('points') === 'descending'" aria-hidden="true" />
+            <ChevronsUpDown v-else aria-hidden="true" />
+          </ElfButton>
+        </ElfTableHead>
+      </ElfTableRow>
+    </ElfTableHeader>
+    <ElfTableBody>
+      <ElfTableRow v-for="r in sorted" :key="r.name">
+        <ElfTableCell>{{ r.name }}</ElfTableCell>
+        <ElfTableCell class="text-right">
+          {{ r.points }}
+        </ElfTableCell>
+      </ElfTableRow>
+    </ElfTableBody>
+  </ElfTable>
+</template>
+```
+
+#### Stack On Mobile
+
+```vue
+<script setup lang="ts">
+import { ElfBadge, ElfTable, ElfTableBody, ElfTableCell, ElfTableHead, ElfTableHeader, ElfTableRow } from '@xouyi/elfui'
+
+const members = [
+  { name: 'Ayşe Demir', role: 'Software', status: 'Active' },
+  { name: 'Mert Kaya', role: 'Mechanical', status: 'Active' },
+  { name: 'Elif Yıldız', role: 'Design', status: 'Away' },
+]
+</script>
+
+<template>
+  <ElfTable caption="Team members" stack-on-mobile>
+    <ElfTableHeader>
+      <ElfTableRow>
+        <ElfTableHead>Name</ElfTableHead>
+        <ElfTableHead>Role</ElfTableHead>
+        <ElfTableHead>Status</ElfTableHead>
+      </ElfTableRow>
+    </ElfTableHeader>
+    <ElfTableBody>
+      <ElfTableRow v-for="m in members" :key="m.name">
+        <ElfTableCell label="Name" class="font-medium">
+          {{ m.name }}
+        </ElfTableCell>
+        <ElfTableCell label="Role">
+          {{ m.role }}
+        </ElfTableCell>
+        <ElfTableCell label="Status">
+          <ElfBadge :variant="m.status === 'Active' ? 'success' : 'warning'">
+            {{ m.status }}
+          </ElfBadge>
+        </ElfTableCell>
+      </ElfTableRow>
+    </ElfTableBody>
+  </ElfTable>
+</template>
+```
+
+#### Sticky Header
+
+```vue
+<script setup lang="ts">
+import { ElfTable, ElfTableBody, ElfTableCell, ElfTableHead, ElfTableHeader, ElfTableRow } from '@xouyi/elfui'
+
+const rows = Array.from({ length: 20 }, (_, i) => ({ id: i + 1, event: `Event log entry ${i + 1}`, level: i % 4 === 0 ? 'Warning' : 'Info' }))
+</script>
+
+<template>
+  <ElfTable caption="Event log" sticky-header container-class="max-h-60">
+    <ElfTableHeader>
+      <ElfTableRow>
+        <ElfTableHead>#</ElfTableHead>
+        <ElfTableHead>Event</ElfTableHead>
+        <ElfTableHead>Level</ElfTableHead>
+      </ElfTableRow>
+    </ElfTableHeader>
+    <ElfTableBody>
+      <ElfTableRow v-for="r in rows" :key="r.id">
+        <ElfTableCell>{{ r.id }}</ElfTableCell>
+        <ElfTableCell>{{ r.event }}</ElfTableCell>
+        <ElfTableCell>{{ r.level }}</ElfTableCell>
+      </ElfTableRow>
+    </ElfTableBody>
+  </ElfTable>
+</template>
+```
+
+### Empty
+
+Empty state: ElfEmpty > ElfEmptyHeader (ElfEmptyMedia, ElfEmptyTitle, ElfEmptyDescription) + ElfEmptyContent for the action. For empty lists, tables and search with no results.
+
+Components: `ElfEmpty`, `ElfEmptyHeader`, `ElfEmptyMedia`, `ElfEmptyTitle`, `ElfEmptyDescription`, `ElfEmptyContent`
+
+Props:
+
+- `ElfEmptyMedia variant` ('default' | 'icon', default default): icon puts the icon on a muted square.
+- `ElfEmptyTitle as` (string, default h3): Heading element; choose the level that fits the page outline.
+- `class` (string | array | object): Accepted by every part; merged with base classes.
+
+Slots:
+
+- default on every part
+
+Accessibility:
+
+- The media is decorative (aria-hidden); the title carries the meaning.
+- Say why it is empty and what to do next; put the action in ElfEmptyContent.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { FolderOpen } from '@lucide/vue'
+import { ElfButton, ElfEmpty, ElfEmptyContent, ElfEmptyDescription, ElfEmptyHeader, ElfEmptyMedia, ElfEmptyTitle } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfEmpty class="w-full max-w-lg">
+    <ElfEmptyHeader>
+      <ElfEmptyMedia variant="icon">
+        <FolderOpen />
+      </ElfEmptyMedia>
+      <ElfEmptyTitle>No projects yet</ElfEmptyTitle>
+      <ElfEmptyDescription>
+        You have not created any projects. Create one to start tracking tasks and parts.
+      </ElfEmptyDescription>
+    </ElfEmptyHeader>
+    <ElfEmptyContent>
+      <div class="flex flex-wrap justify-center gap-2">
+        <ElfButton>Create project</ElfButton>
+        <ElfButton variant="outline">
+          Import
+        </ElfButton>
+      </div>
+    </ElfEmptyContent>
+  </ElfEmpty>
+</template>
+```
+
+#### In Table
+
+```vue
+<script setup lang="ts">
+import { Inbox } from '@lucide/vue'
+import { ElfEmpty, ElfEmptyDescription, ElfEmptyHeader, ElfEmptyMedia, ElfEmptyTitle, ElfTable, ElfTableBody, ElfTableCell, ElfTableHead, ElfTableHeader, ElfTableRow } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfTable caption="Open requests">
+    <ElfTableHeader>
+      <ElfTableRow>
+        <ElfTableHead>Request</ElfTableHead>
+        <ElfTableHead>Status</ElfTableHead>
+      </ElfTableRow>
+    </ElfTableHeader>
+    <ElfTableBody>
+      <ElfTableRow>
+        <ElfTableCell :colspan="2">
+          <ElfEmpty class="border-0 p-6">
+            <ElfEmptyHeader>
+              <ElfEmptyMedia>
+                <Inbox />
+              </ElfEmptyMedia>
+              <ElfEmptyTitle>Nothing to review</ElfEmptyTitle>
+              <ElfEmptyDescription>New requests will show up here.</ElfEmptyDescription>
+            </ElfEmptyHeader>
+          </ElfEmpty>
+        </ElfTableCell>
+      </ElfTableRow>
+    </ElfTableBody>
+  </ElfTable>
+</template>
+```
+
+#### No Results
+
+```vue
+<script setup lang="ts">
+import { SearchX } from '@lucide/vue'
+import { ElfButton, ElfEmpty, ElfEmptyContent, ElfEmptyDescription, ElfEmptyHeader, ElfEmptyMedia, ElfEmptyTitle } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfEmpty class="w-full max-w-lg border-solid">
+    <ElfEmptyHeader>
+      <ElfEmptyMedia>
+        <SearchX />
+      </ElfEmptyMedia>
+      <ElfEmptyTitle>No results for "swerve"</ElfEmptyTitle>
+      <ElfEmptyDescription>Try a different keyword or clear the filters.</ElfEmptyDescription>
+    </ElfEmptyHeader>
+    <ElfEmptyContent>
+      <ElfButton variant="outline" size="sm">
+        Clear filters
+      </ElfButton>
+    </ElfEmptyContent>
+  </ElfEmpty>
+</template>
+```
+
+### StatCard
+
+KPI tile: label, value, hint and trend. A group named by its label. loading shows skeletons and sets aria-busy. To make the card a link, put ElfStatCardLink (as-child around a router link) in the label slot; it stretches over the whole card.
+
+Components: `ElfStatCard`, `ElfStatCardLink`
+
+Props:
+
+- `ElfStatCard label / value / hint` (string | number): Metric name, figure and supporting text. Slots label, default and hint replace them.
+- `ElfStatCard trend` (string): Change text such as +12%.
+- `ElfStatCard trendDirection` ('up' | 'down' | 'flat', default flat): Arrow beside the trend (attribute: trend-direction).
+- `ElfStatCard trendLabel` (string): Accessible sentence for the trend, read instead of the bare text (attribute: trend-label).
+- `ElfStatCard tone` ('default' | 'success' | 'warning' | 'destructive', default default): Tints the border and trend; never the only carrier of meaning.
+- `ElfStatCard loading / loadingLabel` (boolean / string, default false / Loading): Skeleton state and the text announced (attribute: loading-label).
+- `ElfStatCardLink as / asChild` (string / boolean, default a / false): Render a router link instead of an anchor (attribute: as-child).
+
+Slots:
+
+- ElfStatCard label, default (value) and hint
+- ElfStatCardLink default: the link text
+
+Accessibility:
+
+- Use a short specific label; the card is a group named by it.
+- Give trends a trend-label sentence and never rely on colour alone.
+- A linked card has one link, focus shows a ring on the whole card.
+
+Examples:
+
+#### As Link
+
+```vue
+<script setup lang="ts">
+import { ElfStatCard, ElfStatCardLink } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfStatCard value="12" hint="waiting for approval" class="w-full max-w-xs">
+    <template #label>
+      <ElfStatCardLink href="#pending">
+        Pending requests
+      </ElfStatCardLink>
+    </template>
+  </ElfStatCard>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfStatCard } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid w-full max-w-3xl gap-4 sm:grid-cols-3">
+    <ElfStatCard
+      label="Active members"
+      value="48"
+      trend="+6"
+      trend-direction="up"
+      trend-label="up 6 since last month"
+      tone="success"
+      hint="since last month"
+    />
+    <ElfStatCard
+      label="Open issues"
+      value="17"
+      trend="-3"
+      trend-direction="down"
+      trend-label="down 3 since last week"
+      hint="since last week"
+    />
+    <ElfStatCard label="Parts in stock" value="1,284" hint="across 6 shelves" />
+  </div>
+</template>
+```
+
+#### Loading
+
+```vue
+<script setup lang="ts">
+import { ElfStatCard } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid w-full max-w-xl gap-4 sm:grid-cols-2">
+    <ElfStatCard label="Active members" loading loading-label="Loading active members" />
+    <ElfStatCard label="Open issues" loading loading-label="Loading open issues" />
+  </div>
+</template>
+```
+
+#### Tones
+
+```vue
+<script setup lang="ts">
+import { ElfStatCard } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid w-full max-w-3xl gap-4 sm:grid-cols-2">
+    <ElfStatCard label="Uptime" value="99.9%" trend="+0.2%" trend-direction="up" trend-label="up 0.2 percent" tone="success" hint="last 30 days" />
+    <ElfStatCard label="Low stock" value="9" trend="+4" trend-direction="up" trend-label="4 more than last week" tone="warning" hint="needs a reorder" />
+    <ElfStatCard label="Failed logins" value="31" trend="+12" trend-direction="up" trend-label="12 more than yesterday" tone="destructive" hint="today" />
+    <ElfStatCard label="Sessions" value="212" trend="0" trend-direction="flat" trend-label="unchanged" hint="today" />
+  </div>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfThemeSwitcher`, `ElfBreadcrumb`, `ElfBreadcrumbEllipsis`, `ElfBreadcrumbItem`, `ElfBreadcrumbLink`, `ElfBreadcrumbList`, `ElfBreadcrumbPage`, `ElfBreadcrumbSeparator`, `ElfPagination`, `ElfPaginationContent`, `ElfPaginationEllipsis`, `ElfPaginationFirst`, `ElfPaginationItem`, `ElfPaginationLast`, `ElfPaginationNext`, `ElfPaginationPrev`, `ElfSimplePagination`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfThemeSwitcher`, `ElfBreadcrumb`, `ElfBreadcrumbEllipsis`, `ElfBreadcrumbItem`, `ElfBreadcrumbLink`, `ElfBreadcrumbList`, `ElfBreadcrumbPage`, `ElfBreadcrumbSeparator`, `ElfPagination`, `ElfPaginationContent`, `ElfPaginationEllipsis`, `ElfPaginationFirst`, `ElfPaginationItem`, `ElfPaginationLast`, `ElfPaginationNext`, `ElfPaginationPrev`, `ElfSimplePagination`, `ElfToggle`, `ElfToggleGroup`, `ElfToggleGroupItem`, `ElfAspectRatio`, `ElfTable`, `ElfTableBody`, `ElfTableCaption`, `ElfTableCell`, `ElfTableFooter`, `ElfTableHead`, `ElfTableHeader`, `ElfTableRow`, `ElfEmpty`, `ElfEmptyContent`, `ElfEmptyDescription`, `ElfEmptyHeader`, `ElfEmptyMedia`, `ElfEmptyTitle`, `ElfStatCard`, `ElfStatCardLink`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

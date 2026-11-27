@@ -581,6 +581,8 @@ export const components: ComponentMeta[] = [
     ],
     slots: ['ElfPaginationContent default: { items } where each item is { type: \'page\', value } or { type: \'ellipsis\' }', 'ElfSimplePagination status: { page, pageCount }'],
     a11y: ['Nav landmark with native buttons; the current page has aria-current="page" and prev/next are disabled at the ends.', 'Translate ariaLabel and the simple labels; reset to page 1 when filters change.'],
+  },
+  {
     dir: 'toggle',
     name: 'Toggle',
     summary: 'Pressable on/off button (ElfToggle) and a group of them (ElfToggleGroup with ElfToggleGroupItem) in single or multiple mode, built on Reka UI Toggle and ToggleGroup. Use it for filter chips, sort selectors and formatting buttons.',
@@ -611,6 +613,8 @@ export const components: ComponentMeta[] = [
     ],
     slots: ['default: the media or placeholder; it fills the frame'],
     a11y: ['The frame is presentational. Give an img an alt, and give a non-image placeholder role="img" with an aria-label.', 'Constrain the width on the parent; the height follows from the ratio.'],
+  },
+  {
     dir: 'table',
     name: 'Table',
     summary: 'Semantic styled table on a native table. ElfTable (required caption) wraps ElfTableHeader, ElfTableBody, ElfTableFooter, ElfTableRow, ElfTableHead (th, scope col) and ElfTableCell (td). It scrolls sideways inside its container; stackOnMobile turns rows into cards below sm. The parts are designed so a data table can be composed on them: put a sort button in ElfTableHead and set its sort prop (aria-sort).',
