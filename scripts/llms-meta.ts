@@ -537,6 +537,26 @@ export const components: ComponentMeta[] = [
     slots: ['ElfAccordionTrigger icon: replaces the chevron'],
     a11y: ['Triggers are buttons inside headings; arrow keys, Home and End move between them and skip disabled items.', 'Use short, specific trigger labels and do not nest accordions.'],
   },
+  {
+    dir: 'toggle',
+    name: 'Toggle',
+    summary: 'Pressable on/off button (ElfToggle) and a group of them (ElfToggleGroup with ElfToggleGroupItem) in single or multiple mode, built on Reka UI Toggle and ToggleGroup. Use it for filter chips, sort selectors and formatting buttons.',
+    parts: ['ElfToggle', 'ElfToggleGroup', 'ElfToggleGroupItem'],
+    variants: 'toggleVariants',
+    props: [
+      { name: 'ElfToggle modelValue / defaultValue', type: 'boolean', description: 'Pressed state; bind with v-model.' },
+      { name: 'ElfToggleGroup type', type: '\'single\' | \'multiple\'', default: 'single', description: 'single keeps one value (string); multiple keeps an array.' },
+      { name: 'ElfToggleGroup modelValue / defaultValue', type: 'string | string[]', description: 'Pressed item value(s); bind with v-model.' },
+      { name: 'variant', type: '\'default\' | \'outline\'', default: 'default', description: 'On ElfToggle, or on the group (inherited by items, overridable per item).' },
+      { name: 'size', type: '\'sm\' | \'default\' | \'lg\'', default: 'default', description: 'On ElfToggle, or on the group (inherited by items, overridable per item).' },
+      { name: 'ElfToggleGroup joined', type: 'boolean', default: 'false', description: 'Renders the items as one segmented control with shared borders.' },
+      { name: 'ElfToggleGroupItem value', type: 'string', description: 'Required unique value of the item.' },
+      { name: 'disabled', type: 'boolean', default: 'false', description: 'On ElfToggle, ElfToggleGroup or ElfToggleGroupItem.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part; merged with base classes.' },
+    ],
+    slots: ['default: the label or an icon (give icon-only toggles an aria-label)'],
+    a11y: ['A single toggle is a button with aria-pressed. In a single group items are radios in a radiogroup; in a multiple group they are toggle buttons in a group.', 'Name the group with aria-label and every icon-only item with aria-label.', 'Arrow keys, Home and End move focus inside a group; Space or Enter presses.'],
+  },
 ]
 
 export const rules = [

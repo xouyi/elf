@@ -91,7 +91,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, toggle, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -4676,8 +4676,258 @@ import { ElfAccordion, ElfAccordionContent, ElfAccordionItem, ElfAccordionTrigge
 </template>
 ```
 
+### Toggle
+
+Pressable on/off button (ElfToggle) and a group of them (ElfToggleGroup with ElfToggleGroupItem) in single or multiple mode, built on Reka UI Toggle and ToggleGroup. Use it for filter chips, sort selectors and formatting buttons.
+
+Components: `ElfToggle`, `ElfToggleGroup`, `ElfToggleGroupItem`
+
+- variant options: `default`, `outline` (default `default`)
+- size options: `default`, `sm`, `lg` (default `default`)
+
+Props:
+
+- `ElfToggle modelValue / defaultValue` (boolean): Pressed state; bind with v-model.
+- `ElfToggleGroup type` ('single' | 'multiple', default single): single keeps one value (string); multiple keeps an array.
+- `ElfToggleGroup modelValue / defaultValue` (string | string[]): Pressed item value(s); bind with v-model.
+- `variant` ('default' | 'outline', default default): On ElfToggle, or on the group (inherited by items, overridable per item).
+- `size` ('sm' | 'default' | 'lg', default default): On ElfToggle, or on the group (inherited by items, overridable per item).
+- `ElfToggleGroup joined` (boolean, default false): Renders the items as one segmented control with shared borders.
+- `ElfToggleGroupItem value` (string): Required unique value of the item.
+- `disabled` (boolean, default false): On ElfToggle, ElfToggleGroup or ElfToggleGroupItem.
+- `class` (string | array | object): Accepted by every part; merged with base classes.
+
+Slots:
+
+- default: the label or an icon (give icon-only toggles an aria-label)
+
+Accessibility:
+
+- A single toggle is a button with aria-pressed. In a single group items are radios in a radiogroup; in a multiple group they are toggle buttons in a group.
+- Name the group with aria-label and every icon-only item with aria-label.
+- Arrow keys, Home and End move focus inside a group; Space or Enter presses.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfToggle } from '@xouyi/elfui'
+import { Bold } from '@lucide/vue'
+</script>
+
+<template>
+  <ElfToggle aria-label="Toggle bold">
+    <Bold />
+  </ElfToggle>
+</template>
+```
+
+#### Disabled
+
+```vue
+<script setup lang="ts">
+import { ElfToggle } from '@xouyi/elfui'
+import { Bold } from '@lucide/vue'
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <ElfToggle disabled aria-label="Bold, disabled">
+      <Bold />
+    </ElfToggle>
+    <ElfToggle variant="outline" disabled default-value aria-label="Bold, on and disabled">
+      <Bold />
+    </ElfToggle>
+  </div>
+</template>
+```
+
+#### Group Joined
+
+```vue
+<script setup lang="ts">
+import { ElfToggleGroup, ElfToggleGroupItem } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfToggleGroup type="single" variant="outline" joined default-value="week" aria-label="Time range">
+    <ElfToggleGroupItem value="day">
+      Day
+    </ElfToggleGroupItem>
+    <ElfToggleGroupItem value="week">
+      Week
+    </ElfToggleGroupItem>
+    <ElfToggleGroupItem value="month">
+      Month
+    </ElfToggleGroupItem>
+    <ElfToggleGroupItem value="year" disabled>
+      Year
+    </ElfToggleGroupItem>
+  </ElfToggleGroup>
+</template>
+```
+
+#### Group Multiple
+
+```vue
+<script setup lang="ts">
+import { ElfToggleGroup, ElfToggleGroupItem } from '@xouyi/elfui'
+import { Bold, Italic, Underline } from '@lucide/vue'
+import { ref } from 'vue'
+
+const marks = ref<string[]>(['bold'])
+</script>
+
+<template>
+  <div class="flex flex-col items-start gap-3">
+    <ElfToggleGroup v-model="marks" type="multiple" aria-label="Text formatting">
+      <ElfToggleGroupItem value="bold" aria-label="Bold">
+        <Bold />
+      </ElfToggleGroupItem>
+      <ElfToggleGroupItem value="italic" aria-label="Italic">
+        <Italic />
+      </ElfToggleGroupItem>
+      <ElfToggleGroupItem value="underline" aria-label="Underline">
+        <Underline />
+      </ElfToggleGroupItem>
+    </ElfToggleGroup>
+    <p class="text-sm text-muted-foreground">
+      Active: {{ marks.length ? marks.join(', ') : 'none' }}
+    </p>
+  </div>
+</template>
+```
+
+#### Group Single
+
+```vue
+<script setup lang="ts">
+import { ElfToggleGroup, ElfToggleGroupItem } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const sort = ref('newest')
+</script>
+
+<template>
+  <div class="flex flex-col items-start gap-3">
+    <ElfToggleGroup v-model="sort" type="single" variant="outline" aria-label="Sort posts">
+      <ElfToggleGroupItem value="newest">
+        Newest
+      </ElfToggleGroupItem>
+      <ElfToggleGroupItem value="top">
+        Top
+      </ElfToggleGroupItem>
+      <ElfToggleGroupItem value="unanswered">
+        Unanswered
+      </ElfToggleGroupItem>
+    </ElfToggleGroup>
+    <p class="text-sm text-muted-foreground">
+      Sorted by: {{ sort || 'nothing' }}
+    </p>
+  </div>
+</template>
+```
+
+#### Group Sizes
+
+```vue
+<script setup lang="ts">
+import { ElfToggleGroup, ElfToggleGroupItem } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="flex flex-col items-start gap-3">
+    <ElfToggleGroup type="single" size="sm" default-value="a" aria-label="Small group">
+      <ElfToggleGroupItem value="a">
+        Small
+      </ElfToggleGroupItem>
+      <ElfToggleGroupItem value="b">
+        Group
+      </ElfToggleGroupItem>
+    </ElfToggleGroup>
+    <ElfToggleGroup type="single" size="lg" variant="outline" default-value="a" aria-label="Large group">
+      <ElfToggleGroupItem value="a">
+        Large
+      </ElfToggleGroupItem>
+      <ElfToggleGroupItem value="b">
+        Group
+      </ElfToggleGroupItem>
+    </ElfToggleGroup>
+  </div>
+</template>
+```
+
+#### Sizes
+
+```vue
+<script setup lang="ts">
+import { ElfToggle } from '@xouyi/elfui'
+import { Underline } from '@lucide/vue'
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <ElfToggle variant="outline" size="sm" aria-label="Underline, small">
+      <Underline />
+    </ElfToggle>
+    <ElfToggle variant="outline" aria-label="Underline, default">
+      <Underline />
+    </ElfToggle>
+    <ElfToggle variant="outline" size="lg" aria-label="Underline, large">
+      <Underline />
+    </ElfToggle>
+  </div>
+</template>
+```
+
+#### Variants
+
+```vue
+<script setup lang="ts">
+import { ElfToggle } from '@xouyi/elfui'
+import { Italic } from '@lucide/vue'
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <ElfToggle aria-label="Italic, default variant">
+      <Italic />
+    </ElfToggle>
+    <ElfToggle variant="outline" aria-label="Italic, outline variant">
+      <Italic />
+    </ElfToggle>
+  </div>
+</template>
+```
+
+#### With Text
+
+```vue
+<script setup lang="ts">
+import { ElfToggle } from '@xouyi/elfui'
+import { Bell } from '@lucide/vue'
+import { ref } from 'vue'
+
+const subscribed = ref(false)
+</script>
+
+<template>
+  <div class="flex flex-col items-start gap-3">
+    <ElfToggle v-model="subscribed" variant="outline">
+      <Bell />
+      Notify me
+    </ElfToggle>
+    <p class="text-sm text-muted-foreground">
+      Notifications are {{ subscribed ? 'on' : 'off' }}.
+    </p>
+  </div>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfToggle`, `ElfToggleGroup`, `ElfToggleGroupItem`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

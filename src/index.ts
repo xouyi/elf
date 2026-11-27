@@ -241,3 +241,12 @@ export {
   AccordionItem as ElfAccordionItem,
   AccordionTrigger as ElfAccordionTrigger,
 } from './components/accordion'
+
+export {
+  Toggle as ElfToggle,
+  ToggleGroup as ElfToggleGroup,
+  ToggleGroupItem as ElfToggleGroupItem,
+  toggleGroupKey,
+  toggleVariants,
+} from './components/toggle'
+export type { ToggleGroupContext, ToggleGroupItemExtraProps, ToggleGroupProps, ToggleProps, ToggleVariants } from './components/toggle'

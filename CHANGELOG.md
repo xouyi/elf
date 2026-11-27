@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Add `ElfToggle`, `ElfToggleGroup` and `ElfToggleGroupItem` (`toggleVariants`), built on the Reka UI Toggle and ToggleGroup primitives: `variant` `default` or `outline`, `size` `sm`, `default` or `lg`, `v-model`, group `type` `single` or `multiple`, a `joined` segmented layout, per-item overrides, roving focus with arrow keys, Home and End. A single toggle is a button with `aria-pressed`; a single group is a radiogroup. Replaces filter chips and sort selectors.
+
 ## 0.4.0
 
 - **Breaking: the `novatron` theme is now `nova`.** `data-theme="novatron"` becomes `data-theme="nova"`, the file `@xouyi/elfui/themes/novatron.css` becomes `@xouyi/elfui/themes/nova.css`, the Nuxt option `elfui: { theme: 'novatron' }` becomes `theme: 'nova'` (also in `themes: [...]`), `elfui init --theme novatron` becomes `--theme nova`, and `useElfTheme` values stored as `novatron` (cookie or localStorage) must be migrated to `nova`. No compatibility alias. The tokens are unchanged. To migrate: search your project for `novatron` in HTML, CSS imports, `nuxt.config.ts` and stored theme values, and replace it with `nova`.

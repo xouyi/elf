@@ -91,6 +91,11 @@ import PopoverModal from '../../src/components/popover/examples/Modal.vue'
 import TooltipControlled from '../../src/components/tooltip/examples/Controlled.vue'
 import TooltipDefault from '../../src/components/tooltip/examples/Default.vue'
 import TooltipIconButtons from '../../src/components/tooltip/examples/IconButtons.vue'
+import ToggleDefault from '../../src/components/toggle/examples/Default.vue'
+import ToggleDisabled from '../../src/components/toggle/examples/Disabled.vue'
+import ToggleGroupMultiple from '../../src/components/toggle/examples/GroupMultiple.vue'
+import ToggleGroupSingle from '../../src/components/toggle/examples/GroupSingle.vue'
+import ToggleWithText from '../../src/components/toggle/examples/WithText.vue'
 import { axeViolations, mountComponent, settle, setTheme, themes } from './support'
 
 let unmount: (() => void) | undefined
@@ -2121,6 +2126,107 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       const destructive = el.querySelector<HTMLElement>('[data-variant="destructive"]')!
       expect(getComputedStyle(destructive.querySelector('[data-slot="alert-title"]')!).color).toBe(resolved('destructive-text'))
       expect(getComputedStyle(destructive.querySelector('[data-slot="alert-icon"]')!).color).toBe(resolved('destructive-text'))
+    })
+  })
+
+  describe('Toggle', () => {
+    it('presses with Space and Enter and reflects aria-pressed', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleDefault)
+      const toggle = el.querySelector<HTMLElement>('[data-slot="toggle"]')!
+      expect(toggle.getAttribute('aria-pressed')).toBe('false')
+      toggle.focus()
+      await userEvent.keyboard(' ')
+      await settle()
+      expect(toggle.getAttribute('aria-pressed')).toBe('true')
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(toggle.getAttribute('aria-pressed')).toBe('false')
+    })
+
+    it('v-model drives the pressed state and the label', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleWithText)
+      expect(el.textContent).toContain('Notifications are off')
+      await userEvent.click(el.querySelector<HTMLElement>('[data-slot="toggle"]')!)
+      await settle()
+      expect(el.textContent).toContain('Notifications are on')
+    })
+
+    it('shows a distinct pressed background and a visible focus ring', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleWithText)
+      const toggle = el.querySelector<HTMLElement>('[data-slot="toggle"]')!
+      const off = getComputedStyle(toggle).backgroundColor
+      await userEvent.click(toggle)
+      await settle(250)
+      expect(getComputedStyle(toggle).backgroundColor).not.toBe(off)
+      toggle.blur()
+      await userEvent.tab()
+      await settle()
+      expect(document.activeElement).toBe(toggle)
+      expect(getComputedStyle(toggle).boxShadow).not.toBe('none')
+    })
+
+    it('does not respond while disabled and is skipped by Tab', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleDisabled)
+      const toggles = [...el.querySelectorAll<HTMLButtonElement>('[data-slot="toggle"]')]
+      expect(toggles.every(t => t.disabled)).toBe(true)
+      expect(toggles[1]!.getAttribute('aria-pressed')).toBe('true')
+      await userEvent.tab()
+      expect(el.contains(document.activeElement) && document.activeElement !== document.body).toBe(false)
+    })
+  })
+
+  describe('ToggleGroup', () => {
+    const items = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('[data-slot="toggle-group-item"]')]
+
+    it('single: is one tab stop; arrows, Home and End move focus (roving) and Space selects', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleGroupSingle)
+      expect(el.querySelector('[data-slot="toggle-group"]')!.getAttribute('aria-label')).toBe('Sort posts')
+      items(el)[0]!.focus()
+      await userEvent.tab()
+      expect(el.contains(document.activeElement), 'the group is one tab stop').toBe(false)
+      items(el)[0]!.focus()
+      await userEvent.keyboard('{ArrowRight}')
+      await settle()
+      expect(document.activeElement).toBe(items(el)[1])
+      await userEvent.keyboard(' ')
+      await settle()
+      expect(el.textContent).toContain('Sorted by: top')
+      await userEvent.keyboard('{End}')
+      expect(document.activeElement).toBe(items(el)[2])
+      await userEvent.keyboard('{Home}')
+      expect(document.activeElement).toBe(items(el)[0])
+      await userEvent.keyboard('{ArrowLeft}')
+      expect(document.activeElement, 'wraps to the last item').toBe(items(el)[2])
+    })
+
+    it('single: pressing the active item clears the value', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleGroupSingle)
+      await userEvent.click(items(el)[0]!)
+      await settle()
+      expect(el.textContent).toContain('Sorted by: nothing')
+      expect(items(el).every(i => i.getAttribute('data-state') === 'off')).toBe(true)
+    })
+
+    it('multiple: items toggle independently by keyboard', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleGroupMultiple)
+      expect(el.textContent).toContain('Active: bold')
+      items(el)[0]!.focus()
+      await userEvent.keyboard('{ArrowRight}')
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(el.textContent).toContain('Active: bold, italic')
+      await userEvent.keyboard('{ArrowLeft}')
+      await userEvent.keyboard(' ')
+      await settle()
+      expect(el.textContent).toContain('Active: italic')
+      expect(items(el).map(i => i.getAttribute('aria-pressed'))).toEqual(['false', 'true', 'false'])
     })
   })
 
