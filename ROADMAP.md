@@ -259,7 +259,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** Icon buttons in `AppNav`, `MobileTopBar`, row actions.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfPopover
 
@@ -270,7 +270,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** none
 - **Complexity:** M
 - **Novatron screens:** courses `AdminFilterBar` extra filters; stock filters.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfHoverCard
 
@@ -281,7 +281,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfPopover (shared styles)
 - **Complexity:** S
 - **Novatron screens:** forum author cards in `CommentNode`, `PostCard`.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfDropdownMenu
 
@@ -292,7 +292,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfKbd, ElfSeparator
 - **Complexity:** M
 - **Novatron screens:** Row action menus in `AdminTable`; stock `ItemRow` actions; user menu in nav.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfContextMenu
 
@@ -303,7 +303,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfDropdownMenu (shared styles)
 - **Complexity:** S
 - **Novatron screens:** stock item list rows (optional); HQ member rows.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfAlertDialog
 
@@ -369,7 +369,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** courses `LessonShell` TOC, chat panel, command list.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 ### v0.5: Navigation and data display
 

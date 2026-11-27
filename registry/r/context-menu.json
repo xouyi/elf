@@ -1,0 +1,93 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "context-menu",
+  "title": "Context Menu",
+  "description": "Right-click, long-press and keyboard menu with the same parts and styles as the Dropdown Menu, built on Reka UI.",
+  "dependencies": [
+    "reka-ui",
+    "@vueuse/core",
+    "@lucide/vue"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json",
+    "https://xouyi.github.io/elfUI/r/dropdown-menu.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/context-menu/ContextMenu.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ContextMenuRootEmits, ContextMenuRootProps } from 'reka-ui'\nimport { ContextMenuRoot, useForwardPropsEmits } from 'reka-ui'\n\nconst props = defineProps<ContextMenuRootProps>()\nconst emits = defineEmits<ContextMenuRootEmits>()\n\nconst forwarded = useForwardPropsEmits(props, emits)\n</script>\n\n<template>\n  <ContextMenuRoot\n    v-slot=\"slotProps\"\n    data-slot=\"context-menu\"\n    v-bind=\"forwarded\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </ContextMenuRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/context-menu/ContextMenuCheckboxItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ContextMenuCheckboxItemEmits } from 'reka-ui'\nimport type { ContextMenuCheckboxItemProps } from './index'\nimport { Check } from '@lucide/vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { ContextMenuCheckboxItem, ContextMenuItemIndicator, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuItemVariants } from '@/components/ui/dropdown-menu'\n\nconst props = defineProps<ContextMenuCheckboxItemProps>()\nconst emits = defineEmits<ContextMenuCheckboxItemEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <ContextMenuCheckboxItem\n    data-slot=\"context-menu-checkbox-item\"\n    v-bind=\"forwarded\"\n    :class=\"cn(menuItemVariants(), 'pr-2 pl-8', props.class)\"\n  >\n    <span class=\"pointer-events-none absolute left-2 flex size-4 items-center justify-center\">\n      <ContextMenuItemIndicator>\n        <Check class=\"size-4\" />\n      </ContextMenuItemIndicator>\n    </span>\n    <slot />\n  </ContextMenuCheckboxItem>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/context-menu/ContextMenuContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ContextMenuContentEmits } from 'reka-ui'\nimport type { ContextMenuContentProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { ContextMenuContent, ContextMenuPortal, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuContentClass } from '@/components/ui/dropdown-menu'\n\ndefineOptions({\n  inheritAttrs: false,\n})\n\nconst props = defineProps<ContextMenuContentProps>()\nconst emits = defineEmits<ContextMenuContentEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <ContextMenuPortal>\n    <ContextMenuContent\n      data-slot=\"context-menu-content\"\n      v-bind=\"{ ...$attrs, ...forwarded }\"\n      :class=\"cn(\n        menuContentClass,\n        'max-h-(--reka-context-menu-content-available-height) origin-(--reka-context-menu-content-transform-origin)',\n        props.class,\n      )\"\n    >\n      <slot />\n    </ContextMenuContent>\n  </ContextMenuPortal>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/context-menu/ContextMenuGroup.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ContextMenuGroupProps } from 'reka-ui'\nimport { ContextMenuGroup, useForwardProps } from 'reka-ui'\n\nconst props = defineProps<ContextMenuGroupProps>()\nconst forwarded = useForwardProps(props)\n</script>\n\n<template>\n  <ContextMenuGroup data-slot=\"context-menu-group\" v-bind=\"forwarded\">\n    <slot />\n  </ContextMenuGroup>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/context-menu/ContextMenuItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ContextMenuItemEmits } from 'reka-ui'\nimport type { ContextMenuItemProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { ContextMenuItem, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuItemVariants } from '@/components/ui/dropdown-menu'\n\nconst props = withDefaults(defineProps<ContextMenuItemProps>(), {\n  variant: 'default',\n})\nconst emits = defineEmits<ContextMenuItemEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class', 'variant', 'inset')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <ContextMenuItem\n    data-slot=\"context-menu-item\"\n    :data-variant=\"props.variant\"\n    :data-inset=\"props.inset ? '' : undefined\"\n    v-bind=\"forwarded\"\n    :class=\"cn(menuItemVariants({ variant: props.variant }), props.class)\"\n  >\n    <slot />\n  </ContextMenuItem>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/context-menu/ContextMenuLabel.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ContextMenuLabelProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { ContextMenuLabel, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuLabelClass } from '@/components/ui/dropdown-menu'\n\nconst props = defineProps<ContextMenuLabelProps>()\nconst delegatedProps = reactiveOmit(props, 'class', 'inset')\nconst forwarded = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <ContextMenuLabel\n    data-slot=\"context-menu-label\"\n    :data-inset=\"props.inset ? '' : undefined\"\n    v-bind=\"forwarded\"\n    :class=\"cn(menuLabelClass, props.class)\"\n  >\n    <slot />\n  </ContextMenuLabel>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/context-menu/ContextMenuRadioGroup.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ContextMenuRadioGroupEmits, ContextMenuRadioGroupProps } from 'reka-ui'\nimport { ContextMenuRadioGroup, useForwardPropsEmits } from 'reka-ui'\n\nconst props = defineProps<ContextMenuRadioGroupProps>()\nconst emits = defineEmits<ContextMenuRadioGroupEmits>()\n\nconst forwarded = useForwardPropsEmits(props, emits)\n</script>\n\n<template>\n  <ContextMenuRadioGroup data-slot=\"context-menu-radio-group\" v-bind=\"forwarded\">\n    <slot />\n  </ContextMenuRadioGroup>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/context-menu/ContextMenuRadioItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ContextMenuRadioItemEmits } from 'reka-ui'\nimport type { ContextMenuRadioItemProps } from './index'\nimport { Circle } from '@lucide/vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { ContextMenuItemIndicator, ContextMenuRadioItem, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuItemVariants } from '@/components/ui/dropdown-menu'\n\nconst props = defineProps<ContextMenuRadioItemProps>()\nconst emits = defineEmits<ContextMenuRadioItemEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <ContextMenuRadioItem\n    data-slot=\"context-menu-radio-item\"\n    v-bind=\"forwarded\"\n    :class=\"cn(menuItemVariants(), 'pr-2 pl-8', props.class)\"\n  >\n    <span class=\"pointer-events-none absolute left-2 flex size-4 items-center justify-center\">\n      <ContextMenuItemIndicator>\n        <Circle class=\"size-2 fill-current\" />\n      </ContextMenuItemIndicator>\n    </span>\n    <slot />\n  </ContextMenuRadioItem>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/context-menu/ContextMenuSeparator.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ContextMenuSeparatorProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { ContextMenuSeparator, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuSeparatorClass } from '@/components/ui/dropdown-menu'\n\nconst props = defineProps<ContextMenuSeparatorProps>()\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <ContextMenuSeparator\n    data-slot=\"context-menu-separator\"\n    v-bind=\"forwarded\"\n    :class=\"cn(menuSeparatorClass, props.class)\"\n  />\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/context-menu/ContextMenuShortcut.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ContextMenuShortcutProps } from './index'\nimport { cn } from '@/lib/utils'\nimport { menuShortcutClass } from '@/components/ui/dropdown-menu'\n\nconst props = defineProps<ContextMenuShortcutProps>()\n</script>\n\n<template>\n  <span\n    data-slot=\"context-menu-shortcut\"\n    :class=\"cn(menuShortcutClass, props.class)\"\n  >\n    <slot />\n  </span>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/context-menu/ContextMenuSub.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ContextMenuSubEmits, ContextMenuSubProps } from 'reka-ui'\nimport { ContextMenuSub, useForwardPropsEmits } from 'reka-ui'\n\nconst props = defineProps<ContextMenuSubProps>()\nconst emits = defineEmits<ContextMenuSubEmits>()\n\nconst forwarded = useForwardPropsEmits(props, emits)\n</script>\n\n<template>\n  <ContextMenuSub\n    v-slot=\"slotProps\"\n    data-slot=\"context-menu-sub\"\n    v-bind=\"forwarded\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </ContextMenuSub>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/context-menu/ContextMenuSubContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ContextMenuSubContentEmits } from 'reka-ui'\nimport type { ContextMenuSubContentProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { ContextMenuSubContent, ContextMenuPortal, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuContentClass } from '@/components/ui/dropdown-menu'\n\ndefineOptions({\n  inheritAttrs: false,\n})\n\nconst props = withDefaults(defineProps<ContextMenuSubContentProps>(), {\n  sideOffset: 2,\n  alignOffset: -4,\n})\nconst emits = defineEmits<ContextMenuSubContentEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <ContextMenuPortal>\n    <ContextMenuSubContent\n      data-slot=\"context-menu-sub-content\"\n      v-bind=\"{ ...$attrs, ...forwarded }\"\n      :class=\"cn(\n        menuContentClass,\n        'max-h-(--reka-context-menu-content-available-height) origin-(--reka-context-menu-content-transform-origin)',\n        props.class,\n      )\"\n    >\n      <slot />\n    </ContextMenuSubContent>\n  </ContextMenuPortal>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/context-menu/ContextMenuSubTrigger.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ContextMenuSubTriggerProps } from './index'\nimport { ChevronRight } from '@lucide/vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { ContextMenuSubTrigger, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuItemVariants } from '@/components/ui/dropdown-menu'\n\nconst props = defineProps<ContextMenuSubTriggerProps>()\nconst delegatedProps = reactiveOmit(props, 'class', 'inset')\nconst forwarded = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <ContextMenuSubTrigger\n    data-slot=\"context-menu-sub-trigger\"\n    :data-inset=\"props.inset ? '' : undefined\"\n    v-bind=\"forwarded\"\n    :class=\"cn(menuItemVariants(), 'data-[state=open]:bg-accent data-[state=open]:text-accent-foreground', props.class)\"\n  >\n    <slot />\n    <ChevronRight class=\"ml-auto size-4 rtl:rotate-180\" />\n  </ContextMenuSubTrigger>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/context-menu/ContextMenuTrigger.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ContextMenuTriggerProps } from 'reka-ui'\nimport { ContextMenuTrigger, useForwardProps } from 'reka-ui'\n\nconst props = defineProps<ContextMenuTriggerProps>()\nconst forwarded = useForwardProps(props)\n</script>\n\n<template>\n  <ContextMenuTrigger data-slot=\"context-menu-trigger\" v-bind=\"forwarded\">\n    <slot />\n  </ContextMenuTrigger>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/context-menu/index.ts",
+      "content": "import type { ContextMenuCheckboxItemProps as RekaCheckboxItemProps, ContextMenuContentProps as RekaContentProps, ContextMenuItemProps as RekaItemProps, ContextMenuLabelProps as RekaLabelProps, ContextMenuRadioItemProps as RekaRadioItemProps, ContextMenuSeparatorProps as RekaSeparatorProps, ContextMenuSubContentProps as RekaSubContentProps, ContextMenuSubTriggerProps as RekaSubTriggerProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport type { MenuItemVariants } from '@/components/ui/dropdown-menu'\n\nexport { default as ContextMenu } from './ContextMenu.vue'\nexport { default as ContextMenuCheckboxItem } from './ContextMenuCheckboxItem.vue'\nexport { default as ContextMenuContent } from './ContextMenuContent.vue'\nexport { default as ContextMenuGroup } from './ContextMenuGroup.vue'\nexport { default as ContextMenuItem } from './ContextMenuItem.vue'\nexport { default as ContextMenuLabel } from './ContextMenuLabel.vue'\nexport { default as ContextMenuRadioGroup } from './ContextMenuRadioGroup.vue'\nexport { default as ContextMenuRadioItem } from './ContextMenuRadioItem.vue'\nexport { default as ContextMenuSeparator } from './ContextMenuSeparator.vue'\nexport { default as ContextMenuShortcut } from './ContextMenuShortcut.vue'\nexport { default as ContextMenuSub } from './ContextMenuSub.vue'\nexport { default as ContextMenuSubContent } from './ContextMenuSubContent.vue'\nexport { default as ContextMenuSubTrigger } from './ContextMenuSubTrigger.vue'\nexport { default as ContextMenuTrigger } from './ContextMenuTrigger.vue'\n\nexport interface ContextMenuContentProps extends RekaContentProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface ContextMenuSubContentProps extends RekaSubContentProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface ContextMenuItemProps extends RekaItemProps {\n  /** `destructive` colours the item for irreversible actions such as delete. */\n  variant?: MenuItemVariants['variant']\n  /** Indent the item so that it lines up with items that have a checkbox or radio indicator. */\n  inset?: boolean\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface ContextMenuCheckboxItemProps extends RekaCheckboxItemProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface ContextMenuRadioItemProps extends RekaRadioItemProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface ContextMenuLabelProps extends RekaLabelProps {\n  /** Indent the label so that it lines up with items that have an indicator. */\n  inset?: boolean\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface ContextMenuSeparatorProps extends RekaSeparatorProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface ContextMenuSubTriggerProps extends RekaSubTriggerProps {\n  /** Indent the trigger so that it lines up with items that have an indicator. */\n  inset?: boolean\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface ContextMenuShortcutProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "tooltip",
+  "title": "Tooltip",
+  "description": "Short non-interactive hint on hover or focus with a shared delay provider, built on Reka UI.",
+  "dependencies": [
+    "reka-ui",
+    "@vueuse/core"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/tooltip/Tooltip.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { TooltipRootEmits, TooltipRootProps } from 'reka-ui'\nimport { TooltipProvider, TooltipRoot, useForwardPropsEmits } from 'reka-ui'\nimport { inject } from 'vue'\nimport { tooltipProviderKey } from './context'\n\nconst props = defineProps<TooltipRootProps>()\nconst emits = defineEmits<TooltipRootEmits>()\n\nconst forwarded = useForwardPropsEmits(props, emits)\n// Without an ElfTooltipProvider above, the tooltip creates its own so it works standalone.\nconst hasProvider = inject(tooltipProviderKey, null) !== null\n</script>\n\n<template>\n  <TooltipRoot\n    v-if=\"hasProvider\"\n    v-slot=\"slotProps\"\n    data-slot=\"tooltip\"\n    v-bind=\"forwarded\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </TooltipRoot>\n  <TooltipProvider v-else :delay-duration=\"400\">\n    <TooltipRoot\n      v-slot=\"slotProps\"\n      data-slot=\"tooltip\"\n      v-bind=\"forwarded\"\n    >\n      <slot v-bind=\"slotProps\" />\n    </TooltipRoot>\n  </TooltipProvider>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/tooltip/TooltipContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { TooltipContentEmits } from 'reka-ui'\nimport type { TooltipContentProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { TooltipContent, TooltipPortal, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\ndefineOptions({\n  inheritAttrs: false,\n})\n\nconst props = withDefaults(defineProps<TooltipContentProps>(), {\n  sideOffset: 6,\n})\nconst emits = defineEmits<TooltipContentEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <TooltipPortal>\n    <TooltipContent\n      data-slot=\"tooltip-content\"\n      v-bind=\"{ ...$attrs, ...forwarded }\"\n      :class=\"cn(\n        'z-50 w-fit max-w-[min(20rem,calc(100vw-1rem))] origin-(--reka-tooltip-content-transform-origin) rounded-md border bg-popover px-3 py-1.5 text-xs text-balance text-popover-foreground shadow-md',\n        'data-[state=closed]:animate-[elf-fade-out_100ms_ease-in_forwards] data-[state=delayed-open]:animate-[elf-fade-in_120ms_ease-out] data-[state=instant-open]:animate-[elf-fade-in_120ms_ease-out] motion-reduce:animate-none!',\n        props.class,\n      )\"\n    >\n      <slot />\n    </TooltipContent>\n  </TooltipPortal>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/tooltip/TooltipProvider.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { TooltipProviderProps } from 'reka-ui'\nimport { TooltipProvider, useForwardProps } from 'reka-ui'\nimport { provide } from 'vue'\nimport { tooltipProviderKey } from './context'\n\nconst props = withDefaults(defineProps<TooltipProviderProps>(), {\n  delayDuration: 400,\n})\nconst forwarded = useForwardProps(props)\n\nprovide(tooltipProviderKey, true)\n</script>\n\n<template>\n  <TooltipProvider v-bind=\"forwarded\">\n    <slot />\n  </TooltipProvider>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/tooltip/TooltipTrigger.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { TooltipTriggerProps } from 'reka-ui'\nimport { TooltipTrigger, useForwardProps } from 'reka-ui'\n\nconst props = defineProps<TooltipTriggerProps>()\nconst forwarded = useForwardProps(props)\n</script>\n\n<template>\n  <TooltipTrigger data-slot=\"tooltip-trigger\" v-bind=\"forwarded\">\n    <slot />\n  </TooltipTrigger>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/tooltip/context.ts",
+      "content": "import type { InjectionKey } from 'vue'\n\n/** Provided by `ElfTooltipProvider` so that `ElfTooltip` knows a shared provider already exists. */\nexport const tooltipProviderKey: InjectionKey<true> = Symbol('elf-tooltip-provider')\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/tooltip/index.ts",
+      "content": "import type { TooltipContentProps as RekaTooltipContentProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\n\nexport { tooltipProviderKey } from './context'\nexport { default as Tooltip } from './Tooltip.vue'\nexport { default as TooltipContent } from './TooltipContent.vue'\nexport { default as TooltipProvider } from './TooltipProvider.vue'\nexport { default as TooltipTrigger } from './TooltipTrigger.vue'\n\nexport interface TooltipContentProps extends RekaTooltipContentProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

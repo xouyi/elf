@@ -57,6 +57,26 @@ import DialogControlled from '../../src/components/dialog/examples/Controlled.vu
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
 import TabsControlled from '../../src/components/tabs/examples/Controlled.vue'
 import TabsDefault from '../../src/components/tabs/examples/Default.vue'
+import ScrollAreaBoth from '../../src/components/scroll-area/examples/Both.vue'
+import ScrollAreaDefault from '../../src/components/scroll-area/examples/Default.vue'
+import ScrollAreaHorizontal from '../../src/components/scroll-area/examples/Horizontal.vue'
+import ContextMenuDefault from '../../src/components/context-menu/examples/Default.vue'
+import ContextMenuOptions from '../../src/components/context-menu/examples/Options.vue'
+import DropdownMenuCheckboxes from '../../src/components/dropdown-menu/examples/Checkboxes.vue'
+import DropdownMenuControlled from '../../src/components/dropdown-menu/examples/Controlled.vue'
+import DropdownMenuDefault from '../../src/components/dropdown-menu/examples/Default.vue'
+import DropdownMenuRadioItems from '../../src/components/dropdown-menu/examples/RadioItems.vue'
+import DropdownMenuRowActions from '../../src/components/dropdown-menu/examples/RowActions.vue'
+import DropdownMenuSubMenu from '../../src/components/dropdown-menu/examples/SubMenu.vue'
+import HoverCardControlled from '../../src/components/hover-card/examples/Controlled.vue'
+import HoverCardDefault from '../../src/components/hover-card/examples/Default.vue'
+import HoverCardDelays from '../../src/components/hover-card/examples/Delays.vue'
+import PopoverControlled from '../../src/components/popover/examples/Controlled.vue'
+import PopoverDefault from '../../src/components/popover/examples/Default.vue'
+import PopoverModal from '../../src/components/popover/examples/Modal.vue'
+import TooltipControlled from '../../src/components/tooltip/examples/Controlled.vue'
+import TooltipDefault from '../../src/components/tooltip/examples/Default.vue'
+import TooltipIconButtons from '../../src/components/tooltip/examples/IconButtons.vue'
 import { mountComponent, settle, setTheme, themes } from './support'
 
 let unmount: (() => void) | undefined
@@ -1137,6 +1157,499 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       const [a, b] = [avatars[0]!.getBoundingClientRect(), avatars[1]!.getBoundingClientRect()]
       expect(b.left, 'each avatar overlaps the previous one').toBeLessThan(a.right)
       expect(getComputedStyle(avatars[0]!).boxShadow).not.toBe('none')
+    })
+  })
+
+  describe('ScrollArea', () => {
+    const viewport = (el: Element) => el.querySelector<HTMLElement>('[data-slot="scroll-area-viewport"]')!
+
+    it('is a named, keyboard focusable region that scrolls with arrows, Page Down, End and Home', async () => {
+      setTheme(theme)
+      const { el } = await show(ScrollAreaDefault)
+      const vp = viewport(el)
+      expect(vp.getAttribute('role')).toBe('region')
+      expect(vp.getAttribute('aria-label')).toBe('Inventory list')
+      expect(vp.scrollHeight, 'content overflows').toBeGreaterThan(vp.clientHeight)
+      await userEvent.tab()
+      expect(document.activeElement).toBe(vp)
+      expect(vp.scrollTop).toBe(0)
+      await userEvent.keyboard('{ArrowDown}')
+      await settle(100)
+      const afterArrow = vp.scrollTop
+      expect(afterArrow, 'ArrowDown scrolls').toBeGreaterThan(0)
+      await userEvent.keyboard('{PageDown}')
+      await settle(150)
+      expect(vp.scrollTop, 'PageDown scrolls further').toBeGreaterThan(afterArrow)
+      await userEvent.keyboard('{End}')
+      await settle(150)
+      expect(vp.scrollTop + vp.clientHeight).toBeGreaterThanOrEqual(vp.scrollHeight - 1)
+      await userEvent.keyboard('{Home}')
+      await settle(150)
+      expect(vp.scrollTop).toBe(0)
+    })
+
+    it('scrolls a horizontal area with ArrowRight and ArrowLeft', async () => {
+      setTheme(theme)
+      const { el } = await show(ScrollAreaHorizontal)
+      const vp = viewport(el)
+      expect(vp.scrollWidth).toBeGreaterThan(vp.clientWidth)
+      await userEvent.tab()
+      expect(document.activeElement).toBe(vp)
+      await userEvent.keyboard('{ArrowRight}')
+      await settle(100)
+      expect(vp.scrollLeft).toBeGreaterThan(0)
+      await userEvent.keyboard('{ArrowLeft}')
+      await settle(150)
+      expect(vp.scrollLeft, 'ArrowLeft scrolls back').toBe(0)
+    })
+
+    it('renders both scrollbars and the corner for orientation both, and the table stays readable', async () => {
+      setTheme(theme)
+      const { el } = await show(ScrollAreaBoth)
+      const vp = viewport(el)
+      expect(vp.scrollHeight).toBeGreaterThan(vp.clientHeight)
+      expect(vp.scrollWidth).toBeGreaterThan(vp.clientWidth)
+      await userEvent.tab()
+      await userEvent.keyboard('{ArrowDown}{ArrowRight}')
+      await settle(150)
+      expect(vp.scrollTop).toBeGreaterThan(0)
+      expect(vp.scrollLeft).toBeGreaterThan(0)
+      expect(el.querySelector('table caption')?.textContent).toContain('Match scores')
+    })
+  })
+
+  describe('ContextMenu', () => {
+    const menu = () => document.querySelector<HTMLElement>('[role="menu"]')
+    const active = () => document.activeElement as HTMLElement
+    const label = (e: HTMLElement) => e.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+    const area = (el: Element) => el.querySelector<HTMLElement>('[data-slot="context-menu-trigger"]')!
+    const rightClick = (target: HTMLElement) => {
+      const box = target.getBoundingClientRect()
+      target.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, clientX: box.left + 20, clientY: box.top + 20 }))
+    }
+
+    it('opens on the contextmenu event at the pointer, with focus inside the menu', async () => {
+      setTheme(theme)
+      const { el } = await show(ContextMenuDefault)
+      expect(menu()).toBeNull()
+      rightClick(area(el))
+      await settle(200)
+      expect(menu()).not.toBeNull()
+      expect(menu()!.contains(document.activeElement), 'focus moved into the menu').toBe(true)
+      expect(document.querySelectorAll('[role="menuitem"]')).toHaveLength(4)
+      await userEvent.keyboard('{Escape}')
+      await settle(200)
+      expect(menu()).toBeNull()
+    })
+
+    it('opens from the keyboard with Shift+F10 and the ContextMenu key, and Escape returns focus to the area', async () => {
+      setTheme(theme)
+      const { el } = await show(ContextMenuDefault)
+      const trigger = area(el)
+      await userEvent.tab()
+      expect(document.activeElement).toBe(trigger)
+      for (const key of ['{Shift>}{F10}{/Shift}', '{ContextMenu}']) {
+        await userEvent.keyboard(key)
+        await settle(250)
+        expect(menu(), `${key} opens the menu`).not.toBeNull()
+        await userEvent.keyboard('{Escape}')
+        await settle(250)
+        expect(menu()).toBeNull()
+        expect(document.activeElement, 'focus returned to the area').toBe(trigger)
+      }
+    })
+
+    it('moves with arrow keys, skips disabled items, supports typeahead and Enter activates', async () => {
+      setTheme(theme)
+      const { el } = await show(ContextMenuDefault)
+      rightClick(area(el))
+      await settle(200)
+      await userEvent.keyboard('{ArrowDown}')
+      expect(label(active())).toContain('Open')
+      await userEvent.keyboard('{ArrowDown}')
+      expect(label(active())).toContain('Rename')
+      await userEvent.keyboard('{End}')
+      expect(label(active())).toContain('Delete')
+      expect(active().getAttribute('data-variant')).toBe('destructive')
+      await userEvent.keyboard('{Home}')
+      expect(label(active())).toContain('Open')
+      await userEvent.keyboard('re')
+      await settle(100)
+      expect(label(active())).toContain('Rename')
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(menu()).toBeNull()
+      expect(el.textContent).toContain('last = rename')
+    })
+
+    it('Space activates the highlighted item', async () => {
+      setTheme(theme)
+      const { el } = await show(ContextMenuDefault)
+      rightClick(area(el))
+      await settle(200)
+      await userEvent.keyboard('{ArrowDown} ')
+      await settle(200)
+      expect(el.textContent).toContain('last = open')
+    })
+
+    it('checkbox and radio items toggle and select, and keep aria-checked in sync', async () => {
+      setTheme(theme)
+      const { el } = await show(ContextMenuOptions)
+      expect(el.textContent).toContain('grid = true, density = comfortable')
+      rightClick(area(el))
+      await settle(200)
+      await userEvent.keyboard('{ArrowDown}')
+      expect(active().getAttribute('role')).toBe('menuitemcheckbox')
+      expect(active().getAttribute('aria-checked')).toBe('true')
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(el.textContent).toContain('grid = false')
+      rightClick(area(el))
+      await settle(200)
+      const radios = [...document.querySelectorAll<HTMLElement>('[role="menuitemradio"]')]
+      expect(radios.map(r => r.getAttribute('aria-checked'))).toEqual(['true', 'false'])
+      radios[1]!.focus()
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(el.textContent).toContain('density = compact')
+    })
+
+    it('opens a sub menu with ArrowRight and closes it with ArrowLeft', async () => {
+      setTheme(theme)
+      const { el } = await show(ContextMenuOptions)
+      rightClick(area(el))
+      await settle(200)
+      await userEvent.keyboard('{End}')
+      const subTrigger = active()
+      expect(label(subTrigger)).toContain('Export as')
+      await userEvent.keyboard('{ArrowRight}')
+      await settle(250)
+      expect(document.querySelectorAll('[role="menu"]')).toHaveLength(2)
+      expect(label(active())).toContain('PNG')
+      await userEvent.keyboard('{ArrowLeft}')
+      await settle(250)
+      expect(document.querySelectorAll('[role="menu"]')).toHaveLength(1)
+      expect(document.activeElement).toBe(subTrigger)
+    })
+  })
+
+  describe('DropdownMenu', () => {
+    const menu = () => document.querySelector<HTMLElement>('[role="menu"]')
+    const items = () => [...document.querySelectorAll<HTMLElement>('[role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"]')]
+    const active = () => document.activeElement as HTMLElement
+    const label = (e: HTMLElement) => e.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+
+    it('opens with Enter, ArrowDown and Space, exposes menu roles and Escape returns focus to the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(DropdownMenuDefault)
+      const trigger = el.querySelector<HTMLElement>('[aria-haspopup="menu"]')!
+      await userEvent.tab()
+      expect(document.activeElement).toBe(trigger)
+      expect(trigger.getAttribute('aria-expanded')).toBe('false')
+      for (const key of ['{Enter}', '{ArrowDown}', ' ']) {
+        await userEvent.keyboard(key)
+        await settle(200)
+        expect(menu(), `${key} opens the menu`).not.toBeNull()
+        expect(trigger.getAttribute('aria-expanded')).toBe('true')
+        expect(menu()!.contains(document.activeElement), 'focus moved into the menu').toBe(true)
+        await userEvent.keyboard('{Escape}')
+        await settle(200)
+        expect(menu()).toBeNull()
+        expect(document.activeElement, 'focus returned to the trigger').toBe(trigger)
+      }
+    })
+
+    it('moves with arrow keys, Home and End, skips disabled items, and supports typeahead', async () => {
+      setTheme(theme)
+      await show(DropdownMenuDefault)
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      const names = items().map(label)
+      expect(names.map(n => n.replace(/Ctrl.*/, '').trim())).toEqual(['Profile', 'Billing', 'Settings', 'Support', 'API (soon)', 'Sign out'])
+      expect(label(active())).toContain('Profile')
+      await userEvent.keyboard('{ArrowDown}')
+      expect(label(active())).toContain('Billing')
+      await userEvent.keyboard('{End}')
+      expect(label(active())).toContain('Sign out')
+      await userEvent.keyboard('{ArrowUp}')
+      expect(label(active()), 'the disabled item keeps its place but the menu still reaches Support next').toMatch(/API|Support/)
+      await userEvent.keyboard('{Home}')
+      expect(label(active())).toContain('Profile')
+      await userEvent.keyboard('su')
+      await settle(100)
+      expect(label(active())).toContain('Support')
+    })
+
+    it('Enter activates an item, closes the menu and returns focus to the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(DropdownMenuRowActions)
+      const trigger = el.querySelector<HTMLElement>('[aria-haspopup="menu"]')!
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      await userEvent.keyboard('{ArrowDown}{ArrowDown}')
+      expect(label(active())).toContain('Delete')
+      expect(active().getAttribute('data-variant')).toBe('destructive')
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(menu()).toBeNull()
+      expect(el.textContent).toContain('last = delete')
+      expect(document.activeElement).toBe(trigger)
+    })
+
+    it('Space activates the highlighted item as well', async () => {
+      setTheme(theme)
+      const { el } = await show(DropdownMenuRowActions)
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      await userEvent.keyboard(' ')
+      await settle(200)
+      expect(el.textContent).toContain('last = edit')
+    })
+
+    it('checkbox items toggle with Enter and Space and keep aria-checked in sync', async () => {
+      setTheme(theme)
+      const { el } = await show(DropdownMenuCheckboxes)
+      const trigger = el.querySelector<HTMLElement>('[aria-haspopup="menu"]')!
+      expect(el.textContent).toContain('status = true, sku = false')
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      const boxes = () => [...document.querySelectorAll<HTMLElement>('[role="menuitemcheckbox"]')]
+      expect(boxes().map(b => b.getAttribute('aria-checked'))).toEqual(['true', 'false', 'false'])
+      await userEvent.keyboard('{ArrowDown}{ArrowDown}')
+      expect(label(active())).toContain('SKU')
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(el.textContent).toContain('sku = true')
+      expect(trigger.getAttribute('aria-expanded')).toBe('false')
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(boxes().map(b => b.getAttribute('aria-checked'))).toEqual(['true', 'true', 'false'])
+      await userEvent.keyboard(' ')
+      await settle(200)
+      expect(el.textContent, 'the first item is highlighted on open; Space toggles it').toContain('status = false')
+    })
+
+    it('radio items select one value and expose it with aria-checked', async () => {
+      setTheme(theme)
+      const { el } = await show(DropdownMenuRadioItems)
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      const radios = () => [...document.querySelectorAll<HTMLElement>('[role="menuitemradio"]')]
+      expect(radios().map(r => r.getAttribute('aria-checked'))).toEqual(['true', 'false', 'false'])
+      await userEvent.keyboard('{ArrowDown}{ArrowDown}{Enter}')
+      await settle(200)
+      expect(el.textContent).toContain('sort = updated')
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(radios().map(r => r.getAttribute('aria-checked'))).toEqual(['false', 'false', 'true'])
+    })
+
+    it('opens a sub menu with ArrowRight and closes it with ArrowLeft, returning focus to the sub trigger', async () => {
+      setTheme(theme)
+      await show(DropdownMenuSubMenu)
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      await userEvent.keyboard('{ArrowDown}')
+      const subTrigger = active()
+      expect(label(subTrigger)).toContain('Share')
+      expect(subTrigger.getAttribute('aria-haspopup')).toBe('menu')
+      expect(subTrigger.getAttribute('aria-expanded')).toBe('false')
+      await userEvent.keyboard('{ArrowRight}')
+      await settle(250)
+      expect(subTrigger.getAttribute('aria-expanded')).toBe('true')
+      expect(document.querySelectorAll('[role="menu"]')).toHaveLength(2)
+      expect(label(active())).toContain('Email link')
+      await userEvent.keyboard('{ArrowLeft}')
+      await settle(250)
+      expect(document.querySelectorAll('[role="menu"]')).toHaveLength(1)
+      expect(document.activeElement).toBe(subTrigger)
+      await userEvent.keyboard('{Escape}')
+      await settle(200)
+      expect(menu()).toBeNull()
+    })
+
+    it('opens on a pointer click and closes on an outside click', async () => {
+      setTheme(theme)
+      const { el } = await show(DropdownMenuControlled)
+      expect(el.textContent).toContain('open = false')
+      await userEvent.click(el.querySelector<HTMLElement>('button')!)
+      await settle(200)
+      expect(menu()).not.toBeNull()
+      expect(el.textContent).toContain('open = true')
+      // The page behind a modal menu has pointer-events: none, so a real click cannot target it; send the pointer event Reka listens for.
+      document.body.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, cancelable: true, button: 0, pointerType: 'mouse' }))
+      await settle(200)
+      expect(menu()).toBeNull()
+      expect(el.textContent).toContain('open = false')
+    })
+  })
+
+  describe('HoverCard', () => {
+    const card = () => document.querySelector<HTMLElement>('[data-slot="hover-card-content"]')
+
+    it('opens on keyboard focus of the link and Escape closes it without losing focus', async () => {
+      setTheme(theme)
+      const { el } = await show(HoverCardDefault)
+      const link = el.querySelector<HTMLElement>('a')!
+      await userEvent.tab()
+      expect(document.activeElement).toBe(link)
+      await settle(1000)
+      expect(card()?.textContent).toContain('Software lead')
+      await userEvent.keyboard('{Escape}')
+      await settle(200)
+      expect(card()).toBeNull()
+      expect(document.activeElement).toBe(link)
+    })
+
+    it('opens after the open delay on hover and closes after the close delay on leave', async () => {
+      setTheme(theme)
+      const { el } = await show(HoverCardDelays)
+      const link = el.querySelector<HTMLElement>('a')!
+      await userEvent.hover(link)
+      await settle(400)
+      expect(card()).not.toBeNull()
+      await userEvent.unhover(link)
+      await settle(500)
+      expect(card()).toBeNull()
+    })
+
+    it('v-model:open follows the card state', async () => {
+      setTheme(theme)
+      const { el } = await show(HoverCardControlled)
+      expect(el.textContent).toContain('open = false')
+      await userEvent.tab()
+      await settle(1000)
+      expect(el.textContent).toContain('open = true')
+      await userEvent.keyboard('{Escape}')
+      await settle(200)
+      expect(el.textContent).toContain('open = false')
+    })
+  })
+
+  describe('Popover', () => {
+    const panel = () => document.querySelector<HTMLElement>('[data-slot="popover-content"]')
+
+    it('moves focus into the panel on open, closes on Escape and returns focus to the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(PopoverDefault)
+      const trigger = el.querySelector<HTMLElement>('[aria-haspopup="dialog"]')!
+      await userEvent.tab()
+      expect(document.activeElement).toBe(trigger)
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(panel()).not.toBeNull()
+      expect(trigger.getAttribute('aria-expanded')).toBe('true')
+      expect(panel()!.contains(document.activeElement), 'focus moved into the panel').toBe(true)
+      await userEvent.keyboard('{Escape}')
+      await settle(200)
+      expect(panel()).toBeNull()
+      expect(document.activeElement, 'focus returned to the trigger').toBe(trigger)
+    })
+
+    it('opens with Space and closes when focus moves outside it by clicking elsewhere', async () => {
+      setTheme(theme)
+      await show(PopoverDefault)
+      await userEvent.tab()
+      await userEvent.keyboard(' ')
+      await settle(200)
+      expect(panel()).not.toBeNull()
+      await userEvent.click(document.body)
+      await settle(200)
+      expect(panel()).toBeNull()
+    })
+
+    it('a close part closes it and v-model:open follows', async () => {
+      setTheme(theme)
+      const { el } = await show(PopoverControlled)
+      expect(el.textContent).toContain('open = false')
+      await userEvent.click(el.querySelector<HTMLElement>('button')!)
+      await settle(200)
+      expect(el.textContent).toContain('open = true')
+      const apply = [...document.querySelectorAll<HTMLElement>('[data-slot="popover-content"] button')].find(b => b.textContent?.trim() === 'Apply')!
+      await userEvent.click(apply)
+      await settle(200)
+      expect(panel()).toBeNull()
+      expect(el.textContent).toContain('open = false')
+    })
+
+    it('modal traps Tab inside the panel and makes the page behind inert to assistive tech', async () => {
+      setTheme(theme)
+      const { el } = await show(PopoverModal)
+      await userEvent.click(el.querySelector<HTMLElement>('button')!)
+      await settle(200)
+      for (let i = 0; i < 6; i++) {
+        await userEvent.tab()
+        expect(panel()!.contains(document.activeElement), `focus stayed inside after Tab #${i + 1}`).toBe(true)
+      }
+      expect(el.querySelector('button')!.closest('[aria-hidden="true"]')).not.toBeNull()
+      await userEvent.keyboard('{Escape}')
+      await settle(200)
+      expect(panel()).toBeNull()
+    })
+  })
+
+  describe('Tooltip', () => {
+    const tip = () => document.querySelector<HTMLElement>('[role="tooltip"]')
+
+    it('opens on keyboard focus, describes the trigger, and Escape closes it while focus stays on the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(TooltipDefault)
+      const trigger = el.querySelector<HTMLElement>('button')!
+      expect(tip()).toBeNull()
+      await userEvent.tab()
+      expect(document.activeElement).toBe(trigger)
+      await settle(150)
+      expect(tip()?.textContent).toContain('Saved to your team library')
+      expect(trigger.getAttribute('aria-describedby')).toBe(tip()!.id)
+      await userEvent.keyboard('{Escape}')
+      await settle(200)
+      expect(tip()).toBeNull()
+      expect(document.activeElement).toBe(trigger)
+    })
+
+    it('opens after the hover delay and closes when the pointer leaves', async () => {
+      setTheme(theme)
+      const { el } = await show(TooltipDefault)
+      const trigger = el.querySelector<HTMLElement>('button')!
+      await userEvent.hover(trigger)
+      await settle(700)
+      expect(tip()).not.toBeNull()
+      await userEvent.unhover(trigger)
+      await settle(400)
+      expect(tip()).toBeNull()
+    })
+
+    it('shares the delay of a provider: the second tooltip opens at once after the first', async () => {
+      setTheme(theme)
+      const { el } = await show(TooltipIconButtons)
+      const [bold, italic] = [...el.querySelectorAll<HTMLElement>('button')]
+      await userEvent.hover(bold!)
+      await settle(600)
+      expect(tip()?.textContent).toContain('Bold')
+      await userEvent.hover(italic!)
+      // A real mouse keeps moving; the second move happens once the pointer has left the first tooltip's grace area.
+      await settle(60)
+      await userEvent.hover(italic!, { position: { x: 6, y: 6 } })
+      await settle(120)
+      expect(tip()?.textContent, 'no second delay inside the skip window').toContain('Italic')
+    })
+
+    it('v-model:open follows the tooltip state', async () => {
+      setTheme(theme)
+      const { el } = await show(TooltipControlled)
+      expect(el.textContent).toContain('open = false')
+      await userEvent.tab()
+      await settle(150)
+      expect(el.textContent).toContain('open = true')
+      await userEvent.keyboard('{Escape}')
+      await settle(150)
+      expect(el.textContent).toContain('open = false')
     })
   })
 

@@ -1,0 +1,98 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "dropdown-menu",
+  "title": "Dropdown Menu",
+  "description": "Action menu opened from a button with items, checkbox and radio items, groups, sub menus and shortcuts, built on Reka UI.",
+  "dependencies": [
+    "reka-ui",
+    "@vueuse/core",
+    "@lucide/vue",
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/dropdown-menu/DropdownMenu.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { DropdownMenuRootEmits, DropdownMenuRootProps } from 'reka-ui'\nimport { DropdownMenuRoot, useForwardPropsEmits } from 'reka-ui'\n\nconst props = defineProps<DropdownMenuRootProps>()\nconst emits = defineEmits<DropdownMenuRootEmits>()\n\nconst forwarded = useForwardPropsEmits(props, emits)\n</script>\n\n<template>\n  <DropdownMenuRoot\n    v-slot=\"slotProps\"\n    data-slot=\"dropdown-menu\"\n    v-bind=\"forwarded\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </DropdownMenuRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/dropdown-menu/DropdownMenuCheckboxItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { DropdownMenuCheckboxItemEmits } from 'reka-ui'\nimport type { DropdownMenuCheckboxItemProps } from './index'\nimport { Check } from '@lucide/vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { DropdownMenuCheckboxItem, DropdownMenuItemIndicator, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuItemVariants } from './styles'\n\nconst props = defineProps<DropdownMenuCheckboxItemProps>()\nconst emits = defineEmits<DropdownMenuCheckboxItemEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <DropdownMenuCheckboxItem\n    data-slot=\"dropdown-menu-checkbox-item\"\n    v-bind=\"forwarded\"\n    :class=\"cn(menuItemVariants(), 'pr-2 pl-8', props.class)\"\n  >\n    <span class=\"pointer-events-none absolute left-2 flex size-4 items-center justify-center\">\n      <DropdownMenuItemIndicator>\n        <Check class=\"size-4\" />\n      </DropdownMenuItemIndicator>\n    </span>\n    <slot />\n  </DropdownMenuCheckboxItem>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/dropdown-menu/DropdownMenuContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { DropdownMenuContentEmits } from 'reka-ui'\nimport type { DropdownMenuContentProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { DropdownMenuContent, DropdownMenuPortal, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuContentClass } from './styles'\n\ndefineOptions({\n  inheritAttrs: false,\n})\n\nconst props = withDefaults(defineProps<DropdownMenuContentProps>(), {\n  sideOffset: 4,\n})\nconst emits = defineEmits<DropdownMenuContentEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <DropdownMenuPortal>\n    <DropdownMenuContent\n      data-slot=\"dropdown-menu-content\"\n      v-bind=\"{ ...$attrs, ...forwarded }\"\n      :class=\"cn(\n        menuContentClass,\n        'max-h-(--reka-dropdown-menu-content-available-height) origin-(--reka-dropdown-menu-content-transform-origin)',\n        props.class,\n      )\"\n    >\n      <slot />\n    </DropdownMenuContent>\n  </DropdownMenuPortal>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/dropdown-menu/DropdownMenuGroup.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { DropdownMenuGroupProps } from 'reka-ui'\nimport { DropdownMenuGroup, useForwardProps } from 'reka-ui'\n\nconst props = defineProps<DropdownMenuGroupProps>()\nconst forwarded = useForwardProps(props)\n</script>\n\n<template>\n  <DropdownMenuGroup data-slot=\"dropdown-menu-group\" v-bind=\"forwarded\">\n    <slot />\n  </DropdownMenuGroup>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/dropdown-menu/DropdownMenuItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { DropdownMenuItemEmits } from 'reka-ui'\nimport type { DropdownMenuItemProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { DropdownMenuItem, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuItemVariants } from './styles'\n\nconst props = withDefaults(defineProps<DropdownMenuItemProps>(), {\n  variant: 'default',\n})\nconst emits = defineEmits<DropdownMenuItemEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class', 'variant', 'inset')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <DropdownMenuItem\n    data-slot=\"dropdown-menu-item\"\n    :data-variant=\"props.variant\"\n    :data-inset=\"props.inset ? '' : undefined\"\n    v-bind=\"forwarded\"\n    :class=\"cn(menuItemVariants({ variant: props.variant }), props.class)\"\n  >\n    <slot />\n  </DropdownMenuItem>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/dropdown-menu/DropdownMenuLabel.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { DropdownMenuLabelProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { DropdownMenuLabel, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuLabelClass } from './styles'\n\nconst props = defineProps<DropdownMenuLabelProps>()\nconst delegatedProps = reactiveOmit(props, 'class', 'inset')\nconst forwarded = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <DropdownMenuLabel\n    data-slot=\"dropdown-menu-label\"\n    :data-inset=\"props.inset ? '' : undefined\"\n    v-bind=\"forwarded\"\n    :class=\"cn(menuLabelClass, props.class)\"\n  >\n    <slot />\n  </DropdownMenuLabel>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/dropdown-menu/DropdownMenuRadioGroup.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { DropdownMenuRadioGroupEmits, DropdownMenuRadioGroupProps } from 'reka-ui'\nimport { DropdownMenuRadioGroup, useForwardPropsEmits } from 'reka-ui'\n\nconst props = defineProps<DropdownMenuRadioGroupProps>()\nconst emits = defineEmits<DropdownMenuRadioGroupEmits>()\n\nconst forwarded = useForwardPropsEmits(props, emits)\n</script>\n\n<template>\n  <DropdownMenuRadioGroup data-slot=\"dropdown-menu-radio-group\" v-bind=\"forwarded\">\n    <slot />\n  </DropdownMenuRadioGroup>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/dropdown-menu/DropdownMenuRadioItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { DropdownMenuRadioItemEmits } from 'reka-ui'\nimport type { DropdownMenuRadioItemProps } from './index'\nimport { Circle } from '@lucide/vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { DropdownMenuItemIndicator, DropdownMenuRadioItem, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuItemVariants } from './styles'\n\nconst props = defineProps<DropdownMenuRadioItemProps>()\nconst emits = defineEmits<DropdownMenuRadioItemEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <DropdownMenuRadioItem\n    data-slot=\"dropdown-menu-radio-item\"\n    v-bind=\"forwarded\"\n    :class=\"cn(menuItemVariants(), 'pr-2 pl-8', props.class)\"\n  >\n    <span class=\"pointer-events-none absolute left-2 flex size-4 items-center justify-center\">\n      <DropdownMenuItemIndicator>\n        <Circle class=\"size-2 fill-current\" />\n      </DropdownMenuItemIndicator>\n    </span>\n    <slot />\n  </DropdownMenuRadioItem>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/dropdown-menu/DropdownMenuSeparator.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { DropdownMenuSeparatorProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { DropdownMenuSeparator, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuSeparatorClass } from './styles'\n\nconst props = defineProps<DropdownMenuSeparatorProps>()\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <DropdownMenuSeparator\n    data-slot=\"dropdown-menu-separator\"\n    v-bind=\"forwarded\"\n    :class=\"cn(menuSeparatorClass, props.class)\"\n  />\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/dropdown-menu/DropdownMenuShortcut.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { DropdownMenuShortcutProps } from './index'\nimport { cn } from '@/lib/utils'\nimport { menuShortcutClass } from './styles'\n\nconst props = defineProps<DropdownMenuShortcutProps>()\n</script>\n\n<template>\n  <span\n    data-slot=\"dropdown-menu-shortcut\"\n    :class=\"cn(menuShortcutClass, props.class)\"\n  >\n    <slot />\n  </span>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/dropdown-menu/DropdownMenuSub.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { DropdownMenuSubEmits, DropdownMenuSubProps } from 'reka-ui'\nimport { DropdownMenuSub, useForwardPropsEmits } from 'reka-ui'\n\nconst props = defineProps<DropdownMenuSubProps>()\nconst emits = defineEmits<DropdownMenuSubEmits>()\n\nconst forwarded = useForwardPropsEmits(props, emits)\n</script>\n\n<template>\n  <DropdownMenuSub\n    v-slot=\"slotProps\"\n    data-slot=\"dropdown-menu-sub\"\n    v-bind=\"forwarded\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </DropdownMenuSub>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/dropdown-menu/DropdownMenuSubContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { DropdownMenuSubContentEmits } from 'reka-ui'\nimport type { DropdownMenuSubContentProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { DropdownMenuSubContent, DropdownMenuPortal, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuContentClass } from './styles'\n\ndefineOptions({\n  inheritAttrs: false,\n})\n\nconst props = withDefaults(defineProps<DropdownMenuSubContentProps>(), {\n  sideOffset: 2,\n  alignOffset: -4,\n})\nconst emits = defineEmits<DropdownMenuSubContentEmits>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <DropdownMenuPortal>\n    <DropdownMenuSubContent\n      data-slot=\"dropdown-menu-sub-content\"\n      v-bind=\"{ ...$attrs, ...forwarded }\"\n      :class=\"cn(\n        menuContentClass,\n        'max-h-(--reka-dropdown-menu-content-available-height) origin-(--reka-dropdown-menu-content-transform-origin)',\n        props.class,\n      )\"\n    >\n      <slot />\n    </DropdownMenuSubContent>\n  </DropdownMenuPortal>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/dropdown-menu/DropdownMenuSubTrigger.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { DropdownMenuSubTriggerProps } from './index'\nimport { ChevronRight } from '@lucide/vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { DropdownMenuSubTrigger, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { menuItemVariants } from './styles'\n\nconst props = defineProps<DropdownMenuSubTriggerProps>()\nconst delegatedProps = reactiveOmit(props, 'class', 'inset')\nconst forwarded = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <DropdownMenuSubTrigger\n    data-slot=\"dropdown-menu-sub-trigger\"\n    :data-inset=\"props.inset ? '' : undefined\"\n    v-bind=\"forwarded\"\n    :class=\"cn(menuItemVariants(), 'data-[state=open]:bg-accent data-[state=open]:text-accent-foreground', props.class)\"\n  >\n    <slot />\n    <ChevronRight class=\"ml-auto size-4 rtl:rotate-180\" />\n  </DropdownMenuSubTrigger>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/dropdown-menu/DropdownMenuTrigger.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { DropdownMenuTriggerProps } from 'reka-ui'\nimport { DropdownMenuTrigger, useForwardProps } from 'reka-ui'\n\nconst props = defineProps<DropdownMenuTriggerProps>()\nconst forwarded = useForwardProps(props)\n</script>\n\n<template>\n  <DropdownMenuTrigger data-slot=\"dropdown-menu-trigger\" v-bind=\"forwarded\">\n    <slot />\n  </DropdownMenuTrigger>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/dropdown-menu/index.ts",
+      "content": "import type { DropdownMenuCheckboxItemProps as RekaCheckboxItemProps, DropdownMenuContentProps as RekaContentProps, DropdownMenuItemProps as RekaItemProps, DropdownMenuLabelProps as RekaLabelProps, DropdownMenuRadioItemProps as RekaRadioItemProps, DropdownMenuSeparatorProps as RekaSeparatorProps, DropdownMenuSubContentProps as RekaSubContentProps, DropdownMenuSubTriggerProps as RekaSubTriggerProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport type { MenuItemVariants } from './styles'\n\nexport { default as DropdownMenu } from './DropdownMenu.vue'\nexport { default as DropdownMenuCheckboxItem } from './DropdownMenuCheckboxItem.vue'\nexport { default as DropdownMenuContent } from './DropdownMenuContent.vue'\nexport { default as DropdownMenuGroup } from './DropdownMenuGroup.vue'\nexport { default as DropdownMenuItem } from './DropdownMenuItem.vue'\nexport { default as DropdownMenuLabel } from './DropdownMenuLabel.vue'\nexport { default as DropdownMenuRadioGroup } from './DropdownMenuRadioGroup.vue'\nexport { default as DropdownMenuRadioItem } from './DropdownMenuRadioItem.vue'\nexport { default as DropdownMenuSeparator } from './DropdownMenuSeparator.vue'\nexport { default as DropdownMenuShortcut } from './DropdownMenuShortcut.vue'\nexport { default as DropdownMenuSub } from './DropdownMenuSub.vue'\nexport { default as DropdownMenuSubContent } from './DropdownMenuSubContent.vue'\nexport { default as DropdownMenuSubTrigger } from './DropdownMenuSubTrigger.vue'\nexport { default as DropdownMenuTrigger } from './DropdownMenuTrigger.vue'\nexport { menuContentClass, menuItemVariants, menuLabelClass, menuSeparatorClass, menuShortcutClass } from './styles'\nexport type { MenuItemVariants } from './styles'\n\nexport interface DropdownMenuContentProps extends RekaContentProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface DropdownMenuSubContentProps extends RekaSubContentProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface DropdownMenuItemProps extends RekaItemProps {\n  /** `destructive` colours the item for irreversible actions such as delete. */\n  variant?: MenuItemVariants['variant']\n  /** Indent the item so that it lines up with items that have a checkbox or radio indicator. */\n  inset?: boolean\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface DropdownMenuCheckboxItemProps extends RekaCheckboxItemProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface DropdownMenuRadioItemProps extends RekaRadioItemProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface DropdownMenuLabelProps extends RekaLabelProps {\n  /** Indent the label so that it lines up with items that have an indicator. */\n  inset?: boolean\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface DropdownMenuSeparatorProps extends RekaSeparatorProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface DropdownMenuSubTriggerProps extends RekaSubTriggerProps {\n  /** Indent the trigger so that it lines up with items that have an indicator. */\n  inset?: boolean\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface DropdownMenuShortcutProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/dropdown-menu/styles.ts",
+      "content": "import type { VariantProps } from 'class-variance-authority'\nimport { cva } from 'class-variance-authority'\n\n/** Classes of the floating menu panel, shared by DropdownMenu and ContextMenu (and their sub menus). */\nexport const menuContentClass = 'z-50 min-w-40 overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground shadow-md data-[state=closed]:animate-[elf-fade-out_100ms_ease-in_forwards] data-[state=open]:animate-[elf-zoom-in_120ms_ease-out] motion-reduce:animate-none!'\n\n/** Classes of a group label inside a menu. */\nexport const menuLabelClass = 'px-2 py-1.5 text-xs font-medium text-muted-foreground data-[inset]:pl-8'\n\n/** Classes of the divider between menu groups. */\nexport const menuSeparatorClass = '-mx-1 my-1 h-px bg-border'\n\n/** Classes of the shortcut hint at the end of an item. Put `ElfKbd` elements or plain text inside. */\nexport const menuShortcutClass = 'ml-auto inline-flex items-center gap-1 pl-4 text-xs tracking-widest text-muted-foreground group-data-[highlighted]/menu-item:text-accent-foreground'\n\n/** Item rows: 40px tall on small screens (touch), compact from the `md` breakpoint. */\nexport const menuItemVariants = cva(\n  'group/menu-item relative flex min-h-10 cursor-default items-center gap-2 rounded-sm px-2 py-2 text-base outline-hidden select-none md:min-h-0 md:py-1.5 md:text-sm data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-4 [&_svg:not([class*=text-])]:text-muted-foreground',\n  {\n    variants: {\n      variant: {\n        default: 'data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[highlighted]:[&_svg:not([class*=text-])]:text-accent-foreground',\n        destructive: 'text-destructive-text data-[highlighted]:bg-destructive/15 data-[highlighted]:text-destructive-text [&_svg:not([class*=text-])]:text-destructive-text!',\n      },\n    },\n    defaultVariants: {\n      variant: 'default',\n    },\n  },\n)\n\nexport type MenuItemVariants = VariantProps<typeof menuItemVariants>\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

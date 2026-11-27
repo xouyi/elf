@@ -1,0 +1,2 @@
+/** Classes shared by every floating panel that looks like a popover (Popover, HoverCard). */
+export const popoverPanelClass = 'z-50 max-w-[calc(100vw-1rem)] overflow-y-auto rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden data-[state=closed]:animate-[elf-fade-out_100ms_ease-in_forwards] data-[state=open]:animate-[elf-zoom-in_120ms_ease-out] motion-reduce:animate-none!'

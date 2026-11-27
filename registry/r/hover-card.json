@@ -1,0 +1,37 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "hover-card",
+  "title": "Hover Card",
+  "description": "Rich preview on hover or focus of a link, built on Reka UI and sharing the Popover panel styles.",
+  "dependencies": [
+    "reka-ui",
+    "@vueuse/core"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json",
+    "https://xouyi.github.io/elfUI/r/popover.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/hover-card/HoverCard.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { HoverCardRootEmits, HoverCardRootProps } from 'reka-ui'\nimport { HoverCardRoot, useForwardPropsEmits } from 'reka-ui'\n\nconst props = defineProps<HoverCardRootProps>()\nconst emits = defineEmits<HoverCardRootEmits>()\n\nconst forwarded = useForwardPropsEmits(props, emits)\n</script>\n\n<template>\n  <HoverCardRoot\n    v-slot=\"slotProps\"\n    data-slot=\"hover-card\"\n    v-bind=\"forwarded\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </HoverCardRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/hover-card/HoverCardContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { FocusOutsideEvent, PointerDownOutsideEvent } from 'reka-ui'\nimport type { HoverCardContentProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { HoverCardContent, HoverCardPortal, useForwardPropsEmits } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { popoverPanelClass } from '@/components/ui/popover'\n\ndefineOptions({\n  inheritAttrs: false,\n})\n\nconst props = withDefaults(defineProps<HoverCardContentProps>(), {\n  sideOffset: 4,\n  align: 'center',\n})\nconst emits = defineEmits<{\n  /** Called when Escape is pressed. Can be prevented. */\n  escapeKeyDown: [event: KeyboardEvent]\n  /** Called when a pointer is pressed outside the card. Can be prevented. */\n  pointerDownOutside: [event: PointerDownOutsideEvent]\n  /** Called when focus moves outside the card. Can be prevented. */\n  focusOutside: [event: FocusOutsideEvent]\n  /** Called for either of the two outside interactions. Can be prevented. */\n  interactOutside: [event: PointerDownOutsideEvent | FocusOutsideEvent]\n}>()\n\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardPropsEmits(delegatedProps, emits)\n</script>\n\n<template>\n  <HoverCardPortal>\n    <HoverCardContent\n      data-slot=\"hover-card-content\"\n      v-bind=\"{ ...$attrs, ...forwarded }\"\n      :class=\"cn(\n        popoverPanelClass,\n        'max-h-(--reka-hover-card-content-available-height) w-72 origin-(--reka-hover-card-content-transform-origin)',\n        props.class,\n      )\"\n    >\n      <slot />\n    </HoverCardContent>\n  </HoverCardPortal>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/hover-card/HoverCardTrigger.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { HoverCardTriggerProps } from 'reka-ui'\nimport { HoverCardTrigger, useForwardProps } from 'reka-ui'\n\nconst props = defineProps<HoverCardTriggerProps>()\nconst forwarded = useForwardProps(props)\n</script>\n\n<template>\n  <HoverCardTrigger data-slot=\"hover-card-trigger\" v-bind=\"forwarded\">\n    <slot />\n  </HoverCardTrigger>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/hover-card/index.ts",
+      "content": "import type { HoverCardContentProps as RekaHoverCardContentProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\n\nexport { default as HoverCard } from './HoverCard.vue'\nexport { default as HoverCardContent } from './HoverCardContent.vue'\nexport { default as HoverCardTrigger } from './HoverCardTrigger.vue'\n\nexport interface HoverCardContentProps extends RekaHoverCardContentProps {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

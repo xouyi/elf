@@ -46,6 +46,12 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   progress: { title: 'Progress', description: 'Determinate and indeterminate progress bar built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
   'gradient-text': { title: 'Gradient Text', description: 'Inline gradient text with theme-aware presets, custom stops, direction and a reduced-motion-safe shimmer.', dependencies: ['reka-ui'] },
   avatar: { title: 'Avatar', description: 'Image with initials fallback, four sizes and an overlapping group, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
+  'scroll-area': { title: 'Scroll Area', description: 'Scrolling container with styled scrollbars that stays keyboard scrollable, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
+  'context-menu': { title: 'Context Menu', description: 'Right-click, long-press and keyboard menu with the same parts and styles as the Dropdown Menu, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('dropdown-menu')] },
+  'dropdown-menu': { title: 'Dropdown Menu', description: 'Action menu opened from a button with items, checkbox and radio items, groups, sub menus and shortcuts, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'] },
+  'hover-card': { title: 'Hover Card', description: 'Rich preview on hover or focus of a link, built on Reka UI and sharing the Popover panel styles.', dependencies: ['reka-ui', '@vueuse/core'], registryDependencies: [dep('popover')] },
+  popover: { title: 'Popover', description: 'Anchored interactive panel with trigger, anchor and close parts, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
+  tooltip: { title: 'Tooltip', description: 'Short non-interactive hint on hover or focus with a shared delay provider, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
   'visually-hidden': { title: 'Visually Hidden', description: 'Hides content visually while keeping it available to assistive technology.', dependencies: ['reka-ui'] },
 }
 
