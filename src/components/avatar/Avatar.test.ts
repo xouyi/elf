@@ -56,7 +56,7 @@ describe('AvatarGroup', () => {
     expect(w.attributes('role')).toBe('group')
     expect(w.attributes('aria-label')).toBe('Team')
     expect(w.attributes('data-slot')).toBe('avatar-group')
-    expect(w.classes()).toContain('-space-x-2')
+    expect(w.classes()).toContain('-space-x-1.5')
     expect(w.findAll('[data-slot="avatar"]')).toHaveLength(2)
   })
 })
