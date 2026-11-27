@@ -35,8 +35,8 @@ for (const theme of ['elf', 'nova', 'elfwood'] as const) {
           await page.locator('html[data-ready="true"]').waitFor({ state: 'attached' })
           await expect(page.locator('html')).toHaveAttribute('data-theme', theme)
 
-          // Overlay examples (Dialog) show their trigger first; open it so the portalled content is captured.
-          const trigger = page.locator('#example-frame [aria-haspopup="dialog"]')
+          // Overlay examples (Dialog, Sheet, Popover) show their trigger first; open the first one so the portalled content is captured.
+          const trigger = page.locator('#example-frame [aria-haspopup="dialog"]').first()
           const overlay = (await trigger.count()) > 0
           if (overlay) {
             await trigger.click()
