@@ -67,6 +67,9 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   'theme-switcher': { title: 'Theme Switcher', description: 'Ready-made control to switch themes as a select, a segmented radio group or one toggle button, driven by useElfTheme.', dependencies: ['reka-ui', '@lucide/vue', 'vue'], registryDependencies: [dep('button'), dep('select'), dep('use-elf-theme')] },
   breadcrumb: { title: 'Breadcrumb', description: 'Hierarchical location trail with list, item, link, page, separator and ellipsis parts, composed from native elements.', dependencies: ['reka-ui', '@lucide/vue'] },
   pagination: { title: 'Pagination', description: 'Page navigation with numbers, ellipsis, first, previous, next and last, plus a simple previous/next bar, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('button')] },
+  table: { title: 'Table', description: 'Semantic styled table with caption, density, sticky header, sortable header affordance and a stacked-card mode on small screens.', dependencies: ['@vueuse/core'] },
+  empty: { title: 'Empty', description: 'Empty state with media, title, description and action parts.', dependencies: ['reka-ui', 'class-variance-authority'] },
+  'stat-card': { title: 'Stat Card', description: 'KPI tile with label, value, hint, trend, tone, loading state and an optional stretched link.', dependencies: ['reka-ui', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('skeleton'), dep('visually-hidden')] },
 }
 
 const items: unknown[] = [

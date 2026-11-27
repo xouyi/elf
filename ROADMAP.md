@@ -428,7 +428,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfVisuallyHidden
 - **Complexity:** M
 - **Novatron screens:** courses/stock `AdminTable`; activity logs; HQ audit log.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfDataTable
 
@@ -450,7 +450,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfButton
 - **Complexity:** S
 - **Novatron screens:** courses/stock `AdminEmpty`; search with no results.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfStatCard
 
@@ -461,7 +461,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfCard, ElfSkeleton
 - **Complexity:** S
 - **Novatron screens:** courses/stock `AdminStatCard`; forum `StatTile`; HQ dashboards.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfAspectRatio
 

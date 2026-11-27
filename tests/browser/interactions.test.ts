@@ -109,6 +109,14 @@ import ToggleGroupSingle from '../../src/components/toggle/examples/GroupSingle.
 import ToggleWithText from '../../src/components/toggle/examples/WithText.vue'
 import AspectRatioDefault from '../../src/components/aspect-ratio/examples/Default.vue'
 import AspectRatioRatios from '../../src/components/aspect-ratio/examples/Ratios.vue'
+import TableDefault from '../../src/components/table/examples/Default.vue'
+import TableSortable from '../../src/components/table/examples/SortableHeader.vue'
+import TableStack from '../../src/components/table/examples/StackOnMobile.vue'
+import TableSticky from '../../src/components/table/examples/StickyHeader.vue'
+import EmptyDefault from '../../src/components/empty/examples/Default.vue'
+import StatCardAsLink from '../../src/components/stat-card/examples/AsLink.vue'
+import StatCardLoading from '../../src/components/stat-card/examples/Loading.vue'
+import StatCardTones from '../../src/components/stat-card/examples/Tones.vue'
 import { axeViolations, mountComponent, settle, setTheme, themes } from './support'
 
 let unmount: (() => void) | undefined
@@ -2525,6 +2533,145 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await settle()
       expect(el.textContent).toContain('Panel B')
       expect(el.textContent).not.toContain('Panel A')
+    })
+  })
+
+  describe('Table', () => {
+    it('is a native table named by its caption', async () => {
+      setTheme(theme)
+      const { el } = await show(TableDefault)
+      const table = el.querySelector('table')!
+      expect(table.caption?.textContent).toBe('Qualification matches')
+      expect(el.querySelectorAll('th[scope="col"]').length).toBe(4)
+      expect(el.querySelector('tfoot')).not.toBeNull()
+    })
+
+    it('puts a scrollable table in the tab order only while it overflows', async () => {
+      setTheme(theme)
+      const wrapper = document.createElement('div')
+      wrapper.style.width = '200px'
+      document.body.append(wrapper)
+      const mounted = await mountComponent(TableDefault)
+      wrapper.append(mounted.el)
+      await settle(100)
+      unmount = () => {
+        mounted.unmount()
+        wrapper.remove()
+      }
+      const container = mounted.el.querySelector<HTMLElement>('[data-slot="table-container"]')!
+      expect(container.scrollWidth).toBeGreaterThan(container.clientWidth)
+      expect(container.getAttribute('tabindex')).toBe('0')
+      expect(container.getAttribute('role')).toBe('region')
+      expect(container.getAttribute('aria-label')).toBe('Qualification matches')
+      await userEvent.tab()
+      expect(document.activeElement).toBe(container)
+      wrapper.style.width = '1000px'
+      await settle(100)
+      expect(container.hasAttribute('tabindex')).toBe(false)
+    })
+
+    it('keeps the header sticky inside a height-limited container', async () => {
+      setTheme(theme)
+      const { el } = await show(TableSticky)
+      const head = el.querySelector<HTMLElement>('th')!
+      expect(getComputedStyle(head).position).toBe('sticky')
+      const container = el.querySelector<HTMLElement>('[data-slot="table-container"]')!
+      container.scrollTop = 200
+      await settle(50)
+      const top = container.getBoundingClientRect().top
+      expect(Math.abs(head.getBoundingClientRect().top - top)).toBeLessThan(3)
+    })
+
+    it('sorts from a keyboard-operable header button and updates aria-sort', async () => {
+      setTheme(theme)
+      const { el } = await show(TableSortable)
+      const heads = [...el.querySelectorAll<HTMLElement>('th')]
+      const cells = () => [...el.querySelectorAll('tbody tr td:first-child')].map(c => c.textContent?.trim())
+      expect(heads[0]!.getAttribute('aria-sort')).toBe('ascending')
+      expect(heads[1]!.getAttribute('aria-sort')).toBe('none')
+      expect(cells()).toEqual(['Climber', 'Intake', 'Swerve drive'])
+      await userEvent.tab()
+      expect(document.activeElement).toBe(heads[0]!.querySelector('button'))
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(heads[0]!.getAttribute('aria-sort')).toBe('descending')
+      expect(cells()).toEqual(['Swerve drive', 'Intake', 'Climber'])
+      await userEvent.tab()
+      await userEvent.keyboard(' ')
+      await settle()
+      expect(heads[0]!.getAttribute('aria-sort')).toBe('none')
+      expect(heads[1]!.getAttribute('aria-sort')).toBe('ascending')
+      expect(cells()).toEqual(['Intake', 'Climber', 'Swerve drive'])
+    })
+
+    it('stacks rows as cards below the sm breakpoint only', async () => {
+      setTheme(theme)
+      const { el } = await show(TableStack)
+      const row = el.querySelector<HTMLElement>('tbody tr')!
+      const stacked = window.innerWidth < 640
+      expect(getComputedStyle(row).display).toBe(stacked ? 'block' : 'table-row')
+      expect(el.querySelector('table')!.getAttribute('role')).toBe('table')
+      expect(el.querySelector('td')!.getAttribute('data-label')).toBe('Name')
+    })
+  })
+
+  describe('Empty', () => {
+    it('shows the title as a heading and keeps the actions reachable by keyboard', async () => {
+      setTheme(theme)
+      const { el } = await show(EmptyDefault)
+      expect(el.querySelector('h3')?.textContent).toBe('No projects yet')
+      const buttons = [...el.querySelectorAll('button')]
+      await userEvent.tab()
+      expect(document.activeElement).toBe(buttons[0])
+      await userEvent.tab()
+      expect(document.activeElement).toBe(buttons[1])
+      expect(getComputedStyle(el.querySelector('[data-slot="empty"]')!).borderTopStyle).toBe('dashed')
+    })
+  })
+
+  describe('StatCard', () => {
+    it('makes the whole card clickable through the stretched link and shows focus on the card', async () => {
+      setTheme(theme)
+      const { el } = await show(StatCardAsLink)
+      const card = el.querySelector<HTMLElement>('[data-slot="stat-card"]')!
+      const link = el.querySelector<HTMLAnchorElement>('a')!
+      await userEvent.tab()
+      expect(document.activeElement).toBe(link)
+      expect(getComputedStyle(card).boxShadow).not.toBe('none')
+      const box = card.getBoundingClientRect()
+      const linkBox = link.getBoundingClientRect()
+      expect(linkBox.width).toBeLessThan(box.width)
+      const after = getComputedStyle(link, '::after')
+      expect(after.position).toBe('absolute')
+    })
+
+    it('marks loading cards busy and announces the loading label', async () => {
+      setTheme(theme)
+      const { el } = await show(StatCardLoading)
+      const cards = el.querySelectorAll('[data-slot="stat-card"]')
+      expect(cards.length).toBe(2)
+      for (const c of cards) {
+        expect(c.getAttribute('aria-busy')).toBe('true')
+        expect(c.querySelector('[role="status"]')?.textContent).toContain('Loading')
+        expect(c.querySelector('[data-slot="stat-card-value"]')).toBeNull()
+      }
+    })
+
+    it('colors the trend of a toned card with the readable text tokens', async () => {
+      setTheme(theme)
+      const { el } = await show(StatCardTones)
+      const trend = (tone: string) => getComputedStyle(el.querySelector(`[data-tone="${tone}"] [data-slot="stat-card-trend"]`)!).color
+      const probe = (token: string) => {
+        const d = document.createElement('div')
+        d.style.color = `var(--elf-${token})`
+        el.append(d)
+        const c = getComputedStyle(d).color
+        d.remove()
+        return c
+      }
+      expect(trend('success')).toBe(probe('success-text'))
+      expect(trend('warning')).toBe(probe('warning-text'))
+      expect(trend('destructive')).toBe(probe('destructive-text'))
     })
   })
 })

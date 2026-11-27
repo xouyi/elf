@@ -279,3 +279,28 @@ export type { ToggleGroupContext, ToggleGroupItemExtraProps, ToggleGroupProps, T
 
 export { AspectRatio as ElfAspectRatio } from './components/aspect-ratio'
 export type { AspectRatioProps } from './components/aspect-ratio'
+export {
+  Table as ElfTable,
+  TableBody as ElfTableBody,
+  TableCaption as ElfTableCaption,
+  TableCell as ElfTableCell,
+  TableFooter as ElfTableFooter,
+  TableHead as ElfTableHead,
+  TableHeader as ElfTableHeader,
+  TableRow as ElfTableRow,
+} from './components/table'
+export type { TableCaptionProps, TableCellProps, TableDensity, TableHeadProps, TableProps, TableRowProps, TableSectionProps, TableSort } from './components/table'
+
+export {
+  Empty as ElfEmpty,
+  EmptyContent as ElfEmptyContent,
+  EmptyDescription as ElfEmptyDescription,
+  EmptyHeader as ElfEmptyHeader,
+  EmptyMedia as ElfEmptyMedia,
+  emptyMediaVariants,
+  EmptyTitle as ElfEmptyTitle,
+} from './components/empty'
+export type { EmptyMediaProps, EmptyMediaVariants, EmptyPartProps, EmptyProps, EmptyTitleProps } from './components/empty'
+
+export { StatCard as ElfStatCard, StatCardLink as ElfStatCardLink, statCardVariants } from './components/stat-card'
+export type { StatCardLinkProps, StatCardProps, StatCardTrendDirection, StatCardVariants } from './components/stat-card'

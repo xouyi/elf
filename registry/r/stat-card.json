@@ -1,0 +1,34 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "stat-card",
+  "title": "Stat Card",
+  "description": "KPI tile with label, value, hint, trend, tone, loading state and an optional stretched link.",
+  "dependencies": [
+    "reka-ui",
+    "@lucide/vue",
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json",
+    "https://xouyi.github.io/elfUI/r/skeleton.json",
+    "https://xouyi.github.io/elfUI/r/visually-hidden.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/stat-card/StatCard.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { StatCardProps } from './index'\nimport { Minus, TrendingDown, TrendingUp } from '@lucide/vue'\nimport { useId } from 'vue'\nimport { cn } from '@/lib/utils'\nimport Skeleton from '../skeleton/Skeleton.vue'\nimport VisuallyHidden from '../visually-hidden/VisuallyHidden.vue'\nimport { statCardVariants } from './index'\n\nconst props = withDefaults(defineProps<StatCardProps>(), {\n  tone: 'default',\n  trendDirection: 'flat',\n  loadingLabel: 'Loading',\n})\n\nconst labelId = useId()\nconst icons = { up: TrendingUp, down: TrendingDown, flat: Minus }\n</script>\n\n<template>\n  <div\n    data-slot=\"stat-card\"\n    :data-tone=\"props.tone\"\n    :data-loading=\"props.loading ? 'true' : undefined\"\n    role=\"group\"\n    :aria-labelledby=\"labelId\"\n    :aria-busy=\"props.loading ? 'true' : undefined\"\n    :class=\"cn(statCardVariants({ tone: props.tone }), props.class)\"\n  >\n    <p :id=\"labelId\" data-slot=\"stat-card-label\" class=\"text-sm font-medium text-muted-foreground\">\n      <slot name=\"label\">\n        {{ props.label }}\n      </slot>\n    </p>\n    <template v-if=\"props.loading\">\n      <VisuallyHidden role=\"status\">\n        {{ props.loadingLabel }}\n      </VisuallyHidden>\n      <Skeleton class=\"mt-1 h-8 w-24\" />\n      <Skeleton class=\"mt-1 h-4 w-32\" />\n    </template>\n    <template v-else>\n      <p data-slot=\"stat-card-value\" class=\"text-3xl font-semibold tracking-tight tabular-nums\">\n        <slot>\n          {{ props.value }}\n        </slot>\n      </p>\n      <div v-if=\"props.trend || props.hint || $slots.hint\" class=\"flex flex-wrap items-center gap-x-2 text-sm text-muted-foreground\">\n        <span\n          v-if=\"props.trend\"\n          data-slot=\"stat-card-trend\"\n          :data-direction=\"props.trendDirection\"\n          class=\"inline-flex items-center gap-1 font-medium group-data-[tone=destructive]/stat:text-destructive-text group-data-[tone=success]/stat:text-success-text group-data-[tone=warning]/stat:text-warning-text\"\n        >\n          <component :is=\"icons[props.trendDirection]\" aria-hidden=\"true\" class=\"size-4\" />\n          <VisuallyHidden v-if=\"props.trendLabel\">{{ props.trendLabel }}</VisuallyHidden>\n          <span :aria-hidden=\"props.trendLabel ? 'true' : undefined\">{{ props.trend }}</span>\n        </span>\n        <span v-if=\"props.hint || $slots.hint\" data-slot=\"stat-card-hint\">\n          <slot name=\"hint\">{{ props.hint }}</slot>\n        </span>\n      </div>\n    </template>\n  </div>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/stat-card/StatCardLink.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { StatCardLinkProps } from './index'\nimport { Primitive } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = withDefaults(defineProps<StatCardLinkProps>(), {\n  as: 'a',\n})\n</script>\n\n<template>\n  <Primitive\n    data-slot=\"stat-card-link\"\n    :as=\"props.as\"\n    :as-child=\"props.asChild\"\n    :class=\"cn('outline-none after:absolute after:inset-0 after:content-[\\'\\']', props.class)\"\n  >\n    <slot />\n  </Primitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/stat-card/index.ts",
+      "content": "import type { PrimitiveProps } from 'reka-ui'\nimport type { VariantProps } from 'class-variance-authority'\nimport type { HTMLAttributes } from 'vue'\nimport { cva } from 'class-variance-authority'\n\nexport { default as StatCard } from './StatCard.vue'\nexport { default as StatCardLink } from './StatCardLink.vue'\n\nexport const statCardVariants = cva(\n  'group/stat relative flex flex-col gap-1 rounded-xl border bg-card p-5 text-card-foreground shadow-sm has-[[data-slot=stat-card-link]]:transition-colors has-[[data-slot=stat-card-link]]:hover:bg-accent/50 has-[[data-slot=stat-card-link]:focus-visible]:border-ring has-[[data-slot=stat-card-link]:focus-visible]:ring-3 has-[[data-slot=stat-card-link]:focus-visible]:ring-ring/50',\n  {\n    variants: {\n      tone: {\n        default: '',\n        success: 'border-success/40',\n        warning: 'border-warning/40',\n        destructive: 'border-destructive/50',\n      },\n    },\n    defaultVariants: {\n      tone: 'default',\n    },\n  },\n)\n\nexport type StatCardVariants = VariantProps<typeof statCardVariants>\n\n/** Direction of the change shown by the trend. */\nexport type StatCardTrendDirection = 'up' | 'down' | 'flat'\n\nexport interface StatCardProps {\n  /** Short name of the metric. Names the card for assistive technology. Replace the markup with the `label` slot. */\n  label?: string\n  /** The figure. Numbers are formatted by you, so pass the exact text you want shown (for example `1.284` or `%92`). */\n  value?: string | number\n  /** Supporting text under the value, such as the comparison period. */\n  hint?: string\n  /** Change since the last period, for example `+12%`. Shown with an arrow for `trendDirection`. */\n  trend?: string\n  /** Arrow shown next to the trend. */\n  trendDirection?: StatCardTrendDirection\n  /**\n   * Accessible description of the trend, for example `up 12 percent since last week`. Read instead of the bare trend\n   * text. Defaults to the trend text.\n   */\n  trendLabel?: string\n  /**\n   * Meaning of the card: tints the border and the trend. The meaning is never carried by colour alone, so keep the\n   * trend text or hint explicit.\n   */\n  tone?: StatCardVariants['tone']\n  /** Show skeletons instead of the value, hint and trend and set `aria-busy`. */\n  loading?: boolean\n  /** Text announced while loading. */\n  loadingLabel?: string\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface StatCardLinkProps extends Pick<PrimitiveProps, 'as' | 'asChild'> {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
