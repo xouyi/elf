@@ -117,6 +117,11 @@ import EmptyDefault from '../../src/components/empty/examples/Default.vue'
 import StatCardAsLink from '../../src/components/stat-card/examples/AsLink.vue'
 import StatCardLoading from '../../src/components/stat-card/examples/Loading.vue'
 import StatCardTones from '../../src/components/stat-card/examples/Tones.vue'
+import StepperControlled from '../../src/components/stepper/examples/Controlled.vue'
+import StepperDefault from '../../src/components/stepper/examples/Default.vue'
+import StepperDisabled from '../../src/components/stepper/examples/Disabled.vue'
+import StepperNonLinear from '../../src/components/stepper/examples/NonLinear.vue'
+import StepperVertical from '../../src/components/stepper/examples/Vertical.vue'
 import { axeViolations, mountComponent, settle, setTheme, themes } from './support'
 import NavigationMenuDefault from '../../src/components/navigation-menu/examples/Default.vue'
 import NavigationMenuLinksOnly from '../../src/components/navigation-menu/examples/LinksOnly.vue'
@@ -2855,6 +2860,114 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(trend('success')).toBe(probe('success-text'))
       expect(trend('warning')).toBe(probe('warning-text'))
       expect(trend('destructive')).toBe(probe('destructive-text'))
+  describe('Stepper', () => {
+    const triggers = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('[data-slot="stepper-trigger"]')]
+    const states = (el: HTMLElement) => [...el.querySelectorAll('[data-slot="stepper-item"]')].map(i => i.getAttribute('data-state'))
+    const buttons = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('button')].filter(b => !b.matches('[data-slot="stepper-trigger"]'))
+
+    it('lists the steps as a labelled group with the active one marked', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperDefault)
+      const root = el.querySelector<HTMLElement>('[data-slot="stepper"]')!
+      expect(root.getAttribute('role')).toBe('group')
+      expect(root.getAttribute('aria-label')).toBe('New item')
+      expect(states(el)).toEqual(['completed', 'active', 'inactive'])
+      expect(el.querySelectorAll('[aria-current="true"]')).toHaveLength(1)
+    })
+
+    it('moves focus between triggers with the arrow keys and stops at the ends', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperNonLinear)
+      const [first, second, third] = triggers(el)
+      first!.focus()
+      await userEvent.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(second)
+      await userEvent.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(third)
+      await userEvent.keyboard('{ArrowRight}')
+      expect(document.activeElement, 'does not wrap').toBe(third)
+      await userEvent.keyboard('{ArrowLeft}')
+      expect(document.activeElement).toBe(second)
+    })
+
+    it('vertical orientation uses the up and down arrow keys', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperVertical)
+      const [first, second] = triggers(el)
+      first!.focus()
+      await userEvent.keyboard('{ArrowDown}')
+      expect(document.activeElement).toBe(second)
+      await userEvent.keyboard('{ArrowUp}')
+      expect(document.activeElement).toBe(first)
+    })
+
+    it('Enter and Space select the focused step; Tab leaves the stepper', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperNonLinear)
+      const [, second, third] = triggers(el)
+      second!.focus()
+      await userEvent.keyboard('{Enter}')
+      expect(states(el)).toEqual(['completed', 'active', 'inactive'])
+      third!.focus()
+      await userEvent.keyboard(' ')
+      expect(states(el)).toEqual(['completed', 'completed', 'active'])
+      await userEvent.keyboard('{Tab}')
+      expect(triggers(el).includes(document.activeElement as HTMLElement)).toBe(false)
+    })
+
+    it('linear: a step more than one ahead cannot be reached, the next one can', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperControlled)
+      const [first, second, third] = triggers(el)
+      expect(third!.hasAttribute('disabled')).toBe(true)
+      await userEvent.click(second!)
+      expect(el.textContent).toContain('step = 2')
+      await userEvent.click(third!)
+      expect(el.textContent).toContain('step = 3')
+      await userEvent.click(first!)
+      expect(el.textContent).toContain('step = 1')
+    })
+
+    it('non-linear skips nothing but disabled steps stay unselectable', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperDisabled)
+      const [first, locked, last] = triggers(el)
+      expect(locked!.hasAttribute('disabled')).toBe(true)
+      first!.focus()
+      await userEvent.click(locked!, { force: true }).catch(() => {})
+      expect(states(el)[1]).not.toBe('active')
+      await userEvent.click(last!)
+      expect(states(el)[2]).toBe('active')
+    })
+
+    it('Back and Next buttons move through the steps', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperDefault)
+      const [back, next] = buttons(el)
+      await userEvent.click(next!)
+      expect(states(el)).toEqual(['completed', 'completed', 'active'])
+      expect(next!.hasAttribute('disabled')).toBe(true)
+      await userEvent.click(back!)
+      await userEvent.click(back!)
+      expect(states(el)).toEqual(['active', 'inactive', 'inactive'])
+      expect(back!.hasAttribute('disabled')).toBe(true)
+    })
+
+    it('announces the position in a status region', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperDefault)
+      await settle(50)
+      expect(el.querySelector('[role="status"]')!.textContent?.trim()).toBe('Step 2 of 3')
+    })
+
+    it('shows a focus ring on the trigger and fits a 360px screen', async () => {
+      setTheme(theme)
+      const { el } = await show(StepperDefault)
+      triggers(el)[0]!.focus()
+      await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+      await userEvent.keyboard('{Tab}')
+      expect(getComputedStyle(document.activeElement!).boxShadow).not.toBe('none')
+      expect(el.scrollWidth).toBeLessThanOrEqual(el.clientWidth + 1)
     })
   })
 })

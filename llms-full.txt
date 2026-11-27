@@ -92,7 +92,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, theme-switcher, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, breadcrumb, pagination, toggle, aspect-ratio, table, empty, stat-card, navigation-menu, menubar, sidebar, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, theme-switcher, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, breadcrumb, pagination, toggle, aspect-ratio, table, empty, stat-card, navigation-menu, menubar, sidebar, stepper, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -6732,8 +6732,236 @@ const items = [
 </template>
 ```
 
+### Stepper
+
+Multi-step progress and wizard header on Reka UI Stepper. ElfStepper contains ElfStepperItem (step, 1-based) with an ElfStepperTrigger holding an ElfStepperIndicator and an ElfStepperTitle, plus an ElfStepperSeparator between steps. It renders no step content.
+
+Components: `ElfStepper`, `ElfStepperItem`, `ElfStepperTrigger`, `ElfStepperIndicator`, `ElfStepperTitle`, `ElfStepperDescription`, `ElfStepperSeparator`
+
+Props:
+
+- `ElfStepper modelValue / defaultValue` (number, default 1): Current step, 1-based; bind with v-model.
+- `ElfStepper orientation` ('horizontal' | 'vertical', default horizontal): Layout and arrow-key axis.
+- `ElfStepper linear` (boolean, default true): Only the next step can be selected; false allows any enabled step.
+- `ElfStepperItem step` (number): Required, 1-based.
+- `ElfStepperItem disabled / completed` (boolean, default false): Disable the step or force the completed state.
+- `class` (string | array | object): Accepted by every part; merged with base classes.
+
+Slots:
+
+- ElfStepper default: modelValue, totalSteps, goToStep, nextStep, prevStep, hasNext, hasPrev, isFirstStep, isLastStep
+- ElfStepperIndicator default: replaces the number or check
+
+Accessibility:
+
+- Give ElfStepper an aria-label and every step an ElfStepperTitle (it names the trigger).
+- Keep ElfStepperDescription outside the trigger; the stepper does not render step content.
+
+Examples:
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfStepper, ElfStepperIndicator, ElfStepperItem, ElfStepperSeparator, ElfStepperTitle, ElfStepperTrigger } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const step = ref(1)
+</script>
+
+<template>
+  <div class="w-full max-w-lg space-y-4">
+    <p class="text-sm text-muted-foreground">
+      step = {{ step }}
+    </p>
+    <ElfStepper v-model="step" aria-label="Onboarding">
+      <ElfStepperItem :step="1">
+        <ElfStepperTrigger>
+          <ElfStepperIndicator />
+          <ElfStepperTitle>Welcome</ElfStepperTitle>
+        </ElfStepperTrigger>
+        <ElfStepperSeparator />
+      </ElfStepperItem>
+      <ElfStepperItem :step="2">
+        <ElfStepperTrigger>
+          <ElfStepperIndicator />
+          <ElfStepperTitle>Team</ElfStepperTitle>
+        </ElfStepperTrigger>
+        <ElfStepperSeparator />
+      </ElfStepperItem>
+      <ElfStepperItem :step="3">
+        <ElfStepperTrigger>
+          <ElfStepperIndicator />
+          <ElfStepperTitle>Done</ElfStepperTitle>
+        </ElfStepperTrigger>
+      </ElfStepperItem>
+    </ElfStepper>
+    <ElfButton variant="outline" size="sm" @click="step = 3">
+      Jump to the end
+    </ElfButton>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfStepper, ElfStepperIndicator, ElfStepperItem, ElfStepperSeparator, ElfStepperTitle, ElfStepperTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfStepper aria-label="New item" :default-value="2" class="w-full max-w-lg flex-col gap-6">
+    <template #default="{ nextStep, prevStep, hasNext, hasPrev }">
+      <div class="flex w-full">
+        <ElfStepperItem :step="1">
+          <ElfStepperTrigger>
+            <ElfStepperIndicator />
+            <ElfStepperTitle>Photo</ElfStepperTitle>
+          </ElfStepperTrigger>
+          <ElfStepperSeparator />
+        </ElfStepperItem>
+        <ElfStepperItem :step="2">
+          <ElfStepperTrigger>
+            <ElfStepperIndicator />
+            <ElfStepperTitle>Details</ElfStepperTitle>
+          </ElfStepperTrigger>
+          <ElfStepperSeparator />
+        </ElfStepperItem>
+        <ElfStepperItem :step="3">
+          <ElfStepperTrigger>
+            <ElfStepperIndicator />
+            <ElfStepperTitle>Review</ElfStepperTitle>
+          </ElfStepperTrigger>
+        </ElfStepperItem>
+      </div>
+      <div class="flex gap-2">
+        <ElfButton variant="outline" :disabled="!hasPrev()" @click="prevStep()">
+          Back
+        </ElfButton>
+        <ElfButton :disabled="!hasNext()" @click="nextStep()">
+          Next
+        </ElfButton>
+      </div>
+    </template>
+  </ElfStepper>
+</template>
+```
+
+#### Disabled
+
+```vue
+<script setup lang="ts">
+import { ElfStepper, ElfStepperIndicator, ElfStepperItem, ElfStepperSeparator, ElfStepperTitle, ElfStepperTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfStepper :linear="false" aria-label="Checkout" class="w-full max-w-lg">
+    <ElfStepperItem :step="1">
+      <ElfStepperTrigger>
+        <ElfStepperIndicator />
+        <ElfStepperTitle>Cart</ElfStepperTitle>
+      </ElfStepperTrigger>
+      <ElfStepperSeparator />
+    </ElfStepperItem>
+    <ElfStepperItem :step="2" disabled>
+      <ElfStepperTrigger>
+        <ElfStepperIndicator />
+        <ElfStepperTitle>Shipping</ElfStepperTitle>
+      </ElfStepperTrigger>
+      <ElfStepperSeparator />
+    </ElfStepperItem>
+    <ElfStepperItem :step="3">
+      <ElfStepperTrigger>
+        <ElfStepperIndicator />
+        <ElfStepperTitle>Pay</ElfStepperTitle>
+      </ElfStepperTrigger>
+    </ElfStepperItem>
+  </ElfStepper>
+</template>
+```
+
+#### Non Linear
+
+```vue
+<script setup lang="ts">
+import { ElfStepper, ElfStepperIndicator, ElfStepperItem, ElfStepperSeparator, ElfStepperTitle, ElfStepperTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfStepper :linear="false" aria-label="Sections" class="w-full max-w-lg">
+    <ElfStepperItem :step="1">
+      <ElfStepperTrigger>
+        <ElfStepperIndicator />
+        <ElfStepperTitle>Basics</ElfStepperTitle>
+      </ElfStepperTrigger>
+      <ElfStepperSeparator />
+    </ElfStepperItem>
+    <ElfStepperItem :step="2">
+      <ElfStepperTrigger>
+        <ElfStepperIndicator />
+        <ElfStepperTitle>Media</ElfStepperTitle>
+      </ElfStepperTrigger>
+      <ElfStepperSeparator />
+    </ElfStepperItem>
+    <ElfStepperItem :step="3">
+      <ElfStepperTrigger>
+        <ElfStepperIndicator />
+        <ElfStepperTitle>Publish</ElfStepperTitle>
+      </ElfStepperTrigger>
+    </ElfStepperItem>
+  </ElfStepper>
+</template>
+```
+
+#### Vertical
+
+```vue
+<script setup lang="ts">
+import { ElfStepper, ElfStepperDescription, ElfStepperIndicator, ElfStepperItem, ElfStepperSeparator, ElfStepperTitle, ElfStepperTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfStepper aria-label="Provisioning" orientation="vertical" :default-value="2" class="w-full max-w-xs gap-0">
+    <ElfStepperItem :step="1" class="gap-0">
+      <ElfStepperTrigger>
+        <ElfStepperIndicator />
+        <ElfStepperTitle>Account</ElfStepperTitle>
+      </ElfStepperTrigger>
+      <div class="flex">
+        <ElfStepperSeparator />
+        <ElfStepperDescription class="py-2 pl-6">
+          Username and password
+        </ElfStepperDescription>
+      </div>
+    </ElfStepperItem>
+    <ElfStepperItem :step="2" class="gap-0">
+      <ElfStepperTrigger>
+        <ElfStepperIndicator />
+        <ElfStepperTitle>Roles</ElfStepperTitle>
+      </ElfStepperTrigger>
+      <div class="flex">
+        <ElfStepperSeparator />
+        <ElfStepperDescription class="py-2 pl-6">
+          Choose what they can do
+        </ElfStepperDescription>
+      </div>
+    </ElfStepperItem>
+    <ElfStepperItem :step="3" class="gap-0">
+      <ElfStepperTrigger>
+        <ElfStepperIndicator />
+        <ElfStepperTitle>Confirm</ElfStepperTitle>
+      </ElfStepperTrigger>
+      <ElfStepperDescription class="py-2 pl-10">
+        Review and create
+      </ElfStepperDescription>
+    </ElfStepperItem>
+  </ElfStepper>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfThemeSwitcher`, `ElfBreadcrumb`, `ElfBreadcrumbEllipsis`, `ElfBreadcrumbItem`, `ElfBreadcrumbLink`, `ElfBreadcrumbList`, `ElfBreadcrumbPage`, `ElfBreadcrumbSeparator`, `ElfPagination`, `ElfPaginationContent`, `ElfPaginationEllipsis`, `ElfPaginationFirst`, `ElfPaginationItem`, `ElfPaginationLast`, `ElfPaginationNext`, `ElfPaginationPrev`, `ElfSimplePagination`, `ElfToggle`, `ElfToggleGroup`, `ElfToggleGroupItem`, `ElfAspectRatio`, `ElfTable`, `ElfTableBody`, `ElfTableCaption`, `ElfTableCell`, `ElfTableFooter`, `ElfTableHead`, `ElfTableHeader`, `ElfTableRow`, `ElfEmpty`, `ElfEmptyContent`, `ElfEmptyDescription`, `ElfEmptyHeader`, `ElfEmptyMedia`, `ElfEmptyTitle`, `ElfStatCard`, `ElfStatCardLink`, `ElfNavigationMenu`, `ElfNavigationMenuContent`, `ElfNavigationMenuIndicator`, `ElfNavigationMenuItem`, `ElfNavigationMenuLink`, `ElfNavigationMenuList`, `ElfNavigationMenuTrigger`, `ElfNavigationMenuViewport`, `ElfMenubar`, `ElfMenubarCheckboxItem`, `ElfMenubarContent`, `ElfMenubarGroup`, `ElfMenubarItem`, `ElfMenubarLabel`, `ElfMenubarMenu`, `ElfMenubarRadioGroup`, `ElfMenubarRadioItem`, `ElfMenubarSeparator`, `ElfMenubarShortcut`, `ElfMenubarSub`, `ElfMenubarSubContent`, `ElfMenubarSubTrigger`, `ElfMenubarTrigger`, `ElfSidebar`, `ElfSidebarContent`, `ElfSidebarFooter`, `ElfSidebarGroup`, `ElfSidebarGroupContent`, `ElfSidebarGroupLabel`, `ElfSidebarHeader`, `ElfSidebarInset`, `ElfSidebarMenu`, `ElfSidebarMenuBadge`, `ElfSidebarMenuButton`, `ElfSidebarMenuItem`, `ElfSidebarMenuSub`, `ElfSidebarMenuSubButton`, `ElfSidebarMenuSubItem`, `ElfSidebarProvider`, `ElfSidebarRail`, `ElfSidebarSeparator`, `ElfSidebarTrigger`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfThemeSwitcher`, `ElfBreadcrumb`, `ElfBreadcrumbEllipsis`, `ElfBreadcrumbItem`, `ElfBreadcrumbLink`, `ElfBreadcrumbList`, `ElfBreadcrumbPage`, `ElfBreadcrumbSeparator`, `ElfPagination`, `ElfPaginationContent`, `ElfPaginationEllipsis`, `ElfPaginationFirst`, `ElfPaginationItem`, `ElfPaginationLast`, `ElfPaginationNext`, `ElfPaginationPrev`, `ElfSimplePagination`, `ElfToggle`, `ElfToggleGroup`, `ElfToggleGroupItem`, `ElfAspectRatio`, `ElfTable`, `ElfTableBody`, `ElfTableCaption`, `ElfTableCell`, `ElfTableFooter`, `ElfTableHead`, `ElfTableHeader`, `ElfTableRow`, `ElfEmpty`, `ElfEmptyContent`, `ElfEmptyDescription`, `ElfEmptyHeader`, `ElfEmptyMedia`, `ElfEmptyTitle`, `ElfStatCard`, `ElfStatCardLink`, `ElfNavigationMenu`, `ElfNavigationMenuContent`, `ElfNavigationMenuIndicator`, `ElfNavigationMenuItem`, `ElfNavigationMenuLink`, `ElfNavigationMenuList`, `ElfNavigationMenuTrigger`, `ElfNavigationMenuViewport`, `ElfMenubar`, `ElfMenubarCheckboxItem`, `ElfMenubarContent`, `ElfMenubarGroup`, `ElfMenubarItem`, `ElfMenubarLabel`, `ElfMenubarMenu`, `ElfMenubarRadioGroup`, `ElfMenubarRadioItem`, `ElfMenubarSeparator`, `ElfMenubarShortcut`, `ElfMenubarSub`, `ElfMenubarSubContent`, `ElfMenubarSubTrigger`, `ElfMenubarTrigger`, `ElfSidebar`, `ElfSidebarContent`, `ElfSidebarFooter`, `ElfSidebarGroup`, `ElfSidebarGroupContent`, `ElfSidebarGroupLabel`, `ElfSidebarHeader`, `ElfSidebarInset`, `ElfSidebarMenu`, `ElfSidebarMenuBadge`, `ElfSidebarMenuButton`, `ElfSidebarMenuItem`, `ElfSidebarMenuSub`, `ElfSidebarMenuSubButton`, `ElfSidebarMenuSubItem`, `ElfSidebarProvider`, `ElfSidebarRail`, `ElfSidebarSeparator`, `ElfSidebarTrigger`, `ElfStepper`, `ElfStepperDescription`, `ElfStepperIndicator`, `ElfStepperItem`, `ElfStepperSeparator`, `ElfStepperTitle`, `ElfStepperTrigger`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

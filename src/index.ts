@@ -361,3 +361,13 @@ export {
   useSidebar,
 } from './components/sidebar'
 export type { SidebarCollapsible, SidebarContext, SidebarMenuButtonProps, SidebarMenuButtonVariants, SidebarMenuSubButtonProps, SidebarProps, SidebarProviderProps, SidebarSide, SidebarState, SidebarTriggerProps } from './components/sidebar'
+export type { StepperProps } from './components/stepper'
+export {
+  Stepper as ElfStepper,
+  StepperDescription as ElfStepperDescription,
+  StepperIndicator as ElfStepperIndicator,
+  StepperItem as ElfStepperItem,
+  StepperSeparator as ElfStepperSeparator,
+  StepperTitle as ElfStepperTitle,
+  StepperTrigger as ElfStepperTrigger,
+} from './components/stepper'

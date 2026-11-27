@@ -726,6 +726,22 @@ export const components: ComponentMeta[] = [
     slots: ['ElfSidebar default: header, content and footer; rail: an ElfSidebarRail', 'ElfSidebarMenuButton default: icon then <span>label</span> (the label must be the last span)', 'ElfSidebarGroupLabel: as-child with ElfCollapsibleTrigger for a collapsible group'],
     a11y: ['The panel is a labelled <nav>; on phones it is a modal sheet (focus trap, Escape, focus returns to the trigger).', 'Use real links (as-child with a link component) for pages and set is-active on the current one; give every icon-only trigger a label.', 'The trigger reports aria-expanded; the rail is pointer-only (tabindex -1) because the trigger and Ctrl/Cmd+B cover the keyboard.', 'Collapsed icon buttons keep their accessible name; the tooltip repeats it visually on hover and focus.'],
   },
+  {
+    dir: 'stepper',
+    name: 'Stepper',
+    summary: 'Multi-step progress and wizard header on Reka UI Stepper. ElfStepper contains ElfStepperItem (step, 1-based) with an ElfStepperTrigger holding an ElfStepperIndicator and an ElfStepperTitle, plus an ElfStepperSeparator between steps. It renders no step content.',
+    parts: ['ElfStepper', 'ElfStepperItem', 'ElfStepperTrigger', 'ElfStepperIndicator', 'ElfStepperTitle', 'ElfStepperDescription', 'ElfStepperSeparator'],
+    props: [
+      { name: 'ElfStepper modelValue / defaultValue', type: 'number', default: '1', description: 'Current step, 1-based; bind with v-model.' },
+      { name: 'ElfStepper orientation', type: '\'horizontal\' | \'vertical\'', default: 'horizontal', description: 'Layout and arrow-key axis.' },
+      { name: 'ElfStepper linear', type: 'boolean', default: 'true', description: 'Only the next step can be selected; false allows any enabled step.' },
+      { name: 'ElfStepperItem step', type: 'number', description: 'Required, 1-based.' },
+      { name: 'ElfStepperItem disabled / completed', type: 'boolean', default: 'false', description: 'Disable the step or force the completed state.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part; merged with base classes.' },
+    ],
+    slots: ['ElfStepper default: modelValue, totalSteps, goToStep, nextStep, prevStep, hasNext, hasPrev, isFirstStep, isLastStep', 'ElfStepperIndicator default: replaces the number or check'],
+    a11y: ['Give ElfStepper an aria-label and every step an ElfStepperTitle (it names the trigger).', 'Keep ElfStepperDescription outside the trigger; the stepper does not render step content.'],
+  },
 ]
 
 export const rules = [
