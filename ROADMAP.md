@@ -395,7 +395,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfDropdownMenu (ellipsis)
 - **Complexity:** S
 - **Novatron screens:** courses `LessonShell`, admin page headers (`AdminPageHeader`); stock locations.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfPagination
 
@@ -406,7 +406,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfButton
 - **Complexity:** S
 - **Novatron screens:** courses/stock `AdminPagination`.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfToggleGroup / ElfToggle
 

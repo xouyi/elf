@@ -77,6 +77,12 @@ import ScrollAreaHorizontal from '../../src/components/scroll-area/examples/Hori
 import ContextMenuDefault from '../../src/components/context-menu/examples/Default.vue'
 import ContextMenuOptions from '../../src/components/context-menu/examples/Options.vue'
 import DropdownMenuCheckboxes from '../../src/components/dropdown-menu/examples/Checkboxes.vue'
+import BreadcrumbCollapsed from '../../src/components/breadcrumb/examples/Collapsed.vue'
+import BreadcrumbDefault from '../../src/components/breadcrumb/examples/Default.vue'
+import PaginationDefault from '../../src/components/pagination/examples/Default.vue'
+import PaginationDisabled from '../../src/components/pagination/examples/Disabled.vue'
+import PaginationSimple from '../../src/components/pagination/examples/Simple.vue'
+import PaginationWithEdges from '../../src/components/pagination/examples/WithEdges.vue'
 import DropdownMenuControlled from '../../src/components/dropdown-menu/examples/Controlled.vue'
 import DropdownMenuDefault from '../../src/components/dropdown-menu/examples/Default.vue'
 import DropdownMenuRadioItems from '../../src/components/dropdown-menu/examples/RadioItems.vue'
@@ -2245,6 +2251,133 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       const destructive = el.querySelector<HTMLElement>('[data-variant="destructive"]')!
       expect(getComputedStyle(destructive.querySelector('[data-slot="alert-title"]')!).color).toBe(resolved('destructive-text'))
       expect(getComputedStyle(destructive.querySelector('[data-slot="alert-icon"]')!).color).toBe(resolved('destructive-text'))
+    })
+  })
+
+  describe('Breadcrumb', () => {
+    it('is a labelled landmark whose links are Tab stops and whose current page is not', async () => {
+      setTheme(theme)
+      const { el } = await show(BreadcrumbDefault)
+      const nav = el.querySelector<HTMLElement>('nav[aria-label="Breadcrumb"]')!
+      expect(nav).not.toBeNull()
+      const links = [...nav.querySelectorAll<HTMLElement>('a[href]')]
+      expect(links.length).toBe(2)
+      await userEvent.tab()
+      expect(document.activeElement).toBe(links[0])
+      await userEvent.tab()
+      expect(document.activeElement).toBe(links[1])
+      await userEvent.tab()
+      expect(nav.contains(document.activeElement), 'the current page must not take focus').toBe(false)
+      expect(nav.querySelector('[aria-current="page"]')?.textContent).toBe('Breadcrumb')
+    })
+
+    it('has a visible focus ring on links', async () => {
+      setTheme(theme)
+      const { el } = await show(BreadcrumbDefault)
+      const first = el.querySelector<HTMLElement>('[data-slot="breadcrumb-link"]')!
+      first.focus()
+      await userEvent.keyboard('{Tab}{Shift>}{Tab}{/Shift}') // keyboard modality, so :focus-visible matches
+      const link = document.activeElement as HTMLElement
+      expect(link).toBe(first)
+      const style = getComputedStyle(link)
+      expect(style.boxShadow !== 'none' || style.outlineStyle !== 'none', 'focus indicator is drawn').toBe(true)
+      expect(el.contains(link)).toBe(true)
+    })
+
+    it('opens the collapsed levels from the ellipsis, navigates with arrows and returns focus on Escape', async () => {
+      setTheme(theme)
+      const { el } = await show(BreadcrumbCollapsed)
+      const trigger = el.querySelector<HTMLElement>('[aria-haspopup="menu"]')!
+      trigger.focus()
+      await userEvent.keyboard('{Enter}')
+      await settle(400)
+      const items = () => [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')]
+      expect(items().length).toBe(3)
+      expect(document.activeElement).toBe(items()[0])
+      await userEvent.keyboard('{ArrowDown}')
+      expect(document.activeElement).toBe(items()[1])
+      await userEvent.keyboard('{Escape}')
+      await settle(300)
+      expect(document.querySelector('[role="menu"]')).toBeNull()
+      expect(document.activeElement).toBe(trigger)
+    })
+  })
+
+  describe('Pagination', () => {
+    const buttons = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('nav button:not([disabled])')]
+    const current = (el: HTMLElement) => el.querySelector<HTMLElement>('[aria-current="page"]')!.textContent
+
+    it('is a labelled landmark with a Tab stop per enabled button and the current page marked', async () => {
+      setTheme(theme)
+      const { el } = await show(PaginationDefault)
+      expect(el.querySelector('nav[aria-label="Pagination"]')).not.toBeNull()
+      expect(current(el)).toBe('5')
+      await userEvent.tab()
+      expect(document.activeElement).toBe(buttons(el)[0])
+      await userEvent.tab()
+      expect(document.activeElement).toBe(buttons(el)[1])
+    })
+
+    it('changes page with Enter and Space and updates v-model', async () => {
+      setTheme(theme)
+      const { el } = await show(PaginationDefault)
+      const page = (n: string) => buttons(el).find(b => b.textContent?.trim() === n)!
+      page('6').focus()
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(current(el)).toBe('6')
+      expect(el.textContent).toContain('Page 6 of 10')
+      page('7').focus()
+      await userEvent.keyboard(' ')
+      await settle()
+      expect(current(el)).toBe('7')
+    })
+
+    it('previous and next move one page and are disabled at the ends', async () => {
+      setTheme(theme)
+      const { el } = await show(PaginationWithEdges)
+      const prev = () => el.querySelector<HTMLButtonElement>('[data-slot="pagination-prev"]')!
+      const next = () => el.querySelector<HTMLButtonElement>('[data-slot="pagination-next"]')!
+      expect(prev().disabled).toBe(true)
+      expect(el.querySelector<HTMLButtonElement>('[data-slot="pagination-first"]')!.disabled).toBe(true)
+      next().focus()
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(current(el)).toBe('2')
+      expect(prev().disabled).toBe(false)
+      el.querySelector<HTMLElement>('[data-slot="pagination-last"]')!.focus()
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(current(el)).toBe('50')
+      expect(next().disabled).toBe(true)
+    })
+
+    it('does not make disabled controls focusable', async () => {
+      setTheme(theme)
+      const { el } = await show(PaginationDisabled)
+      expect(el.querySelectorAll('nav button:not([disabled])').length).toBe(0)
+      await userEvent.tab()
+      expect(el.contains(document.activeElement)).toBe(false)
+    })
+
+    it('simple pagination steps through pages and shows the status', async () => {
+      setTheme(theme)
+      const { el } = await show(PaginationSimple)
+      const status = () => el.querySelector('[data-slot="simple-pagination-status"]')!.textContent?.trim()
+      expect(status()).toBe('Page 1 of 5')
+      el.querySelector<HTMLElement>('[data-slot="simple-pagination-next"]')!.focus()
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(status()).toBe('Page 2 of 5')
+    })
+
+    it('draws a visible focus indicator on a page button', async () => {
+      setTheme(theme)
+      const { el } = await show(PaginationDefault)
+      await userEvent.tab()
+      const style = getComputedStyle(document.activeElement as HTMLElement)
+      expect(style.boxShadow !== 'none' || style.outlineStyle !== 'none', 'focus indicator is drawn').toBe(true)
+      expect(el.contains(document.activeElement)).toBe(true)
     })
   })
 

@@ -244,3 +244,27 @@ export {
 
 export { ThemeSwitcher as ElfThemeSwitcher } from './components/theme-switcher'
 export type { ThemeSwitcherProps, ThemeSwitcherVariant } from './components/theme-switcher'
+
+export {
+  Breadcrumb as ElfBreadcrumb,
+  BreadcrumbEllipsis as ElfBreadcrumbEllipsis,
+  BreadcrumbItem as ElfBreadcrumbItem,
+  BreadcrumbLink as ElfBreadcrumbLink,
+  BreadcrumbList as ElfBreadcrumbList,
+  BreadcrumbPage as ElfBreadcrumbPage,
+  BreadcrumbSeparator as ElfBreadcrumbSeparator,
+} from './components/breadcrumb'
+export type { BreadcrumbEllipsisProps, BreadcrumbItemProps, BreadcrumbLinkProps, BreadcrumbListProps, BreadcrumbPageProps, BreadcrumbProps, BreadcrumbSeparatorProps } from './components/breadcrumb'
+
+export {
+  Pagination as ElfPagination,
+  PaginationContent as ElfPaginationContent,
+  PaginationEllipsis as ElfPaginationEllipsis,
+  PaginationFirst as ElfPaginationFirst,
+  PaginationItem as ElfPaginationItem,
+  PaginationLast as ElfPaginationLast,
+  PaginationNext as ElfPaginationNext,
+  PaginationPrev as ElfPaginationPrev,
+  SimplePagination as ElfSimplePagination,
+} from './components/pagination'
+export type { PaginationEllipsisProps, PaginationFirstProps, PaginationItemProps, PaginationLastProps, PaginationNextProps, PaginationPrevProps, PaginationProps, SimplePaginationProps } from './components/pagination'

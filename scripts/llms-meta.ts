@@ -551,6 +551,37 @@ export const components: ComponentMeta[] = [
     slots: ['ElfAccordionTrigger icon: replaces the chevron'],
     a11y: ['Triggers are buttons inside headings; arrow keys, Home and End move between them and skip disabled items.', 'Use short, specific trigger labels and do not nest accordions.'],
   },
+  {
+    dir: 'breadcrumb',
+    name: 'Breadcrumb',
+    summary: 'Hierarchical location trail composed from native elements: a labelled nav with an ordered list. Collapse long trails with ElfBreadcrumbEllipsis inside an ElfDropdownMenu.',
+    parts: ['ElfBreadcrumb', 'ElfBreadcrumbList', 'ElfBreadcrumbItem', 'ElfBreadcrumbLink', 'ElfBreadcrumbPage', 'ElfBreadcrumbSeparator', 'ElfBreadcrumbEllipsis'],
+    props: [
+      { name: 'ElfBreadcrumb ariaLabel', type: 'string', default: 'Breadcrumb', description: 'Accessible name of the nav landmark; translate it.' },
+      { name: 'ElfBreadcrumbLink as / asChild', type: 'string | Component / boolean', default: 'a', description: 'Render a router link with as-child, for example <NuxtLink>.' },
+      { name: 'ElfBreadcrumbEllipsis label', type: 'string', default: 'More', description: 'Screen reader text for the icon.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part; merged with base classes.' },
+    ],
+    slots: ['ElfBreadcrumbSeparator default: replaces the chevron icon', 'ElfBreadcrumbEllipsis default: replaces the ellipsis icon'],
+    a11y: ['Renders nav > ol > li; the last item uses ElfBreadcrumbPage (aria-current="page", not a link).', 'Separators are aria-hidden list items; links are plain Tab stops.', 'Put the ellipsis inside an ElfDropdownMenuTrigger so hidden levels stay reachable by keyboard.'],
+  },
+  {
+    dir: 'pagination',
+    name: 'Pagination',
+    summary: 'Page navigation on Reka UI Pagination: a nav with a list of page buttons, ellipsis, first/previous/next/last, plus ElfSimplePagination for a previous/next bar. Render pages from the items slot of ElfPaginationContent.',
+    parts: ['ElfPagination', 'ElfPaginationContent', 'ElfPaginationItem', 'ElfPaginationEllipsis', 'ElfPaginationPrev', 'ElfPaginationNext', 'ElfPaginationFirst', 'ElfPaginationLast', 'ElfSimplePagination'],
+    props: [
+      { name: 'ElfPagination page / defaultPage', type: 'number', default: '1', description: 'Current page; bind with v-model:page.' },
+      { name: 'ElfPagination total', type: 'number', default: '0', description: 'Total item count; the page count is ceil(total / itemsPerPage).' },
+      { name: 'ElfPagination itemsPerPage', type: 'number', description: 'Required. Items on one page.' },
+      { name: 'ElfPagination siblingCount', type: 'number', default: '1', description: 'Pages shown on each side of the current page.' },
+      { name: 'ElfPagination showEdges', type: 'boolean', default: 'true', description: 'Always show the first and last page.' },
+      { name: 'ElfPagination ariaLabel', type: 'string', default: 'Pagination', description: 'Accessible name of the nav; translate it.' },
+      { name: 'ElfSimplePagination prevLabel / nextLabel', type: 'string', default: 'Previous / Next', description: 'Button text and accessible names.' },
+    ],
+    slots: ['ElfPaginationContent default: { items } where each item is { type: \'page\', value } or { type: \'ellipsis\' }', 'ElfSimplePagination status: { page, pageCount }'],
+    a11y: ['Nav landmark with native buttons; the current page has aria-current="page" and prev/next are disabled at the ends.', 'Translate ariaLabel and the simple labels; reset to page 1 when filters change.'],
+  },
 ]
 
 export const rules = [
