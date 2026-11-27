@@ -213,6 +213,17 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Novatron screens:** forum `UserAvatar`, comments, profile; HQ member lists.
 - **Status:** shipped (unreleased, v0.4)
 
+#### ElfGradientText
+
+- **Purpose:** Inline gradient text for headings and short emphasis.
+- **Built on:** Primitive
+- **Key props, variants and parts:** `variant` (`brand`, `aurora`, `sunset`, `forest`), `from`, `via`, `to`, `direction`, `animate`.
+- **Accessibility:** Native semantics; no dedicated APG pattern (real text, selectable). `forced-colors` falls back to `CanvasText`; preset stops are contrast-tested on every theme; `animate` honours `prefers-reduced-motion`.
+- **Depends on:** none
+- **Complexity:** S
+- **Novatron screens:** Marketing and landing headings (not required by current apps).
+- **Status:** shipped (unreleased, v0.4)
+
 #### ElfKbd
 
 - **Purpose:** Keyboard key hint.

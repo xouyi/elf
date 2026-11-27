@@ -87,6 +87,21 @@
   to { transform: translateX(250%); }
 }
 
+@keyframes elf-gradient-shimmer {
+  from { background-position: 0% 0%; }
+  to { background-position: 100% 100%; }
+}
+
+/* Gradient text falls back to plain system text colour when the user forces colours. */
+@media (forced-colors: active) {
+  [data-slot='gradient-text'] {
+    background-image: none !important;
+    color: CanvasText !important;
+    -webkit-text-fill-color: CanvasText !important;
+    animation: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-slot='dialog-overlay'],
   [data-slot='dialog-content'] {

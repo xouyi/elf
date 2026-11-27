@@ -1,0 +1,25 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "gradient-text",
+  "title": "Gradient Text",
+  "description": "Inline gradient text with theme-aware presets, custom stops, direction and a reduced-motion-safe shimmer.",
+  "dependencies": [
+    "reka-ui"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/gradient-text/GradientText.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { GradientTextProps } from './index'\nimport { Primitive } from 'reka-ui'\nimport { computed } from 'vue'\nimport { cn } from '@/lib/utils'\nimport { gradientTextDirections, gradientTextPresets } from './index'\n\nconst props = withDefaults(defineProps<GradientTextProps>(), {\n  as: 'span',\n  variant: 'brand',\n  direction: 'r',\n  animate: false,\n})\n\nconst stops = computed(() => {\n  const preset = gradientTextPresets[props.variant]\n  const base: readonly string[] = 'stops' in preset\n    ? preset.stops\n    : preset.light.map((light, i) => `light-dark(${light}, ${preset.dark[i]})`)\n  const first = props.from ?? base[0]!\n  const last = props.to ?? base[base.length - 1]!\n  const middle = props.via ?? (base.length > 2 ? base[1] : undefined)\n  return [first, middle, last].filter(Boolean).join(', ')\n})\n\nconst style = computed(() => ({\n  backgroundImage: `linear-gradient(${gradientTextDirections[props.direction]}, ${stops.value})`,\n  backgroundSize: props.animate ? '200% 200%' : undefined,\n}))\n</script>\n\n<template>\n  <Primitive\n    data-slot=\"gradient-text\"\n    :data-variant=\"props.variant\"\n    :as=\"props.as\"\n    :as-child=\"props.asChild\"\n    :style=\"style\"\n    :class=\"cn(\n      'bg-clip-text text-transparent [box-decoration-break:clone]',\n      props.animate && 'animate-[elf-gradient-shimmer_6s_ease-in-out_infinite_alternate] motion-reduce:animate-none',\n      props.class,\n    )\"\n  >\n    <slot />\n  </Primitive>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/gradient-text/index.ts",
+      "content": "import type { PrimitiveProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\n\nexport { default as GradientText } from './GradientText.vue'\n\n/** Named colour presets. `brand` follows the active theme; the others have a light and a dark set, picked by the theme's `color-scheme`. */\nexport type GradientTextVariant = 'brand' | 'aurora' | 'sunset' | 'forest'\n\n/** Direction of the gradient, in Tailwind notation: `r` is left to right, `br` is top-left to bottom-right. */\nexport type GradientTextDirection = 'r' | 'l' | 'b' | 't' | 'br' | 'bl' | 'tr' | 'tl'\n\n/**\n * Stops of every preset. `brand` uses theme tokens (the primary colour into the foreground colour, both of which meet\n * 4.5:1 on the theme background). The named presets list a `light` set for light themes and a `dark` set for dark themes;\n * `GradientText.test.ts` checks every stop of every set against the background tokens of every theme (4.5:1).\n */\nexport const gradientTextPresets = {\n  brand: { stops: ['var(--elf-primary)', 'var(--elf-foreground)'] },\n  aurora: { light: ['#0e7490', '#6d28d9', '#be185d'], dark: ['#22d3ee', '#a78bfa', '#f472b6'] },\n  sunset: { light: ['#c2410c', '#b91c1c', '#be185d'], dark: ['#fb923c', '#f87171', '#f472b6'] },\n  forest: { light: ['#15803d', '#0f766e', '#4d7c0f'], dark: ['#4ade80', '#2dd4bf', '#a3e635'] },\n} as const\n\nexport const gradientTextDirections: Record<GradientTextDirection, string> = {\n  r: 'to right',\n  l: 'to left',\n  b: 'to bottom',\n  t: 'to top',\n  br: 'to bottom right',\n  bl: 'to bottom left',\n  tr: 'to top right',\n  tl: 'to top left',\n}\n\nexport interface GradientTextProps extends PrimitiveProps {\n  /** Colour preset. Defaults to `brand`, which blends the theme's primary colour into its foreground colour. */\n  variant?: GradientTextVariant\n  /** First colour, any CSS colour (a token works: `var(--elf-primary)`). Overrides the first stop of the preset. */\n  from?: string\n  /** Optional middle colour. Overrides the middle stop of the preset (a two-stop preset gains one). */\n  via?: string\n  /** Last colour. Overrides the last stop of the preset. */\n  to?: string\n  /** Direction of the gradient. */\n  direction?: GradientTextDirection\n  /** Slowly shifts the gradient back and forth. Static under `prefers-reduced-motion`. */\n  animate?: boolean\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

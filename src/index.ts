@@ -55,6 +55,9 @@ export type { SpinnerProps, SpinnerVariants } from './components/spinner'
 export { Skeleton as ElfSkeleton } from './components/skeleton'
 export type { SkeletonProps } from './components/skeleton'
 
+export { GradientText as ElfGradientText, gradientTextDirections, gradientTextPresets } from './components/gradient-text'
+export type { GradientTextDirection, GradientTextProps, GradientTextVariant } from './components/gradient-text'
+
 export { Textarea as ElfTextarea } from './components/textarea'
 
 export {

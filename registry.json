@@ -599,6 +599,28 @@
       ]
     },
     {
+      "name": "gradient-text",
+      "type": "registry:ui",
+      "title": "Gradient Text",
+      "description": "Inline gradient text with theme-aware presets, custom stops, direction and a reduced-motion-safe shimmer.",
+      "dependencies": [
+        "reka-ui"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/gradient-text/GradientText.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/gradient-text/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "avatar",
       "type": "registry:ui",
       "title": "Avatar",

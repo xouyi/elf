@@ -91,7 +91,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -2823,8 +2823,123 @@ const sizes = ['sm', 'default', 'lg', 'xl'] as const
 </template>
 ```
 
+### GradientText
+
+Inline gradient text (bg-clip-text) on a span by default. Real, selectable text; presets follow the theme and pass 4.5:1 on every theme background.
+
+Components: `ElfGradientText`
+
+Props:
+
+- `variant` ('brand' | 'aurora' | 'sunset' | 'forest', default brand): Colour preset. brand blends the theme primary into its foreground; the others switch between a light and a dark set by color-scheme.
+- `from / via / to` (string): Custom CSS colours (tokens work: var(--elf-primary)). They override the preset stops.
+- `direction` ('r' | 'l' | 'b' | 't' | 'br' | 'bl' | 'tr' | 'tl', default r): Gradient direction.
+- `animate` (boolean, default false): Slow shimmer; static under prefers-reduced-motion.
+- `as` (string | Component, default span): Element to render.
+- `asChild` (boolean, default false): Render the child element with the gradient (attribute: as-child).
+- `class` (string | array | object): Merged with base classes.
+
+Slots:
+
+- default: the text
+
+Accessibility:
+
+- The text stays real text: selectable, searchable and read as written.
+- In forced-colors mode the gradient is replaced by CanvasText.
+- Custom from/via/to colours are not checked: keep 4.5:1 against the background (3:1 for large text).
+- Use it for short decorative emphasis, not for long paragraphs.
+
+Examples:
+
+#### Animated
+
+```vue
+<script setup lang="ts">
+import { ElfGradientText } from '@xouyi/elfui'
+</script>
+
+<template>
+  <p class="text-3xl font-bold tracking-tight">
+    <ElfGradientText variant="aurora" animate>
+      Shimmering, unless you prefer reduced motion
+    </ElfGradientText>
+  </p>
+</template>
+```
+
+#### Custom
+
+```vue
+<script setup lang="ts">
+import { ElfGradientText } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid gap-2 text-2xl font-semibold tracking-tight">
+    <ElfGradientText from="var(--elf-primary)" to="var(--elf-destructive-text)" direction="br">
+      Primary into destructive text
+    </ElfGradientText>
+    <ElfGradientText from="var(--elf-success-text)" via="var(--elf-primary)" to="var(--elf-warning-text)">
+      Three stops from theme tokens
+    </ElfGradientText>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfGradientText } from '@xouyi/elfui'
+</script>
+
+<template>
+  <p class="text-2xl font-semibold tracking-tight">
+    Build the next <ElfGradientText>robot</ElfGradientText> together.
+  </p>
+</template>
+```
+
+#### Heading
+
+```vue
+<script setup lang="ts">
+import { ElfGradientText } from '@xouyi/elfui'
+</script>
+
+<template>
+  <h2 class="text-4xl font-bold tracking-tight text-balance">
+    Ship faster with
+    <ElfGradientText variant="sunset" direction="br">
+      accessible components
+    </ElfGradientText>
+  </h2>
+</template>
+```
+
+#### Variants
+
+```vue
+<script setup lang="ts">
+import { ElfGradientText } from '@xouyi/elfui'
+
+const variants = ['brand', 'aurora', 'sunset', 'forest'] as const
+</script>
+
+<template>
+  <ul class="grid gap-2 text-2xl font-semibold tracking-tight">
+    <li v-for="variant in variants" :key="variant">
+      <ElfGradientText :variant="variant">
+        {{ variant }}
+      </ElfGradientText>
+    </li>
+  </ul>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`
