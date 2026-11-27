@@ -551,6 +551,23 @@ export const components: ComponentMeta[] = [
     slots: ['ElfBreadcrumbSeparator default: replaces the chevron icon', 'ElfBreadcrumbEllipsis default: replaces the ellipsis icon'],
     a11y: ['Renders nav > ol > li; the last item uses ElfBreadcrumbPage (aria-current="page", not a link).', 'Separators are aria-hidden list items; links are plain Tab stops.', 'Put the ellipsis inside an ElfDropdownMenuTrigger so hidden levels stay reachable by keyboard.'],
   },
+  {
+    dir: 'pagination',
+    name: 'Pagination',
+    summary: 'Page navigation on Reka UI Pagination: a nav with a list of page buttons, ellipsis, first/previous/next/last, plus ElfSimplePagination for a previous/next bar. Render pages from the items slot of ElfPaginationContent.',
+    parts: ['ElfPagination', 'ElfPaginationContent', 'ElfPaginationItem', 'ElfPaginationEllipsis', 'ElfPaginationPrev', 'ElfPaginationNext', 'ElfPaginationFirst', 'ElfPaginationLast', 'ElfSimplePagination'],
+    props: [
+      { name: 'ElfPagination page / defaultPage', type: 'number', default: '1', description: 'Current page; bind with v-model:page.' },
+      { name: 'ElfPagination total', type: 'number', default: '0', description: 'Total item count; the page count is ceil(total / itemsPerPage).' },
+      { name: 'ElfPagination itemsPerPage', type: 'number', description: 'Required. Items on one page.' },
+      { name: 'ElfPagination siblingCount', type: 'number', default: '1', description: 'Pages shown on each side of the current page.' },
+      { name: 'ElfPagination showEdges', type: 'boolean', default: 'true', description: 'Always show the first and last page.' },
+      { name: 'ElfPagination ariaLabel', type: 'string', default: 'Pagination', description: 'Accessible name of the nav; translate it.' },
+      { name: 'ElfSimplePagination prevLabel / nextLabel', type: 'string', default: 'Previous / Next', description: 'Button text and accessible names.' },
+    ],
+    slots: ['ElfPaginationContent default: { items } where each item is { type: \'page\', value } or { type: \'ellipsis\' }', 'ElfSimplePagination status: { page, pageCount }'],
+    a11y: ['Nav landmark with native buttons; the current page has aria-current="page" and prev/next are disabled at the ends.', 'Translate ariaLabel and the simple labels; reset to page 1 when filters change.'],
+  },
 ]
 
 export const rules = [

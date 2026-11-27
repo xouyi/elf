@@ -4,6 +4,8 @@
 
 - Add `ElfBreadcrumb`, `ElfBreadcrumbList`, `ElfBreadcrumbItem`, `ElfBreadcrumbLink` (`asChild` for router links), `ElfBreadcrumbPage`, `ElfBreadcrumbSeparator` and `ElfBreadcrumbEllipsis`, composed from native elements: a labelled `nav` with an ordered list, `aria-current="page"` on the last item, aria-hidden separators (any icon through the slot, mirrored in RTL) and an ellipsis that collapses long trails when placed inside an `ElfDropdownMenuTrigger`.
 
+- Add `ElfPagination`, `ElfPaginationContent`, `ElfPaginationItem`, `ElfPaginationEllipsis`, `ElfPaginationFirst`, `ElfPaginationPrev`, `ElfPaginationNext`, `ElfPaginationLast` and `ElfSimplePagination`, built on the Reka UI Pagination primitive: `v-model:page`, `total`, `itemsPerPage`, `siblingCount` (default 1) and `showEdges` (default true), a labelled `nav` with a list of native buttons, `aria-current="page"`, disabled ends, a `disabled` state, and a previous/next bar with a translatable status for simple lists.
+
 ## 0.4.0
 
 - **Breaking: the `novatron` theme is now `nova`.** `data-theme="novatron"` becomes `data-theme="nova"`, the file `@xouyi/elfui/themes/novatron.css` becomes `@xouyi/elfui/themes/nova.css`, the Nuxt option `elfui: { theme: 'novatron' }` becomes `theme: 'nova'` (also in `themes: [...]`), `elfui init --theme novatron` becomes `--theme nova`, and `useElfTheme` values stored as `novatron` (cookie or localStorage) must be migrated to `nova`. No compatibility alias. The tokens are unchanged. To migrate: search your project for `novatron` in HTML, CSS imports, `nuxt.config.ts` and stored theme values, and replace it with `nova`.

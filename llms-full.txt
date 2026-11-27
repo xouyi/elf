@@ -91,7 +91,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, breadcrumb, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, breadcrumb, pagination, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -4850,8 +4850,136 @@ const trail = ['Courses', 'Robotics basics', 'Sensors and actuators', 'Reading a
 </template>
 ```
 
+### Pagination
+
+Page navigation on Reka UI Pagination: a nav with a list of page buttons, ellipsis, first/previous/next/last, plus ElfSimplePagination for a previous/next bar. Render pages from the items slot of ElfPaginationContent.
+
+Components: `ElfPagination`, `ElfPaginationContent`, `ElfPaginationItem`, `ElfPaginationEllipsis`, `ElfPaginationPrev`, `ElfPaginationNext`, `ElfPaginationFirst`, `ElfPaginationLast`, `ElfSimplePagination`
+
+Props:
+
+- `ElfPagination page / defaultPage` (number, default 1): Current page; bind with v-model:page.
+- `ElfPagination total` (number, default 0): Total item count; the page count is ceil(total / itemsPerPage).
+- `ElfPagination itemsPerPage` (number): Required. Items on one page.
+- `ElfPagination siblingCount` (number, default 1): Pages shown on each side of the current page.
+- `ElfPagination showEdges` (boolean, default true): Always show the first and last page.
+- `ElfPagination ariaLabel` (string, default Pagination): Accessible name of the nav; translate it.
+- `ElfSimplePagination prevLabel / nextLabel` (string, default Previous / Next): Button text and accessible names.
+
+Slots:
+
+- ElfPaginationContent default: { items } where each item is { type: 'page', value } or { type: 'ellipsis' }
+- ElfSimplePagination status: { page, pageCount }
+
+Accessibility:
+
+- Nav landmark with native buttons; the current page has aria-current="page" and prev/next are disabled at the ends.
+- Translate ariaLabel and the simple labels; reset to page 1 when filters change.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfPagination, ElfPaginationContent, ElfPaginationEllipsis, ElfPaginationItem, ElfPaginationNext, ElfPaginationPrev } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const page = ref(5)
+</script>
+
+<template>
+  <div class="grid w-full gap-3">
+    <ElfPagination v-model:page="page" :total="100" :items-per-page="10">
+      <ElfPaginationContent v-slot="{ items }">
+        <ElfPaginationPrev />
+        <template v-for="(item, i) in items" :key="i">
+          <ElfPaginationItem v-if="item.type === 'page'" :value="item.value" />
+          <ElfPaginationEllipsis v-else />
+        </template>
+        <ElfPaginationNext />
+      </ElfPaginationContent>
+    </ElfPagination>
+    <p class="text-center text-sm text-muted-foreground">
+      Page {{ page }} of 10
+    </p>
+  </div>
+</template>
+```
+
+#### Disabled
+
+```vue
+<script setup lang="ts">
+import { ElfPagination, ElfPaginationContent, ElfPaginationEllipsis, ElfPaginationItem, ElfPaginationNext, ElfPaginationPrev } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfPagination disabled :default-page="2" :total="60" :items-per-page="10">
+    <ElfPaginationContent v-slot="{ items }">
+      <ElfPaginationPrev />
+      <template v-for="(item, i) in items" :key="i">
+        <ElfPaginationItem v-if="item.type === 'page'" :value="item.value" />
+        <ElfPaginationEllipsis v-else />
+      </template>
+      <ElfPaginationNext />
+    </ElfPaginationContent>
+  </ElfPagination>
+</template>
+```
+
+#### Simple
+
+```vue
+<script setup lang="ts">
+import { ElfSimplePagination } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const page = ref(1)
+</script>
+
+<template>
+  <ElfSimplePagination v-model:page="page" :total="45" :items-per-page="10" class="max-w-md" />
+</template>
+```
+
+#### With Edges
+
+```vue
+<script setup lang="ts">
+import {
+  ElfPagination,
+  ElfPaginationContent,
+  ElfPaginationEllipsis,
+  ElfPaginationFirst,
+  ElfPaginationItem,
+  ElfPaginationLast,
+  ElfPaginationNext,
+  ElfPaginationPrev,
+} from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const page = ref(1)
+</script>
+
+<template>
+  <ElfPagination v-model:page="page" :total="500" :items-per-page="10" :sibling-count="0" aria-label="Search results">
+    <ElfPaginationContent v-slot="{ items }">
+      <ElfPaginationFirst />
+      <ElfPaginationPrev />
+      <template v-for="(item, i) in items" :key="i">
+        <ElfPaginationItem v-if="item.type === 'page'" :value="item.value" />
+        <ElfPaginationEllipsis v-else />
+      </template>
+      <ElfPaginationNext />
+      <ElfPaginationLast />
+    </ElfPaginationContent>
+  </ElfPagination>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfBreadcrumb`, `ElfBreadcrumbEllipsis`, `ElfBreadcrumbItem`, `ElfBreadcrumbLink`, `ElfBreadcrumbList`, `ElfBreadcrumbPage`, `ElfBreadcrumbSeparator`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfBreadcrumb`, `ElfBreadcrumbEllipsis`, `ElfBreadcrumbItem`, `ElfBreadcrumbLink`, `ElfBreadcrumbList`, `ElfBreadcrumbPage`, `ElfBreadcrumbSeparator`, `ElfPagination`, `ElfPaginationContent`, `ElfPaginationEllipsis`, `ElfPaginationFirst`, `ElfPaginationItem`, `ElfPaginationLast`, `ElfPaginationNext`, `ElfPaginationPrev`, `ElfSimplePagination`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

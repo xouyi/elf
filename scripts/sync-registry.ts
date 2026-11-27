@@ -59,6 +59,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   collapsible: { title: 'Collapsible', description: 'Single show and hide region with an animated height, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
   accordion: { title: 'Accordion', description: 'Stacked collapsible sections, single or multiple, with arrow-key navigation, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('collapsible')] },
   breadcrumb: { title: 'Breadcrumb', description: 'Hierarchical location trail with list, item, link, page, separator and ellipsis parts, composed from native elements.', dependencies: ['reka-ui', '@lucide/vue'] },
+  pagination: { title: 'Pagination', description: 'Page navigation with numbers, ellipsis, first, previous, next and last, plus a simple previous/next bar, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('button')] },
 }
 
 const items: unknown[] = [
