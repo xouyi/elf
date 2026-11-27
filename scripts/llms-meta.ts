@@ -600,7 +600,7 @@ export const components: ComponentMeta[] = [
       { name: 'class', type: 'string | array | object', description: 'Accepted by every part; merged with base classes.' },
     ],
     slots: ['default: the label or an icon (give icon-only toggles an aria-label)'],
-    a11y: ['A single toggle is a button with aria-pressed. In a single group items are radios in a radiogroup; in a multiple group they are toggle buttons in a group.', 'Name the group with aria-label and every icon-only item with aria-label.', 'Arrow keys, Home and End move focus inside a group; Space or Enter presses.'],
+    a11y: ['A single toggle is a button with aria-pressed. A group (single or multiple) renders role="group" with aria-pressed toggle buttons; a single group lets at most one be pressed.', 'Name the group with aria-label and every icon-only item with aria-label.', 'Arrow keys, Home and End move focus inside a group; Space or Enter presses.'],
   },
   {
     dir: 'aspect-ratio',

@@ -61,7 +61,7 @@ describe('Toggle', () => {
 })
 
 describe('ToggleGroup', () => {
-  it('single: radiogroup of radios, passes the group size and per-item override', async () => {
+  it('single: group of aria-pressed buttons, passes the group size and per-item override', async () => {
     wrapper = mount(Single, { attachTo: document.body })
     await flushPromises()
     expect(wrapper.get('[data-slot="toggle-group"]').attributes('role')).toBe('group')
