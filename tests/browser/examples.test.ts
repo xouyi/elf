@@ -49,7 +49,7 @@ describe.each(themes)('examples in the %s theme', (theme) => {
       expect(document.querySelector('[role="tooltip"], [data-slot="hover-card-content"]'), 'focus did not open the floating content').not.toBeNull()
     }
 
-    expect(await axeViolations()).toEqual([])
+    expect(await axeViolations(document, { menuOpen: document.querySelector('[role="menu"]') !== null })).toEqual([])
   })
 })
 

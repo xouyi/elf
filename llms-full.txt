@@ -90,7 +90,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, tooltip, popover, hover-card, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, tooltip, popover, hover-card, dropdown-menu, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -3219,8 +3219,321 @@ import { ElfHoverCard, ElfHoverCardContent, ElfHoverCardTrigger } from '@xouyi/e
 </template>
 ```
 
+### DropdownMenu
+
+Action menu opened from a button, built on Reka UI DropdownMenu. Compose ElfDropdownMenu > ElfDropdownMenuTrigger (as-child around a button) + ElfDropdownMenuContent > items. Items: ElfDropdownMenuItem (@select), ElfDropdownMenuCheckboxItem (v-model), ElfDropdownMenuRadioGroup (v-model) with ElfDropdownMenuRadioItem, ElfDropdownMenuSub with SubTrigger and SubContent; ElfDropdownMenuLabel, Group, Separator and Shortcut (put ElfKbd inside) structure it.
+
+Components: `ElfDropdownMenu`, `ElfDropdownMenuTrigger`, `ElfDropdownMenuContent`, `ElfDropdownMenuItem`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuGroup`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuSubContent`
+
+Props:
+
+- `ElfDropdownMenu open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfDropdownMenu modal` (boolean, default true): Make the page behind inert while open.
+- `ElfDropdownMenuContent side / align / sideOffset` (side, alignment, number, default bottom / center / 4): Placement against the trigger (attribute: side-offset).
+- `ElfDropdownMenuItem variant` ('default' | 'destructive', default default): destructive colours irreversible actions such as delete.
+- `ElfDropdownMenuItem inset` (boolean, default false): Indent to line up with indicator items. Also on Label and SubTrigger.
+- `ElfDropdownMenuItem disabled` (boolean, default false): Item cannot be activated.
+- `ElfDropdownMenuItem @select` ((event) => void): Emitted when the item is activated; call event.preventDefault() to keep the menu open.
+- `ElfDropdownMenuCheckboxItem modelValue` (boolean | 'indeterminate'): Checked state, bound with v-model.
+- `ElfDropdownMenuRadioGroup modelValue` (string): Selected value, bound with v-model; each ElfDropdownMenuRadioItem has a value.
+- `class` (string | array | object): Accepted by every part except ElfDropdownMenu; merged with base classes.
+
+Slots:
+
+- ElfDropdownMenuTrigger default: the button (use as-child)
+- ElfDropdownMenuContent default: items, labels, groups, separators, sub menus
+- ElfDropdownMenuShortcut default: ElfKbd elements or text
+
+Accessibility:
+
+- The trigger has aria-haspopup=menu and aria-expanded; give an icon-only trigger an aria-label.
+- Arrow keys, Home, End and typeahead move; Enter or Space activates; ArrowRight and ArrowLeft open and close sub menus; Escape closes and returns focus to the trigger.
+- Use for actions, not for choosing a form value (use ElfSelect). Confirm destructive actions with a dialog.
+
+Examples:
+
+#### Checkboxes
+
+```vue
+<script setup lang="ts">
+import {
+  ElfButton,
+  ElfDropdownMenu,
+  ElfDropdownMenuCheckboxItem,
+  ElfDropdownMenuContent,
+  ElfDropdownMenuLabel,
+  ElfDropdownMenuSeparator,
+  ElfDropdownMenuTrigger,
+} from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const showStatus = ref(true)
+const showSku = ref(false)
+const showNotes = ref(false)
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfDropdownMenu>
+      <ElfDropdownMenuTrigger as-child>
+        <ElfButton variant="outline">
+          Columns
+        </ElfButton>
+      </ElfDropdownMenuTrigger>
+      <ElfDropdownMenuContent class="w-48" align="start">
+        <ElfDropdownMenuLabel>Visible columns</ElfDropdownMenuLabel>
+        <ElfDropdownMenuSeparator />
+        <ElfDropdownMenuCheckboxItem v-model="showStatus">
+          Status
+        </ElfDropdownMenuCheckboxItem>
+        <ElfDropdownMenuCheckboxItem v-model="showSku">
+          SKU
+        </ElfDropdownMenuCheckboxItem>
+        <ElfDropdownMenuCheckboxItem v-model="showNotes" disabled>
+          Notes (unavailable)
+        </ElfDropdownMenuCheckboxItem>
+      </ElfDropdownMenuContent>
+    </ElfDropdownMenu>
+    <p class="text-sm text-muted-foreground">
+      status = {{ showStatus }}, sku = {{ showSku }}
+    </p>
+  </div>
+</template>
+```
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfDropdownMenu, ElfDropdownMenuContent, ElfDropdownMenuItem, ElfDropdownMenuTrigger } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfDropdownMenu v-model:open="open">
+      <ElfDropdownMenuTrigger as-child>
+        <ElfButton variant="outline">
+          Menu
+        </ElfButton>
+      </ElfDropdownMenuTrigger>
+      <ElfDropdownMenuContent align="start">
+        <ElfDropdownMenuItem>First</ElfDropdownMenuItem>
+        <ElfDropdownMenuItem>Second</ElfDropdownMenuItem>
+      </ElfDropdownMenuContent>
+    </ElfDropdownMenu>
+    <p class="text-sm text-muted-foreground">
+      open = {{ open }}
+    </p>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { CreditCard, LifeBuoy, LogOut, Settings, User } from '@lucide/vue'
+import {
+  ElfButton,
+  ElfDropdownMenu,
+  ElfDropdownMenuContent,
+  ElfDropdownMenuGroup,
+  ElfDropdownMenuItem,
+  ElfDropdownMenuLabel,
+  ElfDropdownMenuSeparator,
+  ElfDropdownMenuShortcut,
+  ElfDropdownMenuTrigger,
+  ElfKbd,
+} from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfDropdownMenu>
+    <ElfDropdownMenuTrigger as-child>
+      <ElfButton variant="outline">
+        My account
+      </ElfButton>
+    </ElfDropdownMenuTrigger>
+    <ElfDropdownMenuContent class="w-56" align="start">
+      <ElfDropdownMenuLabel>Signed in as ayse</ElfDropdownMenuLabel>
+      <ElfDropdownMenuGroup>
+        <ElfDropdownMenuItem>
+          <User /> Profile
+          <ElfDropdownMenuShortcut>
+            <ElfKbd>Ctrl</ElfKbd><ElfKbd>P</ElfKbd>
+          </ElfDropdownMenuShortcut>
+        </ElfDropdownMenuItem>
+        <ElfDropdownMenuItem>
+          <CreditCard /> Billing
+        </ElfDropdownMenuItem>
+        <ElfDropdownMenuItem>
+          <Settings /> Settings
+          <ElfDropdownMenuShortcut>
+            <ElfKbd>Ctrl</ElfKbd><ElfKbd>,</ElfKbd>
+          </ElfDropdownMenuShortcut>
+        </ElfDropdownMenuItem>
+      </ElfDropdownMenuGroup>
+      <ElfDropdownMenuSeparator />
+      <ElfDropdownMenuItem>
+        <LifeBuoy /> Support
+      </ElfDropdownMenuItem>
+      <ElfDropdownMenuItem disabled>
+        API (soon)
+      </ElfDropdownMenuItem>
+      <ElfDropdownMenuSeparator />
+      <ElfDropdownMenuItem>
+        <LogOut /> Sign out
+      </ElfDropdownMenuItem>
+    </ElfDropdownMenuContent>
+  </ElfDropdownMenu>
+</template>
+```
+
+#### Radio Items
+
+```vue
+<script setup lang="ts">
+import {
+  ElfButton,
+  ElfDropdownMenu,
+  ElfDropdownMenuContent,
+  ElfDropdownMenuLabel,
+  ElfDropdownMenuRadioGroup,
+  ElfDropdownMenuRadioItem,
+  ElfDropdownMenuSeparator,
+  ElfDropdownMenuTrigger,
+} from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const sort = ref('name')
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfDropdownMenu>
+      <ElfDropdownMenuTrigger as-child>
+        <ElfButton variant="outline">
+          Sort
+        </ElfButton>
+      </ElfDropdownMenuTrigger>
+      <ElfDropdownMenuContent class="w-48" align="start">
+        <ElfDropdownMenuLabel>Sort by</ElfDropdownMenuLabel>
+        <ElfDropdownMenuSeparator />
+        <ElfDropdownMenuRadioGroup v-model="sort">
+          <ElfDropdownMenuRadioItem value="name">
+            Name
+          </ElfDropdownMenuRadioItem>
+          <ElfDropdownMenuRadioItem value="quantity">
+            Quantity
+          </ElfDropdownMenuRadioItem>
+          <ElfDropdownMenuRadioItem value="updated">
+            Last updated
+          </ElfDropdownMenuRadioItem>
+        </ElfDropdownMenuRadioGroup>
+      </ElfDropdownMenuContent>
+    </ElfDropdownMenu>
+    <p class="text-sm text-muted-foreground">
+      sort = {{ sort }}
+    </p>
+  </div>
+</template>
+```
+
+#### Row Actions
+
+```vue
+<script setup lang="ts">
+import { Copy, Ellipsis, Pencil, Trash2 } from '@lucide/vue'
+import {
+  ElfButton,
+  ElfDropdownMenu,
+  ElfDropdownMenuContent,
+  ElfDropdownMenuItem,
+  ElfDropdownMenuSeparator,
+  ElfDropdownMenuTrigger,
+} from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const last = ref('none')
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <p class="text-sm">
+      Battery 12V
+    </p>
+    <ElfDropdownMenu>
+      <ElfDropdownMenuTrigger as-child>
+        <ElfButton variant="ghost" size="icon" aria-label="Actions for Battery 12V">
+          <Ellipsis />
+        </ElfButton>
+      </ElfDropdownMenuTrigger>
+      <ElfDropdownMenuContent align="start">
+        <ElfDropdownMenuItem @select="last = 'edit'">
+          <Pencil /> Edit
+        </ElfDropdownMenuItem>
+        <ElfDropdownMenuItem @select="last = 'duplicate'">
+          <Copy /> Duplicate
+        </ElfDropdownMenuItem>
+        <ElfDropdownMenuSeparator />
+        <ElfDropdownMenuItem variant="destructive" @select="last = 'delete'">
+          <Trash2 /> Delete
+        </ElfDropdownMenuItem>
+      </ElfDropdownMenuContent>
+    </ElfDropdownMenu>
+    <p class="text-sm text-muted-foreground">
+      last = {{ last }}
+    </p>
+  </div>
+</template>
+```
+
+#### Sub Menu
+
+```vue
+<script setup lang="ts">
+import {
+  ElfButton,
+  ElfDropdownMenu,
+  ElfDropdownMenuContent,
+  ElfDropdownMenuItem,
+  ElfDropdownMenuSeparator,
+  ElfDropdownMenuSub,
+  ElfDropdownMenuSubContent,
+  ElfDropdownMenuSubTrigger,
+  ElfDropdownMenuTrigger,
+} from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfDropdownMenu>
+    <ElfDropdownMenuTrigger as-child>
+      <ElfButton variant="outline">
+        Actions
+      </ElfButton>
+    </ElfDropdownMenuTrigger>
+    <ElfDropdownMenuContent class="w-48" align="start">
+      <ElfDropdownMenuItem>Duplicate</ElfDropdownMenuItem>
+      <ElfDropdownMenuSub>
+        <ElfDropdownMenuSubTrigger>Share</ElfDropdownMenuSubTrigger>
+        <ElfDropdownMenuSubContent>
+          <ElfDropdownMenuItem>Email link</ElfDropdownMenuItem>
+          <ElfDropdownMenuItem>Message</ElfDropdownMenuItem>
+          <ElfDropdownMenuSeparator />
+          <ElfDropdownMenuItem>Copy link</ElfDropdownMenuItem>
+        </ElfDropdownMenuSubContent>
+      </ElfDropdownMenuSub>
+      <ElfDropdownMenuItem>Archive</ElfDropdownMenuItem>
+    </ElfDropdownMenuContent>
+  </ElfDropdownMenu>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

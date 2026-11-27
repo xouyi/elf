@@ -281,7 +281,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfKbd, ElfSeparator
 - **Complexity:** M
 - **Novatron screens:** Row action menus in `AdminTable`; stock `ItemRow` actions; user menu in nav.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfContextMenu
 

@@ -45,6 +45,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   alert: { title: 'Alert', description: 'Static message with default, destructive, success and warning variants and live region handling.', dependencies: ['class-variance-authority', '@lucide/vue'] },
   progress: { title: 'Progress', description: 'Determinate and indeterminate progress bar built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
   avatar: { title: 'Avatar', description: 'Image with initials fallback, four sizes and an overlapping group, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
+  'dropdown-menu': { title: 'Dropdown Menu', description: 'Action menu opened from a button with items, checkbox and radio items, groups, sub menus and shortcuts, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'] },
   'hover-card': { title: 'Hover Card', description: 'Rich preview on hover or focus of a link, built on Reka UI and sharing the Popover panel styles.', dependencies: ['reka-ui', '@vueuse/core'], registryDependencies: [dep('popover')] },
   popover: { title: 'Popover', description: 'Anchored interactive panel with trigger, anchor and close parts, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
   tooltip: { title: 'Tooltip', description: 'Short non-interactive hint on hover or focus with a shared delay provider, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },

@@ -635,6 +635,87 @@
       ]
     },
     {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "Dropdown Menu",
+      "description": "Action menu opened from a button with items, checkbox and radio items, groups, sub menus and shortcuts, built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core",
+        "@lucide/vue",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/dropdown-menu/DropdownMenu.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dropdown-menu/DropdownMenuCheckboxItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dropdown-menu/DropdownMenuContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dropdown-menu/DropdownMenuGroup.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dropdown-menu/DropdownMenuItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dropdown-menu/DropdownMenuLabel.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dropdown-menu/DropdownMenuRadioGroup.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dropdown-menu/DropdownMenuRadioItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dropdown-menu/DropdownMenuSeparator.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dropdown-menu/DropdownMenuShortcut.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dropdown-menu/DropdownMenuSub.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dropdown-menu/DropdownMenuSubContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dropdown-menu/DropdownMenuSubTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dropdown-menu/DropdownMenuTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dropdown-menu/index.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/dropdown-menu/styles.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "hover-card",
       "type": "registry:ui",
       "title": "Hover Card",

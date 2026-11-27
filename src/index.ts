@@ -135,3 +135,37 @@ export {
   HoverCardTrigger as ElfHoverCardTrigger,
 } from './components/hover-card'
 export type { HoverCardContentProps } from './components/hover-card'
+
+export {
+  DropdownMenu as ElfDropdownMenu,
+  DropdownMenuCheckboxItem as ElfDropdownMenuCheckboxItem,
+  DropdownMenuContent as ElfDropdownMenuContent,
+  DropdownMenuGroup as ElfDropdownMenuGroup,
+  DropdownMenuItem as ElfDropdownMenuItem,
+  DropdownMenuLabel as ElfDropdownMenuLabel,
+  DropdownMenuRadioGroup as ElfDropdownMenuRadioGroup,
+  DropdownMenuRadioItem as ElfDropdownMenuRadioItem,
+  DropdownMenuSeparator as ElfDropdownMenuSeparator,
+  DropdownMenuShortcut as ElfDropdownMenuShortcut,
+  DropdownMenuSub as ElfDropdownMenuSub,
+  DropdownMenuSubContent as ElfDropdownMenuSubContent,
+  DropdownMenuSubTrigger as ElfDropdownMenuSubTrigger,
+  DropdownMenuTrigger as ElfDropdownMenuTrigger,
+  menuContentClass,
+  menuItemVariants,
+  menuLabelClass,
+  menuSeparatorClass,
+  menuShortcutClass,
+} from './components/dropdown-menu'
+export type {
+  DropdownMenuCheckboxItemProps,
+  DropdownMenuContentProps,
+  DropdownMenuItemProps,
+  DropdownMenuLabelProps,
+  DropdownMenuRadioItemProps,
+  DropdownMenuSeparatorProps,
+  DropdownMenuShortcutProps,
+  DropdownMenuSubContentProps,
+  DropdownMenuSubTriggerProps,
+  MenuItemVariants,
+} from './components/dropdown-menu'

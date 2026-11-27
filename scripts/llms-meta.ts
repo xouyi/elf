@@ -386,6 +386,26 @@ export const components: ComponentMeta[] = [
     slots: ['ElfHoverCardTrigger default: a link (use as-child)', 'ElfHoverCardContent default: non-interactive preview content'],
     a11y: ['The trigger must be a real link that works without the card; the card is an enhancement for pointer users.', 'Opens on keyboard focus and closes on Escape. Put no essential information or interactive elements in it.', 'Use a popover for interactive content.'],
   },
+  {
+    dir: 'dropdown-menu',
+    name: 'DropdownMenu',
+    summary: 'Action menu opened from a button, built on Reka UI DropdownMenu. Compose ElfDropdownMenu > ElfDropdownMenuTrigger (as-child around a button) + ElfDropdownMenuContent > items. Items: ElfDropdownMenuItem (@select), ElfDropdownMenuCheckboxItem (v-model), ElfDropdownMenuRadioGroup (v-model) with ElfDropdownMenuRadioItem, ElfDropdownMenuSub with SubTrigger and SubContent; ElfDropdownMenuLabel, Group, Separator and Shortcut (put ElfKbd inside) structure it.',
+    parts: ['ElfDropdownMenu', 'ElfDropdownMenuTrigger', 'ElfDropdownMenuContent', 'ElfDropdownMenuItem', 'ElfDropdownMenuCheckboxItem', 'ElfDropdownMenuRadioGroup', 'ElfDropdownMenuRadioItem', 'ElfDropdownMenuLabel', 'ElfDropdownMenuGroup', 'ElfDropdownMenuSeparator', 'ElfDropdownMenuShortcut', 'ElfDropdownMenuSub', 'ElfDropdownMenuSubTrigger', 'ElfDropdownMenuSubContent'],
+    props: [
+      { name: 'ElfDropdownMenu open / defaultOpen', type: 'boolean', description: 'Controlled (v-model:open) or initial open state.' },
+      { name: 'ElfDropdownMenu modal', type: 'boolean', default: 'true', description: 'Make the page behind inert while open.' },
+      { name: 'ElfDropdownMenuContent side / align / sideOffset', type: 'side, alignment, number', default: 'bottom / center / 4', description: 'Placement against the trigger (attribute: side-offset).' },
+      { name: 'ElfDropdownMenuItem variant', type: '\'default\' | \'destructive\'', default: 'default', description: 'destructive colours irreversible actions such as delete.' },
+      { name: 'ElfDropdownMenuItem inset', type: 'boolean', default: 'false', description: 'Indent to line up with indicator items. Also on Label and SubTrigger.' },
+      { name: 'ElfDropdownMenuItem disabled', type: 'boolean', default: 'false', description: 'Item cannot be activated.' },
+      { name: 'ElfDropdownMenuItem @select', type: '(event) => void', description: 'Emitted when the item is activated; call event.preventDefault() to keep the menu open.' },
+      { name: 'ElfDropdownMenuCheckboxItem modelValue', type: 'boolean | \'indeterminate\'', description: 'Checked state, bound with v-model.' },
+      { name: 'ElfDropdownMenuRadioGroup modelValue', type: 'string', description: 'Selected value, bound with v-model; each ElfDropdownMenuRadioItem has a value.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part except ElfDropdownMenu; merged with base classes.' },
+    ],
+    slots: ['ElfDropdownMenuTrigger default: the button (use as-child)', 'ElfDropdownMenuContent default: items, labels, groups, separators, sub menus', 'ElfDropdownMenuShortcut default: ElfKbd elements or text'],
+    a11y: ['The trigger has aria-haspopup=menu and aria-expanded; give an icon-only trigger an aria-label.', 'Arrow keys, Home, End and typeahead move; Enter or Space activates; ArrowRight and ArrowLeft open and close sub menus; Escape closes and returns focus to the trigger.', 'Use for actions, not for choosing a form value (use ElfSelect). Confirm destructive actions with a dialog.'],
+  },
 ]
 
 export const rules = [
