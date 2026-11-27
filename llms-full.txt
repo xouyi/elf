@@ -141,6 +141,7 @@ Tokens (CSS variables `--elf-<name>`, Tailwind utilities `bg-<name>`, `text-<nam
 | radius | `0.625rem` | `0.5rem` | `0px` |
 | radius-pill | `9999px` | `9999px` | `0px` |
 | glow | `40%` | `22%` | `45%` |
+| overlay | `rgb(0 0 0 / 0.8)` | `rgb(11 26 16 / 0.38)` | `rgb(0 0 0 / 0.8)` |
 
 Create a theme: add a CSS file declaring every token under `[data-theme='name']`, import it after styles.css, then run `bun run contrast` (WCAG AA).
 

@@ -83,7 +83,7 @@ export const uiPairs: Array<[string, string]> = [
 ]
 
 /** Tokens whose value is not a color: geometry and the glow strength (a percentage used by `color-mix`). */
-export const NON_COLOR_TOKENS = new Set(['radius', 'radius-pill', 'glow'])
+export const NON_COLOR_TOKENS = new Set(['radius', 'radius-pill', 'glow', 'overlay'])
 
 export interface ThemeTokens {
   /** Theme name (file name without extension). */

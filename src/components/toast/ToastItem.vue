@@ -33,7 +33,7 @@ const icon = computed(() => (loading.value ? LoaderCircle : variant.value === 'd
       v-if="icon"
       data-slot="toast-icon"
       aria-hidden="true"
-      :class="cn('mt-0.5 shrink-0 [&_svg]:size-4', variant === 'destructive' && 'text-destructive-text', variant === 'success' && 'text-success', variant === 'warning' && 'text-warning')"
+      :class="cn('mt-0.5 shrink-0 [&_svg]:size-4', variant === 'destructive' && 'text-destructive-text', variant === 'success' && 'text-success-text', variant === 'warning' && 'text-warning-text')"
     >
       <component :is="icon" :class="loading && 'animate-spin motion-reduce:animate-none'" />
     </span>

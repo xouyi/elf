@@ -30,4 +30,5 @@
   --elf-radius: 0.625rem;
   --elf-radius-pill: 9999px;
   --elf-glow: 40%;
+  --elf-overlay: rgb(0 0 0 / 0.8);
 }

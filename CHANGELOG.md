@@ -18,6 +18,8 @@
 - Add `ElfToaster` and `useToast()` / `toast` (`toastVariants`), built on the Reka UI Toast viewport and manager: `toast(message, { description, variant, duration, action })`, `toast.success`, `toast.warning`, `toast.error`, `toast.promise`, `toast.update` and `toast.dismiss`; `position`, `limit`, `duration`, `hotkey` (F8) props, swipe to dismiss, pause on hover and focus, persistent polite (`role=status`) and assertive (`role=alert`) live regions, safe-area aware layout and a module-singleton queue that is a no-op on the server. The Nuxt module auto-imports `useToast`.
 - Add `ElfCollapsible`, `ElfCollapsibleTrigger` and `ElfCollapsibleContent`, built on the Reka UI Collapsible primitive: `v-model:open`, `disabled`, a height animation that settles at the natural height, and a reduced-motion fallback. Adds the `elf-collapsible-*` keyframes to `styles.css` and the shared `collapsibleContentClass`.
 - Add `ElfAccordion`, `ElfAccordionItem`, `ElfAccordionTrigger` and `ElfAccordionContent`, built on the Reka UI Accordion primitive: `type` `single` (with `collapsible`) or `multiple`, `v-model`, disabled items, arrow-key, Home and End navigation, an animated height shared with `ElfCollapsible`, a rotating chevron (`icon` slot) and reduced-motion fallbacks.
+- Add the optional `--elf-overlay` theme token: the scrim colour behind `ElfDialog`, `ElfAlertDialog` and `ElfSheet` (default `rgb(0 0 0 / 0.8)`; `elfwood` uses a lighter green-black). The docs set `color-scheme` to `light dark` so light-theme visitors see no dark flash.
+- `ElfToaster` status icons use `text-success-text` and `text-warning-text`, so they stay readable on the light `elfwood` surfaces.
 
 ## 0.4.0
 
