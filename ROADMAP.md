@@ -325,7 +325,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfAlert (styles), ElfButton
 - **Complexity:** M
 - **Novatron screens:** courses/stock/forum `ToastHost` plus each app's `useToast`.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfCollapsible
 

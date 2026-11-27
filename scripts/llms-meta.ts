@@ -367,6 +367,25 @@ export const components: ComponentMeta[] = [
     slots: ['ElfSheetTrigger and ElfSheetClose: use as-child with an ElfButton'],
     a11y: ['Always include ElfSheetTitle and ElfSheetDescription (hide the description with class="sr-only" if needed).', 'Use ElfAlertDialog, not a sheet, for confirmations.', 'Animations stop under prefers-reduced-motion.'],
   },
+  {
+    dir: 'toast',
+    name: 'Toast',
+    summary: 'Transient notifications. Mount one ElfToaster per app and call useToast() (or import toast) from anywhere: toast(message, options), toast.success/warning/error, toast.promise, toast.update, toast.dismiss. Built on the Reka UI Toast viewport and manager; the queue is a module singleton that is a no-op on the server.',
+    parts: ['ElfToaster'],
+    variants: 'toastVariants',
+    props: [
+      { name: 'ElfToaster position', type: '\'top-left\' | \'top-center\' | \'top-right\' | \'bottom-left\' | \'bottom-center\' | \'bottom-right\'', default: 'bottom-right', description: 'Where the stack sits; toasts span the width on small screens.' },
+      { name: 'ElfToaster limit', type: 'number', default: '3', description: 'Maximum toasts visible at once; older ones stay queued.' },
+      { name: 'ElfToaster duration', type: 'number', default: '5000', description: 'Default milliseconds before a toast closes; 0 keeps it until dismissed.' },
+      { name: 'ElfToaster hotkey', type: 'string[]', default: '[\'F8\']', description: 'Keys that focus the notification region.' },
+      { name: 'ElfToaster closeButton / closeLabel', type: 'boolean / string', default: 'true / Close', description: 'Dismiss button and its accessible name (attributes: close-button, close-label).' },
+      { name: 'ElfToaster label / announceLabel', type: 'string', description: 'Region landmark label ({hotkey} is replaced) and the name read before each toast.' },
+      { name: 'toast(message, options)', type: 'ToastOptions', description: 'options: description, variant (default | success | warning | destructive), duration, action ({ label, onClick, altText }), id, onClose. Returns the id.' },
+      { name: 'toast.promise(promise, { loading, success, error })', type: 'Promise<T>', description: 'Loading toast that becomes success or destructive; returns and rethrows the promise.' },
+    ],
+    slots: ['No slots: toasts are created through the API.'],
+    a11y: ['Mount exactly one ElfToaster. Destructive toasts are announced assertively (role=alert), others politely (role=status).', 'F8 focuses the region; Escape closes the focused toast; the timer pauses on hover and focus.', 'Never put information only in a toast, and do not use one for errors that need a decision.'],
+  },
 ]
 
 export const rules = [

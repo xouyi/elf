@@ -90,7 +90,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, alert-dialog, sheet, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, alert-dialog, sheet, toast, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -3124,8 +3124,144 @@ const sizes = ['sm', 'default', 'lg', 'full'] as const
 </template>
 ```
 
+### Toast
+
+Transient notifications. Mount one ElfToaster per app and call useToast() (or import toast) from anywhere: toast(message, options), toast.success/warning/error, toast.promise, toast.update, toast.dismiss. Built on the Reka UI Toast viewport and manager; the queue is a module singleton that is a no-op on the server.
+
+Components: `ElfToaster`
+
+- variant options: `default`, `success`, `warning`, `destructive` (default `default`)
+
+Props:
+
+- `ElfToaster position` ('top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right', default bottom-right): Where the stack sits; toasts span the width on small screens.
+- `ElfToaster limit` (number, default 3): Maximum toasts visible at once; older ones stay queued.
+- `ElfToaster duration` (number, default 5000): Default milliseconds before a toast closes; 0 keeps it until dismissed.
+- `ElfToaster hotkey` (string[], default ['F8']): Keys that focus the notification region.
+- `ElfToaster closeButton / closeLabel` (boolean / string, default true / Close): Dismiss button and its accessible name (attributes: close-button, close-label).
+- `ElfToaster label / announceLabel` (string): Region landmark label ({hotkey} is replaced) and the name read before each toast.
+- `toast(message, options)` (ToastOptions): options: description, variant (default | success | warning | destructive), duration, action ({ label, onClick, altText }), id, onClose. Returns the id.
+- `toast.promise(promise, { loading, success, error })` (Promise<T>): Loading toast that becomes success or destructive; returns and rethrows the promise.
+
+Slots:
+
+- No slots: toasts are created through the API.
+
+Accessibility:
+
+- Mount exactly one ElfToaster. Destructive toasts are announced assertively (role=alert), others politely (role=status).
+- F8 focuses the region; Escape closes the focused toast; the timer pauses on hover and focus.
+- Never put information only in a toast, and do not use one for errors that need a decision.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfButton, useToast } from '@xouyi/elfui'
+
+// Mount one <ElfToaster /> in app.vue; useToast() works from any component.
+const { toast } = useToast()
+</script>
+
+<template>
+  <ElfButton variant="outline" @click="toast('Roster saved', { description: 'Your changes are visible to every member.' })">
+    Show toast
+  </ElfButton>
+</template>
+```
+
+#### Promise
+
+```vue
+<script setup lang="ts">
+import { ElfButton, useToast } from '@xouyi/elfui'
+
+const { toast } = useToast()
+
+function upload(ok: boolean) {
+  const task = new Promise<string>((resolve, reject) => {
+    setTimeout(() => (ok ? resolve('match-12.csv') : reject(new Error('Network error'))), 1500)
+  })
+  toast.promise(task, {
+    loading: 'Uploading scouting data',
+    success: name => `${name} uploaded`,
+    error: 'Upload failed',
+  }).catch(() => {})
+}
+</script>
+
+<template>
+  <div class="flex gap-2">
+    <ElfButton variant="outline" @click="upload(true)">
+      Upload
+    </ElfButton>
+    <ElfButton variant="outline" @click="upload(false)">
+      Upload and fail
+    </ElfButton>
+  </div>
+</template>
+```
+
+#### Variants
+
+```vue
+<script setup lang="ts">
+import { ElfButton, useToast } from '@xouyi/elfui'
+
+const { toast } = useToast()
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-2">
+    <ElfButton variant="outline" @click="toast('New message', { description: 'Mentor Aylin replied to your post.' })">
+      Default
+    </ElfButton>
+    <ElfButton variant="outline" @click="toast.success('Roster saved')">
+      Success
+    </ElfButton>
+    <ElfButton variant="outline" @click="toast.warning('Battery 3 is low', { description: 'Swap it before the next match.' })">
+      Warning
+    </ElfButton>
+    <ElfButton variant="outline" @click="toast.error('Save failed', { description: 'The roster could not be saved.' })">
+      Destructive
+    </ElfButton>
+  </div>
+</template>
+```
+
+#### With Action
+
+```vue
+<script setup lang="ts">
+import { ElfButton, useToast } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const { toast } = useToast()
+const restored = ref(0)
+
+function remove() {
+  toast('Item removed', {
+    description: 'It will be deleted for good in a few seconds.',
+    duration: 8000,
+    action: { label: 'Undo', altText: 'Undo removing the item', onClick: () => { restored.value += 1 } },
+  })
+}
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <ElfButton variant="outline" @click="remove">
+      Remove item
+    </ElfButton>
+    <span class="text-sm text-muted-foreground">restored = {{ restored }}</span>
+  </div>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

@@ -1,4 +1,4 @@
-import { ElfButton, ElfInput, ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from '@xouyi/elfui'
+import { ElfButton, ElfInput, ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger, ElfToaster, toast } from '@xouyi/elfui'
 import { page, userEvent } from 'vitest/browser'
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
@@ -59,9 +59,10 @@ import SheetBottom from '../../src/components/sheet/examples/BottomSheet.vue'
 import SheetControlled from '../../src/components/sheet/examples/Controlled.vue'
 import SheetDefault from '../../src/components/sheet/examples/Default.vue'
 import SheetSides from '../../src/components/sheet/examples/Sides.vue'
+import ToastWithAction from '../../src/components/toast/examples/WithAction.vue'
 import TabsControlled from '../../src/components/tabs/examples/Controlled.vue'
 import TabsDefault from '../../src/components/tabs/examples/Default.vue'
-import { mountComponent, settle, setTheme, themes } from './support'
+import { axeViolations, mountComponent, settle, setTheme, themes } from './support'
 
 let unmount: (() => void) | undefined
 afterEach(() => {
@@ -287,6 +288,146 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await userEvent.keyboard('{Escape}')
       await settle(300)
       expect(el.textContent).toContain('open = false')
+    })
+  })
+
+  describe('Toast', () => {
+    const toasts = () => [...document.querySelectorAll<HTMLElement>('[data-slot="toast"]')]
+    const status = () => document.querySelector('[data-slot="toast-announcer"] [role="status"]')!.textContent?.trim()
+    const alertText = () => document.querySelector('[data-slot="toast-announcer"] [role="alert"]')!.textContent?.trim()
+    const App = (props: Record<string, unknown> = {}, example?: Parameters<typeof mountComponent>[0]) => defineComponent(() => () => h('div', [example ? h(example) : null, h(ElfToaster, props)]))
+
+    afterEach(async () => {
+      toast.dismiss()
+      await settle(300)
+    })
+
+    it('announces ordinary toasts politely (role=status) and destructive ones assertively (role=alert)', async () => {
+      setTheme(theme)
+      await show(App())
+      toast('Saved', { description: 'Roster updated' })
+      await settle(100)
+      expect(status()).toBe('Saved. Roster updated')
+      expect(alertText()).toBe('')
+      toast.error('Save failed')
+      await settle(100)
+      expect(alertText()).toBe('Save failed')
+      expect(toasts()).toHaveLength(2)
+    })
+
+    it('has no axe violations with every variant open', async () => {
+      setTheme(theme)
+      await show(App())
+      toast('Default', { description: 'Plain' })
+      toast.success('Success')
+      toast.warning('Warning')
+      toast.error('Destructive', { action: { label: 'Retry' } })
+      await settle(300)
+      expect(await axeViolations()).toEqual([])
+    })
+
+    it('runs an action from the keyboard and closes the toast', async () => {
+      setTheme(theme)
+      const { el } = await show(App({}, ToastWithAction))
+      await userEvent.click(el.querySelector<HTMLElement>('button')!)
+      await settle(300)
+      expect(toasts()).toHaveLength(1)
+      await userEvent.keyboard('{F8}')
+      await settle(100)
+      const action = document.querySelector<HTMLElement>('[data-slot="toast-action"]')!
+      await userEvent.tab()
+      for (let i = 0; i < 4 && document.activeElement !== action; i++) await userEvent.tab()
+      expect(document.activeElement).toBe(action)
+      await userEvent.keyboard('{Enter}')
+      await settle(400)
+      expect(el.textContent).toContain('restored = 1')
+      expect(toasts()).toHaveLength(0)
+    })
+
+    it('dismisses with the close button', async () => {
+      setTheme(theme)
+      await show(App())
+      toast('Bye', { duration: 0 })
+      await settle(200)
+      await userEvent.click(document.querySelector<HTMLElement>('[data-slot="toast-close"]')!)
+      await settle(400)
+      expect(toasts()).toHaveLength(0)
+    })
+
+    it('F8 moves focus to the notification region', async () => {
+      setTheme(theme)
+      await show(App())
+      toast('Focus me', { duration: 0 })
+      await settle(200)
+      await userEvent.keyboard('{F8}')
+      await settle(100)
+      const viewport = document.querySelector<HTMLElement>('[data-slot="toaster"]')!
+      expect(document.activeElement === viewport || viewport.contains(document.activeElement), 'focus is in the toast region').toBe(true)
+    })
+
+    it('Escape closes a focused toast', async () => {
+      setTheme(theme)
+      await show(App())
+      toast('Esc me', { duration: 0 })
+      await settle(200)
+      toasts()[0]!.focus()
+      await userEvent.keyboard('{Escape}')
+      await settle(400)
+      expect(toasts()).toHaveLength(0)
+    })
+
+    it('closes itself after its duration and pauses while hovered', async () => {
+      setTheme(theme)
+      await show(App())
+      toast('Timed', { duration: 700 })
+      await settle(200)
+      await userEvent.hover(toasts()[0]!)
+      await settle(900)
+      expect(toasts(), 'still open while hovered').toHaveLength(1)
+      await userEvent.unhover(toasts()[0]!)
+      await settle(1300)
+      expect(toasts()).toHaveLength(0)
+    })
+
+    it('shows at most `limit` toasts at once', async () => {
+      setTheme(theme)
+      await show(App({ limit: 2 }))
+      for (const n of ['a', 'b', 'c']) toast(n, { duration: 0 })
+      await settle(300)
+      const visible = toasts().filter(t => getComputedStyle(t).display !== 'none')
+      expect(visible).toHaveLength(2)
+      expect(visible.map(t => t.textContent)).toEqual([expect.stringContaining('b'), expect.stringContaining('c')])
+    })
+
+    it('dismisses on a horizontal swipe', async () => {
+      setTheme(theme)
+      await show(App())
+      toast('Swipe me', { duration: 0 })
+      await settle(300)
+      const item = toasts()[0]!
+      const rect = item.getBoundingClientRect()
+      const x = rect.left + 20
+      const y = rect.top + rect.height / 2
+      const fire = (type: string, dx: number) => item.dispatchEvent(new PointerEvent(type, { bubbles: true, cancelable: true, clientX: x + dx, clientY: y, button: 0, pointerId: 1, pointerType: 'touch', isPrimary: true }))
+      fire('pointerdown', 0)
+      for (const dx of [10, 40, 80, 140]) fire('pointermove', dx)
+      fire('pointerup', 140)
+      await settle(500)
+      expect(toasts()).toHaveLength(0)
+    })
+
+    it('shows a spinner while a promise toast is loading', async () => {
+      setTheme(theme)
+      await show(App())
+      let done!: () => void
+      void toast.promise(new Promise<void>((r) => { done = r }), { loading: 'Working', success: 'Done', error: 'Failed' })
+      await settle(200)
+      expect(toasts()[0]!.getAttribute('data-status')).toBe('loading')
+      expect(toasts()[0]!.querySelector('[data-slot="toast-icon"] svg')).not.toBeNull()
+      done()
+      await settle(300)
+      expect(toasts()[0]!.textContent).toContain('Done')
+      expect(status()).toBe('Done')
     })
   })
 

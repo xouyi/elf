@@ -137,3 +137,6 @@ export {
   SheetTrigger as ElfSheetTrigger,
 } from './components/sheet'
 export type { SheetContentExtraProps, SheetVariants } from './components/sheet'
+
+export { toast, Toaster as ElfToaster, toastManager, toastVariants, useToast } from './components/toast'
+export type { ElfToastObject, ToastActionOptions, ToastData, ToasterPosition, ToasterProps, ToastFunction, ToastOptions, ToastPromiseOptions, ToastVariant, ToastVariants } from './components/toast'

@@ -768,6 +768,44 @@
       ]
     },
     {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "Toast",
+      "description": "Toaster and useToast(): a queue of transient notifications with variants, actions, promise toasts, swipe to dismiss and an F8 hotkey, built on Reka UI Toast.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core",
+        "@lucide/vue",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/button.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/toast/ToastItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/toast/ToastList.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/toast/Toaster.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/toast/index.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/toast/use-toast.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "elf-theme",
       "type": "registry:file",
       "title": "Elf theme",
