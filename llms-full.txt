@@ -12,6 +12,7 @@ Version 0.4.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com
 - Use text-destructive-text for error messages and required markers; bg-destructive is a fill and is too dark for text.
 - Use text-success-text and text-warning-text for status text and icons; bg-success and bg-warning are fills.
 - Themes decide light or dark (elf and nova are dark, elfwood is light): never add dark: variants or hard-coded colors.
+- To let users switch themes, configure it once (Nuxt module options `themes` and `persist`, or `app.use(createElfTheme({ themes }))` in Vue) and call `useElfTheme()` with no arguments; never write data-theme or cookies by hand.
 - Do not override border radius with arbitrary values; radii derive from the theme (nova is sharp, 0px).
 - Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.
@@ -91,7 +92,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, theme-switcher, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -101,10 +102,11 @@ Themes: `elf`, `elfwood`, `nova`. Select with `data-theme` on html or any elemen
 document.documentElement.dataset.theme = 'nova'
 ```
 
-Or from code, SSR-safe, with optional persistence (auto-imported in Nuxt; otherwise `import { useElfTheme } from "@xouyi/elfui"`):
+Switch themes from code in one line, SSR-safe, persisted and without a flash. Nuxt: list the themes in the module options (`persist` is `cookie` by default), then call `useElfTheme()` with no arguments (auto-imported). Vite + Vue: `app.use(createElfTheme({ themes, defaultTheme, persist }))`, then `import { useElfTheme } from "@xouyi/elfui"`:
 
 ```ts
-const { theme, themes, setTheme, cycle } = useElfTheme({ storage: 'cookie' }) // storage: 'cookie' | 'localStorage' | 'none' (default)
+// nuxt.config.ts: elfui: { theme: 'elf', themes: ['nova', 'elfwood'], persist: 'cookie' } // persist: 'cookie' | 'localStorage' | false
+const { theme, themes, setTheme, cycle, toggle } = useElfTheme()
 setTheme('nova')
 ```
 
@@ -2434,6 +2436,92 @@ function submit() {
 </template>
 ```
 
+### Theme Switcher
+
+Ready-made control to switch themes: ElfThemeSwitcher with variant select (default), buttons (segmented radio group) or toggle (one icon button that cycles). It uses useElfTheme(), so it offers the themes configured in the Nuxt module options or createElfTheme(), shows the active one and persists the choice. No v-model.
+
+Components: `ElfThemeSwitcher`
+
+Props:
+
+- `variant` ('select' | 'buttons' | 'toggle', default select): Layout of the control.
+- `label` (string, default Theme): Accessible name of the control.
+- `labels` (Record<string, string>): Visible name per theme, for example { elf: 'Violet' }. Defaults to the capitalised theme name.
+- `themes` (string[]): Themes to offer. Defaults to the themes of the app (module options or createElfTheme).
+- `class` (string | array | object): Merged with base classes; other attributes fall through to the control.
+
+Accessibility:
+
+- buttons is a radiogroup named by label: Tab enters on the checked theme, arrow keys move and select with wrap-around.
+- toggle is a button named "<label>: <current theme>"; Enter and Space switch to the next theme.
+- select is a select-only combobox named by label.
+
+Examples:
+
+#### Buttons
+
+```vue
+<script setup lang="ts">
+import { ElfThemeSwitcher } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfThemeSwitcher variant="buttons" />
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfThemeSwitcher } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfThemeSwitcher />
+</template>
+```
+
+#### Labels
+
+```vue
+<script setup lang="ts">
+import { ElfThemeSwitcher } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfThemeSwitcher
+    variant="buttons"
+    label="Color scheme"
+    :labels="{ elf: 'Violet', nova: 'Gold', elfwood: 'Light' }"
+  />
+</template>
+```
+
+#### Toggle
+
+```vue
+<script setup lang="ts">
+import { ElfThemeSwitcher } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfThemeSwitcher variant="toggle" />
+</template>
+```
+
+#### Two Themes
+
+```vue
+<script setup lang="ts">
+import { ElfThemeSwitcher } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfThemeSwitcher variant="buttons" :themes="['elf', 'elfwood']" :labels="{ elf: 'Dark', elfwood: 'Light' }" />
+</template>
+```
+
 ### Alert
 
 Static message with an icon, a title and a description. Variants: default, destructive, success, warning. Composed from native elements (no Reka primitive): ElfAlert with ElfAlertTitle and ElfAlertDescription.
@@ -4678,6 +4766,6 @@ import { ElfAccordion, ElfAccordionContent, ElfAccordionItem, ElfAccordionTrigge
 
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfThemeSwitcher`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

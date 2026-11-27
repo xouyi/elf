@@ -11,7 +11,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [Installation (Vite + Vue)](https://xouyi.github.io/elfUI/docs/getting-started/installation-vite): Vite and Vue setup
 - [Theming](https://xouyi.github.io/elfUI/docs/getting-started/theming): tokens, data-theme, creating a theme
 - [CLI](https://xouyi.github.io/elfUI/docs/getting-started/cli): bunx @xouyi/elfui init, add, list, diff
-- [useElfTheme](https://xouyi.github.io/elfUI/docs/getting-started/use-elf-theme): composable to read, set and persist the theme (SSR-safe)
+- [useElfTheme](https://xouyi.github.io/elfUI/docs/getting-started/use-elf-theme): switch themes in one line: Nuxt module options or createElfTheme() plus useElfTheme() (SSR-safe, persisted, no flash)
 - [Registry](https://xouyi.github.io/elfUI/docs/getting-started/registry): copy components with bunx @xouyi/elfui add (or the shadcn-vue CLI)
 - [Button](https://xouyi.github.io/elfUI/docs/components/button): Triggers an action. Renders a native button; use as-child to render a link or other element.
 - [Input](https://xouyi.github.io/elfUI/docs/components/input): Single-line text input with v-model. A native input: all native attributes fall through.
@@ -31,6 +31,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [RadioGroup](https://xouyi.github.io/elfUI/docs/components/radio-group): Mutually exclusive options built on Reka UI RadioGroup. ElfRadioGroup holds the value (v-model); each ElfRadioGroupItem is one option. Pair every item with ElfLabel; inside ElfField wrap the group in ElfFieldControl.
 - [Switch](https://xouyi.github.io/elfUI/docs/components/switch): On/off setting that applies immediately, built on Reka UI Switch. A role=switch button with v-model (boolean). Pair it with ElfLabel; use a Checkbox for choices submitted later.
 - [Select](https://xouyi.github.io/elfUI/docs/components/select): Dropdown to choose one value, built on Reka UI Select. Compose ElfSelect (v-model) > ElfSelectTrigger + ElfSelectValue, ElfSelectContent > ElfSelectItem (optionally in ElfSelectGroup with ElfSelectLabel and ElfSelectSeparator). Inside ElfField wrap only the trigger in ElfFieldControl.
+- [Theme Switcher](https://xouyi.github.io/elfUI/docs/components/theme-switcher): Ready-made control to switch themes: ElfThemeSwitcher with variant select (default), buttons (segmented radio group) or toggle (one icon button that cycles). It uses useElfTheme(), so it offers the themes configured in the Nuxt module options or createElfTheme(), shows the active one and persists the choice. No v-model.
 - [Alert](https://xouyi.github.io/elfUI/docs/components/alert): Static message with an icon, a title and a description. Variants: default, destructive, success, warning. Composed from native elements (no Reka primitive): ElfAlert with ElfAlertTitle and ElfAlertDescription.
 - [Progress](https://xouyi.github.io/elfUI/docs/components/progress): Progress bar built on Reka UI Progress (role=progressbar). Determinate with v-model (0..max) or indeterminate with a null value. Always give it a name with label, aria-label or aria-labelledby.
 - [Avatar](https://xouyi.github.io/elfUI/docs/components/avatar): Person or team image with an initials fallback, built on Reka UI Avatar. ElfAvatar (size) contains ElfAvatarImage and ElfAvatarFallback; ElfAvatarGroup overlaps several.
@@ -63,6 +64,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - Use text-destructive-text for error messages and required markers; bg-destructive is a fill and is too dark for text.
 - Use text-success-text and text-warning-text for status text and icons; bg-success and bg-warning are fills.
 - Themes decide light or dark (elf and nova are dark, elfwood is light): never add dark: variants or hard-coded colors.
+- To let users switch themes, configure it once (Nuxt module options `themes` and `persist`, or `app.use(createElfTheme({ themes }))` in Vue) and call `useElfTheme()` with no arguments; never write data-theme or cookies by hand.
 - Do not override border radius with arbitrary values; radii derive from the theme (nova is sharp, 0px).
 - Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.

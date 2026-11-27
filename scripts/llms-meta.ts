@@ -288,6 +288,20 @@ export const components: ComponentMeta[] = [
     a11y: ['The trigger needs an accessible name: ElfLabel for= the trigger id, an ElfField label, or aria-label.', 'Enter, Space and ArrowDown open the list; arrows, Home, End and typeahead move the highlight; Enter selects; Escape closes and returns focus to the trigger.', 'Use a RadioGroup for two or three options.'],
   },
   {
+    dir: 'theme-switcher',
+    name: 'Theme Switcher',
+    summary: 'Ready-made control to switch themes: ElfThemeSwitcher with variant select (default), buttons (segmented radio group) or toggle (one icon button that cycles). It uses useElfTheme(), so it offers the themes configured in the Nuxt module options or createElfTheme(), shows the active one and persists the choice. No v-model.',
+    parts: ['ElfThemeSwitcher'],
+    props: [
+      { name: 'variant', type: '\'select\' | \'buttons\' | \'toggle\'', default: 'select', description: 'Layout of the control.' },
+      { name: 'label', type: 'string', default: 'Theme', description: 'Accessible name of the control.' },
+      { name: 'labels', type: 'Record<string, string>', description: 'Visible name per theme, for example { elf: \'Violet\' }. Defaults to the capitalised theme name.' },
+      { name: 'themes', type: 'string[]', description: 'Themes to offer. Defaults to the themes of the app (module options or createElfTheme).' },
+      { name: 'class', type: 'string | array | object', description: 'Merged with base classes; other attributes fall through to the control.' },
+    ],
+    a11y: ['buttons is a radiogroup named by label: Tab enters on the checked theme, arrow keys move and select with wrap-around.', 'toggle is a button named "<label>: <current theme>"; Enter and Space switch to the next theme.', 'select is a select-only combobox named by label.'],
+  },
+  {
     dir: 'alert',
     name: 'Alert',
     summary: 'Static message with an icon, a title and a description. Variants: default, destructive, success, warning. Composed from native elements (no Reka primitive): ElfAlert with ElfAlertTitle and ElfAlertDescription.',
@@ -546,6 +560,7 @@ export const rules = [
   'Use text-destructive-text for error messages and required markers; bg-destructive is a fill and is too dark for text.',
   'Use text-success-text and text-warning-text for status text and icons; bg-success and bg-warning are fills.',
   'Themes decide light or dark (elf and nova are dark, elfwood is light): never add dark: variants or hard-coded colors.',
+  'To let users switch themes, configure it once (Nuxt module options `themes` and `persist`, or `app.use(createElfTheme({ themes }))` in Vue) and call `useElfTheme()` with no arguments; never write data-theme or cookies by hand.',
   'Do not override border radius with arbitrary values; radii derive from the theme (nova is sharp, 0px).',
   'Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".',
   'Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.',

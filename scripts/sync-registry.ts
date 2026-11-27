@@ -15,6 +15,7 @@ rmSync(out, { recursive: true, force: true })
 const rewrite = (s: string) =>
   s
     .replaceAll(/from '\.\.\/\.\.\/lib\/utils'/g, 'from \'@/lib/utils\'')
+    .replaceAll(/from '\.\.\/\.\.\/composables\/use-elf-theme'/g, 'from \'@/lib/use-elf-theme\'')
     .replaceAll(/from '\.\.\/([a-z-]+)'/g, 'from \'@/components/ui/$1\'')
 
 // Primary host is GitHub Pages; https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r is the fallback.
@@ -23,6 +24,9 @@ const dep = (name: string) => `${REGISTRY}/${name}.json`
 
 mkdirSync(join(out, 'lib'), { recursive: true })
 writeFileSync(join(out, 'lib', 'utils.ts'), readFileSync(join(root, 'src/lib/utils.ts'), 'utf8'))
+writeFileSync(join(out, 'lib', 'themes.ts'), readFileSync(join(root, 'src/lib/themes.ts'), 'utf8'))
+// The theme composable lives in src/composables; in a project it is a lib file so that the CLI's `@/lib/*` rewrite resolves it.
+writeFileSync(join(out, 'lib', 'use-elf-theme.ts'), readFileSync(join(root, 'src/composables/use-elf-theme.ts'), 'utf8').replaceAll(/from '\.\.\/lib\/themes'/g, 'from \'@/lib/themes\''))
 
 const meta: Record<string, { title: string, description: string, dependencies: string[], registryDependencies?: string[] }> = {
   button: { title: 'Button', description: 'Button with default, secondary, outline, ghost, destructive and link variants.', dependencies: ['reka-ui', 'class-variance-authority'] },
@@ -58,6 +62,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   toast: { title: 'Toast', description: 'Toaster and useToast(): a queue of transient notifications with variants, actions, promise toasts, swipe to dismiss and an F8 hotkey, built on Reka UI Toast.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('button')] },
   collapsible: { title: 'Collapsible', description: 'Single show and hide region with an animated height, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
   accordion: { title: 'Accordion', description: 'Stacked collapsible sections, single or multiple, with arrow-key navigation, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('collapsible')] },
+  'theme-switcher': { title: 'Theme Switcher', description: 'Ready-made control to switch themes as a select, a segmented radio group or one toggle button, driven by useElfTheme.', dependencies: ['reka-ui', '@lucide/vue', 'vue'], registryDependencies: [dep('button'), dep('select'), dep('use-elf-theme')] },
 }
 
 const items: unknown[] = [
@@ -68,6 +73,22 @@ const items: unknown[] = [
     description: 'clsx + tailwind-merge class helper.',
     dependencies: ['clsx', 'tailwind-merge'],
     files: [{ path: 'registry/_generated/lib/utils.ts', type: 'registry:lib', target: 'lib/utils.ts' }],
+  },
+  {
+    name: 'elf-themes',
+    type: 'registry:lib',
+    title: 'Theme names',
+    description: 'The names of the shipped themes (elfThemes, ElfTheme, isElfTheme).',
+    files: [{ path: 'registry/_generated/lib/themes.ts', type: 'registry:lib', target: 'lib/themes.ts' }],
+  },
+  {
+    name: 'use-elf-theme',
+    type: 'registry:lib',
+    title: 'useElfTheme',
+    description: 'SSR-safe composable and createElfTheme() plugin to read, set and persist the active theme.',
+    dependencies: ['vue'],
+    registryDependencies: [dep('elf-themes')],
+    files: [{ path: 'registry/_generated/lib/use-elf-theme.ts', type: 'registry:lib', target: 'lib/use-elf-theme.ts' }],
   },
 ]
 

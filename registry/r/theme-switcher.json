@@ -1,0 +1,30 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "theme-switcher",
+  "title": "Theme Switcher",
+  "description": "Ready-made control to switch themes as a select, a segmented radio group or one toggle button, driven by useElfTheme.",
+  "dependencies": [
+    "reka-ui",
+    "@lucide/vue",
+    "vue"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json",
+    "https://xouyi.github.io/elfUI/r/button.json",
+    "https://xouyi.github.io/elfUI/r/select.json",
+    "https://xouyi.github.io/elfUI/r/use-elf-theme.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/theme-switcher/ThemeSwitcher.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ThemeSwitcherProps } from './index'\nimport { Palette } from '@lucide/vue'\nimport { RadioGroupItem, RadioGroupRoot } from 'reka-ui'\nimport { computed } from 'vue'\nimport { useElfTheme } from '@/lib/use-elf-theme'\nimport { cn } from '@/lib/utils'\nimport { Button } from '@/components/ui/button'\nimport { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'\n\ndefineOptions({ inheritAttrs: false })\n\nconst props = withDefaults(defineProps<ThemeSwitcherProps>(), {\n  variant: 'select',\n  label: 'Theme',\n})\n\n// The app-wide theme state. Only when `themes` names a theme the app does not know does the switcher keep a state of its own.\nconst shared = useElfTheme<string>()\nconst own = props.themes?.some(name => !shared.themes.includes(name)) ? useElfTheme<string>({ themes: props.themes }) : undefined\nconst { theme, setTheme } = own ?? shared\n\nconst names = computed(() => (props.themes ?? shared.themes) as readonly string[])\nconst nameOf = (value: string) => props.labels?.[value] ?? `${value.charAt(0).toUpperCase()}${value.slice(1)}`\nconst current = computed(() => nameOf(theme.value))\nconst next = computed(() => nameOf(names.value[(names.value.indexOf(theme.value) + 1) % names.value.length] ?? theme.value))\n\n/** Moves to the next offered theme (not the next of the app, which may offer more). */\nfunction toggle() {\n  setTheme(names.value[(names.value.indexOf(theme.value) + 1) % names.value.length] ?? theme.value)\n}\n\nfunction choose(value: unknown) {\n  if (typeof value === 'string')\n    setTheme(value)\n}\n</script>\n\n<template>\n  <Select v-if=\"props.variant === 'select'\" :model-value=\"theme\" @update:model-value=\"choose\">\n    <SelectTrigger\n      data-slot=\"theme-switcher\"\n      data-variant=\"select\"\n      :aria-label=\"props.label\"\n      v-bind=\"$attrs\"\n      :class=\"cn('w-40', props.class)\"\n    >\n      <SelectValue />\n    </SelectTrigger>\n    <SelectContent>\n      <SelectItem v-for=\"name in names\" :key=\"name\" :value=\"name\">\n        <span :data-theme=\"name\" class=\"size-2.5 shrink-0 rounded-(--elf-radius-pill) bg-primary\" aria-hidden=\"true\" />\n        {{ nameOf(name) }}\n      </SelectItem>\n    </SelectContent>\n  </Select>\n\n  <RadioGroupRoot\n    v-else-if=\"props.variant === 'buttons'\"\n    data-slot=\"theme-switcher\"\n    data-variant=\"buttons\"\n    :model-value=\"theme\"\n    :aria-label=\"props.label\"\n    loop\n    v-bind=\"$attrs\"\n    :class=\"cn('inline-flex max-w-full flex-wrap items-center gap-0.5 rounded-md border border-border bg-muted p-0.5', props.class)\"\n    @update:model-value=\"choose\"\n  >\n    <RadioGroupItem\n      v-for=\"name in names\"\n      :key=\"name\"\n      :value=\"name\"\n      data-slot=\"theme-switcher-item\"\n      class=\"inline-flex h-7 items-center gap-1.5 rounded-sm px-2.5 text-xs font-medium whitespace-nowrap text-muted-foreground transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 data-[state=checked]:bg-secondary data-[state=checked]:text-secondary-foreground data-[state=checked]:shadow-sm\"\n    >\n      <span :data-theme=\"name\" class=\"size-2.5 shrink-0 rounded-(--elf-radius-pill) bg-primary\" aria-hidden=\"true\" />\n      {{ nameOf(name) }}\n    </RadioGroupItem>\n  </RadioGroupRoot>\n\n  <Button\n    v-else\n    data-slot=\"theme-switcher\"\n    data-variant=\"toggle\"\n    variant=\"ghost\"\n    size=\"icon\"\n    type=\"button\"\n    :aria-label=\"`${props.label}: ${current}`\"\n    :title=\"`${props.label}: ${current}. Switch to ${next}.`\"\n    v-bind=\"$attrs\"\n    :class=\"props.class\"\n    @click=\"toggle\"\n  >\n    <Palette aria-hidden=\"true\" />\n  </Button>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/theme-switcher/index.ts",
+      "content": "import type { HTMLAttributes } from 'vue'\n\nexport { default as ThemeSwitcher } from './ThemeSwitcher.vue'\n\n/** Layout of `ElfThemeSwitcher`. */\nexport type ThemeSwitcherVariant = 'select' | 'buttons' | 'toggle'\n\nexport interface ThemeSwitcherProps {\n  /**\n   * Layout: `select` (a dropdown), `buttons` (a segmented radio group, best for two to four themes) or `toggle`\n   * (one icon button that switches to the next theme).\n   */\n  variant?: ThemeSwitcherVariant\n  /** Accessible name of the control, also shown as the tooltip of `toggle`. Defaults to `Theme`. */\n  label?: string\n  /** Visible names by theme name, for example `{ elf: 'Violet' }`. Themes without an entry show their name with a capital letter. */\n  labels?: Record<string, string>\n  /** Themes to offer. Defaults to the themes of the Nuxt module or `createElfTheme()`, or else the shipped themes. */\n  themes?: readonly string[]\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

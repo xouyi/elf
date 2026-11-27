@@ -1,0 +1,15 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "elf-themes",
+  "title": "Theme names",
+  "description": "The names of the shipped themes (elfThemes, ElfTheme, isElfTheme).",
+  "files": [
+    {
+      "path": "registry/_generated/lib/themes.ts",
+      "content": "/** Names of the themes that ship with ElfUI, in the order `useElfTheme().cycle()` visits them. */\nexport const elfThemes = ['elf', 'nova', 'elfwood'] as const\n\n/** A theme that ships with ElfUI. */\nexport type ElfTheme = (typeof elfThemes)[number]\n\n/** Type guard for the shipped theme names. */\nexport function isElfTheme(value: unknown): value is ElfTheme {\n  return typeof value === 'string' && (elfThemes as readonly string[]).includes(value)\n}\n",
+      "type": "registry:lib",
+      "target": "lib/themes.ts"
+    }
+  ],
+  "type": "registry:lib"
+}

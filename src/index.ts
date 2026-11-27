@@ -112,8 +112,8 @@ export type { AvatarFallbackProps, AvatarGroupProps, AvatarImageProps, AvatarPro
 export { elfThemes, isElfTheme } from './lib/themes'
 export type { ElfTheme } from './lib/themes'
 
-export { elfThemeBootScript, useElfTheme } from './composables/use-elf-theme'
-export type { ElfThemeBootScriptOptions, ElfThemeStorage, UseElfThemeOptions, UseElfThemeReturn } from './composables/use-elf-theme'
+export { createElfTheme, elfThemeBootScript, provideElfTheme, useElfTheme } from './composables/use-elf-theme'
+export type { ElfThemeBootScriptOptions, ElfThemeConfig, ElfThemePersist, ElfThemeStorage, UseElfThemeOptions, UseElfThemeReturn } from './composables/use-elf-theme'
 
 export {
   Tooltip as ElfTooltip,
@@ -241,3 +241,6 @@ export {
   AccordionItem as ElfAccordionItem,
   AccordionTrigger as ElfAccordionTrigger,
 } from './components/accordion'
+
+export { ThemeSwitcher as ElfThemeSwitcher } from './components/theme-switcher'
+export type { ThemeSwitcherProps, ThemeSwitcherVariant } from './components/theme-switcher'

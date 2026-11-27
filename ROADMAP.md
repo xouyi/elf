@@ -239,12 +239,23 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 
 - **Purpose:** Composable to read and set the active theme (`elf`, `nova`) and persist it; works with and without Nuxt.
 - **Built on:** utility
-- **Key props, variants and parts:** `theme`, `setTheme`, `cycle`, `themes`; options `themes`, `defaultTheme`, `initial`, `storage` (`cookie` | `localStorage` | `none`), `storageKey`; `elfThemeBootScript()` for no-flash loads.
+- **Key props, variants and parts:** `theme`, `setTheme`, `cycle`, `toggle`, `themes`; options `themes`, `defaultTheme`, `initial`, `storage` (`cookie` | `localStorage` | `none`), `storageKey`; `elfThemeBootScript()` for no-flash loads. Zero-argument use: the Nuxt module options `themes`/`persist` or the `createElfTheme()` Vue plugin supply the defaults.
 - **Accessibility:** Native semantics; no dedicated APG pattern. Keyboard and ARIA covered by the Definition of Done.
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** Docs site switcher; every app that exposes a theme choice.
-- **Status:** shipped (v0.4.0)
+- **Status:** shipped (v0.4.0); `toggle()`, module `persist` option and `createElfTheme()` shipped (unreleased, v0.5)
+
+#### ElfThemeSwitcher
+
+- **Purpose:** Ready-made control to switch themes, driven by `useElfTheme`.
+- **Built on:** composed (`select`, `button`, Reka UI RadioGroup)
+- **Key props, variants and parts:** `variant` (`select` | `buttons` | `toggle`), `label`, `labels`, `themes`, `class`.
+- **Accessibility:** WAI-ARIA Radio Group (`buttons`), Select-only Combobox (`select`), plain button (`toggle`). Keyboard and ARIA covered by the Definition of Done.
+- **Depends on:** `select`, `button`, `useElfTheme`
+- **Complexity:** S
+- **Novatron screens:** Docs site switcher; every app that exposes a theme choice.
+- **Status:** shipped (unreleased, v0.5)
 
 ### v0.4: Overlays and disclosure
 
