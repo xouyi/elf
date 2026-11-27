@@ -91,7 +91,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, table, empty, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, table, empty, stat-card, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -5095,8 +5095,118 @@ import { ElfButton, ElfEmpty, ElfEmptyContent, ElfEmptyDescription, ElfEmptyHead
 </template>
 ```
 
+### StatCard
+
+KPI tile: label, value, hint and trend. A group named by its label. loading shows skeletons and sets aria-busy. To make the card a link, put ElfStatCardLink (as-child around a router link) in the label slot; it stretches over the whole card.
+
+Components: `ElfStatCard`, `ElfStatCardLink`
+
+Props:
+
+- `ElfStatCard label / value / hint` (string | number): Metric name, figure and supporting text. Slots label, default and hint replace them.
+- `ElfStatCard trend` (string): Change text such as +12%.
+- `ElfStatCard trendDirection` ('up' | 'down' | 'flat', default flat): Arrow beside the trend (attribute: trend-direction).
+- `ElfStatCard trendLabel` (string): Accessible sentence for the trend, read instead of the bare text (attribute: trend-label).
+- `ElfStatCard tone` ('default' | 'success' | 'warning' | 'destructive', default default): Tints the border and trend; never the only carrier of meaning.
+- `ElfStatCard loading / loadingLabel` (boolean / string, default false / Loading): Skeleton state and the text announced (attribute: loading-label).
+- `ElfStatCardLink as / asChild` (string / boolean, default a / false): Render a router link instead of an anchor (attribute: as-child).
+
+Slots:
+
+- ElfStatCard label, default (value) and hint
+- ElfStatCardLink default: the link text
+
+Accessibility:
+
+- Use a short specific label; the card is a group named by it.
+- Give trends a trend-label sentence and never rely on colour alone.
+- A linked card has one link, focus shows a ring on the whole card.
+
+Examples:
+
+#### As Link
+
+```vue
+<script setup lang="ts">
+import { ElfStatCard, ElfStatCardLink } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfStatCard value="12" hint="waiting for approval" class="w-full max-w-xs">
+    <template #label>
+      <ElfStatCardLink href="#pending">
+        Pending requests
+      </ElfStatCardLink>
+    </template>
+  </ElfStatCard>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfStatCard } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid w-full max-w-3xl gap-4 sm:grid-cols-3">
+    <ElfStatCard
+      label="Active members"
+      value="48"
+      trend="+6"
+      trend-direction="up"
+      trend-label="up 6 since last month"
+      tone="success"
+      hint="since last month"
+    />
+    <ElfStatCard
+      label="Open issues"
+      value="17"
+      trend="-3"
+      trend-direction="down"
+      trend-label="down 3 since last week"
+      hint="since last week"
+    />
+    <ElfStatCard label="Parts in stock" value="1,284" hint="across 6 shelves" />
+  </div>
+</template>
+```
+
+#### Loading
+
+```vue
+<script setup lang="ts">
+import { ElfStatCard } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid w-full max-w-xl gap-4 sm:grid-cols-2">
+    <ElfStatCard label="Active members" loading loading-label="Loading active members" />
+    <ElfStatCard label="Open issues" loading loading-label="Loading open issues" />
+  </div>
+</template>
+```
+
+#### Tones
+
+```vue
+<script setup lang="ts">
+import { ElfStatCard } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid w-full max-w-3xl gap-4 sm:grid-cols-2">
+    <ElfStatCard label="Uptime" value="99.9%" trend="+0.2%" trend-direction="up" trend-label="up 0.2 percent" tone="success" hint="last 30 days" />
+    <ElfStatCard label="Low stock" value="9" trend="+4" trend-direction="up" trend-label="4 more than last week" tone="warning" hint="needs a reorder" />
+    <ElfStatCard label="Failed logins" value="31" trend="+12" trend-direction="up" trend-label="12 more than yesterday" tone="destructive" hint="today" />
+    <ElfStatCard label="Sessions" value="212" trend="0" trend-direction="flat" trend-label="unchanged" hint="today" />
+  </div>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfTable`, `ElfTableBody`, `ElfTableCaption`, `ElfTableCell`, `ElfTableFooter`, `ElfTableHead`, `ElfTableHeader`, `ElfTableRow`, `ElfEmpty`, `ElfEmptyContent`, `ElfEmptyDescription`, `ElfEmptyHeader`, `ElfEmptyMedia`, `ElfEmptyTitle`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfTable`, `ElfTableBody`, `ElfTableCaption`, `ElfTableCell`, `ElfTableFooter`, `ElfTableHead`, `ElfTableHeader`, `ElfTableRow`, `ElfEmpty`, `ElfEmptyContent`, `ElfEmptyDescription`, `ElfEmptyHeader`, `ElfEmptyMedia`, `ElfEmptyTitle`, `ElfStatCard`, `ElfStatCardLink`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

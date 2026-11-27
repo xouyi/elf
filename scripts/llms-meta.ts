@@ -569,6 +569,23 @@ export const components: ComponentMeta[] = [
     slots: ['default on every part'],
     a11y: ['The media is decorative (aria-hidden); the title carries the meaning.', 'Say why it is empty and what to do next; put the action in ElfEmptyContent.'],
   },
+  {
+    dir: 'stat-card',
+    name: 'StatCard',
+    summary: 'KPI tile: label, value, hint and trend. A group named by its label. loading shows skeletons and sets aria-busy. To make the card a link, put ElfStatCardLink (as-child around a router link) in the label slot; it stretches over the whole card.',
+    parts: ['ElfStatCard', 'ElfStatCardLink'],
+    props: [
+      { name: 'ElfStatCard label / value / hint', type: 'string | number', description: 'Metric name, figure and supporting text. Slots label, default and hint replace them.' },
+      { name: 'ElfStatCard trend', type: 'string', description: 'Change text such as +12%.' },
+      { name: 'ElfStatCard trendDirection', type: '\'up\' | \'down\' | \'flat\'', default: 'flat', description: 'Arrow beside the trend (attribute: trend-direction).' },
+      { name: 'ElfStatCard trendLabel', type: 'string', description: 'Accessible sentence for the trend, read instead of the bare text (attribute: trend-label).' },
+      { name: 'ElfStatCard tone', type: '\'default\' | \'success\' | \'warning\' | \'destructive\'', default: 'default', description: 'Tints the border and trend; never the only carrier of meaning.' },
+      { name: 'ElfStatCard loading / loadingLabel', type: 'boolean / string', default: 'false / Loading', description: 'Skeleton state and the text announced (attribute: loading-label).' },
+      { name: 'ElfStatCardLink as / asChild', type: 'string / boolean', default: 'a / false', description: 'Render a router link instead of an anchor (attribute: as-child).' },
+    ],
+    slots: ['ElfStatCard label, default (value) and hint', 'ElfStatCardLink default: the link text'],
+    a11y: ['Use a short specific label; the card is a group named by it.', 'Give trends a trend-label sentence and never rely on colour alone.', 'A linked card has one link, focus shows a ring on the whole card.'],
+  },
 ]
 
 export const rules = [

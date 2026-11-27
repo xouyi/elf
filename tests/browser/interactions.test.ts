@@ -96,6 +96,9 @@ import TableSortable from '../../src/components/table/examples/SortableHeader.vu
 import TableStack from '../../src/components/table/examples/StackOnMobile.vue'
 import TableSticky from '../../src/components/table/examples/StickyHeader.vue'
 import EmptyDefault from '../../src/components/empty/examples/Default.vue'
+import StatCardAsLink from '../../src/components/stat-card/examples/AsLink.vue'
+import StatCardLoading from '../../src/components/stat-card/examples/Loading.vue'
+import StatCardTones from '../../src/components/stat-card/examples/Tones.vue'
 import { axeViolations, mountComponent, settle, setTheme, themes } from './support'
 
 let unmount: (() => void) | undefined
@@ -2235,6 +2238,52 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await userEvent.tab()
       expect(document.activeElement).toBe(buttons[1])
       expect(getComputedStyle(el.querySelector('[data-slot="empty"]')!).borderTopStyle).toBe('dashed')
+    })
+  })
+
+  describe('StatCard', () => {
+    it('makes the whole card clickable through the stretched link and shows focus on the card', async () => {
+      setTheme(theme)
+      const { el } = await show(StatCardAsLink)
+      const card = el.querySelector<HTMLElement>('[data-slot="stat-card"]')!
+      const link = el.querySelector<HTMLAnchorElement>('a')!
+      await userEvent.tab()
+      expect(document.activeElement).toBe(link)
+      expect(getComputedStyle(card).boxShadow).not.toBe('none')
+      const box = card.getBoundingClientRect()
+      const linkBox = link.getBoundingClientRect()
+      expect(linkBox.width).toBeLessThan(box.width)
+      const after = getComputedStyle(link, '::after')
+      expect(after.position).toBe('absolute')
+    })
+
+    it('marks loading cards busy and announces the loading label', async () => {
+      setTheme(theme)
+      const { el } = await show(StatCardLoading)
+      const cards = el.querySelectorAll('[data-slot="stat-card"]')
+      expect(cards.length).toBe(2)
+      for (const c of cards) {
+        expect(c.getAttribute('aria-busy')).toBe('true')
+        expect(c.querySelector('[role="status"]')?.textContent).toContain('Loading')
+        expect(c.querySelector('[data-slot="stat-card-value"]')).toBeNull()
+      }
+    })
+
+    it('colors the trend of a toned card with the readable text tokens', async () => {
+      setTheme(theme)
+      const { el } = await show(StatCardTones)
+      const trend = (tone: string) => getComputedStyle(el.querySelector(`[data-tone="${tone}"] [data-slot="stat-card-trend"]`)!).color
+      const probe = (token: string) => {
+        const d = document.createElement('div')
+        d.style.color = `var(--elf-${token})`
+        el.append(d)
+        const c = getComputedStyle(d).color
+        d.remove()
+        return c
+      }
+      expect(trend('success')).toBe(probe('success-text'))
+      expect(trend('warning')).toBe(probe('warning-text'))
+      expect(trend('destructive')).toBe(probe('destructive-text'))
     })
   })
 })

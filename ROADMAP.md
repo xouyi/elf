@@ -450,7 +450,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfCard, ElfSkeleton
 - **Complexity:** S
 - **Novatron screens:** courses/stock `AdminStatCard`; forum `StatTile`; HQ dashboards.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfAspectRatio
 

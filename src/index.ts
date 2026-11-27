@@ -264,3 +264,6 @@ export {
   EmptyTitle as ElfEmptyTitle,
 } from './components/empty'
 export type { EmptyMediaProps, EmptyMediaVariants, EmptyPartProps, EmptyProps, EmptyTitleProps } from './components/empty'
+
+export { StatCard as ElfStatCard, StatCardLink as ElfStatCardLink, statCardVariants } from './components/stat-card'
+export type { StatCardLinkProps, StatCardProps, StatCardTrendDirection, StatCardVariants } from './components/stat-card'

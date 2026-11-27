@@ -1288,6 +1288,36 @@
       ]
     },
     {
+      "name": "stat-card",
+      "type": "registry:ui",
+      "title": "Stat Card",
+      "description": "KPI tile with label, value, hint, trend, tone, loading state and an optional stretched link.",
+      "dependencies": [
+        "reka-ui",
+        "@lucide/vue",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/skeleton.json",
+        "https://xouyi.github.io/elfUI/r/visually-hidden.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/stat-card/StatCard.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/stat-card/StatCardLink.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/stat-card/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "elf-theme",
       "type": "registry:file",
       "title": "Elf theme",

@@ -60,6 +60,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   accordion: { title: 'Accordion', description: 'Stacked collapsible sections, single or multiple, with arrow-key navigation, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('collapsible')] },
   table: { title: 'Table', description: 'Semantic styled table with caption, density, sticky header, sortable header affordance and a stacked-card mode on small screens.', dependencies: ['@vueuse/core'] },
   empty: { title: 'Empty', description: 'Empty state with media, title, description and action parts.', dependencies: ['reka-ui', 'class-variance-authority'] },
+  'stat-card': { title: 'Stat Card', description: 'KPI tile with label, value, hint, trend, tone, loading state and an optional stretched link.', dependencies: ['reka-ui', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('skeleton'), dep('visually-hidden')] },
 }
 
 const items: unknown[] = [

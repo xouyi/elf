@@ -4,7 +4,7 @@
 
 - Add `ElfTable` with `ElfTableCaption`, `ElfTableHeader`, `ElfTableBody`, `ElfTableFooter`, `ElfTableRow`, `ElfTableHead` and `ElfTableCell`, on a native table: a required `caption` (optionally `captionHidden`), `density` (`compact`, `default`, `comfortable`), `stickyHeader`, `stackOnMobile` (rows become `label: value` cards below `sm`, with ARIA table roles so the semantics survive), a scroll container that becomes a focusable named region only while it overflows, `sort` on `ElfTableHead` for `aria-sort` (the base for the later data table) and `selected` on `ElfTableRow`.
 - Add `ElfEmpty` with `ElfEmptyHeader`, `ElfEmptyMedia` (`variant` `default` or `icon`, `emptyMediaVariants`), `ElfEmptyTitle` (renders an `h3`, configurable with `as`), `ElfEmptyDescription` and `ElfEmptyContent`: an empty state for lists, tables and searches with no results.
-
+- Add `ElfStatCard` and `ElfStatCardLink` (`statCardVariants`): a KPI tile with `label`, `value`, `hint`, `trend` (`trendDirection`, `trendLabel`), `tone` (`default`, `success`, `warning`, `destructive`) and a `loading` skeleton state with `aria-busy`; `ElfStatCardLink` (`as`, `asChild`) stretches one link over the whole card.
 
 ## 0.4.0
 
