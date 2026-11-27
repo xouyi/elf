@@ -8,6 +8,7 @@ const props = withDefaults(defineProps<ButtonProps>(), {
   as: 'button',
   variant: 'default',
   size: 'default',
+  glow: false,
 })
 </script>
 
@@ -16,9 +17,10 @@ const props = withDefaults(defineProps<ButtonProps>(), {
     data-slot="button"
     :data-variant="props.variant"
     :data-size="props.size"
+    :data-glow="props.glow ? '' : undefined"
     :as="props.as"
     :as-child="props.asChild"
-    :class="cn(buttonVariants({ variant: props.variant, size: props.size }), props.class)"
+    :class="cn(buttonVariants({ variant: props.variant, size: props.size, glow: props.glow }), props.class)"
   >
     <slot />
   </Primitive>

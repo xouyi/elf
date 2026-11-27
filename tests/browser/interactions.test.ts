@@ -49,6 +49,7 @@ import AvatarDefault from '../../src/components/avatar/examples/Default.vue'
 import AvatarFallbackExample from '../../src/components/avatar/examples/Fallback.vue'
 import AvatarGroupExample from '../../src/components/avatar/examples/Group.vue'
 import AvatarSizes from '../../src/components/avatar/examples/Sizes.vue'
+import ButtonGlow from '../../src/components/button/examples/Glow.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -220,6 +221,32 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(document.activeElement).toBe(first)
       const style = getComputedStyle(first)
       expect(style.boxShadow !== 'none' || style.outlineStyle !== 'none', 'focus indicator is drawn').toBe(true)
+    })
+
+    it('glow draws a coloured shadow that grows on hover and keyboard focus without changing the layout', async () => {
+      setTheme(theme)
+      const { el } = await show(ButtonGlow)
+      const buttons = [...el.querySelectorAll<HTMLButtonElement>('button')]
+      expect(buttons.length).toBeGreaterThan(3)
+      for (const button of buttons) {
+        const rest = getComputedStyle(button)
+        expect(rest.boxShadow, `${button.dataset.variant} has a resting glow`).not.toBe('none')
+        expect(rest.boxShadow).toMatch(/\d/)
+      }
+      const first = buttons[0]!
+      const box = first.getBoundingClientRect()
+      const restShadow = getComputedStyle(first).boxShadow
+      await userEvent.hover(first)
+      await settle()
+      const hovered = getComputedStyle(first).boxShadow
+      expect(hovered, 'hover changes the glow').not.toBe(restShadow)
+      await userEvent.unhover(first)
+      await userEvent.tab()
+      expect(document.activeElement).toBe(first)
+      await settle()
+      expect(getComputedStyle(first).boxShadow, 'focus lifts the glow').not.toBe(restShadow)
+      const after = first.getBoundingClientRect()
+      expect([after.width, after.height], 'glow never changes the layout').toEqual([box.width, box.height])
     })
   })
 

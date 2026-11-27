@@ -63,6 +63,12 @@
   }
 }
 
+/* Button glow: rest and lifted (hover, focus) shadows derived from the variant colour and the theme's --elf-glow strength. */
+[data-slot='button'][data-glow] {
+  --elf-glow-rest: 0 0 0.875rem -0.125rem color-mix(in oklab, var(--elf-glow-color, var(--elf-primary)) var(--elf-glow, 40%), transparent);
+  --elf-glow-lift: 0 0 1.5rem 0 color-mix(in oklab, var(--elf-glow-color, var(--elf-primary)) calc(var(--elf-glow, 40%) * 1.6), transparent);
+}
+
 @keyframes elf-fade-in {
   from { opacity: 0; }
 }

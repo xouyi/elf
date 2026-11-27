@@ -13,7 +13,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 
 import { join } from 'node:path'
 import { codeToHtml } from 'shiki'
 import { createChecker } from 'vue-component-meta'
-import { ratio, readThemes, textPairs, toHex, uiPairs } from '../../../scripts/lib/color'
+import { NON_COLOR_TOKENS, ratio, readThemes, textPairs, toHex, uiPairs } from '../../../scripts/lib/color'
 
 const docsRoot = join(import.meta.dirname, '..')
 const root = join(docsRoot, '..', '..')
@@ -37,7 +37,7 @@ const tokens = {
   themes: themes.map(t => t.name),
   tokens: tokenNames.map(name => ({
     name,
-    isColor: name !== 'radius' && name !== 'radius-pill',
+    isColor: !NON_COLOR_TOKENS.has(name),
     values: Object.fromEntries(themes.map(t => [t.name, { css: t.raw[name]!, hex: t.colors[name] ? toHex(t.colors[name]!) : null }])),
   })),
   contrast: Object.fromEntries(themes.map(t => [t.name, [
@@ -52,7 +52,7 @@ const registry = JSON.parse(read('registry.json')) as { items: { name: string, d
 const checker = createChecker(join(root, 'tsconfig.json'), { forceUseTs: true })
 
 const stripNullish = (type: string) => type.replace(/ \| (undefined|null)/g, '').replace(/^(undefined|null) \| /, '')
-const tokenAlternation = [...tokenNames].filter(n => !n.startsWith('radius')).sort((a, b) => b.length - a.length).join('|')
+const tokenAlternation = [...tokenNames].filter(n => !NON_COLOR_TOKENS.has(n)).sort((a, b) => b.length - a.length).join('|')
 const tokenUtility = new RegExp(`(?:^|[\\s"'\`:\\[(])(?:[a-z-]+:)*(?:bg|text|border|ring|outline|fill|stroke|from|to|via|decoration|divide|shadow|accent|caret|selection:bg|selection:text)-(${tokenAlternation})(?![\\w-])`, 'g')
 
 function usedTokens(dir: string): string[] {

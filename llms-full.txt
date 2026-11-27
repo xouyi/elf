@@ -140,6 +140,7 @@ Tokens (CSS variables `--elf-<name>`, Tailwind utilities `bg-<name>`, `text-<nam
 | ring | `oklch(0.7 0.16 293)` | `#15803d` | `#ffcc00` |
 | radius | `0.625rem` | `0.5rem` | `0px` |
 | radius-pill | `9999px` | `9999px` | `0px` |
+| glow | `40%` | `22%` | `45%` |
 
 Create a theme: add a CSS file declaring every token under `[data-theme='name']`, import it after styles.css, then run `bun run contrast` (WCAG AA).
 
@@ -152,6 +153,7 @@ Triggers an action. Renders a native button; use as-child to render a link or ot
 Components: `ElfButton`
 
 - variant options: `default`, `secondary`, `outline`, `ghost`, `destructive`, `link` (default `default`)
+- glow options: `true`, `false` (default `undefined`)
 - size options: `default`, `sm`, `lg`, `icon` (default `default`)
 
 Props:
@@ -210,6 +212,24 @@ import { ElfButton } from '@xouyi/elfui'
   <ElfButton disabled>
     Disabled
   </ElfButton>
+</template>
+```
+
+#### Glow
+
+```vue
+<script setup lang="ts">
+import { ElfButton } from '@xouyi/elfui'
+
+const variants = ['default', 'secondary', 'outline', 'ghost', 'destructive'] as const
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-4 p-2">
+    <ElfButton v-for="variant in variants" :key="variant" :variant="variant" glow>
+      {{ variant }}
+    </ElfButton>
+  </div>
 </template>
 ```
 
