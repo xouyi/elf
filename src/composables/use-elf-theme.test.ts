@@ -19,7 +19,7 @@ function clearCookies() {
   for (const entry of document.cookie.split('; ')) {
     const name = entry.split('=')[0]
     if (name)
-      document.cookie = `${name}=; path=/; max-age=0`
+      document.cookie = `${name}=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT`
   }
 }
 
@@ -246,7 +246,8 @@ describe('createElfTheme', () => {
     clearCookies()
     const none = withPlugin({ persist: false })
     none.api.setTheme('nova')
-    expect(document.cookie).not.toContain('elfui-theme')
+    // Some DOM implementations keep an expired cookie as an empty value; only a stored theme counts.
+    expect(document.cookie).not.toMatch(/elfui-theme=[^;]/)
     expect(localStorage.getItem('elfui-theme')).toBeNull()
     none.wrapper.unmount()
   })
