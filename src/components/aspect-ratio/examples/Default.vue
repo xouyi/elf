@@ -6,7 +6,7 @@ const photo = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w
 </script>
 
 <template>
-  <div class="w-full max-w-sm">
+  <div class="w-72 max-w-full">
     <ElfAspectRatio :ratio="16 / 9">
       <img :src="photo" alt="Purple hills under a pale sun">
     </ElfAspectRatio>
