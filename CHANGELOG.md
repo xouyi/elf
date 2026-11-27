@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.5.1
 
 - Theme: soften control borders in the `elf` theme. `--elf-input` (outline buttons, toggles, inputs, selects, checkboxes) is now a dim violet `oklch(0.47 0.04 293)` instead of the bright neutral grey `#6b6b6b`; it still meets the 3:1 non-text contrast minimum. The `nova` and `elfwood` themes are unchanged.
 - Tabs: the selected tab uses the subtle `border` token instead of `input`, so it no longer shows a bright outline; the background and text colour still mark it.
