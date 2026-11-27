@@ -1,5 +1,6 @@
 import type { Component } from 'vue'
 import axe from 'axe-core'
+import { expect } from 'vitest'
 import { createApp } from 'vue'
 
 export type ThemeName = 'elf' | 'nova' | 'elfwood'
@@ -36,13 +37,34 @@ export async function mountComponent(component: Component) {
   }
 }
 
-/** Waits for Vue to flush and for focus/transition callbacks scheduled by Reka UI to run. */
+/** Finite animations and transitions that are still moving: what axe contrast checks and layout reads must not race. */
+function runningAnimations() {
+  return document.getAnimations().filter(a => (a.playState === 'running' || a.pending) && a.effect?.getTiming().iterations !== Infinity)
+}
+
+/**
+ * Resolves once every finite CSS animation and transition has finished and stayed finished for two frames. Open/close
+ * animations are waited for as a real condition, so a slow or loaded machine can never leave a half-faded panel (a
+ * translucent background fails axe contrast) or a still-sliding toast behind. Endless animations (spinners) are ignored.
+ */
+export async function animationsSettled() {
+  await expect.poll(() => runningAnimations().length, { timeout: 10_000, message: 'animations did not finish' }).toBe(0)
+  await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+  await expect.poll(() => runningAnimations().length, { timeout: 10_000, message: 'animations restarted' }).toBe(0)
+}
+
+/**
+ * Lets Vue flush and the focus/timer callbacks scheduled by Reka UI run (`ms` is a lower bound for timer driven
+ * behaviour), then waits for running animations to finish. Prefer `expect.poll` on the condition you care about.
+ */
 export async function settle(ms = 50) {
   await new Promise(resolve => setTimeout(resolve, ms))
+  await animationsSettled()
 }
 
 /** Runs axe over the whole document (portalled overlays included) and returns a readable list of violations. */
 export async function axeViolations(context: Element | Document = document, options: { menuOpen?: boolean } = {}) {
+  await animationsSettled() // axe samples colours: a fading panel is translucent and would fail contrast
   const result = await axe.run(context as axe.ElementContext, {
     resultTypes: ['violations'],
     // Examples are fragments, not pages: page-level structure rules do not apply to them.

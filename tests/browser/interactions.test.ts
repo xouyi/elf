@@ -1,6 +1,6 @@
 import { ElfButton, ElfInput, ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger, ElfToaster, toast } from '@xouyi/elfui'
 import { page, userEvent } from 'vitest/browser'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 import VisuallyHiddenDefault from '../../src/components/visually-hidden/examples/Default.vue'
 import VisuallyHiddenTable from '../../src/components/visually-hidden/examples/TableCaption.vue'
@@ -387,8 +387,9 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       toast.success('Success')
       toast.warning('Warning')
       toast.error('Destructive', { action: { label: 'Retry' } })
-      await settle(300)
-      expect(await axeViolations()).toEqual([])
+      await expect.poll(() => toasts().length, { message: 'every variant is rendered' }).toBe(4)
+      await expect.poll(() => toasts().every(t => t.getAttribute('data-state') === 'open')).toBe(true)
+      expect(await axeViolations()).toEqual([]) // waits for the slide-in animations to finish
     })
 
     it('runs an action from the keyboard and closes the toast', async () => {
@@ -1634,6 +1635,12 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
   })
 
   describe('ScrollArea', () => {
+    /** True once the scroll offset has not moved for two animation frames (smooth scrolling finished). */
+    async function scrollStable(vp: HTMLElement, key: 'scrollTop' | 'scrollLeft') {
+      const before = vp[key]
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+      return before === vp[key]
+    }
     const viewport = (el: Element) => el.querySelector<HTMLElement>('[data-slot="scroll-area-viewport"]')!
 
     it('is a named, keyboard focusable region that scrolls with arrows, Page Down, End and Home', async () => {
@@ -1646,19 +1653,17 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await userEvent.tab()
       expect(document.activeElement).toBe(vp)
       expect(vp.scrollTop).toBe(0)
+      // Chromium animates keyboard scrolling (smooth scroll): poll until the position has landed instead of sleeping.
       await userEvent.keyboard('{ArrowDown}')
-      await settle(100)
+      await expect.poll(() => vp.scrollTop, { message: 'ArrowDown scrolls' }).toBeGreaterThan(0)
+      await expect.poll(() => scrollStable(vp, 'scrollTop')).toBe(true)
       const afterArrow = vp.scrollTop
-      expect(afterArrow, 'ArrowDown scrolls').toBeGreaterThan(0)
       await userEvent.keyboard('{PageDown}')
-      await settle(150)
-      expect(vp.scrollTop, 'PageDown scrolls further').toBeGreaterThan(afterArrow)
+      await expect.poll(() => vp.scrollTop, { message: 'PageDown scrolls further' }).toBeGreaterThan(afterArrow)
       await userEvent.keyboard('{End}')
-      await settle(150)
-      expect(vp.scrollTop + vp.clientHeight).toBeGreaterThanOrEqual(vp.scrollHeight - 1)
+      await expect.poll(() => vp.scrollTop + vp.clientHeight, { message: 'End reaches the bottom' }).toBeGreaterThanOrEqual(vp.scrollHeight - 1)
       await userEvent.keyboard('{Home}')
-      await settle(150)
-      expect(vp.scrollTop).toBe(0)
+      await expect.poll(() => vp.scrollTop, { message: 'Home returns to the top' }).toBe(0)
     })
 
     it('scrolls a horizontal area with ArrowRight and ArrowLeft', async () => {
@@ -1669,11 +1674,10 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await userEvent.tab()
       expect(document.activeElement).toBe(vp)
       await userEvent.keyboard('{ArrowRight}')
-      await settle(100)
-      expect(vp.scrollLeft).toBeGreaterThan(0)
+      await expect.poll(() => vp.scrollLeft).toBeGreaterThan(0)
+      await expect.poll(() => scrollStable(vp, 'scrollLeft')).toBe(true)
       await userEvent.keyboard('{ArrowLeft}')
-      await settle(150)
-      expect(vp.scrollLeft, 'ArrowLeft scrolls back').toBe(0)
+      await expect.poll(() => vp.scrollLeft, { message: 'ArrowLeft scrolls back' }).toBe(0)
     })
 
     it('renders both scrollbars and the corner for orientation both, and the table stays readable', async () => {
@@ -1684,9 +1688,8 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(vp.scrollWidth).toBeGreaterThan(vp.clientWidth)
       await userEvent.tab()
       await userEvent.keyboard('{ArrowDown}{ArrowRight}')
-      await settle(150)
-      expect(vp.scrollTop).toBeGreaterThan(0)
-      expect(vp.scrollLeft).toBeGreaterThan(0)
+      await expect.poll(() => vp.scrollTop).toBeGreaterThan(0)
+      await expect.poll(() => vp.scrollLeft).toBeGreaterThan(0)
       expect(el.querySelector('table caption')?.textContent).toContain('Match scores')
     })
   })
@@ -2086,31 +2089,42 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(document.activeElement).toBe(trigger)
     })
 
+    // The delay is the point of these two tests, so the page's timers are faked: the clock is advanced by exact amounts
+    // instead of sleeping and hoping a loaded machine fires its timers on time. Only timers are faked; Vue, rAF and the
+    // animation clock stay real.
+    const fakeClock = () => vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })
+    afterEach(() => vi.useRealTimers())
+
     it('opens after the hover delay and closes when the pointer leaves', async () => {
       setTheme(theme)
       const { el } = await show(TooltipDefault)
       const trigger = el.querySelector<HTMLElement>('button')!
+      fakeClock()
       await userEvent.hover(trigger)
-      await settle(700)
-      expect(tip()).not.toBeNull()
+      await vi.advanceTimersByTimeAsync(200)
+      expect(tip(), 'still closed inside the delay').toBeNull()
+      await vi.advanceTimersByTimeAsync(300) // the provider default is 400 ms
+      await expect.poll(tip).not.toBeNull()
       await userEvent.unhover(trigger)
-      await settle(400)
-      expect(tip()).toBeNull()
+      await vi.advanceTimersByTimeAsync(100)
+      vi.useRealTimers()
+      await expect.poll(tip).toBeNull()
     })
 
     it('shares the delay of a provider: the second tooltip opens at once after the first', async () => {
       setTheme(theme)
       const { el } = await show(TooltipIconButtons)
       const [bold, italic] = [...el.querySelectorAll<HTMLElement>('button')]
+      fakeClock()
       await userEvent.hover(bold!)
-      await settle(600)
-      expect(tip()?.textContent).toContain('Bold')
+      await vi.advanceTimersByTimeAsync(350) // this provider waits 300 ms for the first tooltip
+      await expect.poll(() => tip()?.textContent).toContain('Bold')
       await userEvent.hover(italic!)
       // A real mouse keeps moving; the second move happens once the pointer has left the first tooltip's grace area.
-      await settle(60)
       await userEvent.hover(italic!, { position: { x: 6, y: 6 } })
-      await settle(120)
-      expect(tip()?.textContent, 'no second delay inside the skip window').toContain('Italic')
+      // No clock advance past the 300 ms delay: inside the 500 ms skip window the second tooltip must already be open.
+      await vi.advanceTimersByTimeAsync(50)
+      await expect.poll(() => tip()?.textContent, { message: 'no second delay inside the skip window' }).toContain('Italic')
     })
 
     it('v-model:open follows the tooltip state', async () => {

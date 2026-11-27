@@ -32,8 +32,14 @@ export default defineConfig({
           name: 'browser',
           include: ['tests/browser/**/*.test.ts'],
           setupFiles: ['tests/browser/setup.ts'],
+          // One page at a time: parallel files each own an iframe that Chromium throttles under load, which showed up as
+          // "iframe not ready" and a dropped browser connection. The ~4 minute run is dominated by the biggest file anyway.
+          fileParallelism: false,
+          // Polled conditions (a menu opening, a hover card after its delay) get room on a loaded machine; they still return the moment they hold.
+          expect: { poll: { timeout: 8000 } },
           browser: {
             enabled: true,
+            connectTimeout: 180_000,
             headless: true,
             provider: playwright(),
             instances: [{ browser: 'chromium' }],
