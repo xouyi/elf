@@ -15,7 +15,7 @@ const { open: searchOpen, shortcut } = useSearchState()
       <ElfBadge variant="outline" class="hidden sm:inline-flex">
         v{{ site.version }}
       </ElfBadge>
-      <nav aria-label="Main" class="ml-4 hidden items-center gap-1 text-sm md:flex">
+      <nav aria-label="Main" class="ml-4 hidden items-center gap-1 text-sm lg:flex">
         <ElfButton as-child variant="ghost" size="sm">
           <NuxtLink to="/docs/getting-started/introduction">
             Docs
@@ -33,9 +33,9 @@ const { open: searchOpen, shortcut } = useSearchState()
         </ElfButton>
       </nav>
       <div class="ml-auto flex items-center gap-1.5 sm:gap-2">
-        <ElfButton variant="outline" size="sm" class="h-8 gap-2 text-muted-foreground sm:w-56 sm:justify-start lg:w-64" aria-label="Search documentation" @click="searchOpen = true">
+        <ElfButton variant="outline" size="sm" class="h-8 gap-2 text-muted-foreground sm:w-56 sm:justify-start lg:w-64" @click="searchOpen = true">
           <Search />
-          <span class="hidden sm:inline">Search docs...</span>
+          <span class="sr-only sm:not-sr-only">Search docs...</span>
           <kbd class="ml-auto hidden rounded-sm border bg-muted px-1.5 font-mono text-[0.6875rem] sm:inline">{{ shortcut }}</kbd>
         </ElfButton>
         <ThemeSwitcher />
