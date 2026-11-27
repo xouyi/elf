@@ -33,6 +33,8 @@
   --color-success-foreground: var(--elf-success-foreground);
   --color-warning: var(--elf-warning);
   --color-warning-foreground: var(--elf-warning-foreground);
+  --color-success-text: var(--elf-success-text);
+  --color-warning-text: var(--elf-warning-text);
   --color-border: var(--elf-border);
   --color-input: var(--elf-input);
   --color-ring: var(--elf-ring);
@@ -61,6 +63,12 @@
   }
 }
 
+/* Button glow: rest and lifted (hover, focus) shadows derived from the variant colour and the theme's --elf-glow strength. */
+[data-slot='button'][data-glow] {
+  --elf-glow-rest: 0 0 0.875rem -0.125rem color-mix(in oklab, var(--elf-glow-color, var(--elf-primary)) var(--elf-glow, 40%), transparent);
+  --elf-glow-lift: 0 0 1.5rem 0 color-mix(in oklab, var(--elf-glow-color, var(--elf-primary)) calc(var(--elf-glow, 40%) * 1.6), transparent);
+}
+
 @keyframes elf-fade-in {
   from { opacity: 0; }
 }
@@ -77,6 +85,21 @@
 @keyframes elf-progress-indeterminate {
   from { transform: translateX(-100%); }
   to { transform: translateX(250%); }
+}
+
+@keyframes elf-gradient-shimmer {
+  from { background-position: 0% 0%; }
+  to { background-position: 100% 100%; }
+}
+
+/* Gradient text falls back to plain system text colour when the user forces colours. */
+@media (forced-colors: active) {
+  [data-slot='gradient-text'] {
+    background-image: none !important;
+    color: CanvasText !important;
+    -webkit-text-fill-color: CanvasText !important;
+    animation: none !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

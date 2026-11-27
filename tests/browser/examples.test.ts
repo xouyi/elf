@@ -2,7 +2,7 @@ import { userEvent } from 'vitest/browser'
 import { afterEach, describe, expect, it } from 'vitest'
 import { axeViolations, examples, mountComponent, settle, setTheme, themes } from './support'
 
-// Every example, in both themes, must render and be free of axe violations. Overlay examples (Dialog) are
+// Every example, in every theme, must render and be free of axe violations. Overlay examples (Dialog) are
 // opened first so that the portalled content is checked too: an example whose root is a trigger is clicked.
 let unmount: (() => void) | undefined
 afterEach(() => {
@@ -34,10 +34,10 @@ describe('themes', () => {
     const read = () => getComputedStyle(document.documentElement).getPropertyValue('--elf-primary').trim()
     setTheme('elf')
     const elf = read()
-    setTheme('novatron')
-    const novatron = read()
+    setTheme('nova')
+    const nova = read()
     expect(elf).not.toBe('')
-    expect(novatron).toBe('#ffcc00')
-    expect(elf).not.toBe(novatron)
+    expect(nova).toBe('#ffcc00')
+    expect(elf).not.toBe(nova)
   })
 })

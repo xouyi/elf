@@ -4,7 +4,7 @@ const props = defineProps<{ code: string, lang?: string }>()
 const { data: html } = await useAsyncData(`snippet-${props.lang}-${props.code}`, async () => {
   if (!import.meta.server) return ''
   const { codeToHtml } = await import('shiki')
-  return codeToHtml(props.code, { lang: props.lang ?? 'text', theme: 'github-dark-default' })
+  return codeToHtml(props.code, { lang: props.lang ?? 'text', themes: { dark: 'github-dark-default', elfwood: 'github-light-default' }, defaultColor: 'dark' })
 })
 </script>
 

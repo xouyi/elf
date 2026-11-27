@@ -1,0 +1,33 @@
+/* Elfwood theme (light): white surfaces, deep forest-green primary, 0.5rem radius. The only light theme. */
+[data-theme='elfwood'] {
+  color-scheme: light;
+  --elf-background: #fbfdfb;
+  --elf-foreground: #0b1a10;
+  --elf-card: #ffffff;
+  --elf-card-foreground: #0b1a10;
+  --elf-popover: #ffffff;
+  --elf-popover-foreground: #0b1a10;
+  --elf-primary: #15803d;
+  --elf-primary-foreground: #ffffff;
+  --elf-secondary: #e6f1e8;
+  --elf-secondary-foreground: #0f2417;
+  --elf-muted: #eef5ef;
+  --elf-muted-foreground: #4b6252;
+  --elf-accent: #d9eddd;
+  --elf-accent-foreground: #0b1a10;
+  --elf-destructive: #dc2626;
+  --elf-destructive-foreground: #ffffff;
+  --elf-destructive-text: #b91c1c;
+  --elf-success: #15803d;
+  --elf-success-foreground: #ffffff;
+  --elf-success-text: #166534;
+  --elf-warning: #f59e0b;
+  --elf-warning-foreground: #1c1200;
+  --elf-warning-text: #92400e;
+  --elf-border: #c8dbcc;
+  --elf-input: #6f8a77;
+  --elf-ring: #15803d;
+  --elf-radius: 0.5rem;
+  --elf-radius-pill: 9999px;
+  --elf-glow: 22%;
+}

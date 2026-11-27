@@ -336,6 +336,23 @@ export const components: ComponentMeta[] = [
     slots: ['ElfAvatarFallback default: custom fallback content (an icon, +3)', 'ElfAvatarGroup default: ElfAvatar items'],
     a11y: ['Give ElfAvatarImage an alt (the name, or empty when the name is shown beside it).', 'Use label on a standalone avatar, and aria-label on a group.', 'Avatars are not interactive; name the link or button you wrap one in.'],
   },
+  {
+    dir: 'gradient-text',
+    name: 'GradientText',
+    summary: 'Inline gradient text (bg-clip-text) on a span by default. Real, selectable text; presets follow the theme and pass 4.5:1 on every theme background.',
+    parts: ['ElfGradientText'],
+    props: [
+      { name: 'variant', type: '\'brand\' | \'aurora\' | \'sunset\' | \'forest\'', default: 'brand', description: 'Colour preset. brand blends the theme primary into its foreground; the others switch between a light and a dark set by color-scheme.' },
+      { name: 'from / via / to', type: 'string', description: 'Custom CSS colours (tokens work: var(--elf-primary)). They override the preset stops.' },
+      { name: 'direction', type: '\'r\' | \'l\' | \'b\' | \'t\' | \'br\' | \'bl\' | \'tr\' | \'tl\'', default: 'r', description: 'Gradient direction.' },
+      { name: 'animate', type: 'boolean', default: 'false', description: 'Slow shimmer; static under prefers-reduced-motion.' },
+      { name: 'as', type: 'string | Component', default: 'span', description: 'Element to render.' },
+      { name: 'asChild', type: 'boolean', default: 'false', description: 'Render the child element with the gradient (attribute: as-child).' },
+      { name: 'class', type: 'string | array | object', description: 'Merged with base classes.' },
+    ],
+    slots: ['default: the text'],
+    a11y: ['The text stays real text: selectable, searchable and read as written.', 'In forced-colors mode the gradient is replaced by CanvasText.', 'Custom from/via/to colours are not checked: keep 4.5:1 against the background (3:1 for large text).', 'Use it for short decorative emphasis, not for long paragraphs.'],
+  },
 ]
 
 export const rules = [
@@ -343,8 +360,9 @@ export const rules = [
   'Choose appearance with props (variant, size), not custom classes or inline styles.',
   'Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).',
   'Use text-destructive-text for error messages and required markers; bg-destructive is a fill and is too dark for text.',
-  'ElfUI is dark only: do not add light-mode styles or dark: variants.',
-  'Do not override border radius with arbitrary values; radii derive from the theme (novatron is sharp, 0px).',
+  'Use text-success-text and text-warning-text for status text and icons; bg-success and bg-warning are fills.',
+  'Themes decide light or dark (elf and nova are dark, elfwood is light): never add dark: variants or hard-coded colors.',
+  'Do not override border radius with arbitrary values; radii derive from the theme (nova is sharp, 0px).',
   'Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".',
   'Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.',
   'Dialogs need a title and description; tabs lists need an aria-label.',
@@ -353,8 +371,8 @@ export const rules = [
   'Use Bun for all package commands (bun add, bun run, bunx), never npm, pnpm or yarn.',
 ]
 
-export const novatronRules = [
-  'Use data-theme="novatron" (or the `elfui: { theme: "novatron" }` option in nuxt.config; the config key stays `elfui`) for anything representing Novatron Robotics (FRC Team 10202).',
+export const novaRules = [
+  'Use data-theme="nova" (or the `elfui: { theme: "nova" }` option in nuxt.config; the config key stays `elfui`) for anything representing Novatron Robotics (FRC Team 10202).',
   'Palette: obsidian black background (#050505 / #09090b) and Novatron gold (#ffcc00) primary. 100% dark mode.',
   'Geometry is sharp: 0px border radius everywhere. Never add rounded-* overrides or rounded arbitrary values.',
   'Downstream user-facing copy for Novatron apps is Turkish; code, identifiers and comments are English.',

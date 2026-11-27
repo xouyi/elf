@@ -6,7 +6,7 @@ const badges = ['default', 'secondary', 'outline', 'destructive', 'success', 'wa
 // useElfTheme and isElfTheme are auto-imported by the module. The cookie lets the server render the stored theme.
 const cookie = useCookie<string>('elfui-theme', { maxAge: 60 * 60 * 24 * 365, sameSite: 'lax' })
 const { theme, cycle } = useElfTheme({
-  defaultTheme: 'novatron',
+  defaultTheme: 'nova',
   initial: isElfTheme(cookie.value) ? cookie.value : undefined,
   storage: 'cookie',
 })

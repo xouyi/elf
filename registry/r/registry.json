@@ -599,6 +599,28 @@
       ]
     },
     {
+      "name": "gradient-text",
+      "type": "registry:ui",
+      "title": "Gradient Text",
+      "description": "Inline gradient text with theme-aware presets, custom stops, direction and a reduced-motion-safe shimmer.",
+      "dependencies": [
+        "reka-ui"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/gradient-text/GradientText.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/gradient-text/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "avatar",
       "type": "registry:ui",
       "title": "Avatar",
@@ -660,7 +682,7 @@
       "name": "elf-theme",
       "type": "registry:file",
       "title": "Elf theme",
-      "description": "Tailwind v4 token mappings and the elf and novatron theme files. Import elf.css after tailwindcss.",
+      "description": "Tailwind v4 token mappings and the elf, nova and elfwood theme files. Import elf.css after tailwindcss.",
       "files": [
         {
           "path": "registry/_generated/css/elf.css",
@@ -673,9 +695,14 @@
           "target": "assets/css/elf/themes/elf.css"
         },
         {
-          "path": "registry/_generated/css/themes/novatron.css",
+          "path": "registry/_generated/css/themes/nova.css",
           "type": "registry:file",
-          "target": "assets/css/elf/themes/novatron.css"
+          "target": "assets/css/elf/themes/nova.css"
+        },
+        {
+          "path": "registry/_generated/css/themes/elfwood.css",
+          "type": "registry:file",
+          "target": "assets/css/elf/themes/elfwood.css"
         }
       ]
     }

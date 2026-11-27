@@ -3,7 +3,7 @@ import tokens from '~/generated/tokens.json'
 
 interface Pair { fg: string, bg: string, kind: string, min: number, ratio: number, pass: boolean }
 const contrast = tokens.contrast as Record<string, Pair[]>
-const utility = (name: string) => (name === 'radius' ? 'rounded-lg' : name === 'radius-pill' ? 'rounded-badge' : name === 'border' ? 'border-border' : name === 'input' ? 'border-input' : name === 'ring' ? 'ring-ring' : name.endsWith('-foreground') ? `text-${name}` : `bg-${name}`)
+const utility = (name: string) => (name === 'radius' ? 'rounded-lg' : name === 'radius-pill' ? 'rounded-badge' : name === 'glow' ? 'glow prop of Button' : name === 'border' ? 'border-border' : name === 'input' ? 'border-input' : name === 'ring' ? 'ring-ring' : name.endsWith('-foreground') ? `text-${name}` : `bg-${name}`)
 </script>
 
 <template>

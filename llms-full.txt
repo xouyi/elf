@@ -1,6 +1,6 @@
 # ElfUI (full reference)
 
-> ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (pure black with violet accents, rounded) and novatron (gold on obsidian, sharp corners).
+> ElfUI is a themeable design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with three themes: elf (pure black with violet accents, rounded), nova (gold on obsidian, sharp corners) and elfwood (light, green on white).
 
 Version 0.4.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com/xouyi/elfUI .
 
@@ -10,8 +10,9 @@ Version 0.4.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com
 - Choose appearance with props (variant, size), not custom classes or inline styles.
 - Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).
 - Use text-destructive-text for error messages and required markers; bg-destructive is a fill and is too dark for text.
-- ElfUI is dark only: do not add light-mode styles or dark: variants.
-- Do not override border radius with arbitrary values; radii derive from the theme (novatron is sharp, 0px).
+- Use text-success-text and text-warning-text for status text and icons; bg-success and bg-warning are fills.
+- Themes decide light or dark (elf and nova are dark, elfwood is light): never add dark: variants or hard-coded colors.
+- Do not override border radius with arbitrary values; radii derive from the theme (nova is sharp, 0px).
 - Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.
 - Dialogs need a title and description; tabs lists need an aria-label.
@@ -19,9 +20,9 @@ Version 0.4.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com
 - Install from npm (`bun add @xouyi/elfui`, or `bunx @xouyi/elfui@latest init` to set up a project); typescript 5 or 6 (not 7) must be installed in the consumer project.
 - Use Bun for all package commands (bun add, bun run, bunx), never npm, pnpm or yarn.
 
-### Novatron theme rules
+### Nova theme rules
 
-- Use data-theme="novatron" (or the `elfui: { theme: "novatron" }` option in nuxt.config; the config key stays `elfui`) for anything representing Novatron Robotics (FRC Team 10202).
+- Use data-theme="nova" (or the `elfui: { theme: "nova" }` option in nuxt.config; the config key stays `elfui`) for anything representing Novatron Robotics (FRC Team 10202).
 - Palette: obsidian black background (#050505 / #09090b) and Novatron gold (#ffcc00) primary. 100% dark mode.
 - Geometry is sharp: 0px border radius everywhere. Never add rounded-* overrides or rounded arbitrary values.
 - Downstream user-facing copy for Novatron apps is Turkish; code, identifiers and comments are English.
@@ -32,7 +33,7 @@ Requirements: Bun, Nuxt 4, Tailwind CSS v4 with @tailwindcss/vite, typescript 5 
 
 ```bash
 # automatic: installs, patches nuxt.config and the main CSS (idempotent)
-bunx @xouyi/elfui@latest init --theme novatron --yes
+bunx @xouyi/elfui@latest init --theme nova --yes
 
 # or by hand
 bun add @xouyi/elfui tailwindcss @tailwindcss/vite
@@ -46,7 +47,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineNuxtConfig({
   modules: ['@xouyi/elfui/nuxt'],
   css: ['~/assets/css/main.css'],
-  elfui: { theme: 'novatron', themes: ['elf'] }, // config key stays elfui; theme: 'elf' | 'novatron'
+  elfui: { theme: 'nova', themes: ['elf'] }, // config key stays elfui; theme: 'elf' | 'nova' | 'elfwood'
   vite: { plugins: [tailwindcss()] },
 })
 ```
@@ -57,7 +58,7 @@ export default defineNuxtConfig({
 @import '@xouyi/elfui/styles.css';
 ```
 
-Components are auto-imported with the Elf prefix. Module options: `theme` ('elf' | 'novatron', default 'elf'), `themes` (extra theme CSS to bundle), `prefix` (default 'Elf').
+Components are auto-imported with the Elf prefix. Module options: `theme` ('elf' | 'nova' | 'elfwood', default 'elf'), `themes` (extra theme CSS to bundle), `prefix` (default 'Elf').
 
 Upgrade: `bun update @xouyi/elfui`. Advanced: an unreleased commit can be installed with `bun add github:xouyi/elfUI#<tag-or-sha>`.
 
@@ -71,14 +72,14 @@ bunx @xouyi/elfui@latest init --yes   # or: bun add @xouyi/elfui tailwindcss @ta
 @import 'tailwindcss';
 @import '@xouyi/elfui/styles.css';
 @import '@xouyi/elfui/themes/elf.css';
-@import '@xouyi/elfui/themes/novatron.css';
+@import '@xouyi/elfui/themes/nova.css';
 ```
 
 ```ts
 import { ElfButton } from '@xouyi/elfui'
 ```
 
-Set `<html data-theme="elf">` (or `novatron`).
+Set `<html data-theme="elf">` (`nova` or `elfwood`).
 
 ## CLI and registry (copy components)
 
@@ -90,53 +91,56 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
-Themes: `elf`, `novatron`. Select with `data-theme` on html or any element. Dark only.
+Themes: `elf`, `elfwood`, `nova`. Select with `data-theme` on html or any element.
 
 ```ts
-document.documentElement.dataset.theme = 'novatron'
+document.documentElement.dataset.theme = 'nova'
 ```
 
 Or from code, SSR-safe, with optional persistence (auto-imported in Nuxt; otherwise `import { useElfTheme } from "@xouyi/elfui"`):
 
 ```ts
 const { theme, themes, setTheme, cycle } = useElfTheme({ storage: 'cookie' }) // storage: 'cookie' | 'localStorage' | 'none' (default)
-setTheme('novatron')
+setTheme('nova')
 ```
 
 Tokens (CSS variables `--elf-<name>`, Tailwind utilities `bg-<name>`, `text-<name>-foreground`, `border-border`, `ring-ring`):
 
-| Token | elf | novatron |
-| :-- | :-- | :-- |
-| background | `#000000` | `#050505` |
-| foreground | `#fafafa` | `#fafafa` |
-| card | `#0a0a0a` | `#09090b` |
-| card-foreground | `#fafafa` | `#fafafa` |
-| popover | `#0f0f0f` | `#09090b` |
-| popover-foreground | `#fafafa` | `#fafafa` |
-| primary | `oklch(0.7 0.16 293)` | `#ffcc00` |
-| primary-foreground | `oklch(0.15 0.03 295)` | `#050505` |
-| secondary | `#1c1c1c` | `#18181b` |
-| secondary-foreground | `#fafafa` | `#fafafa` |
-| muted | `#171717` | `#18181b` |
-| muted-foreground | `#a3a3a3` | `#a1a1aa` |
-| accent | `oklch(0.27 0.06 293)` | `#27272a` |
-| accent-foreground | `#fafafa` | `#fafafa` |
-| destructive | `oklch(0.55 0.21 25)` | `#dc2626` |
-| destructive-foreground | `oklch(0.99 0 0)` | `#ffffff` |
-| destructive-text | `oklch(0.72 0.17 22)` | `#f87171` |
-| success | `oklch(0.72 0.17 150)` | `#22c55e` |
-| success-foreground | `oklch(0.15 0.03 150)` | `#050505` |
-| warning | `oklch(0.82 0.15 85)` | `#f59e0b` |
-| warning-foreground | `oklch(0.2 0.04 85)` | `#050505` |
-| border | `#262626` | `#27272a` |
-| input | `#6b6b6b` | `#71717a` |
-| ring | `oklch(0.7 0.16 293)` | `#ffcc00` |
-| radius | `0.625rem` | `0px` |
-| radius-pill | `9999px` | `0px` |
+| Token | elf | elfwood | nova |
+| :-- | :-- | :-- | :-- |
+| background | `#000000` | `#fbfdfb` | `#050505` |
+| foreground | `#fafafa` | `#0b1a10` | `#fafafa` |
+| card | `#0a0a0a` | `#ffffff` | `#09090b` |
+| card-foreground | `#fafafa` | `#0b1a10` | `#fafafa` |
+| popover | `#0f0f0f` | `#ffffff` | `#09090b` |
+| popover-foreground | `#fafafa` | `#0b1a10` | `#fafafa` |
+| primary | `oklch(0.7 0.16 293)` | `#15803d` | `#ffcc00` |
+| primary-foreground | `oklch(0.15 0.03 295)` | `#ffffff` | `#050505` |
+| secondary | `#1c1c1c` | `#e6f1e8` | `#18181b` |
+| secondary-foreground | `#fafafa` | `#0f2417` | `#fafafa` |
+| muted | `#171717` | `#eef5ef` | `#18181b` |
+| muted-foreground | `#a3a3a3` | `#4b6252` | `#a1a1aa` |
+| accent | `oklch(0.27 0.06 293)` | `#d9eddd` | `#27272a` |
+| accent-foreground | `#fafafa` | `#0b1a10` | `#fafafa` |
+| destructive | `oklch(0.55 0.21 25)` | `#dc2626` | `#dc2626` |
+| destructive-foreground | `oklch(0.99 0 0)` | `#ffffff` | `#ffffff` |
+| destructive-text | `oklch(0.72 0.17 22)` | `#b91c1c` | `#f87171` |
+| success | `oklch(0.72 0.17 150)` | `#15803d` | `#22c55e` |
+| success-foreground | `oklch(0.15 0.03 150)` | `#ffffff` | `#050505` |
+| success-text | `oklch(0.72 0.17 150)` | `#166534` | `#22c55e` |
+| warning | `oklch(0.82 0.15 85)` | `#f59e0b` | `#f59e0b` |
+| warning-foreground | `oklch(0.2 0.04 85)` | `#1c1200` | `#050505` |
+| warning-text | `oklch(0.82 0.15 85)` | `#92400e` | `#f59e0b` |
+| border | `#262626` | `#c8dbcc` | `#27272a` |
+| input | `#6b6b6b` | `#6f8a77` | `#71717a` |
+| ring | `oklch(0.7 0.16 293)` | `#15803d` | `#ffcc00` |
+| radius | `0.625rem` | `0.5rem` | `0px` |
+| radius-pill | `9999px` | `9999px` | `0px` |
+| glow | `40%` | `22%` | `45%` |
 
 Create a theme: add a CSS file declaring every token under `[data-theme='name']`, import it after styles.css, then run `bun run contrast` (WCAG AA).
 
@@ -149,6 +153,7 @@ Triggers an action. Renders a native button; use as-child to render a link or ot
 Components: `ElfButton`
 
 - variant options: `default`, `secondary`, `outline`, `ghost`, `destructive`, `link` (default `default`)
+- glow options: `true`, `false` (default `undefined`)
 - size options: `default`, `sm`, `lg`, `icon` (default `default`)
 
 Props:
@@ -207,6 +212,24 @@ import { ElfButton } from '@xouyi/elfui'
   <ElfButton disabled>
     Disabled
   </ElfButton>
+</template>
+```
+
+#### Glow
+
+```vue
+<script setup lang="ts">
+import { ElfButton } from '@xouyi/elfui'
+
+const variants = ['default', 'secondary', 'outline', 'ghost', 'destructive'] as const
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-4 p-2">
+    <ElfButton v-for="variant in variants" :key="variant" :variant="variant" glow>
+      {{ variant }}
+    </ElfButton>
+  </div>
 </template>
 ```
 
@@ -2800,8 +2823,123 @@ const sizes = ['sm', 'default', 'lg', 'xl'] as const
 </template>
 ```
 
+### GradientText
+
+Inline gradient text (bg-clip-text) on a span by default. Real, selectable text; presets follow the theme and pass 4.5:1 on every theme background.
+
+Components: `ElfGradientText`
+
+Props:
+
+- `variant` ('brand' | 'aurora' | 'sunset' | 'forest', default brand): Colour preset. brand blends the theme primary into its foreground; the others switch between a light and a dark set by color-scheme.
+- `from / via / to` (string): Custom CSS colours (tokens work: var(--elf-primary)). They override the preset stops.
+- `direction` ('r' | 'l' | 'b' | 't' | 'br' | 'bl' | 'tr' | 'tl', default r): Gradient direction.
+- `animate` (boolean, default false): Slow shimmer; static under prefers-reduced-motion.
+- `as` (string | Component, default span): Element to render.
+- `asChild` (boolean, default false): Render the child element with the gradient (attribute: as-child).
+- `class` (string | array | object): Merged with base classes.
+
+Slots:
+
+- default: the text
+
+Accessibility:
+
+- The text stays real text: selectable, searchable and read as written.
+- In forced-colors mode the gradient is replaced by CanvasText.
+- Custom from/via/to colours are not checked: keep 4.5:1 against the background (3:1 for large text).
+- Use it for short decorative emphasis, not for long paragraphs.
+
+Examples:
+
+#### Animated
+
+```vue
+<script setup lang="ts">
+import { ElfGradientText } from '@xouyi/elfui'
+</script>
+
+<template>
+  <p class="text-3xl font-bold tracking-tight">
+    <ElfGradientText variant="aurora" animate>
+      Shimmering, unless you prefer reduced motion
+    </ElfGradientText>
+  </p>
+</template>
+```
+
+#### Custom
+
+```vue
+<script setup lang="ts">
+import { ElfGradientText } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid gap-2 text-2xl font-semibold tracking-tight">
+    <ElfGradientText from="var(--elf-primary)" to="var(--elf-destructive-text)" direction="br">
+      Primary into destructive text
+    </ElfGradientText>
+    <ElfGradientText from="var(--elf-success-text)" via="var(--elf-primary)" to="var(--elf-warning-text)">
+      Three stops from theme tokens
+    </ElfGradientText>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfGradientText } from '@xouyi/elfui'
+</script>
+
+<template>
+  <p class="text-2xl font-semibold tracking-tight">
+    Build the next <ElfGradientText>robot</ElfGradientText> together.
+  </p>
+</template>
+```
+
+#### Heading
+
+```vue
+<script setup lang="ts">
+import { ElfGradientText } from '@xouyi/elfui'
+</script>
+
+<template>
+  <h2 class="text-4xl font-bold tracking-tight text-balance">
+    Ship faster with
+    <ElfGradientText variant="sunset" direction="br">
+      accessible components
+    </ElfGradientText>
+  </h2>
+</template>
+```
+
+#### Variants
+
+```vue
+<script setup lang="ts">
+import { ElfGradientText } from '@xouyi/elfui'
+
+const variants = ['brand', 'aurora', 'sunset', 'forest'] as const
+</script>
+
+<template>
+  <ul class="grid gap-2 text-2xl font-semibold tracking-tight">
+    <li v-for="variant in variants" :key="variant">
+      <ElfGradientText :variant="variant">
+        {{ variant }}
+      </ElfGradientText>
+    </li>
+  </ul>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

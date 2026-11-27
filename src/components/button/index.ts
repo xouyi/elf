@@ -17,6 +17,11 @@ export const buttonVariants = cva(
         destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90 focus-visible:ring-destructive/40',
         link: 'text-primary underline-offset-4 hover:underline',
       },
+      glow: {
+        // The two shadows are built in styles.css from --elf-glow and the variant colour (--elf-glow-color).
+        true: 'shadow-(--elf-glow-rest) hover:shadow-(--elf-glow-lift) focus-visible:shadow-(--elf-glow-lift) motion-reduce:transition-none forced-colors:shadow-none',
+        false: '',
+      },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',
         sm: 'h-8 gap-1.5 px-3 has-[>svg]:px-2.5',
@@ -24,9 +29,18 @@ export const buttonVariants = cva(
         icon: 'size-9',
       },
     },
+    compoundVariants: [
+      { variant: 'default', glow: true, class: '[--elf-glow-color:var(--elf-primary)]' },
+      { variant: 'secondary', glow: true, class: '[--elf-glow-color:var(--elf-secondary-foreground)]' },
+      { variant: 'outline', glow: true, class: '[--elf-glow-color:var(--elf-primary)]' },
+      { variant: 'ghost', glow: true, class: '[--elf-glow-color:var(--elf-primary)]' },
+      { variant: 'destructive', glow: true, class: '[--elf-glow-color:var(--elf-destructive)]' },
+      { variant: 'link', glow: true, class: '[--elf-glow-color:var(--elf-primary)]' },
+    ],
     defaultVariants: {
       variant: 'default',
       size: 'default',
+      glow: false,
     },
   },
 )
@@ -36,6 +50,12 @@ export type ButtonVariants = VariantProps<typeof buttonVariants>
 export interface ButtonProps extends PrimitiveProps {
   /** Visual style. */
   variant?: ButtonVariants['variant']
+  /**
+   * Adds a soft glow (box-shadow) in the colour of the variant, stronger on hover and keyboard focus. Its strength comes
+   * from the theme token `--elf-glow`. It never changes the layout, is static under `prefers-reduced-motion` and is dropped in
+   * forced-colors mode.
+   */
+  glow?: boolean
   /** Height and padding. Use `icon` for square icon-only buttons. */
   size?: ButtonVariants['size']
   /** Extra classes, merged with the base classes through `cn()`. */

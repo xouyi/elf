@@ -23,8 +23,8 @@ export default defineNuxtConfig({
   compatibilityDate: '2026-11-01',
   modules: ['@xouyi/elfui/nuxt', '@nuxt/content'],
   css: ['~/assets/css/main.css'],
-  // The docs dogfood ElfUI: both themes are bundled so the switcher and the per-example previews can use either.
-  elfui: { theme: 'elf', themes: ['novatron'] },
+  // The docs dogfood ElfUI: every theme are bundled so the switcher and the per-example previews can use either.
+  elfui: { theme: 'elf', themes: ['nova', 'elfwood'] },
   vite: {
     plugins: [tailwindcss()],
     resolve: {
@@ -40,7 +40,7 @@ export default defineNuxtConfig({
     build: {
       markdown: {
         toc: { depth: 3, searchDepth: 3 },
-        highlight: { theme: 'github-dark-default', langs: ['vue', 'ts', 'css', 'bash', 'json', 'html', 'md', 'yaml', 'diff'] },
+        highlight: { theme: { default: 'github-dark-default', elfwood: 'github-light-default' }, langs: ['vue', 'ts', 'css', 'bash', 'json', 'html', 'md', 'yaml', 'diff'] },
       },
     },
   },

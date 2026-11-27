@@ -49,6 +49,9 @@ import AvatarDefault from '../../src/components/avatar/examples/Default.vue'
 import AvatarFallbackExample from '../../src/components/avatar/examples/Fallback.vue'
 import AvatarGroupExample from '../../src/components/avatar/examples/Group.vue'
 import AvatarSizes from '../../src/components/avatar/examples/Sizes.vue'
+import GradientTextAnimated from '../../src/components/gradient-text/examples/Animated.vue'
+import GradientTextVariants from '../../src/components/gradient-text/examples/Variants.vue'
+import ButtonGlow from '../../src/components/button/examples/Glow.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
@@ -220,6 +223,58 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(document.activeElement).toBe(first)
       const style = getComputedStyle(first)
       expect(style.boxShadow !== 'none' || style.outlineStyle !== 'none', 'focus indicator is drawn').toBe(true)
+    })
+
+    it('glow draws a coloured shadow that grows on hover and keyboard focus without changing the layout', async () => {
+      setTheme(theme)
+      const { el } = await show(ButtonGlow)
+      const buttons = [...el.querySelectorAll<HTMLButtonElement>('button')]
+      expect(buttons.length).toBeGreaterThan(3)
+      for (const button of buttons) {
+        const rest = getComputedStyle(button)
+        expect(rest.boxShadow, `${button.dataset.variant} has a resting glow`).not.toBe('none')
+        expect(rest.boxShadow).toMatch(/\d/)
+      }
+      const first = buttons[0]!
+      const box = first.getBoundingClientRect()
+      const restShadow = getComputedStyle(first).boxShadow
+      await userEvent.hover(first)
+      await settle()
+      const hovered = getComputedStyle(first).boxShadow
+      expect(hovered, 'hover changes the glow').not.toBe(restShadow)
+      await userEvent.unhover(first)
+      await userEvent.tab()
+      expect(document.activeElement).toBe(first)
+      await settle()
+      expect(getComputedStyle(first).boxShadow, 'focus lifts the glow').not.toBe(restShadow)
+      const after = first.getBoundingClientRect()
+      expect([after.width, after.height], 'glow never changes the layout').toEqual([box.width, box.height])
+    })
+  })
+
+  describe('GradientText', () => {
+    it('paints a gradient clipped to real, selectable text', async () => {
+      setTheme(theme)
+      const { el } = await show(GradientTextVariants)
+      const spans = [...el.querySelectorAll<HTMLElement>('[data-slot="gradient-text"]')]
+      expect(spans.map(s => s.dataset.variant)).toEqual(['brand', 'aurora', 'sunset', 'forest'])
+      for (const span of spans) {
+        const style = getComputedStyle(span)
+        expect(style.backgroundImage, `${span.dataset.variant} paints a gradient`).toContain('linear-gradient')
+        expect(style.backgroundClip).toBe('text')
+        expect(style.color).toBe('rgba(0, 0, 0, 0)')
+        expect(style.userSelect).not.toBe('none')
+        expect(span.textContent!.trim()).toBe(span.dataset.variant)
+      }
+      await expect.element(page.getByText('aurora')).toBeVisible()
+    })
+
+    it('animates the shimmer unless reduced motion is preferred', async () => {
+      setTheme(theme)
+      const { el } = await show(GradientTextAnimated)
+      const style = getComputedStyle(el.querySelector('[data-slot="gradient-text"]')!)
+      const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+      expect(style.animationName).toBe(reduced ? 'none' : 'elf-gradient-shimmer')
     })
   })
 
@@ -1060,7 +1115,7 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(avatars.map(a => a.getAttribute('role'))).toEqual(['img', 'img', 'img', 'img'])
       await expect.element(page.getByRole('img', { name: 'Avatar, xl size' })).toBeInTheDocument()
       const radius = getComputedStyle(avatars[3]!).borderTopLeftRadius
-      expect(radius === '0px' ? theme === 'novatron' : theme === 'elf', 'round in elf, square in novatron').toBe(true)
+      expect(radius === '0px', 'round in elf and elfwood, square in nova').toBe(theme === 'nova')
       expect(getComputedStyle(avatars[3]!.firstElementChild!).backgroundColor).not.toBe('rgba(0, 0, 0, 0)')
     })
 

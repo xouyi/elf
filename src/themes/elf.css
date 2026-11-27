@@ -20,11 +20,14 @@
   --elf-destructive-text: oklch(0.72 0.17 22);
   --elf-success: oklch(0.72 0.17 150);
   --elf-success-foreground: oklch(0.15 0.03 150);
+  --elf-success-text: oklch(0.72 0.17 150);
   --elf-warning: oklch(0.82 0.15 85);
   --elf-warning-foreground: oklch(0.2 0.04 85);
+  --elf-warning-text: oklch(0.82 0.15 85);
   --elf-border: #262626;
   --elf-input: #6b6b6b;
   --elf-ring: oklch(0.7 0.16 293);
   --elf-radius: 0.625rem;
   --elf-radius-pill: 9999px;
+  --elf-glow: 40%;
 }

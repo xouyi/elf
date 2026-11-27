@@ -3,16 +3,16 @@ import { ArrowRight, Contrast, Palette, ShieldCheck, Sparkles } from '@lucide/vu
 
 const config = useRuntimeConfig()
 useSeoMeta({
-  title: 'ElfUI - a dark-only design system for Vue and Nuxt',
-  description: 'Accessible Vue 3 and Nuxt 4 components on Reka UI and Tailwind CSS v4, with two themes, a shadcn-vue registry and llms.txt.',
+  title: 'ElfUI - a themeable design system for Vue and Nuxt',
+  description: 'Accessible Vue 3 and Nuxt 4 components on Reka UI and Tailwind CSS v4, with three themes, a shadcn-vue registry and llms.txt.',
 })
 useHead({ titleTemplate: '%s' })
 
 const install = `bun add github:xouyi/elfUI#v${config.public.version} tailwindcss @tailwindcss/vite\nbun add -d typescript`
 const features = [
-  { icon: ShieldCheck, title: 'Accessible by default', text: 'Reka UI primitives handle focus, keyboard and ARIA. Every example is checked with axe in both themes.' },
-  { icon: Palette, title: 'Two themes, one file each', text: 'Elf (pure black with violet accents, rounded) and Novatron (gold on obsidian, sharp corners). Add your own with a block of CSS variables.' },
-  { icon: Contrast, title: 'Dark only, contrast verified', text: 'No light mode to maintain. WCAG AA ratios of every token pair are computed on each build.' },
+  { icon: ShieldCheck, title: 'Accessible by default', text: 'Reka UI primitives handle focus, keyboard and ARIA. Every example is checked with axe in every theme.' },
+  { icon: Palette, title: 'Three themes, one file each', text: 'Elf (violet on black), Nova (gold, sharp corners) and Elfwood (green on white). Add your own with a block of CSS variables.' },
+  { icon: Contrast, title: 'Contrast verified', text: 'Dark and light themes alike. WCAG AA ratios of every token pair are computed on each build.' },
   { icon: Sparkles, title: 'Built for people and AI', text: 'Install the package, copy sources with the shadcn-vue registry, or point an assistant at llms.txt.' },
 ]
 const components = ['button', 'input', 'badge', 'card', 'dialog', 'tabs']
@@ -26,7 +26,7 @@ const components = ['button', 'input', 'badge', 'card', 'dialog', 'tabs']
           v{{ config.public.version }} - Vue 3, Nuxt 4, Tailwind CSS v4
         </ElfBadge>
         <h1 class="text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl">
-          A dark-only design system for Vue and Nuxt.
+          A themeable design system for Vue and Nuxt.
         </h1>
         <p class="max-w-xl text-lg text-muted-foreground">
           ElfUI is a set of accessible components built on Reka UI primitives, themed with CSS variables and distributed as source. Use it as a package or copy it into your project.
@@ -46,7 +46,7 @@ const components = ['button', 'input', 'badge', 'card', 'dialog', 'tabs']
         <CodeSnippet :code="install" lang="bash" class="w-full max-w-xl" />
       </div>
 
-      <div class="grid min-w-0 content-start gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2" aria-label="Live preview in both themes">
+      <div class="grid min-w-0 content-start gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2" aria-label="Live preview in every theme">
         <div v-for="t in siteThemes" :key="t.value" :data-theme="t.value" class="preview-surface grid gap-4 rounded-lg border p-4">
           <p class="text-xs font-medium tracking-wide text-muted-foreground uppercase">
             {{ t.label }}
