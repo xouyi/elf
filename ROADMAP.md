@@ -439,7 +439,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfButton
 - **Complexity:** S
 - **Novatron screens:** courses/stock `AdminEmpty`; search with no results.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfStatCard
 

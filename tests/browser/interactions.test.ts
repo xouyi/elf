@@ -95,6 +95,7 @@ import TableDefault from '../../src/components/table/examples/Default.vue'
 import TableSortable from '../../src/components/table/examples/SortableHeader.vue'
 import TableStack from '../../src/components/table/examples/StackOnMobile.vue'
 import TableSticky from '../../src/components/table/examples/StickyHeader.vue'
+import EmptyDefault from '../../src/components/empty/examples/Default.vue'
 import { axeViolations, mountComponent, settle, setTheme, themes } from './support'
 
 let unmount: (() => void) | undefined
@@ -2220,6 +2221,20 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(getComputedStyle(row).display).toBe(stacked ? 'block' : 'table-row')
       expect(el.querySelector('table')!.getAttribute('role')).toBe('table')
       expect(el.querySelector('td')!.getAttribute('data-label')).toBe('Name')
+    })
+  })
+
+  describe('Empty', () => {
+    it('shows the title as a heading and keeps the actions reachable by keyboard', async () => {
+      setTheme(theme)
+      const { el } = await show(EmptyDefault)
+      expect(el.querySelector('h3')?.textContent).toBe('No projects yet')
+      const buttons = [...el.querySelectorAll('button')]
+      await userEvent.tab()
+      expect(document.activeElement).toBe(buttons[0])
+      await userEvent.tab()
+      expect(document.activeElement).toBe(buttons[1])
+      expect(getComputedStyle(el.querySelector('[data-slot="empty"]')!).borderTopStyle).toBe('dashed')
     })
   })
 })

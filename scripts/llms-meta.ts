@@ -556,6 +556,19 @@ export const components: ComponentMeta[] = [
     slots: ['ElfTable default: header, body and footer sections', 'ElfTable caption: replaces the caption element'],
     a11y: ['Always give the table a caption; hide it visually with caption-hidden if a heading already names it.', 'A table that overflows its container becomes a focusable named region so keyboard users can scroll it.', 'Use for tabular data, not for layout.'],
   },
+  {
+    dir: 'empty',
+    name: 'Empty',
+    summary: 'Empty state: ElfEmpty > ElfEmptyHeader (ElfEmptyMedia, ElfEmptyTitle, ElfEmptyDescription) + ElfEmptyContent for the action. For empty lists, tables and search with no results.',
+    parts: ['ElfEmpty', 'ElfEmptyHeader', 'ElfEmptyMedia', 'ElfEmptyTitle', 'ElfEmptyDescription', 'ElfEmptyContent'],
+    props: [
+      { name: 'ElfEmptyMedia variant', type: '\'default\' | \'icon\'', default: 'default', description: 'icon puts the icon on a muted square.' },
+      { name: 'ElfEmptyTitle as', type: 'string', default: 'h3', description: 'Heading element; choose the level that fits the page outline.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part; merged with base classes.' },
+    ],
+    slots: ['default on every part'],
+    a11y: ['The media is decorative (aria-hidden); the title carries the meaning.', 'Say why it is empty and what to do next; put the action in ElfEmptyContent.'],
+  },
 ]
 
 export const rules = [

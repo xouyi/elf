@@ -253,3 +253,14 @@ export {
   TableRow as ElfTableRow,
 } from './components/table'
 export type { TableCaptionProps, TableCellProps, TableDensity, TableHeadProps, TableProps, TableRowProps, TableSectionProps, TableSort } from './components/table'
+
+export {
+  Empty as ElfEmpty,
+  EmptyContent as ElfEmptyContent,
+  EmptyDescription as ElfEmptyDescription,
+  EmptyHeader as ElfEmptyHeader,
+  EmptyMedia as ElfEmptyMedia,
+  emptyMediaVariants,
+  EmptyTitle as ElfEmptyTitle,
+} from './components/empty'
+export type { EmptyMediaProps, EmptyMediaVariants, EmptyPartProps, EmptyProps, EmptyTitleProps } from './components/empty'

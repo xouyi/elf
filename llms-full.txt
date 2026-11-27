@@ -91,7 +91,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, table, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, table, empty, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -4980,8 +4980,123 @@ const rows = Array.from({ length: 20 }, (_, i) => ({ id: i + 1, event: `Event lo
 </template>
 ```
 
+### Empty
+
+Empty state: ElfEmpty > ElfEmptyHeader (ElfEmptyMedia, ElfEmptyTitle, ElfEmptyDescription) + ElfEmptyContent for the action. For empty lists, tables and search with no results.
+
+Components: `ElfEmpty`, `ElfEmptyHeader`, `ElfEmptyMedia`, `ElfEmptyTitle`, `ElfEmptyDescription`, `ElfEmptyContent`
+
+Props:
+
+- `ElfEmptyMedia variant` ('default' | 'icon', default default): icon puts the icon on a muted square.
+- `ElfEmptyTitle as` (string, default h3): Heading element; choose the level that fits the page outline.
+- `class` (string | array | object): Accepted by every part; merged with base classes.
+
+Slots:
+
+- default on every part
+
+Accessibility:
+
+- The media is decorative (aria-hidden); the title carries the meaning.
+- Say why it is empty and what to do next; put the action in ElfEmptyContent.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { FolderOpen } from '@lucide/vue'
+import { ElfButton, ElfEmpty, ElfEmptyContent, ElfEmptyDescription, ElfEmptyHeader, ElfEmptyMedia, ElfEmptyTitle } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfEmpty class="w-full max-w-lg">
+    <ElfEmptyHeader>
+      <ElfEmptyMedia variant="icon">
+        <FolderOpen />
+      </ElfEmptyMedia>
+      <ElfEmptyTitle>No projects yet</ElfEmptyTitle>
+      <ElfEmptyDescription>
+        You have not created any projects. Create one to start tracking tasks and parts.
+      </ElfEmptyDescription>
+    </ElfEmptyHeader>
+    <ElfEmptyContent>
+      <div class="flex flex-wrap justify-center gap-2">
+        <ElfButton>Create project</ElfButton>
+        <ElfButton variant="outline">
+          Import
+        </ElfButton>
+      </div>
+    </ElfEmptyContent>
+  </ElfEmpty>
+</template>
+```
+
+#### In Table
+
+```vue
+<script setup lang="ts">
+import { Inbox } from '@lucide/vue'
+import { ElfEmpty, ElfEmptyDescription, ElfEmptyHeader, ElfEmptyMedia, ElfEmptyTitle, ElfTable, ElfTableBody, ElfTableCell, ElfTableHead, ElfTableHeader, ElfTableRow } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfTable caption="Open requests">
+    <ElfTableHeader>
+      <ElfTableRow>
+        <ElfTableHead>Request</ElfTableHead>
+        <ElfTableHead>Status</ElfTableHead>
+      </ElfTableRow>
+    </ElfTableHeader>
+    <ElfTableBody>
+      <ElfTableRow>
+        <ElfTableCell :colspan="2">
+          <ElfEmpty class="border-0 p-6">
+            <ElfEmptyHeader>
+              <ElfEmptyMedia>
+                <Inbox />
+              </ElfEmptyMedia>
+              <ElfEmptyTitle>Nothing to review</ElfEmptyTitle>
+              <ElfEmptyDescription>New requests will show up here.</ElfEmptyDescription>
+            </ElfEmptyHeader>
+          </ElfEmpty>
+        </ElfTableCell>
+      </ElfTableRow>
+    </ElfTableBody>
+  </ElfTable>
+</template>
+```
+
+#### No Results
+
+```vue
+<script setup lang="ts">
+import { SearchX } from '@lucide/vue'
+import { ElfButton, ElfEmpty, ElfEmptyContent, ElfEmptyDescription, ElfEmptyHeader, ElfEmptyMedia, ElfEmptyTitle } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfEmpty class="w-full max-w-lg border-solid">
+    <ElfEmptyHeader>
+      <ElfEmptyMedia>
+        <SearchX />
+      </ElfEmptyMedia>
+      <ElfEmptyTitle>No results for "swerve"</ElfEmptyTitle>
+      <ElfEmptyDescription>Try a different keyword or clear the filters.</ElfEmptyDescription>
+    </ElfEmptyHeader>
+    <ElfEmptyContent>
+      <ElfButton variant="outline" size="sm">
+        Clear filters
+      </ElfButton>
+    </ElfEmptyContent>
+  </ElfEmpty>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfTable`, `ElfTableBody`, `ElfTableCaption`, `ElfTableCell`, `ElfTableFooter`, `ElfTableHead`, `ElfTableHeader`, `ElfTableRow`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfTable`, `ElfTableBody`, `ElfTableCaption`, `ElfTableCell`, `ElfTableFooter`, `ElfTableHead`, `ElfTableHeader`, `ElfTableRow`, `ElfEmpty`, `ElfEmptyContent`, `ElfEmptyDescription`, `ElfEmptyHeader`, `ElfEmptyMedia`, `ElfEmptyTitle`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

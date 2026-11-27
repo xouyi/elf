@@ -59,6 +59,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   collapsible: { title: 'Collapsible', description: 'Single show and hide region with an animated height, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
   accordion: { title: 'Accordion', description: 'Stacked collapsible sections, single or multiple, with arrow-key navigation, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('collapsible')] },
   table: { title: 'Table', description: 'Semantic styled table with caption, density, sticky header, sortable header affordance and a stacked-card mode on small screens.', dependencies: ['@vueuse/core'] },
+  empty: { title: 'Empty', description: 'Empty state with media, title, description and action parts.', dependencies: ['reka-ui', 'class-variance-authority'] },
 }
 
 const items: unknown[] = [
