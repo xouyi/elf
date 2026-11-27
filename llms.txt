@@ -47,6 +47,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [Collapsible](https://xouyi.github.io/elfUI/docs/components/collapsible): A single show and hide region with an animated height, built on Reka UI Collapsible. ElfCollapsibleTrigger toggles ElfCollapsibleContent.
 - [Accordion](https://xouyi.github.io/elfUI/docs/components/accordion): Stacked collapsible sections on Reka UI Accordion. ElfAccordion (type single or multiple) contains ElfAccordionItem (value) with an ElfAccordionTrigger heading button and an ElfAccordionContent region.
 - [NavigationMenu](https://xouyi.github.io/elfUI/docs/components/navigation-menu): Top-level site navigation (a nav landmark) with flyout panels, built on Reka UI NavigationMenu. Compose ElfNavigationMenu > ElfNavigationMenuList > ElfNavigationMenuItem > ElfNavigationMenuTrigger + ElfNavigationMenuContent (links inside) or a top-level ElfNavigationMenuLink variant="trigger". Panels share one animated viewport by default (viewport=false puts each under its item). Use as-child on ElfNavigationMenuLink to render a router link.
+- [Menubar](https://xouyi.github.io/elfUI/docs/components/menubar): Desktop-style horizontal menu bar (File, Edit, View) built on Reka UI Menubar. Same item parts and styles as ElfDropdownMenu: ElfMenubar > ElfMenubarMenu > ElfMenubarTrigger + ElfMenubarContent > ElfMenubarItem, CheckboxItem, RadioGroup/RadioItem, Label, Group, Separator, Shortcut, Sub/SubTrigger/SubContent. For application commands, not for site navigation (use ElfNavigationMenu).
 
 ## Reference
 

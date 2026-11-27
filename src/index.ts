@@ -255,3 +255,22 @@ export {
   NavigationMenuViewport as ElfNavigationMenuViewport,
 } from './components/navigation-menu'
 export type { NavigationMenuContentProps, NavigationMenuIndicatorProps, NavigationMenuItemProps, NavigationMenuLinkProps, NavigationMenuListProps, NavigationMenuProps, NavigationMenuTriggerProps, NavigationMenuViewportProps } from './components/navigation-menu'
+
+export {
+  Menubar as ElfMenubar,
+  MenubarCheckboxItem as ElfMenubarCheckboxItem,
+  MenubarContent as ElfMenubarContent,
+  MenubarGroup as ElfMenubarGroup,
+  MenubarItem as ElfMenubarItem,
+  MenubarLabel as ElfMenubarLabel,
+  MenubarMenu as ElfMenubarMenu,
+  MenubarRadioGroup as ElfMenubarRadioGroup,
+  MenubarRadioItem as ElfMenubarRadioItem,
+  MenubarSeparator as ElfMenubarSeparator,
+  MenubarShortcut as ElfMenubarShortcut,
+  MenubarSub as ElfMenubarSub,
+  MenubarSubContent as ElfMenubarSubContent,
+  MenubarSubTrigger as ElfMenubarSubTrigger,
+  MenubarTrigger as ElfMenubarTrigger,
+} from './components/menubar'
+export type { MenubarCheckboxItemProps, MenubarContentProps, MenubarItemProps, MenubarLabelProps, MenubarProps, MenubarRadioItemProps, MenubarSeparatorProps, MenubarShortcutProps, MenubarSubContentProps, MenubarSubTriggerProps, MenubarTriggerProps } from './components/menubar'

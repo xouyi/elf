@@ -505,7 +505,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfDropdownMenu styles
 - **Complexity:** M
 - **Novatron screens:** Rich editors (courses `LessonMarkdownEditor`), docs tooling; low priority.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 ### v0.6: Advanced inputs
 

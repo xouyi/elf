@@ -95,6 +95,8 @@ import { axeViolations, mountComponent, settle, setTheme, themes } from './suppo
 import NavigationMenuDefault from '../../src/components/navigation-menu/examples/Default.vue'
 import NavigationMenuLinksOnly from '../../src/components/navigation-menu/examples/LinksOnly.vue'
 import NavigationMenuWithoutViewport from '../../src/components/navigation-menu/examples/WithoutViewport.vue'
+import MenubarDefault from '../../src/components/menubar/examples/Default.vue'
+import MenubarOptions from '../../src/components/menubar/examples/Options.vue'
 
 let unmount: (() => void) | undefined
 afterEach(() => {
@@ -2192,6 +2194,119 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await userEvent.tab()
       expect(document.activeElement).toBe(current)
       expect(getComputedStyle(current).boxShadow, 'focus ring').not.toBe('none')
+    })
+  })
+
+  describe('Menubar', () => {
+    const triggers = (el: Element) => [...el.querySelectorAll<HTMLElement>('[data-slot="menubar-trigger"]')]
+    const menu = () => document.querySelector<HTMLElement>('[role="menu"]')
+    const active = () => document.activeElement as HTMLElement
+    const label = (e: HTMLElement) => e.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+
+    it('is one tab stop; arrow keys move along the bar and wrap around', async () => {
+      setTheme(theme)
+      const { el } = await show(MenubarDefault)
+      const [file, edit, help] = triggers(el)
+      expect(el.querySelector('[role="menubar"]')).not.toBeNull()
+      await userEvent.tab()
+      expect(document.activeElement).toBe(file)
+      await userEvent.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(edit)
+      await userEvent.keyboard('{ArrowRight}{ArrowRight}')
+      expect(document.activeElement, 'wraps to the first trigger').toBe(file)
+      await userEvent.keyboard('{ArrowLeft}')
+      expect(document.activeElement).toBe(help)
+      await userEvent.keyboard('{Home}')
+      expect(document.activeElement).toBe(file)
+    })
+
+    it('opens with Enter, Space and ArrowDown, focuses the first item and Escape returns focus to the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(MenubarDefault)
+      const [file] = triggers(el)
+      await userEvent.tab()
+      expect(file!.getAttribute('aria-expanded')).toBe('false')
+      for (const key of ['{Enter}', ' ', '{ArrowDown}']) {
+        await userEvent.keyboard(key)
+        await settle(200)
+        expect(menu(), `${key} opens the menu`).not.toBeNull()
+        expect(file!.getAttribute('aria-expanded')).toBe('true')
+        expect(label(active())).toContain('New lesson')
+        await userEvent.keyboard('{Escape}')
+        await settle(200)
+        expect(menu()).toBeNull()
+        expect(document.activeElement, 'focus returned to the trigger').toBe(file)
+      }
+    })
+
+    it('ArrowRight and ArrowLeft inside an open menu switch to the neighbouring menu; sub menus open with ArrowRight', async () => {
+      setTheme(theme)
+      const { el } = await show(MenubarDefault)
+      const [file] = triggers(el)
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      await userEvent.keyboard('{ArrowDown}{ArrowDown}')
+      expect(label(active())).toContain('Export')
+      await userEvent.keyboard('{ArrowRight}')
+      await settle(200)
+      expect(label(active())).toContain('Markdown')
+      await userEvent.keyboard('{ArrowLeft}')
+      await settle(200)
+      expect(label(active())).toContain('Export')
+      expect(file!.getAttribute('aria-expanded')).toBe('true')
+      await userEvent.keyboard('{Home}{ArrowLeft}')
+      await settle(200)
+      expect(triggers(el)[2]!.getAttribute('aria-expanded'), 'ArrowLeft from the first menu wraps to the last').toBe('true')
+      expect(file!.getAttribute('aria-expanded')).toBe('false')
+    })
+
+    it('skips disabled items, supports typeahead and Enter activates and closes', async () => {
+      setTheme(theme)
+      const { el } = await show(MenubarDefault)
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      await userEvent.keyboard('{End}')
+      expect(label(active()), 'the disabled Print item is skipped').toContain('Export')
+      await userEvent.keyboard('{Home}sa')
+      await settle(100)
+      expect(label(active())).toContain('Save')
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(menu()).toBeNull()
+      expect(document.activeElement).toBe(triggers(el)[0])
+    })
+
+    it('opens on click and then follows the pointer between triggers while a menu is open', async () => {
+      setTheme(theme)
+      const { el } = await show(MenubarDefault)
+      const [file, edit] = triggers(el)
+      await userEvent.click(file!)
+      await settle(200)
+      expect(file!.getAttribute('aria-expanded')).toBe('true')
+      await userEvent.hover(edit!)
+      await settle(200)
+      expect(edit!.getAttribute('aria-expanded')).toBe('true')
+      expect(file!.getAttribute('aria-expanded')).toBe('false')
+    })
+
+    it('toggles a checkbox item with Enter (closing the menu) and selects a radio item', async () => {
+      setTheme(theme)
+      const { el } = await show(MenubarOptions)
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      const checks = [...document.querySelectorAll<HTMLElement>('[role="menuitemcheckbox"]')]
+      expect(checks.map(c => c.getAttribute('aria-checked'))).toEqual(['true', 'false'])
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(el.textContent).toContain('Preview off')
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      await userEvent.click([...document.querySelectorAll<HTMLElement>('[role="menuitemradio"]')][0]!)
+      await settle(200)
+      expect(el.textContent).toContain('layout editor')
     })
   })
 

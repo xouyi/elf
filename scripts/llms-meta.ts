@@ -558,6 +558,26 @@ export const components: ComponentMeta[] = [
     slots: ['ElfNavigationMenu default: the list (and optional custom viewport)', 'ElfNavigationMenuTrigger default: the label; a chevron is added', 'ElfNavigationMenuContent default: links, grids, any content', 'ElfNavigationMenuLink default: the link text (use as-child for a router link)'],
     a11y: ['This is the disclosure navigation pattern, not a menu bar: triggers are buttons with aria-expanded, panels hold ordinary links in Tab order. Do not add role=menu.', 'Enter or Space opens a flyout, Tab moves into its links, Escape closes it and returns focus to the trigger, ArrowLeft and ArrowRight move between top-level items.', 'Mark the current page with active (aria-current=page). Give the nav an aria-label when there is more than one.'],
   },
+  {
+    dir: 'menubar',
+    name: 'Menubar',
+    summary: 'Desktop-style horizontal menu bar (File, Edit, View) built on Reka UI Menubar. Same item parts and styles as ElfDropdownMenu: ElfMenubar > ElfMenubarMenu > ElfMenubarTrigger + ElfMenubarContent > ElfMenubarItem, CheckboxItem, RadioGroup/RadioItem, Label, Group, Separator, Shortcut, Sub/SubTrigger/SubContent. For application commands, not for site navigation (use ElfNavigationMenu).',
+    parts: ['ElfMenubar', 'ElfMenubarMenu', 'ElfMenubarTrigger', 'ElfMenubarContent', 'ElfMenubarItem', 'ElfMenubarCheckboxItem', 'ElfMenubarRadioGroup', 'ElfMenubarRadioItem', 'ElfMenubarLabel', 'ElfMenubarGroup', 'ElfMenubarSeparator', 'ElfMenubarShortcut', 'ElfMenubarSub', 'ElfMenubarSubTrigger', 'ElfMenubarSubContent'],
+    props: [
+      { name: 'ElfMenubar v-model / defaultValue', type: 'string', description: 'The value of the open menu; empty string means all closed.' },
+      { name: 'ElfMenubar loop', type: 'boolean', default: 'true', description: 'Arrow keys wrap from the last trigger to the first.' },
+      { name: 'ElfMenubarMenu value', type: 'string', description: 'Identifies the menu for v-model; generated when omitted.' },
+      { name: 'ElfMenubarContent side / align / sideOffset', type: 'side, alignment, number', default: 'bottom / start / 8', description: 'Placement against the trigger (attribute: side-offset).' },
+      { name: 'ElfMenubarItem variant', type: '\'default\' | \'destructive\'', default: 'default', description: 'destructive colours irreversible actions such as delete.' },
+      { name: 'ElfMenubarItem inset', type: 'boolean', default: 'false', description: 'Indent to line up with indicator items. Also on Label and SubTrigger.' },
+      { name: 'ElfMenubarItem @select', type: '(event) => void', description: 'Emitted when the item is activated; call event.preventDefault() to keep the menu open.' },
+      { name: 'ElfMenubarCheckboxItem modelValue', type: 'boolean | \'indeterminate\'', description: 'Checked state, bound with v-model.' },
+      { name: 'ElfMenubarRadioGroup modelValue', type: 'string', description: 'Selected value, bound with v-model; each ElfMenubarRadioItem has a value.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part except ElfMenubarMenu; merged with base classes.' },
+    ],
+    slots: ['ElfMenubar default: ElfMenubarMenu elements', 'ElfMenubarTrigger default: the label', 'ElfMenubarContent default: items, labels, groups, separators, sub menus', 'ElfMenubarShortcut default: ElfKbd elements or text'],
+    a11y: ['The bar has role=menubar and the triggers role=menuitem with aria-haspopup=menu and aria-expanded; the bar is a single tab stop and arrow keys move along it.', 'ArrowDown, Enter or Space opens a menu; ArrowLeft and ArrowRight switch menus; Escape closes and returns focus to the trigger.', 'Do not use for site navigation (use ElfNavigationMenu); a menubar suits editors and tools.'],
+  },
 ]
 
 export const rules = [

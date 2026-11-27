@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Add `ElfNavigationMenu` with `ElfNavigationMenuList`, `ElfNavigationMenuItem`, `ElfNavigationMenuTrigger`, `ElfNavigationMenuContent`, `ElfNavigationMenuLink` (`variant` `item` or `trigger`, `active`), `ElfNavigationMenuViewport` and `ElfNavigationMenuIndicator`, built on the Reka UI NavigationMenu primitive: a `nav` landmark following the disclosure navigation pattern, flyout panels that share one animated viewport (`viewport` prop, off to place each panel under its trigger), hover and click open, Escape returns focus to the trigger, 40px touch targets on small screens. Exports `navigationMenuTriggerStyle` and `navigationMenuItemLinkClass` for router links.
+- Add `ElfMenubar` with `ElfMenubarMenu`, `ElfMenubarTrigger`, `ElfMenubarContent` and the same item parts as `ElfDropdownMenu` (`Item`, `CheckboxItem`, `RadioGroup`, `RadioItem`, `Label`, `Group`, `Separator`, `Shortcut`, `Sub`, `SubTrigger`, `SubContent`), built on the Reka UI Menubar primitive: a `menubar` with one tab stop, arrow-key movement along the bar (wrapping by default), ArrowLeft and ArrowRight to switch open menus, hover to switch while a menu is open, and the shared menu styles of the dropdown menu (so it depends on it in the registry).
 
 ## 0.4.0
 
