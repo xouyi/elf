@@ -3,7 +3,7 @@ import { ElfButton, ElfStepper, ElfStepperIndicator, ElfStepperItem, ElfStepperS
 </script>
 
 <template>
-  <ElfStepper aria-label="New item" :default-value="2" class="w-full max-w-lg flex-col gap-6">
+  <ElfStepper aria-label="New item" :default-value="2" class="w-full max-w-lg gap-6 data-[orientation=horizontal]:flex-col">
     <template #default="{ nextStep, prevStep, hasNext, hasPrev }">
       <div class="flex w-full">
         <ElfStepperItem :step="1">
