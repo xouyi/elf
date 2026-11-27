@@ -60,6 +60,8 @@ import SheetControlled from '../../src/components/sheet/examples/Controlled.vue'
 import SheetDefault from '../../src/components/sheet/examples/Default.vue'
 import SheetSides from '../../src/components/sheet/examples/Sides.vue'
 import ToastWithAction from '../../src/components/toast/examples/WithAction.vue'
+import CollapsibleControlled from '../../src/components/collapsible/examples/Controlled.vue'
+import CollapsibleDefault from '../../src/components/collapsible/examples/Default.vue'
 import TabsControlled from '../../src/components/tabs/examples/Controlled.vue'
 import TabsDefault from '../../src/components/tabs/examples/Default.vue'
 import { axeViolations, mountComponent, settle, setTheme, themes } from './support'
@@ -428,6 +430,44 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await settle(300)
       expect(toasts()[0]!.textContent).toContain('Done')
       expect(status()).toBe('Done')
+    })
+  })
+
+  describe('Collapsible', () => {
+    it('toggles with Enter and Space, exposes aria-expanded and links the content', async () => {
+      setTheme(theme)
+      const { el } = await show(CollapsibleDefault)
+      const trigger = el.querySelector<HTMLElement>('[data-slot="collapsible-trigger"]')!
+      expect(trigger.getAttribute('aria-expanded')).toBe('false')
+      trigger.focus()
+      await userEvent.keyboard('{Enter}')
+      await settle(300)
+      expect(trigger.getAttribute('aria-expanded')).toBe('true')
+      const content = el.querySelector<HTMLElement>('[data-slot="collapsible-content"]')!
+      expect(trigger.getAttribute('aria-controls')).toBe(content.id)
+      expect(content.getBoundingClientRect().height).toBeGreaterThan(0)
+      await userEvent.keyboard(' ')
+      await settle(400)
+      expect(trigger.getAttribute('aria-expanded')).toBe('false')
+      expect(el.querySelector<HTMLElement>('[data-slot="collapsible-content"]')?.hidden ?? true, 'content is hidden when closed').toBe(true)
+    })
+
+    it('v-model:open reflects the state', async () => {
+      setTheme(theme)
+      const { el } = await show(CollapsibleControlled)
+      expect(el.textContent).toContain('open = false')
+      await userEvent.click(el.querySelector<HTMLElement>('button')!)
+      await settle(300)
+      expect(el.textContent).toContain('open = true')
+    })
+
+    it('animates the height and settles at the natural height', async () => {
+      setTheme(theme)
+      const { el } = await show(CollapsibleControlled)
+      await userEvent.click(el.querySelector<HTMLElement>('button')!)
+      await settle(450)
+      const content = el.querySelector<HTMLElement>('[data-slot="collapsible-content"]')!
+      expect(content.getBoundingClientRect().height).toBeGreaterThan(20)
     })
   })
 

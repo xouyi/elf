@@ -90,7 +90,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, alert-dialog, sheet, toast, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, alert-dialog, sheet, toast, collapsible, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -3260,8 +3260,115 @@ function remove() {
 </template>
 ```
 
+### Collapsible
+
+A single show and hide region with an animated height, built on Reka UI Collapsible. ElfCollapsibleTrigger toggles ElfCollapsibleContent.
+
+Components: `ElfCollapsible`, `ElfCollapsibleTrigger`, `ElfCollapsibleContent`
+
+Props:
+
+- `ElfCollapsible open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfCollapsible disabled` (boolean, default false): Prevents toggling.
+- `class` (string | array | object): Accepted by ElfCollapsibleContent; merged with base classes.
+
+Slots:
+
+- ElfCollapsibleTrigger: use as-child with an ElfButton
+
+Accessibility:
+
+- Give an icon-only trigger an aria-label.
+- Do not hide required form fields in a closed region.
+- The height animation stops under prefers-reduced-motion.
+
+Examples:
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfCollapsible, ElfCollapsibleContent, ElfCollapsibleTrigger } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <ElfCollapsible v-model:open="open" class="w-full max-w-sm space-y-2">
+    <div class="flex items-center gap-3">
+      <ElfCollapsibleTrigger as-child>
+        <ElfButton variant="outline">
+          {{ open ? 'Hide' : 'Show' }} filters
+        </ElfButton>
+      </ElfCollapsibleTrigger>
+      <span class="text-sm text-muted-foreground">open = {{ open }}</span>
+    </div>
+    <ElfCollapsibleContent class="rounded-md border px-4 py-3 text-sm">
+      Season, event and alliance filters live here.
+    </ElfCollapsibleContent>
+  </ElfCollapsible>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ChevronsUpDown } from '@lucide/vue'
+import { ElfButton, ElfCollapsible, ElfCollapsibleContent, ElfCollapsibleTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfCollapsible class="w-full max-w-sm space-y-2">
+    <div class="flex items-center justify-between gap-4">
+      <h4 class="text-sm font-semibold">
+        3 starred repositories
+      </h4>
+      <ElfCollapsibleTrigger as-child>
+        <ElfButton variant="ghost" size="icon" aria-label="Toggle repositories">
+          <ChevronsUpDown />
+        </ElfButton>
+      </ElfCollapsibleTrigger>
+    </div>
+    <div class="rounded-md border px-4 py-2 text-sm">
+      novatron/hq
+    </div>
+    <ElfCollapsibleContent class="space-y-2">
+      <div class="rounded-md border px-4 py-2 text-sm">
+        novatron/kit
+      </div>
+      <div class="rounded-md border px-4 py-2 text-sm">
+        novatron/scout
+      </div>
+    </ElfCollapsibleContent>
+  </ElfCollapsible>
+</template>
+```
+
+#### Disabled
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfCollapsible, ElfCollapsibleContent, ElfCollapsibleTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfCollapsible disabled class="w-full max-w-sm space-y-2">
+    <ElfCollapsibleTrigger as-child>
+      <ElfButton variant="outline">
+        Advanced settings (locked)
+      </ElfButton>
+    </ElfCollapsibleTrigger>
+    <ElfCollapsibleContent class="rounded-md border px-4 py-3 text-sm">
+      Not reachable while disabled.
+    </ElfCollapsibleContent>
+  </ElfCollapsible>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

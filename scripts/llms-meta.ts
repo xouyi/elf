@@ -386,6 +386,20 @@ export const components: ComponentMeta[] = [
     slots: ['No slots: toasts are created through the API.'],
     a11y: ['Mount exactly one ElfToaster. Destructive toasts are announced assertively (role=alert), others politely (role=status).', 'F8 focuses the region; Escape closes the focused toast; the timer pauses on hover and focus.', 'Never put information only in a toast, and do not use one for errors that need a decision.'],
   },
+  {
+    dir: 'collapsible',
+    name: 'Collapsible',
+    summary: 'A single show and hide region with an animated height, built on Reka UI Collapsible. ElfCollapsibleTrigger toggles ElfCollapsibleContent.',
+    parts: ['ElfCollapsible', 'ElfCollapsibleTrigger', 'ElfCollapsibleContent'],
+    props: [
+      { name: 'ElfCollapsible open / defaultOpen', type: 'boolean', description: 'Controlled (v-model:open) or initial open state.' },
+      { name: 'ElfCollapsible disabled', type: 'boolean', default: 'false', description: 'Prevents toggling.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by ElfCollapsibleContent; merged with base classes.' },
+    ],
+    slots: ['ElfCollapsibleTrigger: use as-child with an ElfButton'],
+    a11y: ['Give an icon-only trigger an aria-label.', 'Do not hide required form fields in a closed region.', 'The height animation stops under prefers-reduced-motion.'],
+  },
+
 ]
 
 export const rules = [

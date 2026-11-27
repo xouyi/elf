@@ -1,0 +1,36 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "collapsible",
+  "title": "Collapsible",
+  "description": "Single show and hide region with an animated height, built on Reka UI.",
+  "dependencies": [
+    "reka-ui",
+    "@vueuse/core"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/collapsible/Collapsible.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { CollapsibleRootEmits, CollapsibleRootProps } from 'reka-ui'\nimport { CollapsibleRoot, useForwardPropsEmits } from 'reka-ui'\n\nconst props = defineProps<CollapsibleRootProps>()\nconst emits = defineEmits<CollapsibleRootEmits>()\n\nconst forwarded = useForwardPropsEmits(props, emits)\n</script>\n\n<template>\n  <CollapsibleRoot\n    v-slot=\"slotProps\"\n    data-slot=\"collapsible\"\n    v-bind=\"forwarded\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </CollapsibleRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/collapsible/CollapsibleContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { CollapsibleContentProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { CollapsibleContent, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { collapsibleContentClass } from './index'\n\nconst props = defineProps<CollapsibleContentProps & {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}>()\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwardedProps = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <CollapsibleContent\n    data-slot=\"collapsible-content\"\n    v-bind=\"forwardedProps\"\n    :class=\"cn(collapsibleContentClass, props.class)\"\n  >\n    <slot />\n  </CollapsibleContent>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/collapsible/CollapsibleTrigger.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { CollapsibleTriggerProps } from 'reka-ui'\nimport { CollapsibleTrigger } from 'reka-ui'\n\nconst props = defineProps<CollapsibleTriggerProps>()\n</script>\n\n<template>\n  <CollapsibleTrigger\n    data-slot=\"collapsible-trigger\"\n    v-bind=\"props\"\n  >\n    <slot />\n  </CollapsibleTrigger>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/collapsible/index.ts",
+      "content": "export { default as Collapsible } from './Collapsible.vue'\nexport { default as CollapsibleContent } from './CollapsibleContent.vue'\nexport { default as CollapsibleTrigger } from './CollapsibleTrigger.vue'\n\n/** Height animation of the content, shared by the collapsible and the accordion. Stops under reduced motion (see styles.css). */\nexport const collapsibleContentClass = 'overflow-hidden data-[state=closed]:animate-[elf-collapsible-up_200ms_ease-out] data-[state=open]:animate-[elf-collapsible-down_200ms_ease-out]'\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -37,6 +37,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [AlertDialog](https://xouyi.github.io/elfUI/docs/components/alert-dialog): Modal that demands a decision (destructive confirmation), built on Reka UI AlertDialog. Role alertdialog: focus starts on Cancel, Escape cancels, an outside click never dismisses it.
 - [Sheet](https://xouyi.github.io/elfUI/docs/components/sheet): Edge-anchored modal panel on Reka UI Dialog: side sheets for forms and navigation, and a bottom sheet for mobile. Same focus trap, Escape and focus restore as ElfDialog; an outside click closes it.
 - [Toast](https://xouyi.github.io/elfUI/docs/components/toast): Transient notifications. Mount one ElfToaster per app and call useToast() (or import toast) from anywhere: toast(message, options), toast.success/warning/error, toast.promise, toast.update, toast.dismiss. Built on the Reka UI Toast viewport and manager; the queue is a module singleton that is a no-op on the server.
+- [Collapsible](https://xouyi.github.io/elfUI/docs/components/collapsible): A single show and hide region with an animated height, built on Reka UI Collapsible. ElfCollapsibleTrigger toggles ElfCollapsibleContent.
 
 ## Reference
 
