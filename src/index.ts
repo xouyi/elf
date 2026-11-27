@@ -371,3 +371,6 @@ export {
   StepperTitle as ElfStepperTitle,
   StepperTrigger as ElfStepperTrigger,
 } from './components/stepper'
+
+export { createDataTableColumnHelper, DataTable as ElfDataTable, dataTableFeatures } from './components/data-table'
+export type { DataTableColumn, DataTableColumnInstance, DataTableColumnVisibility, DataTableFeatures, DataTableLabels, DataTablePagination, DataTableProps, DataTableRow, DataTableSelection, DataTableSorting } from './components/data-table'

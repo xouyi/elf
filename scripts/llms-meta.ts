@@ -742,6 +742,26 @@ export const components: ComponentMeta[] = [
     slots: ['ElfStepper default: modelValue, totalSteps, goToStep, nextStep, prevStep, hasNext, hasPrev, isFirstStep, isLastStep', 'ElfStepperIndicator default: replaces the number or check'],
     a11y: ['Give ElfStepper an aria-label and every step an ElfStepperTitle (it names the trigger).', 'Keep ElfStepperDescription outside the trigger; the stepper does not render step content.'],
   },
+  {
+    dir: 'data-table',
+    name: 'DataTable',
+    summary: 'Data table composed on ElfTable with TanStack Table Vue: sorting, a global search, column visibility, row selection, pagination, skeleton loading rows and an empty state, in client or server-driven mode. Define columns with createDataTableColumnHelper<Row>() (no TanStack import needed), pass columns, data and rowKey, and bind the state with v-model:sorting, selection, columnVisibility, pagination and globalFilter.',
+    parts: ['ElfDataTable'],
+    props: [
+      { name: 'ElfDataTable caption', type: 'string', description: 'Required accessible name of the table (also captionHidden, density, stackOnMobile, stickyHeader, containerClass from ElfTable).' },
+      { name: 'ElfDataTable columns', type: 'DataTableColumn<Row>[]', description: 'Column definitions, usually built with createDataTableColumnHelper<Row>(). Keep the array stable (a constant or computed).' },
+      { name: 'ElfDataTable data', type: 'Row[]', description: 'The rows; in server-driven mode only the current page.' },
+      { name: 'ElfDataTable rowKey', type: 'string | (row, index) => string', description: 'Unique row id; selection is keyed by it. Defaults to the row index (static data only).' },
+      { name: 'ElfDataTable loading / loadingRows', type: 'boolean / number', default: 'false / 5', description: 'Skeleton rows (or the loading slot), aria-busy and a screen reader announcement (attribute: loading-rows).' },
+      { name: 'ElfDataTable selectable', type: 'boolean', default: 'false', description: 'Adds a checkbox column with Select all rows and Select row labels; bind with v-model:selection.' },
+      { name: 'ElfDataTable searchable / columnToggle', type: 'boolean', default: 'false', description: 'Search input (v-model:globalFilter) and column visibility menu in the toolbar (attribute: column-toggle).' },
+      { name: 'ElfDataTable paginated / pageSize', type: 'boolean / number', default: 'true / 10', description: 'Client pagination; v-model:pagination is { pageIndex, pageSize } (zero-based).' },
+      { name: 'ElfDataTable manualSorting / manualFiltering / manualPagination / rowCount', type: 'boolean / number', default: 'false', description: 'Server-driven mode: the table keeps the order of data and reports sorting, globalFilter and pagination through the v-models; rowCount is the server total (attributes: manual-sorting, manual-filtering, manual-pagination, row-count).' },
+      { name: 'ElfDataTable labels', type: 'Partial<DataTableLabels>', description: 'Translate the texts: search, columns, selectAll, selectRow, loading, emptyTitle, emptyDescription, pagination, previous, next, selected(n, total), status(page, pageCount).' },
+    ],
+    slots: ['cell-<columnId>: body cell content (value, row, column, cell)', 'header-<columnId>: header label (column, header, sorted)', 'actions: toolbar buttons', 'empty: replaces the default ElfEmpty', 'loading: replaces the skeleton rows'],
+    a11y: ['Sortable headers are native buttons inside the th with aria-sort on the th; Enter and Space sort.', 'Selection checkboxes are named Select all rows and Select row (translate with labels).', 'Wide tables scroll inside their container (or use stackOnMobile); the page never scrolls sideways.'],
+  },
 ]
 
 export const rules = [

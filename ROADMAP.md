@@ -439,7 +439,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfTable, ElfPagination, ElfCheckbox, ElfDropdownMenu, ElfInput, ElfSkeleton, ElfEmpty
 - **Complexity:** L
 - **Novatron screens:** courses `AdminTable` + `AdminFilterBar` + `AdminPagination` combined; stock `admin/*`; HQ members, audit log.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfEmpty
 

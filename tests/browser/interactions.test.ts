@@ -122,6 +122,10 @@ import StepperDefault from '../../src/components/stepper/examples/Default.vue'
 import StepperDisabled from '../../src/components/stepper/examples/Disabled.vue'
 import StepperNonLinear from '../../src/components/stepper/examples/NonLinear.vue'
 import StepperVertical from '../../src/components/stepper/examples/Vertical.vue'
+import DataTableDefault from '../../src/components/data-table/examples/Default.vue'
+import DataTableFiltering from '../../src/components/data-table/examples/FilteringAndColumns.vue'
+import DataTableSelection from '../../src/components/data-table/examples/Selection.vue'
+import DataTableServerSide from '../../src/components/data-table/examples/ServerSide.vue'
 import { axeViolations, mountComponent, settle, setTheme, themes } from './support'
 import NavigationMenuDefault from '../../src/components/navigation-menu/examples/Default.vue'
 import NavigationMenuLinksOnly from '../../src/components/navigation-menu/examples/LinksOnly.vue'
@@ -2991,6 +2995,132 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await userEvent.keyboard('{Tab}')
       expect(getComputedStyle(document.activeElement!).boxShadow).not.toBe('none')
       expect(el.scrollWidth).toBeLessThanOrEqual(el.clientWidth + 1)
+    })
+  })
+
+  describe('DataTable', () => {
+    const headerButton = (el: HTMLElement, name: string) => [...el.querySelectorAll<HTMLButtonElement>('thead th button')].find(b => b.textContent?.trim() === name)!
+    const firstColumn = (el: HTMLElement) => [...el.querySelectorAll('tbody tr')].map(tr => tr.querySelector('td')?.textContent?.trim())
+    /** Both paginations are in the DOM; the one for the current width is displayed. */
+    const visibleNav = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('nav')].find(n => n.getClientRects().length > 0)!
+
+    it('sorts from the keyboard with Enter and Space and keeps aria-sort on the th in sync', async () => {
+      setTheme(theme)
+      const { el } = await show(DataTableDefault)
+      const button = headerButton(el, 'Part')
+      const th = button.closest('th')!
+      expect(button.tagName).toBe('BUTTON')
+      expect(th.getAttribute('aria-sort')).toBe('none')
+      expect(el.querySelector('thead th:nth-child(3)')!.getAttribute('aria-sort')).toBe('descending')
+
+      button.focus()
+      await userEvent.keyboard('{Enter}')
+      expect(th.getAttribute('aria-sort')).toBe('ascending')
+      expect(el.querySelector('thead th:nth-child(3)')!.getAttribute('aria-sort')).toBe('none')
+      expect(firstColumn(el)[0]).toBe('Battery mount')
+      expect(document.activeElement, 'focus stays on the sort button').toBe(button)
+
+      await userEvent.keyboard(' ')
+      expect(th.getAttribute('aria-sort')).toBe('descending')
+      expect(firstColumn(el)[0]).toBe('Wrist gearbox')
+    })
+
+    it('selects all rows of the page with the header checkbox and single rows with Space', async () => {
+      setTheme(theme)
+      const { el } = await show(DataTableSelection)
+      const all = el.querySelector<HTMLElement>('[aria-label="Select all rows"]')!
+      const rows = () => [...el.querySelectorAll<HTMLElement>('tbody [aria-label="Select row"]')]
+      expect(rows()).toHaveLength(5)
+      expect(all.getAttribute('aria-checked'), 'one row is preselected').toBe('mixed')
+
+      await userEvent.click(all)
+      expect(all.getAttribute('aria-checked')).toBe('true')
+      expect(rows().every(r => r.getAttribute('aria-checked') === 'true')).toBe(true)
+      expect(el.textContent).toContain('5 of 5 row(s) selected')
+      expect(el.textContent).toMatch(/Selected ids: (m\d(, )?){5}/)
+
+      await userEvent.click(all)
+      expect(all.getAttribute('aria-checked')).toBe('false')
+      expect(el.textContent).toContain('0 of 5 row(s) selected')
+
+      rows()[2]!.focus()
+      await userEvent.keyboard(' ')
+      expect(rows()[2]!.getAttribute('aria-checked')).toBe('true')
+      expect(el.querySelectorAll('tbody tr')[2]!.getAttribute('data-state')).toBe('selected')
+      expect(all.getAttribute('aria-checked')).toBe('mixed')
+    })
+
+    it('moves between pages with the pagination controls', async () => {
+      setTheme(theme)
+      const { el } = await show(DataTableDefault)
+      const first = firstColumn(el)
+      expect(first).toHaveLength(5)
+      const nav = visibleNav(el)
+      const next = nav.querySelector<HTMLElement>('[data-slot="pagination-next"], [data-slot="simple-pagination-next"]')!
+      const prev = nav.querySelector<HTMLElement>('[data-slot="pagination-prev"], [data-slot="simple-pagination-prev"]')!
+      expect(prev.hasAttribute('disabled')).toBe(true)
+
+      await userEvent.click(next)
+      expect(firstColumn(el)).not.toEqual(first)
+      expect(firstColumn(el)).toHaveLength(5)
+      expect(prev.hasAttribute('disabled')).toBe(false)
+
+      await userEvent.click(next)
+      expect(firstColumn(el)).toHaveLength(2)
+      expect(next.hasAttribute('disabled')).toBe(true)
+
+      await userEvent.click(prev)
+      await userEvent.click(prev)
+      expect(firstColumn(el)).toEqual(first)
+    })
+
+    it('filters with the search input, toggles columns from a menu that stays open, and fits 360px', async () => {
+      setTheme(theme)
+      const { el } = await show(DataTableFiltering)
+      const headers = () => [...el.querySelectorAll('thead th')].map(th => th.textContent?.trim())
+      expect(headers()).toEqual(['Match', 'Opponent', 'Result', 'Score'])
+
+      const search = el.querySelector<HTMLInputElement>('input[type="search"]')!
+      await userEvent.fill(search, 'team 1')
+      await expect.poll(() => firstColumn(el)).toEqual(['Q24', 'P2', 'P5'])
+
+      await userEvent.click([...el.querySelectorAll<HTMLElement>('button')].find(b => b.textContent?.includes('Columns'))!)
+      await expect.poll(() => document.querySelector('[role="menu"]')).not.toBeNull()
+      const items = [...document.querySelectorAll<HTMLElement>('[role="menuitemcheckbox"]')]
+      expect(items.map(i => i.textContent?.trim())).toEqual(['Match', 'Event', 'Opponent', 'Result', 'Score'])
+      expect(items.map(i => i.getAttribute('aria-checked'))).toEqual(['true', 'false', 'true', 'true', 'true'])
+
+      await userEvent.click(items[1]!)
+      expect(headers()).toContain('Event')
+      expect(document.querySelector('[role="menu"]'), 'the menu stays open after a choice').not.toBeNull()
+      await userEvent.keyboard('{Escape}')
+      await expect.poll(() => document.querySelector('[role="menu"]')).toBeNull()
+
+      expect(el.scrollWidth).toBeLessThanOrEqual(el.clientWidth + 1)
+    })
+
+    it('shows the loading state with aria-busy, then the server page', async () => {
+      setTheme(theme)
+      const { el } = await show(DataTableServerSide)
+      expect(el.querySelector('[data-slot="table-container"]')!.getAttribute('aria-busy')).toBe('true')
+      expect(el.querySelectorAll('[data-slot="data-table-skeleton-row"]').length).toBeGreaterThan(0)
+      await expect.poll(() => el.querySelector('[aria-busy="true"]')).toBeNull()
+      expect(firstColumn(el)).toHaveLength(8)
+
+      // Sorting asks the "server" again; page two and the search do too.
+      await userEvent.click(headerButton(el, 'Amount (TRY)'))
+      await expect.poll(() => el.querySelector('thead th:nth-child(2)')!.getAttribute('aria-sort')).toBe('descending')
+      await expect.poll(() => el.querySelector('[aria-busy="true"]')).toBeNull()
+      const sorted = [...el.querySelectorAll('tbody tr')].map(tr => Number(tr.querySelectorAll('td')[1]?.textContent))
+      expect(sorted).toEqual([...sorted].sort((a, b) => b - a))
+
+      const nav = visibleNav(el)
+      await userEvent.click(nav.querySelector<HTMLElement>('[data-slot="pagination-next"], [data-slot="simple-pagination-next"]')!)
+      await expect.poll(() => el.querySelector('[aria-busy="true"]')).toBeNull()
+      expect(visibleNav(el).textContent).toMatch(/2/)
+
+      await userEvent.fill(el.querySelector<HTMLInputElement>('input[type="search"]')!, 'sponsor a1')
+      await expect.poll(() => firstColumn(el)).toEqual(['Sponsor A1'])
     })
   })
 })

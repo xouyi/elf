@@ -1828,6 +1828,41 @@
       ]
     },
     {
+      "name": "data-table",
+      "type": "registry:ui",
+      "title": "Data Table",
+      "description": "Table with sorting, global search, column visibility, row selection, pagination, loading and empty states and a server-driven mode, composed on Table with TanStack Table Vue.",
+      "dependencies": [
+        "@tanstack/vue-table",
+        "@lucide/vue"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/button.json",
+        "https://xouyi.github.io/elfUI/r/checkbox.json",
+        "https://xouyi.github.io/elfUI/r/dropdown-menu.json",
+        "https://xouyi.github.io/elfUI/r/empty.json",
+        "https://xouyi.github.io/elfUI/r/input.json",
+        "https://xouyi.github.io/elfUI/r/pagination.json",
+        "https://xouyi.github.io/elfUI/r/skeleton.json",
+        "https://xouyi.github.io/elfUI/r/table.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/data-table/DataTable.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/data-table/features.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/data-table/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "elf-theme",
       "type": "registry:file",
       "title": "Elf theme",

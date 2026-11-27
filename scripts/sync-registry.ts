@@ -74,6 +74,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   menubar: { title: 'Menubar', description: 'Desktop-style horizontal menu bar with the same item parts and styles as the Dropdown Menu, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('dropdown-menu')] },
   sidebar: { title: 'Sidebar', description: 'Collapsible app navigation: groups, menu buttons with active state and badges, icon-collapsed mode with tooltips, rail, keyboard shortcut and an off-canvas sheet on phones, composed from Sheet, Tooltip, Separator and ScrollArea.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('button'), dep('sheet'), dep('tooltip'), dep('separator'), dep('scroll-area')] },
   stepper: { title: 'Stepper', description: 'Multi-step progress and wizard header, linear or free, horizontal or vertical, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'] },
+  'data-table': { title: 'Data Table', description: 'Table with sorting, global search, column visibility, row selection, pagination, loading and empty states and a server-driven mode, composed on Table with TanStack Table Vue.', dependencies: ['@tanstack/vue-table', '@lucide/vue'], registryDependencies: [dep('button'), dep('checkbox'), dep('dropdown-menu'), dep('empty'), dep('input'), dep('pagination'), dep('skeleton'), dep('table')] },
 }
 
 const items: unknown[] = [
