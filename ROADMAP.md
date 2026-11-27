@@ -347,7 +347,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfCollapsible styles
 - **Complexity:** S
 - **Novatron screens:** courses `CourseRulesCard`; docs FAQ; settings pages.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfScrollArea
 

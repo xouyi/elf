@@ -131,7 +131,8 @@
   [data-slot='sheet-overlay'],
   [data-slot='sheet-content'],
   [data-slot='toast'],
-  [data-slot='collapsible-content'] {
+  [data-slot='collapsible-content'],
+  [data-slot='accordion-content'] {
     animation: none !important;
   }
 }

@@ -50,6 +50,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   sheet: { title: 'Sheet', description: 'Edge-anchored modal panel (top, right, bottom, left) with a mobile-friendly bottom sheet, built on Reka UI Dialog.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('dialog')] },
   toast: { title: 'Toast', description: 'Toaster and useToast(): a queue of transient notifications with variants, actions, promise toasts, swipe to dismiss and an F8 hotkey, built on Reka UI Toast.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('button')] },
   collapsible: { title: 'Collapsible', description: 'Single show and hide region with an animated height, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
+  accordion: { title: 'Accordion', description: 'Stacked collapsible sections, single or multiple, with arrow-key navigation, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('collapsible')] },
 }
 
 const items: unknown[] = [

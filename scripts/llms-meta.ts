@@ -399,7 +399,22 @@ export const components: ComponentMeta[] = [
     slots: ['ElfCollapsibleTrigger: use as-child with an ElfButton'],
     a11y: ['Give an icon-only trigger an aria-label.', 'Do not hide required form fields in a closed region.', 'The height animation stops under prefers-reduced-motion.'],
   },
-
+  {
+    dir: 'accordion',
+    name: 'Accordion',
+    summary: 'Stacked collapsible sections on Reka UI Accordion. ElfAccordion (type single or multiple) contains ElfAccordionItem (value) with an ElfAccordionTrigger heading button and an ElfAccordionContent region.',
+    parts: ['ElfAccordion', 'ElfAccordionItem', 'ElfAccordionTrigger', 'ElfAccordionContent'],
+    props: [
+      { name: 'ElfAccordion type', type: '\'single\' | \'multiple\'', description: 'Required. single opens one item at a time; multiple allows several.' },
+      { name: 'ElfAccordion collapsible', type: 'boolean', default: 'false', description: 'In single mode, lets the open item be closed.' },
+      { name: 'ElfAccordion modelValue / defaultValue', type: 'string | string[]', description: 'Open item value (single) or values (multiple); bind with v-model.' },
+      { name: 'ElfAccordion disabled', type: 'boolean', default: 'false', description: 'Disables every item.' },
+      { name: 'ElfAccordionItem value', type: 'string', description: 'Required unique value; disabled disables the item.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part; merged with base classes.' },
+    ],
+    slots: ['ElfAccordionTrigger icon: replaces the chevron'],
+    a11y: ['Triggers are buttons inside headings; arrow keys, Home and End move between them and skip disabled items.', 'Use short, specific trigger labels and do not nest accordions.'],
+  },
 ]
 
 export const rules = [

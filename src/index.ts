@@ -142,3 +142,10 @@ export { toast, Toaster as ElfToaster, toastManager, toastVariants, useToast } f
 export type { ElfToastObject, ToastActionOptions, ToastData, ToasterPosition, ToasterProps, ToastFunction, ToastOptions, ToastPromiseOptions, ToastVariant, ToastVariants } from './components/toast'
 
 export { Collapsible as ElfCollapsible, CollapsibleContent as ElfCollapsibleContent, CollapsibleTrigger as ElfCollapsibleTrigger } from './components/collapsible'
+
+export {
+  Accordion as ElfAccordion,
+  AccordionContent as ElfAccordionContent,
+  AccordionItem as ElfAccordionItem,
+  AccordionTrigger as ElfAccordionTrigger,
+} from './components/accordion'

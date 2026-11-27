@@ -1,0 +1,43 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "accordion",
+  "title": "Accordion",
+  "description": "Stacked collapsible sections, single or multiple, with arrow-key navigation, built on Reka UI.",
+  "dependencies": [
+    "reka-ui",
+    "@vueuse/core",
+    "@lucide/vue"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json",
+    "https://xouyi.github.io/elfUI/r/collapsible.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/accordion/Accordion.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { AccordionRootEmits, AccordionRootProps } from 'reka-ui'\nimport { AccordionRoot, useForwardPropsEmits } from 'reka-ui'\n\nconst props = defineProps<AccordionRootProps>()\nconst emits = defineEmits<AccordionRootEmits>()\n\nconst forwarded = useForwardPropsEmits(props, emits)\n</script>\n\n<template>\n  <AccordionRoot\n    v-slot=\"slotProps\"\n    data-slot=\"accordion\"\n    v-bind=\"forwarded\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </AccordionRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/accordion/AccordionContent.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { AccordionContentProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { AccordionContent, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport { collapsibleContentClass } from '@/components/ui/collapsible'\n\nconst props = defineProps<AccordionContentProps & {\n  /** Extra classes for the inner wrapper, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}>()\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwardedProps = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <AccordionContent\n    data-slot=\"accordion-content\"\n    v-bind=\"forwardedProps\"\n    :class=\"cn(collapsibleContentClass, 'text-sm')\"\n  >\n    <div :class=\"cn('pt-0 pb-4', props.class)\">\n      <slot />\n    </div>\n  </AccordionContent>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/accordion/AccordionItem.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { AccordionItemProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { AccordionItem, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<AccordionItemProps & {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}>()\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwardedProps = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <AccordionItem\n    v-slot=\"slotProps\"\n    data-slot=\"accordion-item\"\n    v-bind=\"forwardedProps\"\n    :class=\"cn('border-b last:border-b-0', props.class)\"\n  >\n    <slot v-bind=\"slotProps\" />\n  </AccordionItem>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/accordion/AccordionTrigger.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { AccordionTriggerProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\nimport { ChevronDown } from '@lucide/vue'\nimport { reactiveOmit } from '@vueuse/core'\nimport { AccordionHeader, AccordionTrigger, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = defineProps<AccordionTriggerProps & {\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}>()\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwardedProps = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <AccordionHeader data-slot=\"accordion-header\" class=\"flex\">\n    <AccordionTrigger\n      data-slot=\"accordion-trigger\"\n      v-bind=\"forwardedProps\"\n      :class=\"cn('flex min-h-10 flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium outline-none transition-all hover:underline focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180', props.class)\"\n    >\n      <slot />\n      <slot name=\"icon\">\n        <ChevronDown aria-hidden=\"true\" class=\"pointer-events-none mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform duration-200 motion-reduce:transition-none\" />\n      </slot>\n    </AccordionTrigger>\n  </AccordionHeader>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/accordion/index.ts",
+      "content": "export { default as Accordion } from './Accordion.vue'\nexport { default as AccordionContent } from './AccordionContent.vue'\nexport { default as AccordionItem } from './AccordionItem.vue'\nexport { default as AccordionTrigger } from './AccordionTrigger.vue'\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

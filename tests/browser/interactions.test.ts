@@ -60,6 +60,10 @@ import SheetControlled from '../../src/components/sheet/examples/Controlled.vue'
 import SheetDefault from '../../src/components/sheet/examples/Default.vue'
 import SheetSides from '../../src/components/sheet/examples/Sides.vue'
 import ToastWithAction from '../../src/components/toast/examples/WithAction.vue'
+import AccordionControlled from '../../src/components/accordion/examples/Controlled.vue'
+import AccordionDefault from '../../src/components/accordion/examples/Default.vue'
+import AccordionDisabled from '../../src/components/accordion/examples/Disabled.vue'
+import AccordionMultiple from '../../src/components/accordion/examples/Multiple.vue'
 import CollapsibleControlled from '../../src/components/collapsible/examples/Controlled.vue'
 import CollapsibleDefault from '../../src/components/collapsible/examples/Default.vue'
 import TabsControlled from '../../src/components/tabs/examples/Controlled.vue'
@@ -468,6 +472,96 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await settle(450)
       const content = el.querySelector<HTMLElement>('[data-slot="collapsible-content"]')!
       expect(content.getBoundingClientRect().height).toBeGreaterThan(20)
+    })
+  })
+
+  describe('Accordion', () => {
+    const triggers = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('[data-slot="accordion-trigger"]')]
+    const expanded = (el: HTMLElement) => triggers(el).map(t => t.getAttribute('aria-expanded'))
+
+    it('opens with Enter and Space; single mode closes the other item', async () => {
+      setTheme(theme)
+      const { el } = await show(AccordionDefault)
+      expect(expanded(el)).toEqual(['true', 'false', 'false'])
+      const [, second] = triggers(el)
+      second!.focus()
+      await userEvent.keyboard('{Enter}')
+      await settle(350)
+      expect(expanded(el)).toEqual(['false', 'true', 'false'])
+      await userEvent.keyboard(' ')
+      await settle(350)
+      expect(expanded(el), 'collapsible: the open item closes').toEqual(['false', 'false', 'false'])
+    })
+
+    it('moves focus with ArrowDown, ArrowUp, Home and End', async () => {
+      setTheme(theme)
+      const { el } = await show(AccordionDefault)
+      const [first, second, third] = triggers(el)
+      first!.focus()
+      await userEvent.keyboard('{ArrowDown}')
+      expect(document.activeElement).toBe(second)
+      await userEvent.keyboard('{ArrowDown}')
+      expect(document.activeElement).toBe(third)
+      await userEvent.keyboard('{ArrowDown}')
+      expect(document.activeElement, 'wraps to the first').toBe(first)
+      await userEvent.keyboard('{ArrowUp}')
+      expect(document.activeElement, 'wraps to the last').toBe(third)
+      await userEvent.keyboard('{Home}')
+      expect(document.activeElement).toBe(first)
+      await userEvent.keyboard('{End}')
+      expect(document.activeElement).toBe(third)
+    })
+
+    it('multiple mode keeps several items open', async () => {
+      setTheme(theme)
+      const { el } = await show(AccordionMultiple)
+      expect(expanded(el)).toEqual(['true', 'true', 'false'])
+      await userEvent.click(triggers(el)[2]!)
+      await settle(350)
+      expect(expanded(el)).toEqual(['true', 'true', 'true'])
+      await userEvent.click(triggers(el)[0]!)
+      await settle(350)
+      expect(expanded(el)).toEqual(['false', 'true', 'true'])
+    })
+
+    it('skips disabled items with the arrow keys and ignores clicks on them', async () => {
+      setTheme(theme)
+      const { el } = await show(AccordionDisabled)
+      const [first, locked, last] = triggers(el)
+      expect(locked!.hasAttribute('disabled') || locked!.getAttribute('aria-disabled') === 'true').toBe(true)
+      first!.focus()
+      await userEvent.keyboard('{ArrowDown}')
+      expect(document.activeElement).toBe(last)
+      await userEvent.click(locked!, { force: true }).catch(() => {})
+      expect(locked!.getAttribute('aria-expanded')).toBe('false')
+    })
+
+    it('content is a region named by its trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(AccordionDefault)
+      const region = el.querySelector<HTMLElement>('[data-slot="accordion-content"]')!
+      expect(region.getAttribute('role')).toBe('region')
+      expect(region.getAttribute('aria-labelledby')).toBe(triggers(el)[0]!.id)
+    })
+
+    it('v-model reflects the open item', async () => {
+      setTheme(theme)
+      const { el } = await show(AccordionControlled)
+      expect(el.textContent).toContain('open = a')
+      await userEvent.click(triggers(el)[1]!)
+      await settle(350)
+      expect(el.textContent).toContain('open = b')
+      await userEvent.click(triggers(el)[1]!)
+      await settle(350)
+      expect(el.textContent).toContain('open = none')
+    })
+
+    it('the chevron rotates when open', async () => {
+      setTheme(theme)
+      const { el } = await show(AccordionDefault)
+      const rotated = (t: HTMLElement) => getComputedStyle(t.querySelector('svg')!).rotate
+      await settle(300)
+      expect(rotated(triggers(el)[0]!)).not.toBe(rotated(triggers(el)[1]!))
     })
   })
 
