@@ -91,7 +91,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, breadcrumb, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -4676,8 +4676,182 @@ import { ElfAccordion, ElfAccordionContent, ElfAccordionItem, ElfAccordionTrigge
 </template>
 ```
 
+### Breadcrumb
+
+Hierarchical location trail composed from native elements: a labelled nav with an ordered list. Collapse long trails with ElfBreadcrumbEllipsis inside an ElfDropdownMenu.
+
+Components: `ElfBreadcrumb`, `ElfBreadcrumbList`, `ElfBreadcrumbItem`, `ElfBreadcrumbLink`, `ElfBreadcrumbPage`, `ElfBreadcrumbSeparator`, `ElfBreadcrumbEllipsis`
+
+Props:
+
+- `ElfBreadcrumb ariaLabel` (string, default Breadcrumb): Accessible name of the nav landmark; translate it.
+- `ElfBreadcrumbLink as / asChild` (string | Component / boolean, default a): Render a router link with as-child, for example <NuxtLink>.
+- `ElfBreadcrumbEllipsis label` (string, default More): Screen reader text for the icon.
+- `class` (string | array | object): Accepted by every part; merged with base classes.
+
+Slots:
+
+- ElfBreadcrumbSeparator default: replaces the chevron icon
+- ElfBreadcrumbEllipsis default: replaces the ellipsis icon
+
+Accessibility:
+
+- Renders nav > ol > li; the last item uses ElfBreadcrumbPage (aria-current="page", not a link).
+- Separators are aria-hidden list items; links are plain Tab stops.
+- Put the ellipsis inside an ElfDropdownMenuTrigger so hidden levels stay reachable by keyboard.
+
+Examples:
+
+#### Collapsed
+
+```vue
+<script setup lang="ts">
+import {
+  ElfBreadcrumb,
+  ElfBreadcrumbEllipsis,
+  ElfBreadcrumbItem,
+  ElfBreadcrumbLink,
+  ElfBreadcrumbList,
+  ElfBreadcrumbPage,
+  ElfBreadcrumbSeparator,
+  ElfDropdownMenu,
+  ElfDropdownMenuContent,
+  ElfDropdownMenuItem,
+  ElfDropdownMenuTrigger,
+} from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfBreadcrumb>
+    <ElfBreadcrumbList>
+      <ElfBreadcrumbItem>
+        <ElfBreadcrumbLink href="#home">
+          Home
+        </ElfBreadcrumbLink>
+      </ElfBreadcrumbItem>
+      <ElfBreadcrumbSeparator />
+      <ElfBreadcrumbItem>
+        <ElfDropdownMenu>
+          <ElfDropdownMenuTrigger class="flex items-center gap-1 rounded-sm outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50" aria-label="Show hidden levels">
+            <ElfBreadcrumbEllipsis label="Hidden levels" />
+          </ElfDropdownMenuTrigger>
+          <ElfDropdownMenuContent align="start">
+            <ElfDropdownMenuItem>Documentation</ElfDropdownMenuItem>
+            <ElfDropdownMenuItem>Themes</ElfDropdownMenuItem>
+            <ElfDropdownMenuItem>GitHub</ElfDropdownMenuItem>
+          </ElfDropdownMenuContent>
+        </ElfDropdownMenu>
+      </ElfBreadcrumbItem>
+      <ElfBreadcrumbSeparator />
+      <ElfBreadcrumbItem>
+        <ElfBreadcrumbLink href="#components">
+          Components
+        </ElfBreadcrumbLink>
+      </ElfBreadcrumbItem>
+      <ElfBreadcrumbSeparator />
+      <ElfBreadcrumbItem>
+        <ElfBreadcrumbPage>Breadcrumb</ElfBreadcrumbPage>
+      </ElfBreadcrumbItem>
+    </ElfBreadcrumbList>
+  </ElfBreadcrumb>
+</template>
+```
+
+#### Custom Separator
+
+```vue
+<script setup lang="ts">
+import { Slash } from '@lucide/vue'
+import { ElfBreadcrumb, ElfBreadcrumbItem, ElfBreadcrumbLink, ElfBreadcrumbList, ElfBreadcrumbPage, ElfBreadcrumbSeparator } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfBreadcrumb aria-label="Location">
+    <ElfBreadcrumbList>
+      <ElfBreadcrumbItem>
+        <ElfBreadcrumbLink href="#warehouse">
+          Warehouse
+        </ElfBreadcrumbLink>
+      </ElfBreadcrumbItem>
+      <ElfBreadcrumbSeparator>
+        <Slash />
+      </ElfBreadcrumbSeparator>
+      <ElfBreadcrumbItem>
+        <ElfBreadcrumbLink href="#shelf-a">
+          Shelf A
+        </ElfBreadcrumbLink>
+      </ElfBreadcrumbItem>
+      <ElfBreadcrumbSeparator>
+        <Slash />
+      </ElfBreadcrumbSeparator>
+      <ElfBreadcrumbItem>
+        <ElfBreadcrumbPage>Bin 12</ElfBreadcrumbPage>
+      </ElfBreadcrumbItem>
+    </ElfBreadcrumbList>
+  </ElfBreadcrumb>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfBreadcrumb, ElfBreadcrumbItem, ElfBreadcrumbLink, ElfBreadcrumbList, ElfBreadcrumbPage, ElfBreadcrumbSeparator } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfBreadcrumb>
+    <ElfBreadcrumbList>
+      <ElfBreadcrumbItem>
+        <ElfBreadcrumbLink href="#home">
+          Home
+        </ElfBreadcrumbLink>
+      </ElfBreadcrumbItem>
+      <ElfBreadcrumbSeparator />
+      <ElfBreadcrumbItem>
+        <ElfBreadcrumbLink href="#components">
+          Components
+        </ElfBreadcrumbLink>
+      </ElfBreadcrumbItem>
+      <ElfBreadcrumbSeparator />
+      <ElfBreadcrumbItem>
+        <ElfBreadcrumbPage>Breadcrumb</ElfBreadcrumbPage>
+      </ElfBreadcrumbItem>
+    </ElfBreadcrumbList>
+  </ElfBreadcrumb>
+</template>
+```
+
+#### Responsive
+
+```vue
+<script setup lang="ts">
+import { ElfBreadcrumb, ElfBreadcrumbItem, ElfBreadcrumbLink, ElfBreadcrumbList, ElfBreadcrumbPage, ElfBreadcrumbSeparator } from '@xouyi/elfui'
+
+const trail = ['Courses', 'Robotics basics', 'Sensors and actuators', 'Reading an encoder signal']
+</script>
+
+<template>
+  <ElfBreadcrumb aria-label="Lesson location">
+    <ElfBreadcrumbList>
+      <template v-for="(label, i) in trail" :key="label">
+        <ElfBreadcrumbItem v-if="i < trail.length - 1">
+          <ElfBreadcrumbLink :href="`#level-${i}`">
+            {{ label }}
+          </ElfBreadcrumbLink>
+        </ElfBreadcrumbItem>
+        <ElfBreadcrumbItem v-else>
+          <ElfBreadcrumbPage>{{ label }}</ElfBreadcrumbPage>
+        </ElfBreadcrumbItem>
+        <ElfBreadcrumbSeparator v-if="i < trail.length - 1" />
+      </template>
+    </ElfBreadcrumbList>
+  </ElfBreadcrumb>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfBreadcrumb`, `ElfBreadcrumbEllipsis`, `ElfBreadcrumbItem`, `ElfBreadcrumbLink`, `ElfBreadcrumbList`, `ElfBreadcrumbPage`, `ElfBreadcrumbSeparator`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

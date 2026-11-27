@@ -241,3 +241,14 @@ export {
   AccordionItem as ElfAccordionItem,
   AccordionTrigger as ElfAccordionTrigger,
 } from './components/accordion'
+
+export {
+  Breadcrumb as ElfBreadcrumb,
+  BreadcrumbEllipsis as ElfBreadcrumbEllipsis,
+  BreadcrumbItem as ElfBreadcrumbItem,
+  BreadcrumbLink as ElfBreadcrumbLink,
+  BreadcrumbList as ElfBreadcrumbList,
+  BreadcrumbPage as ElfBreadcrumbPage,
+  BreadcrumbSeparator as ElfBreadcrumbSeparator,
+} from './components/breadcrumb'
+export type { BreadcrumbEllipsisProps, BreadcrumbItemProps, BreadcrumbLinkProps, BreadcrumbListProps, BreadcrumbPageProps, BreadcrumbProps, BreadcrumbSeparatorProps } from './components/breadcrumb'

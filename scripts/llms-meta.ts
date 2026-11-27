@@ -537,6 +537,20 @@ export const components: ComponentMeta[] = [
     slots: ['ElfAccordionTrigger icon: replaces the chevron'],
     a11y: ['Triggers are buttons inside headings; arrow keys, Home and End move between them and skip disabled items.', 'Use short, specific trigger labels and do not nest accordions.'],
   },
+  {
+    dir: 'breadcrumb',
+    name: 'Breadcrumb',
+    summary: 'Hierarchical location trail composed from native elements: a labelled nav with an ordered list. Collapse long trails with ElfBreadcrumbEllipsis inside an ElfDropdownMenu.',
+    parts: ['ElfBreadcrumb', 'ElfBreadcrumbList', 'ElfBreadcrumbItem', 'ElfBreadcrumbLink', 'ElfBreadcrumbPage', 'ElfBreadcrumbSeparator', 'ElfBreadcrumbEllipsis'],
+    props: [
+      { name: 'ElfBreadcrumb ariaLabel', type: 'string', default: 'Breadcrumb', description: 'Accessible name of the nav landmark; translate it.' },
+      { name: 'ElfBreadcrumbLink as / asChild', type: 'string | Component / boolean', default: 'a', description: 'Render a router link with as-child, for example <NuxtLink>.' },
+      { name: 'ElfBreadcrumbEllipsis label', type: 'string', default: 'More', description: 'Screen reader text for the icon.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part; merged with base classes.' },
+    ],
+    slots: ['ElfBreadcrumbSeparator default: replaces the chevron icon', 'ElfBreadcrumbEllipsis default: replaces the ellipsis icon'],
+    a11y: ['Renders nav > ol > li; the last item uses ElfBreadcrumbPage (aria-current="page", not a link).', 'Separators are aria-hidden list items; links are plain Tab stops.', 'Put the ellipsis inside an ElfDropdownMenuTrigger so hidden levels stay reachable by keyboard.'],
+  },
 ]
 
 export const rules = [

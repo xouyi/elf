@@ -46,6 +46,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [Toast](https://xouyi.github.io/elfUI/docs/components/toast): Transient notifications. Mount one ElfToaster per app and call useToast() (or import toast) from anywhere: toast(message, options), toast.success/warning/error, toast.promise, toast.update, toast.dismiss. Built on the Reka UI Toast viewport and manager; the queue is a module singleton that is a no-op on the server.
 - [Collapsible](https://xouyi.github.io/elfUI/docs/components/collapsible): A single show and hide region with an animated height, built on Reka UI Collapsible. ElfCollapsibleTrigger toggles ElfCollapsibleContent.
 - [Accordion](https://xouyi.github.io/elfUI/docs/components/accordion): Stacked collapsible sections on Reka UI Accordion. ElfAccordion (type single or multiple) contains ElfAccordionItem (value) with an ElfAccordionTrigger heading button and an ElfAccordionContent region.
+- [Breadcrumb](https://xouyi.github.io/elfUI/docs/components/breadcrumb): Hierarchical location trail composed from native elements: a labelled nav with an ordered list. Collapse long trails with ElfBreadcrumbEllipsis inside an ElfDropdownMenu.
 
 ## Reference
 
