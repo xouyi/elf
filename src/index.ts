@@ -241,3 +241,17 @@ export {
   AccordionItem as ElfAccordionItem,
   AccordionTrigger as ElfAccordionTrigger,
 } from './components/accordion'
+
+export {
+  NavigationMenu as ElfNavigationMenu,
+  NavigationMenuContent as ElfNavigationMenuContent,
+  NavigationMenuIndicator as ElfNavigationMenuIndicator,
+  NavigationMenuItem as ElfNavigationMenuItem,
+  NavigationMenuLink as ElfNavigationMenuLink,
+  NavigationMenuList as ElfNavigationMenuList,
+  navigationMenuItemLinkClass,
+  navigationMenuTriggerStyle,
+  NavigationMenuTrigger as ElfNavigationMenuTrigger,
+  NavigationMenuViewport as ElfNavigationMenuViewport,
+} from './components/navigation-menu'
+export type { NavigationMenuContentProps, NavigationMenuIndicatorProps, NavigationMenuItemProps, NavigationMenuLinkProps, NavigationMenuListProps, NavigationMenuProps, NavigationMenuTriggerProps, NavigationMenuViewportProps } from './components/navigation-menu'

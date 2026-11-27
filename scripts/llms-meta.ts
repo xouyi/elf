@@ -537,6 +537,27 @@ export const components: ComponentMeta[] = [
     slots: ['ElfAccordionTrigger icon: replaces the chevron'],
     a11y: ['Triggers are buttons inside headings; arrow keys, Home and End move between them and skip disabled items.', 'Use short, specific trigger labels and do not nest accordions.'],
   },
+  {
+    dir: 'navigation-menu',
+    name: 'NavigationMenu',
+    summary: 'Top-level site navigation (a nav landmark) with flyout panels, built on Reka UI NavigationMenu. Compose ElfNavigationMenu > ElfNavigationMenuList > ElfNavigationMenuItem > ElfNavigationMenuTrigger + ElfNavigationMenuContent (links inside) or a top-level ElfNavigationMenuLink variant="trigger". Panels share one animated viewport by default (viewport=false puts each under its item). Use as-child on ElfNavigationMenuLink to render a router link.',
+    parts: ['ElfNavigationMenu', 'ElfNavigationMenuList', 'ElfNavigationMenuItem', 'ElfNavigationMenuTrigger', 'ElfNavigationMenuContent', 'ElfNavigationMenuLink', 'ElfNavigationMenuViewport', 'ElfNavigationMenuIndicator'],
+    props: [
+      { name: 'ElfNavigationMenu viewport', type: 'boolean', default: 'true', description: 'Render the shared viewport that all flyout panels grow from; false places each panel under its own trigger.' },
+      { name: 'ElfNavigationMenu v-model / defaultValue', type: 'string', description: 'The open item (its value); empty string means closed.' },
+      { name: 'ElfNavigationMenu delayDuration / skipDelayDuration', type: 'number', default: '200 / 300', description: 'Hover open delay and the window in which moving between triggers skips it, in ms.' },
+      { name: 'ElfNavigationMenu orientation', type: '\'horizontal\' | \'vertical\'', default: 'horizontal', description: 'Layout and arrow-key axis.' },
+      { name: 'ElfNavigationMenu aria-label', type: 'string', description: 'Names the nav landmark; required when the page has more than one navigation.' },
+      { name: 'ElfNavigationMenuItem value', type: 'string', description: 'Identifies the item; generated when omitted.' },
+      { name: 'ElfNavigationMenuLink variant', type: '\'item\' | \'trigger\'', default: 'item', description: 'trigger styles a top-level link like a trigger; item styles a link inside a panel.' },
+      { name: 'ElfNavigationMenuLink active', type: 'boolean', default: 'false', description: 'Marks the current page (aria-current=page).' },
+      { name: 'ElfNavigationMenuLink @select', type: '(event) => void', description: 'Emitted when the link is activated.' },
+      { name: 'ElfNavigationMenuViewport align', type: '\'start\' | \'center\' | \'end\'', default: 'start', description: 'Alignment of the panel against the active trigger.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part; merged with base classes.' },
+    ],
+    slots: ['ElfNavigationMenu default: the list (and optional custom viewport)', 'ElfNavigationMenuTrigger default: the label; a chevron is added', 'ElfNavigationMenuContent default: links, grids, any content', 'ElfNavigationMenuLink default: the link text (use as-child for a router link)'],
+    a11y: ['This is the disclosure navigation pattern, not a menu bar: triggers are buttons with aria-expanded, panels hold ordinary links in Tab order. Do not add role=menu.', 'Enter or Space opens a flyout, Tab moves into its links, Escape closes it and returns focus to the trigger, ArrowLeft and ArrowRight move between top-level items.', 'Mark the current page with active (aria-current=page). Give the nav an aria-label when there is more than one.'],
+  },
 ]
 
 export const rules = [

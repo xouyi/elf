@@ -483,7 +483,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** none
 - **Complexity:** M
 - **Novatron screens:** Docs top bar; marketing pages (not required by current apps).
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfStepper
 

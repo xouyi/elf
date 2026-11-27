@@ -92,6 +92,9 @@ import TooltipControlled from '../../src/components/tooltip/examples/Controlled.
 import TooltipDefault from '../../src/components/tooltip/examples/Default.vue'
 import TooltipIconButtons from '../../src/components/tooltip/examples/IconButtons.vue'
 import { axeViolations, mountComponent, settle, setTheme, themes } from './support'
+import NavigationMenuDefault from '../../src/components/navigation-menu/examples/Default.vue'
+import NavigationMenuLinksOnly from '../../src/components/navigation-menu/examples/LinksOnly.vue'
+import NavigationMenuWithoutViewport from '../../src/components/navigation-menu/examples/WithoutViewport.vue'
 
 let unmount: (() => void) | undefined
 afterEach(() => {
@@ -2121,6 +2124,74 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       const destructive = el.querySelector<HTMLElement>('[data-variant="destructive"]')!
       expect(getComputedStyle(destructive.querySelector('[data-slot="alert-title"]')!).color).toBe(resolved('destructive-text'))
       expect(getComputedStyle(destructive.querySelector('[data-slot="alert-icon"]')!).color).toBe(resolved('destructive-text'))
+    })
+  })
+
+  describe('NavigationMenu', () => {
+    const triggers = (el: Element) => [...el.querySelectorAll<HTMLElement>('[data-slot="navigation-menu-trigger"]')]
+    const panel = () => document.querySelector<HTMLElement>('[data-slot="navigation-menu-content"]')
+
+    it('opens a flyout from the keyboard, moves into its links with Tab and closes with Escape back to the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(NavigationMenuDefault)
+      const [first, second] = triggers(el)
+      expect(el.querySelector('nav')).not.toBeNull()
+      await userEvent.tab()
+      expect(document.activeElement).toBe(first)
+      expect(first!.getAttribute('aria-expanded')).toBe('false')
+      expect(panel()).toBeNull()
+      await userEvent.keyboard('{Enter}')
+      await settle(300)
+      expect(first!.getAttribute('aria-expanded')).toBe('true')
+      expect(panel()?.textContent).toContain('Installation')
+      expect(document.querySelector('[data-slot="navigation-menu-viewport"]')?.contains(panel())).toBe(true)
+      await userEvent.tab()
+      expect((document.activeElement as HTMLElement).textContent).toContain('Installation')
+      await userEvent.keyboard('{Escape}')
+      await settle(300)
+      expect(panel()).toBeNull()
+      expect(first!.getAttribute('aria-expanded')).toBe('false')
+      expect(document.activeElement, 'focus returned to the trigger').toBe(first)
+      await userEvent.keyboard('{ArrowRight}')
+      expect(document.activeElement, 'ArrowRight moves along the top level').toBe(second)
+    })
+
+    it('opens on click, switches panels when another trigger is used and Escape closes it', async () => {
+      setTheme(theme)
+      const { el } = await show(NavigationMenuDefault)
+      const [first, second] = triggers(el)
+      await userEvent.click(first!)
+      await settle(300)
+      expect(first!.getAttribute('aria-expanded')).toBe('true')
+      await userEvent.click(second!)
+      await settle(300)
+      expect(first!.getAttribute('aria-expanded')).toBe('false')
+      expect(second!.getAttribute('aria-expanded')).toBe('true')
+      expect(panel()?.textContent).toContain('Dialog')
+      await userEvent.keyboard('{Escape}')
+      await settle(300)
+      expect(second!.getAttribute('aria-expanded')).toBe('false')
+    })
+
+    it('keeps each panel under its own item without a viewport', async () => {
+      setTheme(theme)
+      const { el } = await show(NavigationMenuWithoutViewport)
+      expect(el.querySelector('[data-slot="navigation-menu"]')!.getAttribute('data-viewport')).toBe('false')
+      await userEvent.tab()
+      await userEvent.keyboard('{Enter}')
+      await settle(300)
+      expect(el.querySelector('[data-slot="navigation-menu-item"] [data-slot="navigation-menu-content"]')).not.toBeNull()
+      expect(document.querySelector('[data-slot="navigation-menu-viewport"]')).toBeNull()
+    })
+
+    it('marks the active link as the current page and gives top-level links a visible focus ring', async () => {
+      setTheme(theme)
+      const { el } = await show(NavigationMenuLinksOnly)
+      const current = el.querySelector<HTMLElement>('[aria-current="page"]')!
+      expect(current.textContent).toContain('Home')
+      await userEvent.tab()
+      expect(document.activeElement).toBe(current)
+      expect(getComputedStyle(current).boxShadow, 'focus ring').not.toBe('none')
     })
   })
 

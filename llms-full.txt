@@ -91,7 +91,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, navigation-menu, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -4676,8 +4676,252 @@ import { ElfAccordion, ElfAccordionContent, ElfAccordionItem, ElfAccordionTrigge
 </template>
 ```
 
+### NavigationMenu
+
+Top-level site navigation (a nav landmark) with flyout panels, built on Reka UI NavigationMenu. Compose ElfNavigationMenu > ElfNavigationMenuList > ElfNavigationMenuItem > ElfNavigationMenuTrigger + ElfNavigationMenuContent (links inside) or a top-level ElfNavigationMenuLink variant="trigger". Panels share one animated viewport by default (viewport=false puts each under its item). Use as-child on ElfNavigationMenuLink to render a router link.
+
+Components: `ElfNavigationMenu`, `ElfNavigationMenuList`, `ElfNavigationMenuItem`, `ElfNavigationMenuTrigger`, `ElfNavigationMenuContent`, `ElfNavigationMenuLink`, `ElfNavigationMenuViewport`, `ElfNavigationMenuIndicator`
+
+Props:
+
+- `ElfNavigationMenu viewport` (boolean, default true): Render the shared viewport that all flyout panels grow from; false places each panel under its own trigger.
+- `ElfNavigationMenu v-model / defaultValue` (string): The open item (its value); empty string means closed.
+- `ElfNavigationMenu delayDuration / skipDelayDuration` (number, default 200 / 300): Hover open delay and the window in which moving between triggers skips it, in ms.
+- `ElfNavigationMenu orientation` ('horizontal' | 'vertical', default horizontal): Layout and arrow-key axis.
+- `ElfNavigationMenu aria-label` (string): Names the nav landmark; required when the page has more than one navigation.
+- `ElfNavigationMenuItem value` (string): Identifies the item; generated when omitted.
+- `ElfNavigationMenuLink variant` ('item' | 'trigger', default item): trigger styles a top-level link like a trigger; item styles a link inside a panel.
+- `ElfNavigationMenuLink active` (boolean, default false): Marks the current page (aria-current=page).
+- `ElfNavigationMenuLink @select` ((event) => void): Emitted when the link is activated.
+- `ElfNavigationMenuViewport align` ('start' | 'center' | 'end', default start): Alignment of the panel against the active trigger.
+- `class` (string | array | object): Accepted by every part; merged with base classes.
+
+Slots:
+
+- ElfNavigationMenu default: the list (and optional custom viewport)
+- ElfNavigationMenuTrigger default: the label; a chevron is added
+- ElfNavigationMenuContent default: links, grids, any content
+- ElfNavigationMenuLink default: the link text (use as-child for a router link)
+
+Accessibility:
+
+- This is the disclosure navigation pattern, not a menu bar: triggers are buttons with aria-expanded, panels hold ordinary links in Tab order. Do not add role=menu.
+- Enter or Space opens a flyout, Tab moves into its links, Escape closes it and returns focus to the trigger, ArrowLeft and ArrowRight move between top-level items.
+- Mark the current page with active (aria-current=page). Give the nav an aria-label when there is more than one.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import {
+  ElfNavigationMenu,
+  ElfNavigationMenuContent,
+  ElfNavigationMenuItem,
+  ElfNavigationMenuLink,
+  ElfNavigationMenuList,
+  ElfNavigationMenuTrigger,
+} from '@xouyi/elfui'
+
+const gettingStarted = [
+  { title: 'Installation', description: 'Add the package and a theme.' },
+  { title: 'Theming', description: 'Tokens, themes and radius.' },
+  { title: 'Accessibility', description: 'Keyboard and screen reader notes.' },
+]
+const components = [
+  { title: 'Dialog', description: 'A modal window.' },
+  { title: 'Tabs', description: 'Sections, one at a time.' },
+  { title: 'Tooltip', description: 'A short hint on focus or hover.' },
+  { title: 'Sheet', description: 'A panel from the screen edge.' },
+]
+</script>
+
+<template>
+  <ElfNavigationMenu>
+    <ElfNavigationMenuList>
+      <ElfNavigationMenuItem>
+        <ElfNavigationMenuTrigger>Getting started</ElfNavigationMenuTrigger>
+        <ElfNavigationMenuContent>
+          <ul class="grid w-64 gap-1">
+            <li v-for="item in gettingStarted" :key="item.title">
+              <ElfNavigationMenuLink href="#">
+                <span class="font-medium">{{ item.title }}</span>
+                <span class="text-muted-foreground">{{ item.description }}</span>
+              </ElfNavigationMenuLink>
+            </li>
+          </ul>
+        </ElfNavigationMenuContent>
+      </ElfNavigationMenuItem>
+      <ElfNavigationMenuItem>
+        <ElfNavigationMenuTrigger>Components</ElfNavigationMenuTrigger>
+        <ElfNavigationMenuContent>
+          <ul class="grid w-72 gap-1 sm:w-96 sm:grid-cols-2">
+            <li v-for="item in components" :key="item.title">
+              <ElfNavigationMenuLink href="#">
+                <span class="font-medium">{{ item.title }}</span>
+                <span class="text-muted-foreground">{{ item.description }}</span>
+              </ElfNavigationMenuLink>
+            </li>
+          </ul>
+        </ElfNavigationMenuContent>
+      </ElfNavigationMenuItem>
+      <ElfNavigationMenuItem>
+        <ElfNavigationMenuLink href="#" variant="trigger">
+          Docs
+        </ElfNavigationMenuLink>
+      </ElfNavigationMenuItem>
+    </ElfNavigationMenuList>
+  </ElfNavigationMenu>
+</template>
+```
+
+#### Links Only
+
+```vue
+<script setup lang="ts">
+import {
+  ElfNavigationMenu,
+  ElfNavigationMenuItem,
+  ElfNavigationMenuLink,
+  ElfNavigationMenuList,
+} from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfNavigationMenu :viewport="false" aria-label="Main">
+    <ElfNavigationMenuList>
+      <ElfNavigationMenuItem>
+        <ElfNavigationMenuLink href="#" variant="trigger" active>
+          Home
+        </ElfNavigationMenuLink>
+      </ElfNavigationMenuItem>
+      <ElfNavigationMenuItem>
+        <ElfNavigationMenuLink href="#" variant="trigger">
+          Courses
+        </ElfNavigationMenuLink>
+      </ElfNavigationMenuItem>
+      <ElfNavigationMenuItem>
+        <ElfNavigationMenuLink href="#" variant="trigger">
+          Stock
+        </ElfNavigationMenuLink>
+      </ElfNavigationMenuItem>
+    </ElfNavigationMenuList>
+  </ElfNavigationMenu>
+</template>
+```
+
+#### With Indicator
+
+```vue
+<script setup lang="ts">
+import {
+  ElfNavigationMenu,
+  ElfNavigationMenuContent,
+  ElfNavigationMenuIndicator,
+  ElfNavigationMenuItem,
+  ElfNavigationMenuLink,
+  ElfNavigationMenuList,
+  ElfNavigationMenuTrigger,
+} from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfNavigationMenu>
+    <ElfNavigationMenuList>
+      <ElfNavigationMenuItem>
+        <ElfNavigationMenuTrigger>Learn</ElfNavigationMenuTrigger>
+        <ElfNavigationMenuContent>
+          <ul class="grid w-64 gap-1">
+            <li>
+              <ElfNavigationMenuLink href="#">
+                <span class="font-medium">Courses</span>
+                <span class="text-muted-foreground">Training for every subteam.</span>
+              </ElfNavigationMenuLink>
+            </li>
+            <li>
+              <ElfNavigationMenuLink href="#">
+                <span class="font-medium">Guides</span>
+                <span class="text-muted-foreground">Short how-to pages.</span>
+              </ElfNavigationMenuLink>
+            </li>
+          </ul>
+        </ElfNavigationMenuContent>
+      </ElfNavigationMenuItem>
+      <ElfNavigationMenuItem>
+        <ElfNavigationMenuTrigger>Build</ElfNavigationMenuTrigger>
+        <ElfNavigationMenuContent>
+          <ul class="grid w-48 gap-1">
+            <li>
+              <ElfNavigationMenuLink href="#">
+                <span class="font-medium">Robot</span>
+              </ElfNavigationMenuLink>
+            </li>
+            <li>
+              <ElfNavigationMenuLink href="#">
+                <span class="font-medium">Scouting app</span>
+              </ElfNavigationMenuLink>
+            </li>
+          </ul>
+        </ElfNavigationMenuContent>
+      </ElfNavigationMenuItem>
+      <ElfNavigationMenuIndicator />
+    </ElfNavigationMenuList>
+  </ElfNavigationMenu>
+</template>
+```
+
+#### Without Viewport
+
+```vue
+<script setup lang="ts">
+import {
+  ElfNavigationMenu,
+  ElfNavigationMenuContent,
+  ElfNavigationMenuItem,
+  ElfNavigationMenuLink,
+  ElfNavigationMenuList,
+  ElfNavigationMenuTrigger,
+} from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfNavigationMenu :viewport="false">
+    <ElfNavigationMenuList>
+      <ElfNavigationMenuItem>
+        <ElfNavigationMenuTrigger>Teams</ElfNavigationMenuTrigger>
+        <ElfNavigationMenuContent>
+          <ul class="grid w-56 gap-1">
+            <li>
+              <ElfNavigationMenuLink href="#">
+                <span class="font-medium">Mechanics</span>
+              </ElfNavigationMenuLink>
+            </li>
+            <li>
+              <ElfNavigationMenuLink href="#">
+                <span class="font-medium">Software</span>
+              </ElfNavigationMenuLink>
+            </li>
+            <li>
+              <ElfNavigationMenuLink href="#">
+                <span class="font-medium">Outreach</span>
+              </ElfNavigationMenuLink>
+            </li>
+          </ul>
+        </ElfNavigationMenuContent>
+      </ElfNavigationMenuItem>
+      <ElfNavigationMenuItem>
+        <ElfNavigationMenuLink href="#" variant="trigger">
+          Contact
+        </ElfNavigationMenuLink>
+      </ElfNavigationMenuItem>
+    </ElfNavigationMenuList>
+  </ElfNavigationMenu>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfNavigationMenu`, `ElfNavigationMenuContent`, `ElfNavigationMenuIndicator`, `ElfNavigationMenuItem`, `ElfNavigationMenuLink`, `ElfNavigationMenuList`, `ElfNavigationMenuTrigger`, `ElfNavigationMenuViewport`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

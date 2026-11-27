@@ -33,6 +33,13 @@ describe.each(themes)('examples in the %s theme', (theme) => {
       await settle(400) // let the open animation finish: axe would otherwise measure contrast on a translucent panel
       expect(document.querySelector('[role="menu"]'), 'button did not open the menu').not.toBeNull()
     }
+    // Navigation menus open their first flyout from a click on its trigger.
+    const navTrigger = mounted.el.querySelector<HTMLElement>('[data-slot="navigation-menu-trigger"]')
+    if (navTrigger) {
+      await userEvent.click(navTrigger)
+      await settle(400)
+      expect(document.querySelector('[data-slot="navigation-menu-content"]'), 'trigger did not open the flyout').not.toBeNull()
+    }
     const contextArea = mounted.el.querySelector<HTMLElement>('[data-slot="context-menu-trigger"]')
     if (contextArea) {
       const box = contextArea.getBoundingClientRect()

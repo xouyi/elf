@@ -1195,6 +1195,63 @@
       ]
     },
     {
+      "name": "navigation-menu",
+      "type": "registry:ui",
+      "title": "Navigation Menu",
+      "description": "Top-level site navigation with flyout panels, a shared animated viewport, an optional indicator and link styles, built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core",
+        "@lucide/vue",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenu.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenuContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenuIndicator.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenuItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenuLink.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenuList.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenuTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/NavigationMenuViewport.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/index.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/navigation-menu/styles.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "elf-theme",
       "type": "registry:file",
       "title": "Elf theme",

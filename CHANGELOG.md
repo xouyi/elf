@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Add `ElfNavigationMenu` with `ElfNavigationMenuList`, `ElfNavigationMenuItem`, `ElfNavigationMenuTrigger`, `ElfNavigationMenuContent`, `ElfNavigationMenuLink` (`variant` `item` or `trigger`, `active`), `ElfNavigationMenuViewport` and `ElfNavigationMenuIndicator`, built on the Reka UI NavigationMenu primitive: a `nav` landmark following the disclosure navigation pattern, flyout panels that share one animated viewport (`viewport` prop, off to place each panel under its trigger), hover and click open, Escape returns focus to the trigger, 40px touch targets on small screens. Exports `navigationMenuTriggerStyle` and `navigationMenuItemLinkClass` for router links.
+
 ## 0.4.0
 
 - **Breaking: the `novatron` theme is now `nova`.** `data-theme="novatron"` becomes `data-theme="nova"`, the file `@xouyi/elfui/themes/novatron.css` becomes `@xouyi/elfui/themes/nova.css`, the Nuxt option `elfui: { theme: 'novatron' }` becomes `theme: 'nova'` (also in `themes: [...]`), `elfui init --theme novatron` becomes `--theme nova`, and `useElfTheme` values stored as `novatron` (cookie or localStorage) must be migrated to `nova`. No compatibility alias. The tokens are unchanged. To migrate: search your project for `novatron` in HTML, CSS imports, `nuxt.config.ts` and stored theme values, and replace it with `nova`.
