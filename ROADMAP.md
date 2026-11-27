@@ -248,7 +248,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** Icon buttons in `AppNav`, `MobileTopBar`, row actions.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfPopover
 

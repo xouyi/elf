@@ -54,6 +54,9 @@ import DialogControlled from '../../src/components/dialog/examples/Controlled.vu
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
 import TabsControlled from '../../src/components/tabs/examples/Controlled.vue'
 import TabsDefault from '../../src/components/tabs/examples/Default.vue'
+import TooltipControlled from '../../src/components/tooltip/examples/Controlled.vue'
+import TooltipDefault from '../../src/components/tooltip/examples/Default.vue'
+import TooltipIconButtons from '../../src/components/tooltip/examples/IconButtons.vue'
 import { mountComponent, settle, setTheme, themes } from './support'
 
 let unmount: (() => void) | undefined
@@ -1082,6 +1085,65 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       const [a, b] = [avatars[0]!.getBoundingClientRect(), avatars[1]!.getBoundingClientRect()]
       expect(b.left, 'each avatar overlaps the previous one').toBeLessThan(a.right)
       expect(getComputedStyle(avatars[0]!).boxShadow).not.toBe('none')
+    })
+  })
+
+  describe('Tooltip', () => {
+    const tip = () => document.querySelector<HTMLElement>('[role="tooltip"]')
+
+    it('opens on keyboard focus, describes the trigger, and Escape closes it while focus stays on the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(TooltipDefault)
+      const trigger = el.querySelector<HTMLElement>('button')!
+      expect(tip()).toBeNull()
+      await userEvent.tab()
+      expect(document.activeElement).toBe(trigger)
+      await settle(150)
+      expect(tip()?.textContent).toContain('Saved to your team library')
+      expect(trigger.getAttribute('aria-describedby')).toBe(tip()!.id)
+      await userEvent.keyboard('{Escape}')
+      await settle(200)
+      expect(tip()).toBeNull()
+      expect(document.activeElement).toBe(trigger)
+    })
+
+    it('opens after the hover delay and closes when the pointer leaves', async () => {
+      setTheme(theme)
+      const { el } = await show(TooltipDefault)
+      const trigger = el.querySelector<HTMLElement>('button')!
+      await userEvent.hover(trigger)
+      await settle(700)
+      expect(tip()).not.toBeNull()
+      await userEvent.unhover(trigger)
+      await settle(400)
+      expect(tip()).toBeNull()
+    })
+
+    it('shares the delay of a provider: the second tooltip opens at once after the first', async () => {
+      setTheme(theme)
+      const { el } = await show(TooltipIconButtons)
+      const [bold, italic] = [...el.querySelectorAll<HTMLElement>('button')]
+      await userEvent.hover(bold!)
+      await settle(600)
+      expect(tip()?.textContent).toContain('Bold')
+      await userEvent.hover(italic!)
+      // A real mouse keeps moving; the second move happens once the pointer has left the first tooltip's grace area.
+      await settle(60)
+      await userEvent.hover(italic!, { position: { x: 6, y: 6 } })
+      await settle(120)
+      expect(tip()?.textContent, 'no second delay inside the skip window').toContain('Italic')
+    })
+
+    it('v-model:open follows the tooltip state', async () => {
+      setTheme(theme)
+      const { el } = await show(TooltipControlled)
+      expect(el.textContent).toContain('open = false')
+      await userEvent.tab()
+      await settle(150)
+      expect(el.textContent).toContain('open = true')
+      await userEvent.keyboard('{Escape}')
+      await settle(150)
+      expect(el.textContent).toContain('open = false')
     })
   })
 

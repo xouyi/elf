@@ -34,6 +34,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [Alert](https://xouyi.github.io/elfUI/docs/components/alert): Static message with an icon, a title and a description. Variants: default, destructive, success, warning. Composed from native elements (no Reka primitive): ElfAlert with ElfAlertTitle and ElfAlertDescription.
 - [Progress](https://xouyi.github.io/elfUI/docs/components/progress): Progress bar built on Reka UI Progress (role=progressbar). Determinate with v-model (0..max) or indeterminate with a null value. Always give it a name with label, aria-label or aria-labelledby.
 - [Avatar](https://xouyi.github.io/elfUI/docs/components/avatar): Person or team image with an initials fallback, built on Reka UI Avatar. ElfAvatar (size) contains ElfAvatarImage and ElfAvatarFallback; ElfAvatarGroup overlaps several.
+- [Tooltip](https://xouyi.github.io/elfUI/docs/components/tooltip): Short non-interactive hint on hover or keyboard focus, built on Reka UI Tooltip. Compose ElfTooltip > ElfTooltipTrigger (as-child around a button) + ElfTooltipContent. Wrap related tooltips in one ElfTooltipProvider to share the open delay.
 
 ## Reference
 

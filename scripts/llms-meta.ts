@@ -336,6 +336,24 @@ export const components: ComponentMeta[] = [
     slots: ['ElfAvatarFallback default: custom fallback content (an icon, +3)', 'ElfAvatarGroup default: ElfAvatar items'],
     a11y: ['Give ElfAvatarImage an alt (the name, or empty when the name is shown beside it).', 'Use label on a standalone avatar, and aria-label on a group.', 'Avatars are not interactive; name the link or button you wrap one in.'],
   },
+  {
+    dir: 'tooltip',
+    name: 'Tooltip',
+    summary: 'Short non-interactive hint on hover or keyboard focus, built on Reka UI Tooltip. Compose ElfTooltip > ElfTooltipTrigger (as-child around a button) + ElfTooltipContent. Wrap related tooltips in one ElfTooltipProvider to share the open delay.',
+    parts: ['ElfTooltip', 'ElfTooltipTrigger', 'ElfTooltipContent', 'ElfTooltipProvider'],
+    props: [
+      { name: 'ElfTooltip open / defaultOpen', type: 'boolean', description: 'Controlled (v-model:open) or initial open state.' },
+      { name: 'ElfTooltip delayDuration', type: 'number', description: 'Milliseconds before opening on hover; overrides the provider.' },
+      { name: 'ElfTooltipProvider delayDuration', type: 'number', default: '400', description: 'Open delay shared by every tooltip below it (attribute: delay-duration).' },
+      { name: 'ElfTooltipProvider skipDelayDuration', type: 'number', default: '300', description: 'Window after a tooltip closes in which the next one opens instantly.' },
+      { name: 'ElfTooltipContent side', type: '\'top\' | \'right\' | \'bottom\' | \'left\'', default: 'top', description: 'Preferred side; flips when there is no room.' },
+      { name: 'ElfTooltipContent align', type: '\'start\' | \'center\' | \'end\'', default: 'center', description: 'Alignment against the trigger.' },
+      { name: 'ElfTooltipContent sideOffset', type: 'number', default: '6', description: 'Gap to the trigger in pixels (attribute: side-offset).' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by ElfTooltipContent; merged with base classes.' },
+    ],
+    slots: ['ElfTooltipTrigger default: the described element (use as-child)', 'ElfTooltipContent default: a short plain-text hint'],
+    a11y: ['The tooltip describes the trigger (aria-describedby); give the trigger its own name, for example aria-label on an icon button.', 'Opens on hover and keyboard focus, closes on Escape. Never put links, buttons or essential information inside it.', 'Touch screens cannot hover: do not hide information that touch users need behind a tooltip.'],
+  },
 ]
 
 export const rules = [

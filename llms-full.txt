@@ -90,7 +90,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, tooltip, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -2800,8 +2800,165 @@ const sizes = ['sm', 'default', 'lg', 'xl'] as const
 </template>
 ```
 
+### Tooltip
+
+Short non-interactive hint on hover or keyboard focus, built on Reka UI Tooltip. Compose ElfTooltip > ElfTooltipTrigger (as-child around a button) + ElfTooltipContent. Wrap related tooltips in one ElfTooltipProvider to share the open delay.
+
+Components: `ElfTooltip`, `ElfTooltipTrigger`, `ElfTooltipContent`, `ElfTooltipProvider`
+
+Props:
+
+- `ElfTooltip open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfTooltip delayDuration` (number): Milliseconds before opening on hover; overrides the provider.
+- `ElfTooltipProvider delayDuration` (number, default 400): Open delay shared by every tooltip below it (attribute: delay-duration).
+- `ElfTooltipProvider skipDelayDuration` (number, default 300): Window after a tooltip closes in which the next one opens instantly.
+- `ElfTooltipContent side` ('top' | 'right' | 'bottom' | 'left', default top): Preferred side; flips when there is no room.
+- `ElfTooltipContent align` ('start' | 'center' | 'end', default center): Alignment against the trigger.
+- `ElfTooltipContent sideOffset` (number, default 6): Gap to the trigger in pixels (attribute: side-offset).
+- `class` (string | array | object): Accepted by ElfTooltipContent; merged with base classes.
+
+Slots:
+
+- ElfTooltipTrigger default: the described element (use as-child)
+- ElfTooltipContent default: a short plain-text hint
+
+Accessibility:
+
+- The tooltip describes the trigger (aria-describedby); give the trigger its own name, for example aria-label on an icon button.
+- Opens on hover and keyboard focus, closes on Escape. Never put links, buttons or essential information inside it.
+- Touch screens cannot hover: do not hide information that touch users need behind a tooltip.
+
+Examples:
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfTooltip, ElfTooltipContent, ElfTooltipTrigger } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfTooltip v-model:open="open">
+      <ElfTooltipTrigger as-child>
+        <ElfButton variant="outline">
+          Details
+        </ElfButton>
+      </ElfTooltipTrigger>
+      <ElfTooltipContent>Opens a read-only summary</ElfTooltipContent>
+    </ElfTooltip>
+    <p class="text-sm text-muted-foreground">
+      open = {{ open }}
+    </p>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfTooltip, ElfTooltipContent, ElfTooltipTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfTooltip>
+    <ElfTooltipTrigger as-child>
+      <ElfButton variant="outline">
+        Hover or focus me
+      </ElfButton>
+    </ElfTooltipTrigger>
+    <ElfTooltipContent>
+      Saved to your team library
+    </ElfTooltipContent>
+  </ElfTooltip>
+</template>
+```
+
+#### Icon Buttons
+
+```vue
+<script setup lang="ts">
+import { Bold, Italic, Link } from '@lucide/vue'
+import { ElfButton, ElfTooltip, ElfTooltipContent, ElfTooltipProvider, ElfTooltipTrigger } from '@xouyi/elfui'
+
+const actions = [
+  { label: 'Bold', icon: Bold },
+  { label: 'Italic', icon: Italic },
+  { label: 'Insert link', icon: Link },
+]
+</script>
+
+<template>
+  <!-- One provider shares the open delay: after the first tooltip, neighbours open instantly. -->
+  <ElfTooltipProvider :delay-duration="300" :skip-delay-duration="500">
+    <div class="flex gap-1">
+      <ElfTooltip v-for="action in actions" :key="action.label">
+        <ElfTooltipTrigger as-child>
+          <ElfButton variant="ghost" size="icon" :aria-label="action.label">
+            <component :is="action.icon" />
+          </ElfButton>
+        </ElfTooltipTrigger>
+        <ElfTooltipContent>{{ action.label }}</ElfTooltipContent>
+      </ElfTooltip>
+    </div>
+  </ElfTooltipProvider>
+</template>
+```
+
+#### Sides
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfTooltip, ElfTooltipContent, ElfTooltipProvider, ElfTooltipTrigger } from '@xouyi/elfui'
+
+const sides = ['top', 'right', 'bottom', 'left'] as const
+</script>
+
+<template>
+  <ElfTooltipProvider :delay-duration="150">
+    <div class="flex flex-wrap items-center gap-2">
+      <ElfTooltip v-for="side in sides" :key="side">
+        <ElfTooltipTrigger as-child>
+          <ElfButton variant="outline" size="sm" class="capitalize">
+            {{ side }}
+          </ElfButton>
+        </ElfTooltipTrigger>
+        <ElfTooltipContent :side="side">
+          Appears on the {{ side }}
+        </ElfTooltipContent>
+      </ElfTooltip>
+    </div>
+  </ElfTooltipProvider>
+</template>
+```
+
+#### With Shortcut
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfKbd, ElfTooltip, ElfTooltipContent, ElfTooltipTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfTooltip>
+    <ElfTooltipTrigger as-child>
+      <ElfButton variant="outline">
+        Save
+      </ElfButton>
+    </ElfTooltipTrigger>
+    <ElfTooltipContent class="flex items-center gap-2">
+      Save changes <ElfKbd>Ctrl S</ElfKbd>
+    </ElfTooltipContent>
+  </ElfTooltip>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

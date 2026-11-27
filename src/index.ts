@@ -111,3 +111,11 @@ export type { ElfTheme } from './lib/themes'
 
 export { elfThemeBootScript, useElfTheme } from './composables/use-elf-theme'
 export type { ElfThemeBootScriptOptions, ElfThemeStorage, UseElfThemeOptions, UseElfThemeReturn } from './composables/use-elf-theme'
+
+export {
+  Tooltip as ElfTooltip,
+  TooltipContent as ElfTooltipContent,
+  TooltipProvider as ElfTooltipProvider,
+  TooltipTrigger as ElfTooltipTrigger,
+} from './components/tooltip'
+export type { TooltipContentProps } from './components/tooltip'

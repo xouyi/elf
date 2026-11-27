@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Add `ElfTooltip`, `ElfTooltipTrigger`, `ElfTooltipContent` and `ElfTooltipProvider`, built on the Reka UI Tooltip primitive: opens on hover and keyboard focus, closes on Escape, hoverable content, a shared open delay through the provider (400 ms by default), `side`/`align`, `v-model:open`, and a standalone mode that creates its own provider.
+
 ## 0.4.0
 
 - Add the `useElfTheme()` composable (`theme`, `themes`, `setTheme`, `cycle`) and `elfThemeBootScript()`: reads and sets `data-theme` on `<html>`, SSR-safe (per-app state, no `document` access on the server), typed theme names with support for custom themes, optional persistence in a cookie or localStorage, auto-imported by the Nuxt module. `elfThemes`, `ElfTheme` and the new `isElfTheme()` now live in `src/lib/themes.ts` and are still exported from the package root.
