@@ -1,6 +1,7 @@
 import type { Component } from 'vue'
 import axe from 'axe-core'
 import { expect } from 'vitest'
+import { userEvent } from 'vitest/browser'
 import { createApp } from 'vue'
 
 export type ThemeName = 'elf' | 'nova' | 'elfwood'
@@ -20,8 +21,27 @@ export function setTheme(theme: ThemeName) {
   document.documentElement.dataset.theme = theme
 }
 
+/**
+ * Moves the real mouse pointer onto a fixed 4px target in the bottom-right corner. Playwright's pointer stays where the
+ * previous test left it, so without this an example can mount under a pointer that is still hovering something: its
+ * hover styles then transition in at an unpredictable moment, and axe or style assertions would sample resting,
+ * half-way or hovered colours depending on timing. Every test starts from "pointer away".
+ */
+async function parkPointer() {
+  let target = document.getElementById('pointer-park')
+  if (!target) {
+    target = document.createElement('div')
+    target.id = 'pointer-park'
+    target.setAttribute('aria-hidden', 'true')
+    target.style.cssText = 'position:fixed;right:0;bottom:0;width:4px;height:4px;z-index:2147483647'
+    document.body.append(target)
+  }
+  await userEvent.hover(target)
+}
+
 /** Mounts a component into a fresh container on document.body and returns it with an unmount helper. */
 export async function mountComponent(component: Component) {
+  await parkPointer()
   const el = document.createElement('div')
   el.id = 'example-root'
   document.body.append(el)
