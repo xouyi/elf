@@ -336,3 +336,28 @@ export {
   MenubarTrigger as ElfMenubarTrigger,
 } from './components/menubar'
 export type { MenubarCheckboxItemProps, MenubarContentProps, MenubarItemProps, MenubarLabelProps, MenubarProps, MenubarRadioItemProps, MenubarSeparatorProps, MenubarShortcutProps, MenubarSubContentProps, MenubarSubTriggerProps, MenubarTriggerProps } from './components/menubar'
+export {
+  Sidebar as ElfSidebar,
+  SIDEBAR_MOBILE_BREAKPOINT,
+  SidebarContent as ElfSidebarContent,
+  SidebarFooter as ElfSidebarFooter,
+  SidebarGroup as ElfSidebarGroup,
+  SidebarGroupContent as ElfSidebarGroupContent,
+  SidebarGroupLabel as ElfSidebarGroupLabel,
+  SidebarHeader as ElfSidebarHeader,
+  SidebarInset as ElfSidebarInset,
+  SidebarMenu as ElfSidebarMenu,
+  SidebarMenuBadge as ElfSidebarMenuBadge,
+  SidebarMenuButton as ElfSidebarMenuButton,
+  sidebarMenuButtonVariants,
+  SidebarMenuItem as ElfSidebarMenuItem,
+  SidebarMenuSub as ElfSidebarMenuSub,
+  SidebarMenuSubButton as ElfSidebarMenuSubButton,
+  SidebarMenuSubItem as ElfSidebarMenuSubItem,
+  SidebarProvider as ElfSidebarProvider,
+  SidebarRail as ElfSidebarRail,
+  SidebarSeparator as ElfSidebarSeparator,
+  SidebarTrigger as ElfSidebarTrigger,
+  useSidebar,
+} from './components/sidebar'
+export type { SidebarCollapsible, SidebarContext, SidebarMenuButtonProps, SidebarMenuButtonVariants, SidebarMenuSubButtonProps, SidebarProps, SidebarProviderProps, SidebarSide, SidebarState, SidebarTriggerProps } from './components/sidebar'

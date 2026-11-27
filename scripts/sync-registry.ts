@@ -72,6 +72,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   'stat-card': { title: 'Stat Card', description: 'KPI tile with label, value, hint, trend, tone, loading state and an optional stretched link.', dependencies: ['reka-ui', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('skeleton'), dep('visually-hidden')] },
   'navigation-menu': { title: 'Navigation Menu', description: 'Top-level site navigation with flyout panels, a shared animated viewport, an optional indicator and link styles, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'] },
   menubar: { title: 'Menubar', description: 'Desktop-style horizontal menu bar with the same item parts and styles as the Dropdown Menu, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('dropdown-menu')] },
+  sidebar: { title: 'Sidebar', description: 'Collapsible app navigation: groups, menu buttons with active state and badges, icon-collapsed mode with tooltips, rail, keyboard shortcut and an off-canvas sheet on phones, composed from Sheet, Tooltip, Separator and ScrollArea.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('button'), dep('sheet'), dep('tooltip'), dep('separator'), dep('scroll-area')] },
 }
 
 const items: unknown[] = [

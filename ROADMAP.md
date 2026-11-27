@@ -483,7 +483,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfSheet, ElfTooltip, ElfCollapsible, ElfSeparator, ElfScrollArea
 - **Complexity:** L
 - **Novatron screens:** `AppNav` in courses/stock/forum; HQ shell; scout.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfNavigationMenu
 
