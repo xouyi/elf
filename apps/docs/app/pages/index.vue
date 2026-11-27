@@ -11,7 +11,7 @@ useHead({ titleTemplate: '%s' })
 const install = `bun add github:xouyi/elfUI#v${config.public.version} tailwindcss @tailwindcss/vite\nbun add -d typescript`
 const features = [
   { icon: ShieldCheck, title: 'Accessible by default', text: 'Reka UI primitives handle focus, keyboard and ARIA. Every example is checked with axe in both themes.' },
-  { icon: Palette, title: 'Two themes, one file each', text: 'Elf (pure black with violet accents, rounded) and Novatron (gold on obsidian, sharp corners). Add your own with a block of CSS variables.' },
+  { icon: Palette, title: 'Two themes, one file each', text: 'Elf (pure black with violet accents, rounded) and Nova (gold on obsidian, sharp corners). Add your own with a block of CSS variables.' },
   { icon: Contrast, title: 'Dark only, contrast verified', text: 'No light mode to maintain. WCAG AA ratios of every token pair are computed on each build.' },
   { icon: Sparkles, title: 'Built for people and AI', text: 'Install the package, copy sources with the shadcn-vue registry, or point an assistant at llms.txt.' },
 ]

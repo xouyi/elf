@@ -7,7 +7,7 @@
  */
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { components, novatronRules, rules } from './llms-meta'
+import { components, novaRules, rules } from './llms-meta'
 
 // readdir order differs between filesystems (local vs CI); sort so the generated files are byte-identical everywhere.
 const byCodePoint = (a: string, b: string): number => (a < b ? -1 : a > b ? 1 : 0)
@@ -89,7 +89,7 @@ function componentSection(c: (typeof components)[number], heading: string) {
 const installNuxt = [
   '```bash',
   '# automatic: installs, patches nuxt.config and the main CSS (idempotent)',
-  'bunx @xouyi/elfui@latest init --theme novatron --yes',
+  'bunx @xouyi/elfui@latest init --theme nova --yes',
   '',
   '# or by hand',
   'bun add @xouyi/elfui tailwindcss @tailwindcss/vite',
@@ -103,7 +103,7 @@ const installNuxt = [
   'export default defineNuxtConfig({',
   '  modules: [\'@xouyi/elfui/nuxt\'],',
   '  css: [\'~/assets/css/main.css\'],',
-  '  elfui: { theme: \'novatron\', themes: [\'elf\'] }, // config key stays elfui; theme: \'elf\' | \'novatron\'',
+  '  elfui: { theme: \'nova\', themes: [\'elf\'] }, // config key stays elfui; theme: \'elf\' | \'nova\'',
   '  vite: { plugins: [tailwindcss()] },',
   '})',
   '```',
@@ -124,17 +124,17 @@ const installPlain = [
   '@import \'tailwindcss\';',
   '@import \'@xouyi/elfui/styles.css\';',
   '@import \'@xouyi/elfui/themes/elf.css\';',
-  '@import \'@xouyi/elfui/themes/novatron.css\';',
+  '@import \'@xouyi/elfui/themes/nova.css\';',
   '```',
   '',
   '```ts',
   'import { ElfButton } from \'@xouyi/elfui\'',
   '```',
   '',
-  'Set `<html data-theme="elf">` (or `novatron`).',
+  'Set `<html data-theme="elf">` (or `nova`).',
 ]
 
-const intro = 'ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (pure black with violet accents, rounded) and novatron (gold on obsidian, sharp corners).'
+const intro = 'ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (pure black with violet accents, rounded) and nova (gold on obsidian, sharp corners).'
 
 const links = [
   `- [Documentation site](${SITE}/): guides and a page per component with live previews, API tables and accessibility notes`,
@@ -190,9 +190,9 @@ const full = [
   '',
   ...rules.map(r => `- ${r}`),
   '',
-  '### Novatron theme rules',
+  '### Nova theme rules',
   '',
-  ...novatronRules.map(r => `- ${r}`),
+  ...novaRules.map(r => `- ${r}`),
   '',
   '## Install (Nuxt 4)',
   '',
@@ -200,7 +200,7 @@ const full = [
   '',
   ...installNuxt,
   '',
-  'Components are auto-imported with the Elf prefix. Module options: `theme` (\'elf\' | \'novatron\', default \'elf\'), `themes` (extra theme CSS to bundle), `prefix` (default \'Elf\').',
+  'Components are auto-imported with the Elf prefix. Module options: `theme` (\'elf\' | \'nova\', default \'elf\'), `themes` (extra theme CSS to bundle), `prefix` (default \'Elf\').',
   '',
   'Upgrade: `bun update @xouyi/elfui`. Advanced: an unreleased commit can be installed with `bun add github:xouyi/elfUI#<tag-or-sha>`.',
   '',
@@ -225,14 +225,14 @@ const full = [
   `Themes: ${themes.map(t => `\`${t}\``).join(', ')}. Select with \`data-theme\` on html or any element. Dark only.`,
   '',
   '```ts',
-  'document.documentElement.dataset.theme = \'novatron\'',
+  'document.documentElement.dataset.theme = \'nova\'',
   '```',
   '',
   'Or from code, SSR-safe, with optional persistence (auto-imported in Nuxt; otherwise `import { useElfTheme } from "@xouyi/elfui"`):',
   '',
   '```ts',
   'const { theme, themes, setTheme, cycle } = useElfTheme({ storage: \'cookie\' }) // storage: \'cookie\' | \'localStorage\' | \'none\' (default)',
-  'setTheme(\'novatron\')',
+  'setTheme(\'nova\')',
   '```',
   '',
   'Tokens (CSS variables `--elf-<name>`, Tailwind utilities `bg-<name>`, `text-<name>-foreground`, `border-border`, `ring-ring`):',

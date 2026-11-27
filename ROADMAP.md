@@ -18,7 +18,7 @@ Status legend: **done** (shipped), **planned** (not started). Complexity: **S** 
 
 ## Where we are
 
-Shipped in 0.2.0: **Button, Input, Badge, Card, Dialog, Tabs**, the `elf` (black with violet accents) and `novatron` (gold, 0px radius) themes, the Nuxt module, the shadcn-vue registry and `llms.txt`. Built on Reka UI 2.11, class-variance-authority, tailwind-merge and Tailwind CSS v4.
+Shipped in 0.2.0: **Button, Input, Badge, Card, Dialog, Tabs**, the `elf` (black with violet accents) and `nova` (gold, 0px radius) themes, the Nuxt module, the shadcn-vue registry and `llms.txt`. Built on Reka UI 2.11, class-variance-authority, tailwind-merge and Tailwind CSS v4.
 
 Reka UI 2.11 (the version in this repo) already ships primitives for almost everything below: Accordion, AlertDialog, AspectRatio, Autocomplete, Avatar, Calendar, Checkbox, Collapsible, Combobox, ContextMenu, DatePicker, DateRangePicker, Dialog, Drawer, DropdownMenu, Editable, Field, Form, HoverCard, Label, Listbox, Menubar, NavigationMenu, NumberField, Pagination, PinInput, Popover, Progress, RadioGroup, RangeCalendar, Rating, ScrollArea, Select, Separator, Slider, Splitter, Stepper, Switch, Tabs, TagsInput, TimeField, Toast, Toggle, ToggleGroup, Toolbar, Tooltip, Tree and VisuallyHidden. What it does not provide, and ElfUI must compose itself, is Table, Data Table, Sidebar, Breadcrumb, Command (partly), Chart, Code Block, Skeleton, Spinner, Alert, Empty, Kbd, Input Group, File Upload and the toast queue.
 
@@ -29,7 +29,7 @@ Reka UI 2.11 (the version in this repo) already ships primitives for almost ever
 1. **Accessibility is a release gate, not a goal.** Every component follows the matching [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/patterns/) pattern, is fully keyboard operable, has visible focus in both themes, respects `prefers-reduced-motion`, and reaches WCAG 2.2 AA contrast. axe-core must report zero violations for every example in both themes. A component with a documented keyboard table that is not tested is not done.
 2. **Reka first.** If Reka UI has a primitive, build on it. Do not reimplement focus management, typeahead, dismissal, collision handling or ARIA wiring. If Reka has no primitive, compose from native elements and `Primitive`, and say so in the docs page.
 3. **API conventions.** Every component: `data-slot` on every part, `data-variant`/`data-size` where applicable, `class` merged with `cn()` last, `asChild`/`as` where it renders an element, `v-model` (and `v-model:open`) for state with an uncontrolled default, a `<Name>Props` type exported from the component's `index.ts`, variants through `cva` and exported as `<name>Variants`, sub-parts named `<Parent><Part>`, relative imports inside `src` (the registry sync rewrites them to aliases). No component reaches for a global, a router or Nuxt auto-imports.
-4. **Tokens, not values.** Components use only semantic CSS variables (`--background`, `--foreground`, `--primary`, `--ring`, `--radius` and the additions listed in v0.8). No hard-coded colours or radii. A new theme needs only token values; the `novatron` theme must keep working with `--radius: 0`. Themes stay dark only.
+4. **Tokens, not values.** Components use only semantic CSS variables (`--background`, `--foreground`, `--primary`, `--ring`, `--radius` and the additions listed in v0.8). No hard-coded colours or radii. A new theme needs only token values; the `nova` theme must keep working with `--radius: 0`. Themes stay dark only.
 5. **One source of truth.** A component's props, emits and slots are read from its source by the docs build; examples are single-file components under `src/components/<name>/examples/` and feed docs previews, unit tests, a11y tests and visual baselines. Nothing is described twice.
 6. **Small, copyable, owned.** The package ships source (`@xouyi/elfui`) and a shadcn-vue registry. Avoid runtime dependencies beyond Reka UI, cva, tailwind-merge and `@vueuse/core` where justified. Heavy features (Chart, Code Block, Carousel, Markdown) use optional peer dependencies and lazy loading.
 7. **Frozen public API after 1.0.** Props, slots, emitted events, `data-slot` names and token names are public API. Breaking changes are announced in the changelog one minor release ahead and land only in a major.
@@ -68,7 +68,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** courses `AdminTable` captions, `AdminFilterBar` labels (`cx-visually-hidden`).
-- **Status:** shipped (unreleased, v0.3)
+- **Status:** shipped (v0.3.0)
 
 #### ElfLabel
 
@@ -79,7 +79,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** Every form in stock, courses, forum.
-- **Status:** shipped (unreleased, v0.3)
+- **Status:** shipped (v0.3.0)
 
 #### ElfField
 
@@ -90,7 +90,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** ElfLabel
 - **Complexity:** M
 - **Novatron screens:** stock `WishlistForm`, `ItemEditSheet`; courses `CourseForm`, `AssignmentForm`; forum `PostForm`, `ProfileEditForm`.
-- **Status:** shipped (unreleased, v0.3)
+- **Status:** shipped (v0.3.0)
 
 #### ElfTextarea
 
@@ -101,7 +101,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** forum `PostForm`, `CommentForm`; courses `AssignmentForm`, `CourseChat`.
-- **Status:** shipped (unreleased, v0.3)
+- **Status:** shipped (v0.3.0)
 
 #### ElfCheckbox
 
@@ -156,7 +156,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** `AdminSection`, sidebars, menus.
-- **Status:** shipped (unreleased, v0.3)
+- **Status:** shipped (v0.3.0)
 
 #### ElfSpinner
 
@@ -167,7 +167,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** ElfVisuallyHidden
 - **Complexity:** S
 - **Novatron screens:** Buttons in loading state; page loaders everywhere.
-- **Status:** shipped (unreleased, v0.3)
+- **Status:** shipped (v0.3.0)
 
 #### ElfSkeleton
 
@@ -178,7 +178,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** courses/stock `AdminSkeleton`, `ax-skel`.
-- **Status:** shipped (unreleased, v0.3)
+- **Status:** shipped (v0.3.0)
 
 #### ElfAlert
 
@@ -189,7 +189,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** `AdminErrorBox` in courses/stock; form-level errors.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfProgress
 
@@ -200,7 +200,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** courses `ProgressBar`, `CourseCard`, lesson progress.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfAvatar
 
@@ -211,7 +211,7 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** forum `UserAvatar`, comments, profile; HQ member lists.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfKbd
 
@@ -222,11 +222,11 @@ Everything needed to build a complete, accessible form and give basic feedback. 
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** Command palette hints, docs, courses `QuickSearch`.
-- **Status:** shipped (unreleased, v0.3)
+- **Status:** shipped (v0.3.0)
 
 #### useElfTheme
 
-- **Purpose:** Composable to read and set the active theme (`elf`, `novatron`) and persist it; works with and without Nuxt.
+- **Purpose:** Composable to read and set the active theme (`elf`, `nova`) and persist it; works with and without Nuxt.
 - **Built on:** utility
 - **Key props, variants and parts:** `theme`, `setTheme`, `cycle`, `themes`; options `themes`, `defaultTheme`, `initial`, `storage` (`cookie` | `localStorage` | `none`), `storageKey`; `elfThemeBootScript()` for no-flash loads.
 - **Accessibility:** Native semantics; no dedicated APG pattern. Keyboard and ARIA covered by the Definition of Done.
@@ -758,7 +758,7 @@ Decide what to ship for layout, finish provider and theme utilities, and harden 
 - **Accessibility:** Native semantics; no dedicated APG pattern (Contrast (WCAG 2.2 AA)). Keyboard and ARIA covered by the Definition of Done.
 - **Depends on:** none
 - **Complexity:** M
-- **Novatron screens:** `novatron` theme maintenance; contrast gate in CI.
+- **Novatron screens:** `nova` theme maintenance; contrast gate in CI.
 - **Status:** planned
 
 ### v0.9: App-level composites
@@ -842,7 +842,7 @@ The v0.9 composites (`ElfAdminPage`, `ElfLightbox`, `ElfCameraCapture`, `ElfQuiz
 
 Copy this checklist into the pull request. All boxes are required unless marked N/A with a reason.
 
-- [ ] **Source.** `src/components/<name>/` with one `.vue` file per part, `index.ts` exporting the parts, `<Name>Props` types and `<name>Variants`, wired into `src/index.ts`. Uses semantic tokens only; works in `elf` and `novatron` themes and at `--radius: 0`.
+- [ ] **Source.** `src/components/<name>/` with one `.vue` file per part, `index.ts` exporting the parts, `<Name>Props` types and `<name>Variants`, wired into `src/index.ts`. Uses semantic tokens only; works in `elf` and `nova` themes and at `--radius: 0`.
 - [ ] **Types.** Strict TypeScript, no `any`, no unexported prop types; `bun run typecheck` and `bun run lint` pass.
 - [ ] **Examples.** `src/components/<name>/examples/*.vue`: at least `Default`, every variant, every size, `Disabled`, and one realistic composition. Examples are the single source for docs, tests and visual baselines.
 - [ ] **Docs page.** `apps/docs/content/components/<name>.md` with Installation (package and registry command), Usage, Examples via `<ComponentPreview>`, generated API reference (props, emits, slots), Accessibility (keyboard table and ARIA roles, with APG link), Theming (tokens used).

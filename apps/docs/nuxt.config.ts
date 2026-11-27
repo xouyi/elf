@@ -24,7 +24,7 @@ export default defineNuxtConfig({
   modules: ['@xouyi/elfui/nuxt', '@nuxt/content'],
   css: ['~/assets/css/main.css'],
   // The docs dogfood ElfUI: both themes are bundled so the switcher and the per-example previews can use either.
-  elfui: { theme: 'elf', themes: ['novatron'] },
+  elfui: { theme: 'elf', themes: ['nova'] },
   vite: {
     plugins: [tailwindcss()],
     resolve: {

@@ -10,7 +10,7 @@ ElfUI is a dark-only design system for Vue 3 and Nuxt 4. Components are built on
 CSS-variable theming) and styled with Tailwind CSS v4.
 
 - Components: Button, Input, Badge, Card, Dialog, Tabs (all prefixed `Elf` in Vue, for example `<ElfButton>`)
-- Themes: `elf` (pure black with violet accents, rounded, default) and `novatron` (gold on obsidian, sharp corners)
+- Themes: `elf` (pure black with violet accents, rounded, default) and `nova` (gold on obsidian, sharp corners)
 - Distribution: the npm package [`@xouyi/elfui`](https://www.npmjs.com/package/@xouyi/elfui) (with its own CLI), plus a registry for copying components into your project
 - Docs: a Nuxt Content site built with ElfUI itself, published at https://xouyi.github.io/elfUI/ (`bun run docs:dev` locally)
 - AI assistants: `llms.txt` and `llms-full.txt`, generated from the sources (`bun run llms`)
@@ -44,7 +44,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineNuxtConfig({
   modules: ['@xouyi/elfui/nuxt'],
   css: ['~/assets/css/main.css'],
-  elfui: { theme: 'novatron' }, // the config key stays `elfui`; 'elf' | 'novatron'; optional: themes: ['elf'] to bundle extra themes
+  elfui: { theme: 'nova' }, // the config key stays `elfui`; 'elf' | 'nova'; optional: themes: ['elf'] to bundle extra themes
   vite: { plugins: [tailwindcss()] },
 })
 ```
@@ -80,7 +80,7 @@ import { ElfButton } from '@xouyi/elfui'
 @import '@xouyi/elfui/themes/elf.css';
 ```
 
-Set `<html data-theme="elf">` (or `novatron`).
+Set `<html data-theme="elf">` (or `nova`).
 
 ### Install from GitHub (advanced)
 

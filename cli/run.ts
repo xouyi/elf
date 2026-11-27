@@ -22,7 +22,7 @@ ${c.bold('Commands')}
   diff <component...>   Compare your local copy of a component with the registry version
 
 ${c.bold('Options')}
-  --theme <elf|novatron>   init: theme to configure (default: elf)
+  --theme <elf|nova>   init: theme to configure (default: elf)
   --path <dir>             add/diff: components directory below src (default: components/ui)
   --overwrite              add: replace files that differ from the registry
   --registry <url|dir>     Registry base URL or local directory (env: ELFUI_REGISTRY)
@@ -36,7 +36,7 @@ ${c.bold('Options')}
   -h, --help               Print this help
 
 ${c.bold('Examples')}
-  bunx @xouyi/elfui@latest init --theme novatron --yes
+  bunx @xouyi/elfui@latest init --theme nova --yes
   bunx @xouyi/elfui add button dialog
   bunx @xouyi/elfui add field --path components/ui --overwrite
   bunx @xouyi/elfui diff button

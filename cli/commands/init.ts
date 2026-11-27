@@ -12,7 +12,7 @@ import { detectProject, hasDependency } from '../lib/project'
 import type { Project } from '../lib/project'
 import { ask, isInteractive } from '../lib/prompt'
 
-export const THEMES = ['elf', 'novatron'] as const
+export const THEMES = ['elf', 'nova'] as const
 type Theme = typeof THEMES[number]
 
 const TAILWIND_RE = /@import\s+(?:url\()?['"]tailwindcss['"]/
@@ -127,7 +127,7 @@ function initVite(ctx: Ctx, project: Project, theme: Theme): void {
     writeFile(ctx, entry, lines.join('\n'), 'update')
   }
 
-  // The elf theme is the default (:root:not([data-theme])); novatron is selected through data-theme on <html>.
+  // The elf theme is the default (:root:not([data-theme])); nova is selected through data-theme on <html>.
   const html = join(project.cwd, 'index.html')
   const text = readIfExists(html)
   if (theme !== 'elf' && text && !/<html[^>]*data-theme=/.test(text)) {

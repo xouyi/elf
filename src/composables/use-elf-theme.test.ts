@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick } from 'vue'
 import { elfThemeBootScript, useElfTheme } from './use-elf-theme'
 
-function setup<T extends string = 'elf' | 'novatron'>(options: UseElfThemeOptions<T> = {}) {
+function setup<T extends string = 'elf' | 'nova'>(options: UseElfThemeOptions<T> = {}) {
   let result!: UseElfThemeReturn<T>
   const wrapper = mount(defineComponent({
     setup() {
@@ -34,17 +34,17 @@ describe('useElfTheme', () => {
   it('starts with the first shipped theme and lists the accepted names', () => {
     const t = setup()
     expect(t.theme.value).toBe('elf')
-    expect(t.themes).toEqual(['elf', 'novatron'])
+    expect(t.themes).toEqual(['elf', 'nova'])
     expect(t.wrapper.text()).toBe('elf')
   })
 
   it('setTheme updates the ref, the rendered output and data-theme on <html>', async () => {
     const t = setup()
-    t.setTheme('novatron')
+    t.setTheme('nova')
     await nextTick()
-    expect(t.theme.value).toBe('novatron')
-    expect(document.documentElement.dataset.theme).toBe('novatron')
-    expect(t.wrapper.text()).toBe('novatron')
+    expect(t.theme.value).toBe('nova')
+    expect(document.documentElement.dataset.theme).toBe('nova')
+    expect(t.wrapper.text()).toBe('nova')
   })
 
   it('ignores unknown names and warns in development', () => {
@@ -59,7 +59,7 @@ describe('useElfTheme', () => {
   it('cycle visits every theme and wraps around', () => {
     const t = setup()
     t.cycle()
-    expect(t.theme.value).toBe('novatron')
+    expect(t.theme.value).toBe('nova')
     t.cycle()
     expect(t.theme.value).toBe('elf')
   })
@@ -74,28 +74,28 @@ describe('useElfTheme', () => {
         return () => h('div')
       },
     }))
-    a.setTheme('novatron')
-    expect(b.theme.value).toBe('novatron')
+    a.setTheme('nova')
+    expect(b.theme.value).toBe('nova')
   })
 
   it('keeps separate state for separate apps', () => {
     const one = setup()
     const two = setup()
-    one.setTheme('novatron')
+    one.setTheme('nova')
     expect(two.theme.value).toBe('elf')
   })
 
   it('accepts a defaultTheme and an initial theme, and ignores an invalid initial', () => {
-    expect(setup({ defaultTheme: 'novatron' }).theme.value).toBe('novatron')
-    expect(setup({ initial: 'novatron' }).theme.value).toBe('novatron')
+    expect(setup({ defaultTheme: 'nova' }).theme.value).toBe('nova')
+    expect(setup({ initial: 'nova' }).theme.value).toBe('nova')
     expect(setup({ initial: 'nope' as never }).theme.value).toBe('elf')
   })
 
   it('adopts the theme the document was served with when it mounts', async () => {
-    document.documentElement.dataset.theme = 'novatron'
+    document.documentElement.dataset.theme = 'nova'
     const t = setup()
     await nextTick()
-    expect(t.theme.value).toBe('novatron')
+    expect(t.theme.value).toBe('nova')
   })
 
   it('supports custom theme names with their own default', () => {
@@ -103,41 +103,41 @@ describe('useElfTheme', () => {
     expect(t.theme.value).toBe('forest')
     t.setTheme('ocean')
     expect(document.documentElement.dataset.theme).toBe('ocean')
-    t.setTheme('novatron' as never)
+    t.setTheme('nova' as never)
     expect(t.theme.value).toBe('ocean')
   })
 
   it('can target another element', () => {
     const box = document.createElement('div')
     const t = setup({ target: box })
-    t.setTheme('novatron')
-    expect(box.dataset.theme).toBe('novatron')
+    t.setTheme('nova')
+    expect(box.dataset.theme).toBe('nova')
     expect(document.documentElement.dataset.theme).toBeUndefined()
   })
 
   describe('persistence', () => {
     it('stores nothing by default', () => {
-      setup().setTheme('novatron')
+      setup().setTheme('nova')
       expect(localStorage.length).toBe(0)
       expect(document.cookie).toBe('')
     })
 
     it('writes to localStorage and restores the choice on the next mount', async () => {
-      setup({ storage: 'localStorage' }).setTheme('novatron')
-      expect(localStorage.getItem('elfui-theme')).toBe('novatron')
+      setup({ storage: 'localStorage' }).setTheme('nova')
+      expect(localStorage.getItem('elfui-theme')).toBe('nova')
       const later = setup({ storage: 'localStorage' })
       await nextTick()
-      expect(later.theme.value).toBe('novatron')
-      expect(document.documentElement.dataset.theme).toBe('novatron')
+      expect(later.theme.value).toBe('nova')
+      expect(document.documentElement.dataset.theme).toBe('nova')
     })
 
     it('writes a cookie and restores the choice', async () => {
-      setup({ storage: 'cookie', storageKey: 'my-theme' }).setTheme('novatron')
-      expect(document.cookie).toContain('my-theme=novatron')
+      setup({ storage: 'cookie', storageKey: 'my-theme' }).setTheme('nova')
+      expect(document.cookie).toContain('my-theme=nova')
       document.documentElement.removeAttribute('data-theme')
       const later = setup({ storage: 'cookie', storageKey: 'my-theme' })
       await nextTick()
-      expect(later.theme.value).toBe('novatron')
+      expect(later.theme.value).toBe('nova')
     })
 
     it('ignores a stored value that is not an accepted theme', async () => {
@@ -152,8 +152,8 @@ describe('useElfTheme', () => {
         throw new Error('blocked')
       })
       const t = setup({ storage: 'localStorage' })
-      expect(() => t.setTheme('novatron')).not.toThrow()
-      expect(t.theme.value).toBe('novatron')
+      expect(() => t.setTheme('nova')).not.toThrow()
+      expect(t.theme.value).toBe('nova')
     })
   })
 })
@@ -166,15 +166,15 @@ describe('elfThemeBootScript', () => {
   }
 
   it('applies a stored localStorage theme before paint', () => {
-    localStorage.setItem('elfui-theme', 'novatron')
+    localStorage.setItem('elfui-theme', 'nova')
     run(elfThemeBootScript())
-    expect(document.documentElement.dataset.theme).toBe('novatron')
+    expect(document.documentElement.dataset.theme).toBe('nova')
   })
 
   it('applies a stored cookie theme and honors a custom key', () => {
-    document.cookie = 'site=novatron; path=/'
+    document.cookie = 'site=nova; path=/'
     run(elfThemeBootScript({ storage: 'cookie', storageKey: 'site' }))
-    expect(document.documentElement.dataset.theme).toBe('novatron')
+    expect(document.documentElement.dataset.theme).toBe('nova')
   })
 
   it('ignores unknown values and never throws', () => {

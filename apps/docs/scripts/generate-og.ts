@@ -13,7 +13,7 @@ const html = `<!doctype html><html><body style="margin:0;width:1200px;height:630
 </div>
 <p style="font-size:46px;line-height:1.2;margin:44px 0 0;max-width:900px;font-weight:600">A dark-only design system for Vue 3 and Nuxt 4.</p>
 <p style="font-size:28px;margin:28px 0 0;color:#b9b3c9">Reka UI primitives, Tailwind CSS v4, two themes, shadcn-vue registry and llms.txt.</p>
-<div style="position:absolute;left:90px;bottom:56px;display:flex;gap:14px;font-size:22px;color:#b9b3c9"><span style="display:inline-block;width:18px;height:18px;background:#a78bfa;border-radius:50%"></span>elf<span style="display:inline-block;width:18px;height:18px;background:#ffcc00;margin-left:18px"></span>novatron</div>
+<div style="position:absolute;left:90px;bottom:56px;display:flex;gap:14px;font-size:22px;color:#b9b3c9"><span style="display:inline-block;width:18px;height:18px;background:#a78bfa;border-radius:50%"></span>elf<span style="display:inline-block;width:18px;height:18px;background:#ffcc00;margin-left:18px"></span>nova</div>
 </body></html>`
 
 const browser = await chromium.launch()

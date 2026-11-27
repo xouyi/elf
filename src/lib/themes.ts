@@ -1,5 +1,5 @@
 /** Names of the themes that ship with ElfUI, in the order `useElfTheme().cycle()` visits them. */
-export const elfThemes = ['elf', 'novatron'] as const
+export const elfThemes = ['elf', 'nova'] as const
 
 /** A theme that ships with ElfUI. */
 export type ElfTheme = (typeof elfThemes)[number]

@@ -22,7 +22,7 @@ const examples = readdirSync(componentsDir, { withFileTypes: true })
 
 const viewports = [{ label: '1280', width: 1280, height: 800 }, { label: '360', width: 360, height: 740 }]
 
-for (const theme of ['elf', 'novatron'] as const) {
+for (const theme of ['elf', 'nova'] as const) {
   for (const vp of viewports) {
     test.describe(`${theme} @ ${vp.label}`, () => {
       test.use({ viewport: { width: vp.width, height: vp.height } })

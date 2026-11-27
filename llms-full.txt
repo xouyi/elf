@@ -1,6 +1,6 @@
 # ElfUI (full reference)
 
-> ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (pure black with violet accents, rounded) and novatron (gold on obsidian, sharp corners).
+> ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (pure black with violet accents, rounded) and nova (gold on obsidian, sharp corners).
 
 Version 0.4.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com/xouyi/elfUI .
 
@@ -11,7 +11,7 @@ Version 0.4.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com
 - Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).
 - Use text-destructive-text for error messages and required markers; bg-destructive is a fill and is too dark for text.
 - ElfUI is dark only: do not add light-mode styles or dark: variants.
-- Do not override border radius with arbitrary values; radii derive from the theme (novatron is sharp, 0px).
+- Do not override border radius with arbitrary values; radii derive from the theme (nova is sharp, 0px).
 - Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.
 - Dialogs need a title and description; tabs lists need an aria-label.
@@ -19,9 +19,9 @@ Version 0.4.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com
 - Install from npm (`bun add @xouyi/elfui`, or `bunx @xouyi/elfui@latest init` to set up a project); typescript 5 or 6 (not 7) must be installed in the consumer project.
 - Use Bun for all package commands (bun add, bun run, bunx), never npm, pnpm or yarn.
 
-### Novatron theme rules
+### Nova theme rules
 
-- Use data-theme="novatron" (or the `elfui: { theme: "novatron" }` option in nuxt.config; the config key stays `elfui`) for anything representing Novatron Robotics (FRC Team 10202).
+- Use data-theme="nova" (or the `elfui: { theme: "nova" }` option in nuxt.config; the config key stays `elfui`) for anything representing Novatron Robotics (FRC Team 10202).
 - Palette: obsidian black background (#050505 / #09090b) and Novatron gold (#ffcc00) primary. 100% dark mode.
 - Geometry is sharp: 0px border radius everywhere. Never add rounded-* overrides or rounded arbitrary values.
 - Downstream user-facing copy for Novatron apps is Turkish; code, identifiers and comments are English.
@@ -32,7 +32,7 @@ Requirements: Bun, Nuxt 4, Tailwind CSS v4 with @tailwindcss/vite, typescript 5 
 
 ```bash
 # automatic: installs, patches nuxt.config and the main CSS (idempotent)
-bunx @xouyi/elfui@latest init --theme novatron --yes
+bunx @xouyi/elfui@latest init --theme nova --yes
 
 # or by hand
 bun add @xouyi/elfui tailwindcss @tailwindcss/vite
@@ -46,7 +46,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineNuxtConfig({
   modules: ['@xouyi/elfui/nuxt'],
   css: ['~/assets/css/main.css'],
-  elfui: { theme: 'novatron', themes: ['elf'] }, // config key stays elfui; theme: 'elf' | 'novatron'
+  elfui: { theme: 'nova', themes: ['elf'] }, // config key stays elfui; theme: 'elf' | 'nova'
   vite: { plugins: [tailwindcss()] },
 })
 ```
@@ -57,7 +57,7 @@ export default defineNuxtConfig({
 @import '@xouyi/elfui/styles.css';
 ```
 
-Components are auto-imported with the Elf prefix. Module options: `theme` ('elf' | 'novatron', default 'elf'), `themes` (extra theme CSS to bundle), `prefix` (default 'Elf').
+Components are auto-imported with the Elf prefix. Module options: `theme` ('elf' | 'nova', default 'elf'), `themes` (extra theme CSS to bundle), `prefix` (default 'Elf').
 
 Upgrade: `bun update @xouyi/elfui`. Advanced: an unreleased commit can be installed with `bun add github:xouyi/elfUI#<tag-or-sha>`.
 
@@ -71,14 +71,14 @@ bunx @xouyi/elfui@latest init --yes   # or: bun add @xouyi/elfui tailwindcss @ta
 @import 'tailwindcss';
 @import '@xouyi/elfui/styles.css';
 @import '@xouyi/elfui/themes/elf.css';
-@import '@xouyi/elfui/themes/novatron.css';
+@import '@xouyi/elfui/themes/nova.css';
 ```
 
 ```ts
 import { ElfButton } from '@xouyi/elfui'
 ```
 
-Set `<html data-theme="elf">` (or `novatron`).
+Set `<html data-theme="elf">` (or `nova`).
 
 ## CLI and registry (copy components)
 
@@ -94,22 +94,22 @@ The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/
 
 ## Theming
 
-Themes: `elf`, `novatron`. Select with `data-theme` on html or any element. Dark only.
+Themes: `elf`, `nova`. Select with `data-theme` on html or any element. Dark only.
 
 ```ts
-document.documentElement.dataset.theme = 'novatron'
+document.documentElement.dataset.theme = 'nova'
 ```
 
 Or from code, SSR-safe, with optional persistence (auto-imported in Nuxt; otherwise `import { useElfTheme } from "@xouyi/elfui"`):
 
 ```ts
 const { theme, themes, setTheme, cycle } = useElfTheme({ storage: 'cookie' }) // storage: 'cookie' | 'localStorage' | 'none' (default)
-setTheme('novatron')
+setTheme('nova')
 ```
 
 Tokens (CSS variables `--elf-<name>`, Tailwind utilities `bg-<name>`, `text-<name>-foreground`, `border-border`, `ring-ring`):
 
-| Token | elf | novatron |
+| Token | elf | nova |
 | :-- | :-- | :-- |
 | background | `#000000` | `#050505` |
 | foreground | `#fafafa` | `#fafafa` |

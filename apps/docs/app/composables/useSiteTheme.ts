@@ -1,7 +1,7 @@
-export type SiteTheme = 'elf' | 'novatron'
+export type SiteTheme = 'elf' | 'nova'
 export const siteThemes: { value: SiteTheme, label: string, swatch: string }[] = [
   { value: 'elf', label: 'Elf', swatch: '#a78bfa' },
-  { value: 'novatron', label: 'Novatron', swatch: '#ffcc00' },
+  { value: 'nova', label: 'Nova', swatch: '#ffcc00' },
 ]
 const STORAGE_KEY = 'elfui-theme'
 
@@ -21,7 +21,7 @@ export function useSiteTheme() {
 }
 
 /** Inline script (runs before paint) that applies the stored theme so there is no flash of the other theme. */
-export const themeBootScript = `try{var t=localStorage.getItem('${STORAGE_KEY}');if(t==='elf'||t==='novatron')document.documentElement.dataset.theme=t}catch(e){}`
+export const themeBootScript = `try{var t=localStorage.getItem('${STORAGE_KEY}');if(t==='elf'||t==='nova')document.documentElement.dataset.theme=t}catch(e){}`
 
 /**
  * The site theme as a component should render it. Until the component has mounted it reports the server value ('elf'),

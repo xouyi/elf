@@ -2,6 +2,6 @@
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.hook('app:mounted', () => {
     const current = document.documentElement.dataset.theme
-    if (current === 'elf' || current === 'novatron') useState<SiteTheme>('site-theme').value = current
+    if (current === 'elf' || current === 'nova') useState<SiteTheme>('site-theme').value = current
   })
 })

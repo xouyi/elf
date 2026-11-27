@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { patchNuxtConfig, patchViteConfig } from './config-patch'
 import { ensureCssImports } from './edit'
 
-const opts = { theme: 'novatron', defaultCss: '~/assets/css/main.css' }
+const opts = { theme: 'nova', defaultCss: '~/assets/css/main.css' }
 
 function nuxt(input: string) {
   const first = patchNuxtConfig(input, opts)
@@ -18,7 +18,7 @@ describe('patchNuxtConfig', () => {
     expect(first.changed).toBe(true)
     expect(first.src).toContain('import tailwindcss from \'@tailwindcss/vite\'')
     expect(first.src).toContain('modules: [\'@xouyi/elfui/nuxt\']')
-    expect(first.src).toContain('elfui: { theme: \'novatron\' }')
+    expect(first.src).toContain('elfui: { theme: \'nova\' }')
     expect(first.src).toContain('vite: { plugins: [tailwindcss()] }')
     expect(first.css).toBe('~/assets/css/main.css')
     expect(second.changed).toBe(false)

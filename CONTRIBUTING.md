@@ -54,7 +54,7 @@ Then wire it into the rest of the repository:
    tests to `tests/browser/interactions.test.ts` for keyboard, focus and state behavior. Then create the baselines (see
    "Visual regression").
 
-Design rules: 100% dark UI, tokens only (never hard-coded colors), works in both the `elf` and `novatron` themes,
+Design rules: 100% dark UI, tokens only (never hard-coded colors), works in both the `elf` and `nova` themes,
 keyboard accessible, no `class*='size-'` selectors with escaped quotes (use `[class*=size-]`).
 
 ### Writing the docs page
@@ -76,7 +76,7 @@ Generated data lives in `apps/docs/app/generated/` and the changelog, roadmap an
 repository root; both are produced by `bun run docs:prepare` (run automatically by `docs:dev` and `docs:build`) and are not
 committed. A missing example name or component directory fails the docs build, so broken pages cannot ship.
 
-Design rules: 100% dark UI, tokens only (never hard-coded colors), works in both the `elf` and `novatron` themes,
+Design rules: 100% dark UI, tokens only (never hard-coded colors), works in both the `elf` and `nova` themes,
 keyboard accessible, no `class*='size-'` selectors with escaped quotes (use `[class*=size-]`).
 
 ## The quality gate
@@ -110,7 +110,7 @@ goes into `tests/browser/interactions.test.ts`. The full explanation is on the d
 
 ### Visual regression
 
-The docs site renders each example alone at `/__examples/<component>/<example>?theme=elf|novatron` (noindex, not in the
+The docs site renders each example alone at `/__examples/<component>/<example>?theme=elf|nova` (noindex, not in the
 sitemap or search). `tests/visual/examples.spec.ts` screenshots every example in both themes at 1280 and 360 px and
 compares them with `tests/visual/__screenshots__/<component>/<example>-<theme>-<width>.png`.
 

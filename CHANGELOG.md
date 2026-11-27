@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Breaking: the `novatron` theme is now `nova`.** `data-theme="novatron"` becomes `data-theme="nova"`, the file `@xouyi/elfui/themes/novatron.css` becomes `@xouyi/elfui/themes/nova.css`, the Nuxt option `elfui: { theme: 'novatron' }` becomes `theme: 'nova'` (also in `themes: [...]`), `elfui init --theme novatron` becomes `--theme nova`, and `useElfTheme` values stored as `novatron` (cookie or localStorage) must be migrated to `nova`. No compatibility alias. The tokens are unchanged. To migrate: search your project for `novatron` in HTML, CSS imports, `nuxt.config.ts` and stored theme values, and replace it with `nova`.
+
 ## 0.4.0
 
 - Add the `useElfTheme()` composable (`theme`, `themes`, `setTheme`, `cycle`) and `elfThemeBootScript()`: reads and sets `data-theme` on `<html>`, SSR-safe (per-app state, no `document` access on the server), typed theme names with support for custom themes, optional persistence in a cookie or localStorage, auto-imported by the Nuxt module. `elfThemes`, `ElfTheme` and the new `isElfTheme()` now live in `src/lib/themes.ts` and are still exported from the package root.

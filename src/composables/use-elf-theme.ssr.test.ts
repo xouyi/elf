@@ -23,18 +23,18 @@ describe('useElfTheme on the server', () => {
   })
 
   it('renders the initial theme passed from the request cookie', async () => {
-    expect(await request({ initial: 'novatron' })).toBe('<main data-theme="novatron">novatron</main>')
+    expect(await request({ initial: 'nova' })).toBe('<main data-theme="nova">nova</main>')
   })
 
   it('applies setTheme to the state without touching storage or the DOM', async () => {
-    expect(await request({}, api => api.setTheme('novatron'))).toBe('<main data-theme="novatron">novatron</main>')
+    expect(await request({}, api => api.setTheme('nova'))).toBe('<main data-theme="nova">nova</main>')
   })
 
   it('does not leak a theme from one request into the next', async () => {
-    await request({}, api => api.setTheme('novatron'))
+    await request({}, api => api.setTheme('nova'))
     expect(await request()).toBe('<main data-theme="elf">elf</main>')
-    const [a, b] = await Promise.all([request({ initial: 'novatron' }), request({ initial: 'elf' })])
-    expect(a).toContain('novatron')
+    const [a, b] = await Promise.all([request({ initial: 'nova' }), request({ initial: 'elf' })])
+    expect(a).toContain('nova')
     expect(b).toContain('>elf<')
   })
 })
