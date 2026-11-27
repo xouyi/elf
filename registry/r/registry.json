@@ -635,6 +635,83 @@
       ]
     },
     {
+      "name": "context-menu",
+      "type": "registry:ui",
+      "title": "Context Menu",
+      "description": "Right-click, long-press and keyboard menu with the same parts and styles as the Dropdown Menu, built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core",
+        "@lucide/vue"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/dropdown-menu.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/context-menu/ContextMenu.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/context-menu/ContextMenuCheckboxItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/context-menu/ContextMenuContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/context-menu/ContextMenuGroup.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/context-menu/ContextMenuItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/context-menu/ContextMenuLabel.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/context-menu/ContextMenuRadioGroup.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/context-menu/ContextMenuRadioItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/context-menu/ContextMenuSeparator.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/context-menu/ContextMenuShortcut.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/context-menu/ContextMenuSub.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/context-menu/ContextMenuSubContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/context-menu/ContextMenuSubTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/context-menu/ContextMenuTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/context-menu/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "dropdown-menu",
       "type": "registry:ui",
       "title": "Dropdown Menu",

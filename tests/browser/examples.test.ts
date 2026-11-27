@@ -30,14 +30,14 @@ describe.each(themes)('examples in the %s theme', (theme) => {
     const menuButton = mounted.el.querySelector<HTMLElement>('[aria-haspopup="menu"]')
     if (menuButton) {
       await userEvent.click(menuButton)
-      await settle(150)
+      await settle(400) // let the open animation finish: axe would otherwise measure contrast on a translucent panel
       expect(document.querySelector('[role="menu"]'), 'button did not open the menu').not.toBeNull()
     }
     const contextArea = mounted.el.querySelector<HTMLElement>('[data-slot="context-menu-trigger"]')
     if (contextArea) {
       const box = contextArea.getBoundingClientRect()
       contextArea.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, clientX: box.left + 10, clientY: box.top + 10 }))
-      await settle(150)
+      await settle(400)
       expect(document.querySelector('[role="menu"]'), 'contextmenu did not open the menu').not.toBeNull()
     }
 

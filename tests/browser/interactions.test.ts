@@ -54,6 +54,8 @@ import DialogControlled from '../../src/components/dialog/examples/Controlled.vu
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
 import TabsControlled from '../../src/components/tabs/examples/Controlled.vue'
 import TabsDefault from '../../src/components/tabs/examples/Default.vue'
+import ContextMenuDefault from '../../src/components/context-menu/examples/Default.vue'
+import ContextMenuOptions from '../../src/components/context-menu/examples/Options.vue'
 import DropdownMenuCheckboxes from '../../src/components/dropdown-menu/examples/Checkboxes.vue'
 import DropdownMenuControlled from '../../src/components/dropdown-menu/examples/Controlled.vue'
 import DropdownMenuDefault from '../../src/components/dropdown-menu/examples/Default.vue'
@@ -1097,6 +1099,121 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       const [a, b] = [avatars[0]!.getBoundingClientRect(), avatars[1]!.getBoundingClientRect()]
       expect(b.left, 'each avatar overlaps the previous one').toBeLessThan(a.right)
       expect(getComputedStyle(avatars[0]!).boxShadow).not.toBe('none')
+    })
+  })
+
+  describe('ContextMenu', () => {
+    const menu = () => document.querySelector<HTMLElement>('[role="menu"]')
+    const active = () => document.activeElement as HTMLElement
+    const label = (e: HTMLElement) => e.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+    const area = (el: Element) => el.querySelector<HTMLElement>('[data-slot="context-menu-trigger"]')!
+    const rightClick = (target: HTMLElement) => {
+      const box = target.getBoundingClientRect()
+      target.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, clientX: box.left + 20, clientY: box.top + 20 }))
+    }
+
+    it('opens on the contextmenu event at the pointer, with focus inside the menu', async () => {
+      setTheme(theme)
+      const { el } = await show(ContextMenuDefault)
+      expect(menu()).toBeNull()
+      rightClick(area(el))
+      await settle(200)
+      expect(menu()).not.toBeNull()
+      expect(menu()!.contains(document.activeElement), 'focus moved into the menu').toBe(true)
+      expect(document.querySelectorAll('[role="menuitem"]')).toHaveLength(4)
+      await userEvent.keyboard('{Escape}')
+      await settle(200)
+      expect(menu()).toBeNull()
+    })
+
+    it('opens from the keyboard with Shift+F10 and the ContextMenu key, and Escape returns focus to the area', async () => {
+      setTheme(theme)
+      const { el } = await show(ContextMenuDefault)
+      const trigger = area(el)
+      await userEvent.tab()
+      expect(document.activeElement).toBe(trigger)
+      for (const key of ['{Shift>}{F10}{/Shift}', '{ContextMenu}']) {
+        await userEvent.keyboard(key)
+        await settle(250)
+        expect(menu(), `${key} opens the menu`).not.toBeNull()
+        await userEvent.keyboard('{Escape}')
+        await settle(250)
+        expect(menu()).toBeNull()
+        expect(document.activeElement, 'focus returned to the area').toBe(trigger)
+      }
+    })
+
+    it('moves with arrow keys, skips disabled items, supports typeahead and Enter activates', async () => {
+      setTheme(theme)
+      const { el } = await show(ContextMenuDefault)
+      rightClick(area(el))
+      await settle(200)
+      await userEvent.keyboard('{ArrowDown}')
+      expect(label(active())).toContain('Open')
+      await userEvent.keyboard('{ArrowDown}')
+      expect(label(active())).toContain('Rename')
+      await userEvent.keyboard('{End}')
+      expect(label(active())).toContain('Delete')
+      expect(active().getAttribute('data-variant')).toBe('destructive')
+      await userEvent.keyboard('{Home}')
+      expect(label(active())).toContain('Open')
+      await userEvent.keyboard('re')
+      await settle(100)
+      expect(label(active())).toContain('Rename')
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(menu()).toBeNull()
+      expect(el.textContent).toContain('last = rename')
+    })
+
+    it('Space activates the highlighted item', async () => {
+      setTheme(theme)
+      const { el } = await show(ContextMenuDefault)
+      rightClick(area(el))
+      await settle(200)
+      await userEvent.keyboard('{ArrowDown} ')
+      await settle(200)
+      expect(el.textContent).toContain('last = open')
+    })
+
+    it('checkbox and radio items toggle and select, and keep aria-checked in sync', async () => {
+      setTheme(theme)
+      const { el } = await show(ContextMenuOptions)
+      expect(el.textContent).toContain('grid = true, density = comfortable')
+      rightClick(area(el))
+      await settle(200)
+      await userEvent.keyboard('{ArrowDown}')
+      expect(active().getAttribute('role')).toBe('menuitemcheckbox')
+      expect(active().getAttribute('aria-checked')).toBe('true')
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(el.textContent).toContain('grid = false')
+      rightClick(area(el))
+      await settle(200)
+      const radios = [...document.querySelectorAll<HTMLElement>('[role="menuitemradio"]')]
+      expect(radios.map(r => r.getAttribute('aria-checked'))).toEqual(['true', 'false'])
+      radios[1]!.focus()
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(el.textContent).toContain('density = compact')
+    })
+
+    it('opens a sub menu with ArrowRight and closes it with ArrowLeft', async () => {
+      setTheme(theme)
+      const { el } = await show(ContextMenuOptions)
+      rightClick(area(el))
+      await settle(200)
+      await userEvent.keyboard('{End}')
+      const subTrigger = active()
+      expect(label(subTrigger)).toContain('Export as')
+      await userEvent.keyboard('{ArrowRight}')
+      await settle(250)
+      expect(document.querySelectorAll('[role="menu"]')).toHaveLength(2)
+      expect(label(active())).toContain('PNG')
+      await userEvent.keyboard('{ArrowLeft}')
+      await settle(250)
+      expect(document.querySelectorAll('[role="menu"]')).toHaveLength(1)
+      expect(document.activeElement).toBe(subTrigger)
     })
   })
 

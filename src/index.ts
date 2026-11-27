@@ -169,3 +169,31 @@ export type {
   DropdownMenuSubTriggerProps,
   MenuItemVariants,
 } from './components/dropdown-menu'
+
+export {
+  ContextMenu as ElfContextMenu,
+  ContextMenuCheckboxItem as ElfContextMenuCheckboxItem,
+  ContextMenuContent as ElfContextMenuContent,
+  ContextMenuGroup as ElfContextMenuGroup,
+  ContextMenuItem as ElfContextMenuItem,
+  ContextMenuLabel as ElfContextMenuLabel,
+  ContextMenuRadioGroup as ElfContextMenuRadioGroup,
+  ContextMenuRadioItem as ElfContextMenuRadioItem,
+  ContextMenuSeparator as ElfContextMenuSeparator,
+  ContextMenuShortcut as ElfContextMenuShortcut,
+  ContextMenuSub as ElfContextMenuSub,
+  ContextMenuSubContent as ElfContextMenuSubContent,
+  ContextMenuSubTrigger as ElfContextMenuSubTrigger,
+  ContextMenuTrigger as ElfContextMenuTrigger,
+} from './components/context-menu'
+export type {
+  ContextMenuCheckboxItemProps,
+  ContextMenuContentProps,
+  ContextMenuItemProps,
+  ContextMenuLabelProps,
+  ContextMenuRadioItemProps,
+  ContextMenuSeparatorProps,
+  ContextMenuShortcutProps,
+  ContextMenuSubContentProps,
+  ContextMenuSubTriggerProps,
+} from './components/context-menu'

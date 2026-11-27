@@ -406,6 +406,25 @@ export const components: ComponentMeta[] = [
     slots: ['ElfDropdownMenuTrigger default: the button (use as-child)', 'ElfDropdownMenuContent default: items, labels, groups, separators, sub menus', 'ElfDropdownMenuShortcut default: ElfKbd elements or text'],
     a11y: ['The trigger has aria-haspopup=menu and aria-expanded; give an icon-only trigger an aria-label.', 'Arrow keys, Home, End and typeahead move; Enter or Space activates; ArrowRight and ArrowLeft open and close sub menus; Escape closes and returns focus to the trigger.', 'Use for actions, not for choosing a form value (use ElfSelect). Confirm destructive actions with a dialog.'],
   },
+  {
+    dir: 'context-menu',
+    name: 'ContextMenu',
+    summary: 'Menu for an area opened by right-click, long-press, Shift+F10 or the ContextMenu key, built on Reka UI ContextMenu. Same parts and styles as ElfDropdownMenu: ElfContextMenu > ElfContextMenuTrigger (as-child around a focusable element) + ElfContextMenuContent > ElfContextMenuItem, CheckboxItem, RadioGroup/RadioItem, Label, Group, Separator, Shortcut, Sub/SubTrigger/SubContent. Never the only way to reach an action.',
+    parts: ['ElfContextMenu', 'ElfContextMenuTrigger', 'ElfContextMenuContent', 'ElfContextMenuItem', 'ElfContextMenuCheckboxItem', 'ElfContextMenuRadioGroup', 'ElfContextMenuRadioItem', 'ElfContextMenuLabel', 'ElfContextMenuGroup', 'ElfContextMenuSeparator', 'ElfContextMenuShortcut', 'ElfContextMenuSub', 'ElfContextMenuSubTrigger', 'ElfContextMenuSubContent'],
+    props: [
+      { name: 'ElfContextMenu modal', type: 'boolean', default: 'true', description: 'Make the page behind inert while open.' },
+      { name: 'ElfContextMenu pressOpenDelay', type: 'number', default: '700', description: 'Long-press duration in milliseconds that opens the menu on touch (attribute: press-open-delay).' },
+      { name: 'ElfContextMenuTrigger disabled', type: 'boolean', default: 'false', description: 'Turns the context menu off for the area; the native menu shows instead.' },
+      { name: 'ElfContextMenuItem variant', type: '\'default\' | \'destructive\'', default: 'default', description: 'destructive colours irreversible actions such as delete.' },
+      { name: 'ElfContextMenuItem inset', type: 'boolean', default: 'false', description: 'Indent to line up with indicator items. Also on Label and SubTrigger.' },
+      { name: 'ElfContextMenuItem @select', type: '(event) => void', description: 'Emitted when the item is activated; call event.preventDefault() to keep the menu open.' },
+      { name: 'ElfContextMenuCheckboxItem modelValue', type: 'boolean | \'indeterminate\'', description: 'Checked state, bound with v-model.' },
+      { name: 'ElfContextMenuRadioGroup modelValue', type: 'string', description: 'Selected value, bound with v-model; each ElfContextMenuRadioItem has a value.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part except ElfContextMenu; merged with base classes.' },
+    ],
+    slots: ['ElfContextMenuTrigger default: the area (use as-child on a focusable element)', 'ElfContextMenuContent default: items, labels, groups, separators, sub menus'],
+    a11y: ['Make the trigger area focusable (tabindex=0), give it a role and a name that mentions the menu, so Shift+F10 or the ContextMenu key open it.', 'The same actions must also be reachable without right-click (a button or a dropdown menu): touch users must long-press.', 'Arrow keys, Home, End and typeahead move; Enter or Space activates; ArrowRight and ArrowLeft open and close sub menus; Escape closes and returns focus to the area.'],
+  },
 ]
 
 export const rules = [

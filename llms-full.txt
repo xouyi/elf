@@ -90,7 +90,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, tooltip, popover, hover-card, dropdown-menu, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, tooltip, popover, hover-card, dropdown-menu, context-menu, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -3532,8 +3532,169 @@ import {
 </template>
 ```
 
+### ContextMenu
+
+Menu for an area opened by right-click, long-press, Shift+F10 or the ContextMenu key, built on Reka UI ContextMenu. Same parts and styles as ElfDropdownMenu: ElfContextMenu > ElfContextMenuTrigger (as-child around a focusable element) + ElfContextMenuContent > ElfContextMenuItem, CheckboxItem, RadioGroup/RadioItem, Label, Group, Separator, Shortcut, Sub/SubTrigger/SubContent. Never the only way to reach an action.
+
+Components: `ElfContextMenu`, `ElfContextMenuTrigger`, `ElfContextMenuContent`, `ElfContextMenuItem`, `ElfContextMenuCheckboxItem`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuLabel`, `ElfContextMenuGroup`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubTrigger`, `ElfContextMenuSubContent`
+
+Props:
+
+- `ElfContextMenu modal` (boolean, default true): Make the page behind inert while open.
+- `ElfContextMenu pressOpenDelay` (number, default 700): Long-press duration in milliseconds that opens the menu on touch (attribute: press-open-delay).
+- `ElfContextMenuTrigger disabled` (boolean, default false): Turns the context menu off for the area; the native menu shows instead.
+- `ElfContextMenuItem variant` ('default' | 'destructive', default default): destructive colours irreversible actions such as delete.
+- `ElfContextMenuItem inset` (boolean, default false): Indent to line up with indicator items. Also on Label and SubTrigger.
+- `ElfContextMenuItem @select` ((event) => void): Emitted when the item is activated; call event.preventDefault() to keep the menu open.
+- `ElfContextMenuCheckboxItem modelValue` (boolean | 'indeterminate'): Checked state, bound with v-model.
+- `ElfContextMenuRadioGroup modelValue` (string): Selected value, bound with v-model; each ElfContextMenuRadioItem has a value.
+- `class` (string | array | object): Accepted by every part except ElfContextMenu; merged with base classes.
+
+Slots:
+
+- ElfContextMenuTrigger default: the area (use as-child on a focusable element)
+- ElfContextMenuContent default: items, labels, groups, separators, sub menus
+
+Accessibility:
+
+- Make the trigger area focusable (tabindex=0), give it a role and a name that mentions the menu, so Shift+F10 or the ContextMenu key open it.
+- The same actions must also be reachable without right-click (a button or a dropdown menu): touch users must long-press.
+- Arrow keys, Home, End and typeahead move; Enter or Space activates; ArrowRight and ArrowLeft open and close sub menus; Escape closes and returns focus to the area.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import {
+  ElfContextMenu,
+  ElfContextMenuContent,
+  ElfContextMenuItem,
+  ElfContextMenuLabel,
+  ElfContextMenuSeparator,
+  ElfContextMenuShortcut,
+  ElfContextMenuTrigger,
+  ElfKbd,
+} from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const last = ref('none')
+</script>
+
+<template>
+  <div class="grid gap-3">
+    <ElfContextMenu>
+      <ElfContextMenuTrigger as-child>
+        <div
+          role="group"
+          aria-label="Item card. Press Shift+F10 or the context menu key for actions."
+          tabindex="0"
+          class="flex h-32 w-full max-w-sm items-center justify-center rounded-md border border-dashed p-4 text-center text-sm text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+        >
+          Right-click, long-press, or focus and press Shift+F10
+        </div>
+      </ElfContextMenuTrigger>
+      <ElfContextMenuContent class="w-56">
+        <ElfContextMenuLabel>Battery 12V</ElfContextMenuLabel>
+        <ElfContextMenuItem @select="last = 'open'">
+          Open
+          <ElfContextMenuShortcut>
+            <ElfKbd>Enter</ElfKbd>
+          </ElfContextMenuShortcut>
+        </ElfContextMenuItem>
+        <ElfContextMenuItem @select="last = 'rename'">
+          Rename
+          <ElfContextMenuShortcut>
+            <ElfKbd>F2</ElfKbd>
+          </ElfContextMenuShortcut>
+        </ElfContextMenuItem>
+        <ElfContextMenuItem disabled>
+          Move (soon)
+        </ElfContextMenuItem>
+        <ElfContextMenuSeparator />
+        <ElfContextMenuItem variant="destructive" @select="last = 'delete'">
+          Delete
+        </ElfContextMenuItem>
+      </ElfContextMenuContent>
+    </ElfContextMenu>
+    <p class="text-sm text-muted-foreground">
+      last = {{ last }}
+    </p>
+  </div>
+</template>
+```
+
+#### Options
+
+```vue
+<script setup lang="ts">
+import {
+  ElfContextMenu,
+  ElfContextMenuCheckboxItem,
+  ElfContextMenuContent,
+  ElfContextMenuItem,
+  ElfContextMenuLabel,
+  ElfContextMenuRadioGroup,
+  ElfContextMenuRadioItem,
+  ElfContextMenuSeparator,
+  ElfContextMenuSub,
+  ElfContextMenuSubContent,
+  ElfContextMenuSubTrigger,
+  ElfContextMenuTrigger,
+} from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const showGrid = ref(true)
+const density = ref('comfortable')
+</script>
+
+<template>
+  <div class="grid gap-3">
+    <ElfContextMenu>
+      <ElfContextMenuTrigger as-child>
+        <div
+          role="group"
+          aria-label="Canvas. Press Shift+F10 or the context menu key for view options."
+          tabindex="0"
+          class="flex h-32 w-full max-w-sm items-center justify-center rounded-md border border-dashed p-4 text-center text-sm text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+        >
+          View options (right-click here)
+        </div>
+      </ElfContextMenuTrigger>
+      <ElfContextMenuContent class="w-56">
+        <ElfContextMenuCheckboxItem v-model="showGrid">
+          Show grid
+        </ElfContextMenuCheckboxItem>
+        <ElfContextMenuSeparator />
+        <ElfContextMenuLabel>Density</ElfContextMenuLabel>
+        <ElfContextMenuRadioGroup v-model="density">
+          <ElfContextMenuRadioItem value="comfortable">
+            Comfortable
+          </ElfContextMenuRadioItem>
+          <ElfContextMenuRadioItem value="compact">
+            Compact
+          </ElfContextMenuRadioItem>
+        </ElfContextMenuRadioGroup>
+        <ElfContextMenuSeparator />
+        <ElfContextMenuSub>
+          <ElfContextMenuSubTrigger>Export as</ElfContextMenuSubTrigger>
+          <ElfContextMenuSubContent>
+            <ElfContextMenuItem>PNG</ElfContextMenuItem>
+            <ElfContextMenuItem>SVG</ElfContextMenuItem>
+          </ElfContextMenuSubContent>
+        </ElfContextMenuSub>
+      </ElfContextMenuContent>
+    </ElfContextMenu>
+    <p class="text-sm text-muted-foreground">
+      grid = {{ showGrid }}, density = {{ density }}
+    </p>
+  </div>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

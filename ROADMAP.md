@@ -292,7 +292,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfDropdownMenu (shared styles)
 - **Complexity:** S
 - **Novatron screens:** stock item list rows (optional); HQ member rows.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfAlertDialog
 
