@@ -91,7 +91,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, sidebar, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -4676,8 +4676,406 @@ import { ElfAccordion, ElfAccordionContent, ElfAccordionItem, ElfAccordionTrigge
 </template>
 ```
 
+### Sidebar
+
+Collapsible app navigation composed from Sheet, Tooltip, Collapsible, Separator and ScrollArea. Wrap the layout in ElfSidebarProvider, put ElfSidebar (header, content, footer) beside ElfSidebarInset (the main area) and add an ElfSidebarTrigger. On desktop it collapses to an icon rail (collapsible="icon") or slides away (offcanvas); below 768px it becomes an off-canvas sheet. useSidebar() exposes state, open, setOpen, openMobile, setOpenMobile, isMobile and toggleSidebar. Ctrl/Cmd+B toggles it.
+
+Components: `ElfSidebarProvider`, `ElfSidebar`, `ElfSidebarHeader`, `ElfSidebarContent`, `ElfSidebarFooter`, `ElfSidebarSeparator`, `ElfSidebarGroup`, `ElfSidebarGroupLabel`, `ElfSidebarGroupContent`, `ElfSidebarMenu`, `ElfSidebarMenuItem`, `ElfSidebarMenuButton`, `ElfSidebarMenuBadge`, `ElfSidebarMenuSub`, `ElfSidebarMenuSubItem`, `ElfSidebarMenuSubButton`, `ElfSidebarTrigger`, `ElfSidebarRail`, `ElfSidebarInset`
+
+- variant options: `default`, `outline` (default `default`)
+- size options: `default`, `sm`, `lg` (default `default`)
+
+Props:
+
+- `ElfSidebarProvider open / defaultOpen` (boolean, default true): Desktop state: v-model:open, or the initial state when uncontrolled.
+- `ElfSidebarProvider shortcut` (string | false, default b): Key of the Ctrl/Cmd shortcut; false disables it. Ignored while typing in a field.
+- `ElfSidebarProvider storageKey` (string): localStorage key that remembers the desktop state (attribute: storage-key); read after mount.
+- `ElfSidebar side` ('left' | 'right', default left): Edge the sidebar sits on.
+- `ElfSidebar variant` ('sidebar' | 'floating' | 'inset', default sidebar): Flush, floating card, or framing an ElfSidebarInset.
+- `ElfSidebar collapsible` ('offcanvas' | 'icon' | 'none', default offcanvas): How it collapses on desktop; none is always expanded.
+- `ElfSidebar label / description` (string): Accessible name of the navigation landmark and the phone sheet; hidden description of the sheet. Use your app language.
+- `ElfSidebarMenuButton isActive` (boolean, default false): Marks the current page (data-active and aria-current="page"; attribute: is-active).
+- `ElfSidebarMenuButton tooltip` (string): Label shown in a tooltip while the sidebar is an icon rail.
+- `ElfSidebarMenuButton size / variant` ('default' | 'sm' | 'lg' / 'default' | 'outline'): Height (taller on phones) and style; as-child wraps a link.
+- `class` (string | array | object): Accepted by every part; merged with base classes. ElfSidebar class styles the panel.
+
+Slots:
+
+- ElfSidebar default: header, content and footer; rail: an ElfSidebarRail
+- ElfSidebarMenuButton default: icon then <span>label</span> (the label must be the last span)
+- ElfSidebarGroupLabel: as-child with ElfCollapsibleTrigger for a collapsible group
+
+Accessibility:
+
+- The panel is a labelled <nav>; on phones it is a modal sheet (focus trap, Escape, focus returns to the trigger).
+- Use real links (as-child with a link component) for pages and set is-active on the current one; give every icon-only trigger a label.
+- The trigger reports aria-expanded; the rail is pointer-only (tabindex -1) because the trigger and Ctrl/Cmd+B cover the keyboard.
+- Collapsed icon buttons keep their accessible name; the tooltip repeats it visually on hover and focus.
+
+Examples:
+
+#### Collapsible Groups
+
+```vue
+<script setup lang="ts">
+import { ChevronRight, FolderKanban, LayoutDashboard } from '@lucide/vue'
+import { ElfCollapsible, ElfCollapsibleContent, ElfCollapsibleTrigger, ElfSidebar, ElfSidebarContent, ElfSidebarGroup, ElfSidebarGroupContent, ElfSidebarGroupLabel, ElfSidebarInset, ElfSidebarMenu, ElfSidebarMenuButton, ElfSidebarMenuItem, ElfSidebarMenuSub, ElfSidebarMenuSubButton, ElfSidebarMenuSubItem, ElfSidebarProvider, ElfSidebarTrigger } from '@xouyi/elfui'
+
+const projects = ['Swerve drive', 'Vision', 'Outreach']
+</script>
+
+<template>
+  <ElfSidebarProvider class="h-80 min-h-0 overflow-hidden rounded-lg border">
+    <ElfSidebar collapsible="icon" label="Main navigation">
+      <ElfSidebarContent>
+        <ElfSidebarGroup>
+          <ElfSidebarGroupContent>
+            <ElfSidebarMenu>
+              <ElfSidebarMenuItem>
+                <ElfSidebarMenuButton tooltip="Dashboard" as-child>
+                  <a href="#" @click.prevent>
+                    <LayoutDashboard />
+                    <span>Dashboard</span>
+                  </a>
+                </ElfSidebarMenuButton>
+              </ElfSidebarMenuItem>
+            </ElfSidebarMenu>
+          </ElfSidebarGroupContent>
+        </ElfSidebarGroup>
+        <ElfCollapsible default-open as-child>
+          <ElfSidebarGroup>
+            <ElfSidebarGroupLabel as-child>
+              <ElfCollapsibleTrigger class="group/label w-full justify-between hover:bg-accent hover:text-accent-foreground">
+                Projects
+                <ChevronRight class="transition-transform group-data-[state=open]/label:rotate-90 motion-reduce:transition-none" />
+              </ElfCollapsibleTrigger>
+            </ElfSidebarGroupLabel>
+            <ElfCollapsibleContent>
+              <ElfSidebarGroupContent>
+                <ElfSidebarMenu>
+                  <ElfCollapsible as-child class="group/collapsible">
+                    <ElfSidebarMenuItem>
+                      <ElfCollapsibleTrigger as-child>
+                        <ElfSidebarMenuButton tooltip="Projects">
+                          <FolderKanban />
+                          <span>All projects</span>
+                          <ChevronRight class="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90 motion-reduce:transition-none" />
+                        </ElfSidebarMenuButton>
+                      </ElfCollapsibleTrigger>
+                      <ElfCollapsibleContent>
+                        <ElfSidebarMenuSub>
+                          <ElfSidebarMenuSubItem v-for="project in projects" :key="project">
+                            <ElfSidebarMenuSubButton :is-active="project === 'Vision'" as="a" href="#" @click.prevent>
+                              <span>{{ project }}</span>
+                            </ElfSidebarMenuSubButton>
+                          </ElfSidebarMenuSubItem>
+                        </ElfSidebarMenuSub>
+                      </ElfCollapsibleContent>
+                    </ElfSidebarMenuItem>
+                  </ElfCollapsible>
+                </ElfSidebarMenu>
+              </ElfSidebarGroupContent>
+            </ElfCollapsibleContent>
+          </ElfSidebarGroup>
+        </ElfCollapsible>
+      </ElfSidebarContent>
+    </ElfSidebar>
+    <ElfSidebarInset class="overflow-auto">
+      <header class="flex h-14 shrink-0 items-center gap-2 border-b px-3">
+        <ElfSidebarTrigger />
+        <span class="text-sm text-muted-foreground">Collapsible group and sub menu</span>
+      </header>
+    </ElfSidebarInset>
+  </ElfSidebarProvider>
+</template>
+```
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { Inbox, LayoutDashboard } from '@lucide/vue'
+import { ElfButton, ElfSidebar, ElfSidebarContent, ElfSidebarGroup, ElfSidebarGroupContent, ElfSidebarInset, ElfSidebarMenu, ElfSidebarMenuButton, ElfSidebarMenuItem, ElfSidebarProvider, ElfSidebarTrigger } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref(true)
+</script>
+
+<template>
+  <div class="flex flex-col gap-3">
+    <div class="flex flex-wrap items-center gap-2 text-sm">
+      <ElfButton variant="outline" size="sm" @click="open = !open">
+        {{ open ? 'Collapse' : 'Expand' }} from outside
+      </ElfButton>
+      <span class="text-muted-foreground">open = {{ open }} (remembered in localStorage)</span>
+    </div>
+    <ElfSidebarProvider v-model:open="open" storage-key="elfui-sidebar-example" class="h-64 min-h-0 overflow-hidden rounded-lg border">
+      <ElfSidebar collapsible="icon" label="Main navigation">
+        <ElfSidebarContent>
+          <ElfSidebarGroup>
+            <ElfSidebarGroupContent>
+              <ElfSidebarMenu>
+                <ElfSidebarMenuItem>
+                  <ElfSidebarMenuButton is-active tooltip="Dashboard" as-child>
+                    <a href="#" @click.prevent>
+                      <LayoutDashboard />
+                      <span>Dashboard</span>
+                    </a>
+                  </ElfSidebarMenuButton>
+                </ElfSidebarMenuItem>
+                <ElfSidebarMenuItem>
+                  <ElfSidebarMenuButton tooltip="Inbox" as-child>
+                    <a href="#" @click.prevent>
+                      <Inbox />
+                      <span>Inbox</span>
+                    </a>
+                  </ElfSidebarMenuButton>
+                </ElfSidebarMenuItem>
+              </ElfSidebarMenu>
+            </ElfSidebarGroupContent>
+          </ElfSidebarGroup>
+        </ElfSidebarContent>
+      </ElfSidebar>
+      <ElfSidebarInset class="overflow-auto">
+        <header class="flex h-14 shrink-0 items-center gap-2 border-b px-3">
+          <ElfSidebarTrigger />
+          <span class="text-sm text-muted-foreground">Ctrl+B toggles it too.</span>
+        </header>
+      </ElfSidebarInset>
+    </ElfSidebarProvider>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { Bot, Inbox, LayoutDashboard, LifeBuoy, Settings, Users } from '@lucide/vue'
+import { ElfSidebar, ElfSidebarContent, ElfSidebarFooter, ElfSidebarGroup, ElfSidebarGroupContent, ElfSidebarGroupLabel, ElfSidebarHeader, ElfSidebarInset, ElfSidebarMenu, ElfSidebarMenuBadge, ElfSidebarMenuButton, ElfSidebarMenuItem, ElfSidebarProvider, ElfSidebarRail, ElfSidebarSeparator, ElfSidebarTrigger } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const active = ref('Dashboard')
+const platform = [
+  { title: 'Dashboard', icon: LayoutDashboard },
+  { title: 'Inbox', icon: Inbox, badge: '12' },
+  { title: 'Team', icon: Users },
+  { title: 'Scouting bot', icon: Bot },
+]
+</script>
+
+<template>
+  <ElfSidebarProvider class="h-[26rem] min-h-0 overflow-hidden rounded-lg border">
+    <ElfSidebar collapsible="icon" label="Main navigation">
+      <ElfSidebarHeader>
+        <ElfSidebarMenu>
+          <ElfSidebarMenuItem>
+            <ElfSidebarMenuButton size="lg" tooltip="Novatron" as-child>
+              <a href="#" @click.prevent>
+                <span class="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary text-sm font-bold text-primary-foreground">N</span>
+                <span class="font-semibold">Novatron</span>
+              </a>
+            </ElfSidebarMenuButton>
+          </ElfSidebarMenuItem>
+        </ElfSidebarMenu>
+      </ElfSidebarHeader>
+      <ElfSidebarSeparator />
+      <ElfSidebarContent>
+        <ElfSidebarGroup>
+          <ElfSidebarGroupLabel>Platform</ElfSidebarGroupLabel>
+          <ElfSidebarGroupContent>
+            <ElfSidebarMenu>
+              <ElfSidebarMenuItem v-for="item in platform" :key="item.title">
+                <ElfSidebarMenuButton :is-active="active === item.title" :tooltip="item.title" as-child>
+                  <a href="#" @click.prevent="active = item.title">
+                    <component :is="item.icon" />
+                    <span>{{ item.title }}</span>
+                  </a>
+                </ElfSidebarMenuButton>
+                <ElfSidebarMenuBadge v-if="item.badge">
+                  {{ item.badge }}
+                </ElfSidebarMenuBadge>
+              </ElfSidebarMenuItem>
+            </ElfSidebarMenu>
+          </ElfSidebarGroupContent>
+        </ElfSidebarGroup>
+      </ElfSidebarContent>
+      <ElfSidebarFooter>
+        <ElfSidebarMenu>
+          <ElfSidebarMenuItem>
+            <ElfSidebarMenuButton tooltip="Support" as-child>
+              <a href="#" @click.prevent>
+                <LifeBuoy />
+                <span>Support</span>
+              </a>
+            </ElfSidebarMenuButton>
+          </ElfSidebarMenuItem>
+          <ElfSidebarMenuItem>
+            <ElfSidebarMenuButton tooltip="Settings" as-child>
+              <a href="#" @click.prevent>
+                <Settings />
+                <span>Settings</span>
+              </a>
+            </ElfSidebarMenuButton>
+          </ElfSidebarMenuItem>
+        </ElfSidebarMenu>
+      </ElfSidebarFooter>
+      <template #rail>
+        <ElfSidebarRail />
+      </template>
+    </ElfSidebar>
+    <ElfSidebarInset class="overflow-auto">
+      <header class="flex h-14 shrink-0 items-center gap-2 border-b px-3">
+        <ElfSidebarTrigger />
+        <h2 class="text-sm font-medium">
+          {{ active }}
+        </h2>
+      </header>
+      <div class="flex flex-col gap-2 p-4 text-sm text-muted-foreground">
+        <p>On a desktop the sidebar collapses to icons: press the button, drag the rail or use Ctrl+B (Cmd+B on a Mac).</p>
+        <p>Below 768px it becomes an off-canvas sheet that opens from the same button.</p>
+      </div>
+    </ElfSidebarInset>
+  </ElfSidebarProvider>
+</template>
+```
+
+#### Offcanvas
+
+```vue
+<script setup lang="ts">
+import { Inbox, LayoutDashboard, Settings } from '@lucide/vue'
+import { ElfSidebar, ElfSidebarContent, ElfSidebarGroup, ElfSidebarGroupContent, ElfSidebarGroupLabel, ElfSidebarInset, ElfSidebarMenu, ElfSidebarMenuButton, ElfSidebarMenuItem, ElfSidebarProvider, ElfSidebarRail, ElfSidebarTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfSidebarProvider class="h-72 min-h-0 overflow-hidden rounded-lg border" :default-open="false">
+    <ElfSidebar label="Main navigation">
+      <ElfSidebarContent>
+        <ElfSidebarGroup>
+          <ElfSidebarGroupLabel>Workspace</ElfSidebarGroupLabel>
+          <ElfSidebarGroupContent>
+            <ElfSidebarMenu>
+              <ElfSidebarMenuItem>
+                <ElfSidebarMenuButton is-active as-child>
+                  <a href="#" @click.prevent>
+                    <LayoutDashboard />
+                    <span>Dashboard</span>
+                  </a>
+                </ElfSidebarMenuButton>
+              </ElfSidebarMenuItem>
+              <ElfSidebarMenuItem>
+                <ElfSidebarMenuButton as-child>
+                  <a href="#" @click.prevent>
+                    <Inbox />
+                    <span>Inbox</span>
+                  </a>
+                </ElfSidebarMenuButton>
+              </ElfSidebarMenuItem>
+              <ElfSidebarMenuItem>
+                <ElfSidebarMenuButton as-child>
+                  <a href="#" @click.prevent>
+                    <Settings />
+                    <span>Settings</span>
+                  </a>
+                </ElfSidebarMenuButton>
+              </ElfSidebarMenuItem>
+            </ElfSidebarMenu>
+          </ElfSidebarGroupContent>
+        </ElfSidebarGroup>
+      </ElfSidebarContent>
+      <template #rail>
+        <ElfSidebarRail />
+      </template>
+    </ElfSidebar>
+    <ElfSidebarInset class="overflow-auto">
+      <header class="flex h-14 shrink-0 items-center gap-2 border-b px-3">
+        <ElfSidebarTrigger />
+        <h2 class="text-sm font-medium">
+          Starts closed
+        </h2>
+      </header>
+      <p class="p-4 text-sm text-muted-foreground">
+        With the default collapsible="offcanvas" the sidebar slides out of view and its links leave the tab order.
+      </p>
+    </ElfSidebarInset>
+  </ElfSidebarProvider>
+</template>
+```
+
+#### Variants
+
+```vue
+<script setup lang="ts">
+import { Inbox, LayoutDashboard, Settings } from '@lucide/vue'
+import { ElfButton, ElfSidebar, ElfSidebarContent, ElfSidebarGroup, ElfSidebarGroupContent, ElfSidebarInset, ElfSidebarMenu, ElfSidebarMenuButton, ElfSidebarMenuItem, ElfSidebarProvider, ElfSidebarTrigger } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const variant = ref<'sidebar' | 'floating' | 'inset'>('floating')
+const side = ref<'left' | 'right'>('left')
+const items = [
+  { title: 'Dashboard', icon: LayoutDashboard },
+  { title: 'Inbox', icon: Inbox },
+  { title: 'Settings', icon: Settings },
+]
+</script>
+
+<template>
+  <div class="flex flex-col gap-3">
+    <div class="flex flex-wrap gap-2">
+      <ElfButton
+        v-for="v in (['sidebar', 'floating', 'inset'] as const)"
+        :key="v"
+        size="sm"
+        :variant="variant === v ? 'default' : 'outline'"
+        :aria-pressed="variant === v"
+        @click="variant = v"
+      >
+        {{ v }}
+      </ElfButton>
+      <ElfButton
+        v-for="s in (['left', 'right'] as const)"
+        :key="s"
+        size="sm"
+        :variant="side === s ? 'default' : 'outline'"
+        :aria-pressed="side === s"
+        @click="side = s"
+      >
+        {{ s }}
+      </ElfButton>
+    </div>
+    <ElfSidebarProvider class="h-72 min-h-0 overflow-hidden rounded-lg border">
+      <ElfSidebar :variant="variant" :side="side" collapsible="icon" label="Main navigation">
+        <ElfSidebarContent>
+          <ElfSidebarGroup>
+            <ElfSidebarGroupContent>
+              <ElfSidebarMenu>
+                <ElfSidebarMenuItem v-for="item in items" :key="item.title">
+                  <ElfSidebarMenuButton :is-active="item.title === 'Dashboard'" :tooltip="item.title" as-child>
+                    <a href="#" @click.prevent>
+                      <component :is="item.icon" />
+                      <span>{{ item.title }}</span>
+                    </a>
+                  </ElfSidebarMenuButton>
+                </ElfSidebarMenuItem>
+              </ElfSidebarMenu>
+            </ElfSidebarGroupContent>
+          </ElfSidebarGroup>
+        </ElfSidebarContent>
+      </ElfSidebar>
+      <ElfSidebarInset class="overflow-auto">
+        <header class="flex h-14 shrink-0 items-center gap-2 border-b px-3">
+          <ElfSidebarTrigger />
+          <span class="text-sm text-muted-foreground">{{ variant }}, {{ side }}</span>
+        </header>
+      </ElfSidebarInset>
+    </ElfSidebarProvider>
+  </div>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfSidebar`, `ElfSidebarContent`, `ElfSidebarFooter`, `ElfSidebarGroup`, `ElfSidebarGroupContent`, `ElfSidebarGroupLabel`, `ElfSidebarHeader`, `ElfSidebarInset`, `ElfSidebarMenu`, `ElfSidebarMenuBadge`, `ElfSidebarMenuButton`, `ElfSidebarMenuItem`, `ElfSidebarMenuSub`, `ElfSidebarMenuSubButton`, `ElfSidebarMenuSubItem`, `ElfSidebarProvider`, `ElfSidebarRail`, `ElfSidebarSeparator`, `ElfSidebarTrigger`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

@@ -537,6 +537,28 @@ export const components: ComponentMeta[] = [
     slots: ['ElfAccordionTrigger icon: replaces the chevron'],
     a11y: ['Triggers are buttons inside headings; arrow keys, Home and End move between them and skip disabled items.', 'Use short, specific trigger labels and do not nest accordions.'],
   },
+  {
+    dir: 'sidebar',
+    name: 'Sidebar',
+    summary: 'Collapsible app navigation composed from Sheet, Tooltip, Collapsible, Separator and ScrollArea. Wrap the layout in ElfSidebarProvider, put ElfSidebar (header, content, footer) beside ElfSidebarInset (the main area) and add an ElfSidebarTrigger. On desktop it collapses to an icon rail (collapsible="icon") or slides away (offcanvas); below 768px it becomes an off-canvas sheet. useSidebar() exposes state, open, setOpen, openMobile, setOpenMobile, isMobile and toggleSidebar. Ctrl/Cmd+B toggles it.',
+    parts: ['ElfSidebarProvider', 'ElfSidebar', 'ElfSidebarHeader', 'ElfSidebarContent', 'ElfSidebarFooter', 'ElfSidebarSeparator', 'ElfSidebarGroup', 'ElfSidebarGroupLabel', 'ElfSidebarGroupContent', 'ElfSidebarMenu', 'ElfSidebarMenuItem', 'ElfSidebarMenuButton', 'ElfSidebarMenuBadge', 'ElfSidebarMenuSub', 'ElfSidebarMenuSubItem', 'ElfSidebarMenuSubButton', 'ElfSidebarTrigger', 'ElfSidebarRail', 'ElfSidebarInset'],
+    variants: 'sidebarMenuButtonVariants',
+    props: [
+      { name: 'ElfSidebarProvider open / defaultOpen', type: 'boolean', default: 'true', description: 'Desktop state: v-model:open, or the initial state when uncontrolled.' },
+      { name: 'ElfSidebarProvider shortcut', type: 'string | false', default: 'b', description: 'Key of the Ctrl/Cmd shortcut; false disables it. Ignored while typing in a field.' },
+      { name: 'ElfSidebarProvider storageKey', type: 'string', description: 'localStorage key that remembers the desktop state (attribute: storage-key); read after mount.' },
+      { name: 'ElfSidebar side', type: '\'left\' | \'right\'', default: 'left', description: 'Edge the sidebar sits on.' },
+      { name: 'ElfSidebar variant', type: '\'sidebar\' | \'floating\' | \'inset\'', default: 'sidebar', description: 'Flush, floating card, or framing an ElfSidebarInset.' },
+      { name: 'ElfSidebar collapsible', type: '\'offcanvas\' | \'icon\' | \'none\'', default: 'offcanvas', description: 'How it collapses on desktop; none is always expanded.' },
+      { name: 'ElfSidebar label / description', type: 'string', description: 'Accessible name of the navigation landmark and the phone sheet; hidden description of the sheet. Use your app language.' },
+      { name: 'ElfSidebarMenuButton isActive', type: 'boolean', default: 'false', description: 'Marks the current page (data-active and aria-current="page"; attribute: is-active).' },
+      { name: 'ElfSidebarMenuButton tooltip', type: 'string', description: 'Label shown in a tooltip while the sidebar is an icon rail.' },
+      { name: 'ElfSidebarMenuButton size / variant', type: '\'default\' | \'sm\' | \'lg\' / \'default\' | \'outline\'', description: 'Height (taller on phones) and style; as-child wraps a link.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part; merged with base classes. ElfSidebar class styles the panel.' },
+    ],
+    slots: ['ElfSidebar default: header, content and footer; rail: an ElfSidebarRail', 'ElfSidebarMenuButton default: icon then <span>label</span> (the label must be the last span)', 'ElfSidebarGroupLabel: as-child with ElfCollapsibleTrigger for a collapsible group'],
+    a11y: ['The panel is a labelled <nav>; on phones it is a modal sheet (focus trap, Escape, focus returns to the trigger).', 'Use real links (as-child with a link component) for pages and set is-active on the current one; give every icon-only trigger a label.', 'The trigger reports aria-expanded; the rail is pointer-only (tabindex -1) because the trigger and Ctrl/Cmd+B cover the keyboard.', 'Collapsed icon buttons keep their accessible name; the tooltip repeats it visually on hover and focus.'],
+  },
 ]
 
 export const rules = [

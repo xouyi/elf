@@ -1195,6 +1195,112 @@
       ]
     },
     {
+      "name": "sidebar",
+      "type": "registry:ui",
+      "title": "Sidebar",
+      "description": "Collapsible app navigation: groups, menu buttons with active state and badges, icon-collapsed mode with tooltips, rail, keyboard shortcut and an off-canvas sheet on phones, composed from Sheet, Tooltip, Separator and ScrollArea.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core",
+        "@lucide/vue",
+        "class-variance-authority"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/button.json",
+        "https://xouyi.github.io/elfUI/r/sheet.json",
+        "https://xouyi.github.io/elfUI/r/tooltip.json",
+        "https://xouyi.github.io/elfUI/r/separator.json",
+        "https://xouyi.github.io/elfUI/r/scroll-area.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/sidebar/Sidebar.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarFooter.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarGroup.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarGroupContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarGroupLabel.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarHeader.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarInset.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarMenu.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarMenuBadge.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarMenuButton.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarMenuItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarMenuSub.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarMenuSubButton.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarMenuSubItem.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarProvider.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarRail.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarSeparator.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/SidebarTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/context.ts",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/sidebar/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "elf-theme",
       "type": "registry:file",
       "title": "Elf theme",

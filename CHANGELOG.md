@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Add `ElfSidebar`, composed from `ElfSheet`, `ElfTooltip`, `ElfSeparator` and `ElfScrollArea` (and `ElfCollapsible` for collapsible groups): `ElfSidebarProvider` (`v-model:open`, `defaultOpen`, Ctrl/Cmd+B `shortcut`, optional `storageKey` persistence), `ElfSidebar` (`side`, `variant` sidebar, floating or inset, `collapsible` offcanvas, icon or none), `ElfSidebarHeader`, `Content`, `Footer`, `Separator`, `Group`, `GroupLabel`, `GroupContent`, `Menu`, `MenuItem`, `MenuButton` (`isActive`, `tooltip` shown in the icon rail, `as-child` for links), `MenuBadge`, `MenuSub`, `Trigger`, `Rail` and `Inset`, plus `useSidebar()` and `sidebarMenuButtonVariants`. Below 768px it becomes an off-canvas sheet with 40px touch rows that closes when a link is chosen; width and slide animations stop under reduced motion.
+
 ## 0.4.0
 
 - **Breaking: the `novatron` theme is now `nova`.** `data-theme="novatron"` becomes `data-theme="nova"`, the file `@xouyi/elfui/themes/novatron.css` becomes `@xouyi/elfui/themes/nova.css`, the Nuxt option `elfui: { theme: 'novatron' }` becomes `theme: 'nova'` (also in `themes: [...]`), `elfui init --theme novatron` becomes `--theme nova`, and `useElfTheme` values stored as `novatron` (cookie or localStorage) must be migrated to `nova`. No compatibility alias. The tokens are unchanged. To migrate: search your project for `novatron` in HTML, CSS imports, `nuxt.config.ts` and stored theme values, and replace it with `nova`.
