@@ -537,6 +537,22 @@ export const components: ComponentMeta[] = [
     slots: ['ElfAccordionTrigger icon: replaces the chevron'],
     a11y: ['Triggers are buttons inside headings; arrow keys, Home and End move between them and skip disabled items.', 'Use short, specific trigger labels and do not nest accordions.'],
   },
+  {
+    dir: 'stepper',
+    name: 'Stepper',
+    summary: 'Multi-step progress and wizard header on Reka UI Stepper. ElfStepper contains ElfStepperItem (step, 1-based) with an ElfStepperTrigger holding an ElfStepperIndicator and an ElfStepperTitle, plus an ElfStepperSeparator between steps. It renders no step content.',
+    parts: ['ElfStepper', 'ElfStepperItem', 'ElfStepperTrigger', 'ElfStepperIndicator', 'ElfStepperTitle', 'ElfStepperDescription', 'ElfStepperSeparator'],
+    props: [
+      { name: 'ElfStepper modelValue / defaultValue', type: 'number', default: '1', description: 'Current step, 1-based; bind with v-model.' },
+      { name: 'ElfStepper orientation', type: '\'horizontal\' | \'vertical\'', default: 'horizontal', description: 'Layout and arrow-key axis.' },
+      { name: 'ElfStepper linear', type: 'boolean', default: 'true', description: 'Only the next step can be selected; false allows any enabled step.' },
+      { name: 'ElfStepperItem step', type: 'number', description: 'Required, 1-based.' },
+      { name: 'ElfStepperItem disabled / completed', type: 'boolean', default: 'false', description: 'Disable the step or force the completed state.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part; merged with base classes.' },
+    ],
+    slots: ['ElfStepper default: modelValue, totalSteps, goToStep, nextStep, prevStep, hasNext, hasPrev, isFirstStep, isLastStep', 'ElfStepperIndicator default: replaces the number or check'],
+    a11y: ['Give ElfStepper an aria-label and every step an ElfStepperTitle (it names the trigger).', 'Keep ElfStepperDescription outside the trigger; the stepper does not render step content.'],
+  },
 ]
 
 export const rules = [

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Add `ElfStepper`, `ElfStepperItem`, `ElfStepperTrigger`, `ElfStepperIndicator`, `ElfStepperTitle`, `ElfStepperDescription` and `ElfStepperSeparator`, built on the Reka UI Stepper primitive: 1-based `v-model`, `orientation` (`horizontal` | `vertical`), `linear` (default) or free navigation, disabled and completed steps, a check icon for finished steps, a separator that fills with the primary colour, arrow-key navigation, a polite "Step n of m" announcement and slot props (`nextStep`, `prevStep`, `goToStep`, `hasNext`, `hasPrev`) for Back and Next buttons.
+
 ## 0.4.0
 
 - **Breaking: the `novatron` theme is now `nova`.** `data-theme="novatron"` becomes `data-theme="nova"`, the file `@xouyi/elfui/themes/novatron.css` becomes `@xouyi/elfui/themes/nova.css`, the Nuxt option `elfui: { theme: 'novatron' }` becomes `theme: 'nova'` (also in `themes: [...]`), `elfui init --theme novatron` becomes `--theme nova`, and `useElfTheme` values stored as `novatron` (cookie or localStorage) must be migrated to `nova`. No compatibility alias. The tokens are unchanged. To migrate: search your project for `novatron` in HTML, CSS imports, `nuxt.config.ts` and stored theme values, and replace it with `nova`.

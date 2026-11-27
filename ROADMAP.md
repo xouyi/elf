@@ -494,7 +494,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfButton
 - **Complexity:** M
 - **Novatron screens:** stock `add.vue` (photo, name, details) flow; courses onboarding; HQ provisioning.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfMenubar
 
