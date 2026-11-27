@@ -2403,6 +2403,9 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       const style = getComputedStyle(document.activeElement as HTMLElement)
       expect(style.boxShadow !== 'none' || style.outlineStyle !== 'none', 'focus indicator is drawn').toBe(true)
       expect(el.contains(document.activeElement)).toBe(true)
+    })
+  })
+
   describe('Toggle', () => {
     it('presses with Space and Enter and reflects aria-pressed', async () => {
       setTheme(theme)
@@ -2527,6 +2530,9 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(ratios[1]).toBeCloseTo(4 / 3, 1)
       expect(ratios[2]).toBeCloseTo(16 / 9, 1)
       expect(ratios[3]).toBeCloseTo(21 / 9, 1)
+    })
+  })
+
   describe('NavigationMenu', () => {
     const triggers = (el: Element) => [...el.querySelectorAll<HTMLElement>('[data-slot="navigation-menu-trigger"]')]
     const panel = () => document.querySelector<HTMLElement>('[data-slot="navigation-menu-content"]')
@@ -2860,6 +2866,9 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       expect(trend('success')).toBe(probe('success-text'))
       expect(trend('warning')).toBe(probe('warning-text'))
       expect(trend('destructive')).toBe(probe('destructive-text'))
+    })
+  })
+
   describe('Stepper', () => {
     const triggers = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('[data-slot="stepper-trigger"]')]
     const states = (el: HTMLElement) => [...el.querySelectorAll('[data-slot="stepper-item"]')].map(i => i.getAttribute('data-state'))
