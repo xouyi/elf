@@ -425,6 +425,22 @@ export const components: ComponentMeta[] = [
     slots: ['ElfContextMenuTrigger default: the area (use as-child on a focusable element)', 'ElfContextMenuContent default: items, labels, groups, separators, sub menus'],
     a11y: ['Make the trigger area focusable (tabindex=0), give it a role and a name that mentions the menu, so Shift+F10 or the ContextMenu key open it.', 'The same actions must also be reachable without right-click (a button or a dropdown menu): touch users must long-press.', 'Arrow keys, Home, End and typeahead move; Enter or Space activates; ArrowRight and ArrowLeft open and close sub menus; Escape closes and returns focus to the area.'],
   },
+  {
+    dir: 'scroll-area',
+    name: 'ScrollArea',
+    summary: 'Scrolling container with styled scrollbars, built on Reka UI ScrollArea. Native scrolling is kept; the viewport is keyboard focusable. Give ElfScrollArea a height or width (class) and a label.',
+    parts: ['ElfScrollArea', 'ElfScrollBar'],
+    props: [
+      { name: 'type', type: '\'hover\' | \'scroll\' | \'auto\' | \'always\'', default: 'hover', description: 'When the scrollbars are visible.' },
+      { name: 'orientation', type: '\'vertical\' | \'horizontal\' | \'both\'', default: 'vertical', description: 'Which scrollbars to render.' },
+      { name: 'scrollHideDelay', type: 'number', default: '600', description: 'Milliseconds before a bar hides for hover and scroll (attribute: scroll-hide-delay).' },
+      { name: 'label', type: 'string', description: 'Accessible name; makes the focusable viewport a role=region.' },
+      { name: 'viewportClass', type: 'string | array | object', description: 'Classes for the scrolling viewport (attribute: viewport-class).' },
+      { name: 'class', type: 'string | array | object', description: 'Merged onto the root; set its height or width here.' },
+    ],
+    slots: ['default: the scrollable content'],
+    a11y: ['The viewport is focusable (tabindex=0) so arrow keys, Page Up/Down, Home and End scroll it; pass label to name it.', 'Scrollbars are decorative; content must not depend on dragging them.', 'Do not nest scroll areas or wrap the whole page in one.'],
+  },
 ]
 
 export const rules = [

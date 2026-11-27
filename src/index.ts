@@ -197,3 +197,6 @@ export type {
   ContextMenuSubContentProps,
   ContextMenuSubTriggerProps,
 } from './components/context-menu'
+
+export { ScrollArea as ElfScrollArea, ScrollBar as ElfScrollBar } from './components/scroll-area'
+export type { ScrollAreaProps, ScrollBarProps } from './components/scroll-area'

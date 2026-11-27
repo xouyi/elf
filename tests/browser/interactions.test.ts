@@ -54,6 +54,9 @@ import DialogControlled from '../../src/components/dialog/examples/Controlled.vu
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
 import TabsControlled from '../../src/components/tabs/examples/Controlled.vue'
 import TabsDefault from '../../src/components/tabs/examples/Default.vue'
+import ScrollAreaBoth from '../../src/components/scroll-area/examples/Both.vue'
+import ScrollAreaDefault from '../../src/components/scroll-area/examples/Default.vue'
+import ScrollAreaHorizontal from '../../src/components/scroll-area/examples/Horizontal.vue'
 import ContextMenuDefault from '../../src/components/context-menu/examples/Default.vue'
 import ContextMenuOptions from '../../src/components/context-menu/examples/Options.vue'
 import DropdownMenuCheckboxes from '../../src/components/dropdown-menu/examples/Checkboxes.vue'
@@ -1099,6 +1102,64 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       const [a, b] = [avatars[0]!.getBoundingClientRect(), avatars[1]!.getBoundingClientRect()]
       expect(b.left, 'each avatar overlaps the previous one').toBeLessThan(a.right)
       expect(getComputedStyle(avatars[0]!).boxShadow).not.toBe('none')
+    })
+  })
+
+  describe('ScrollArea', () => {
+    const viewport = (el: Element) => el.querySelector<HTMLElement>('[data-slot="scroll-area-viewport"]')!
+
+    it('is a named, keyboard focusable region that scrolls with arrows, Page Down, End and Home', async () => {
+      setTheme(theme)
+      const { el } = await show(ScrollAreaDefault)
+      const vp = viewport(el)
+      expect(vp.getAttribute('role')).toBe('region')
+      expect(vp.getAttribute('aria-label')).toBe('Inventory list')
+      expect(vp.scrollHeight, 'content overflows').toBeGreaterThan(vp.clientHeight)
+      await userEvent.tab()
+      expect(document.activeElement).toBe(vp)
+      expect(vp.scrollTop).toBe(0)
+      await userEvent.keyboard('{ArrowDown}')
+      await settle(100)
+      const afterArrow = vp.scrollTop
+      expect(afterArrow, 'ArrowDown scrolls').toBeGreaterThan(0)
+      await userEvent.keyboard('{PageDown}')
+      await settle(150)
+      expect(vp.scrollTop, 'PageDown scrolls further').toBeGreaterThan(afterArrow)
+      await userEvent.keyboard('{End}')
+      await settle(150)
+      expect(vp.scrollTop + vp.clientHeight).toBeGreaterThanOrEqual(vp.scrollHeight - 1)
+      await userEvent.keyboard('{Home}')
+      await settle(150)
+      expect(vp.scrollTop).toBe(0)
+    })
+
+    it('scrolls a horizontal area with ArrowRight and ArrowLeft', async () => {
+      setTheme(theme)
+      const { el } = await show(ScrollAreaHorizontal)
+      const vp = viewport(el)
+      expect(vp.scrollWidth).toBeGreaterThan(vp.clientWidth)
+      await userEvent.tab()
+      expect(document.activeElement).toBe(vp)
+      await userEvent.keyboard('{ArrowRight}')
+      await settle(100)
+      expect(vp.scrollLeft).toBeGreaterThan(0)
+      await userEvent.keyboard('{ArrowLeft}')
+      await settle(150)
+      expect(vp.scrollLeft, 'ArrowLeft scrolls back').toBe(0)
+    })
+
+    it('renders both scrollbars and the corner for orientation both, and the table stays readable', async () => {
+      setTheme(theme)
+      const { el } = await show(ScrollAreaBoth)
+      const vp = viewport(el)
+      expect(vp.scrollHeight).toBeGreaterThan(vp.clientHeight)
+      expect(vp.scrollWidth).toBeGreaterThan(vp.clientWidth)
+      await userEvent.tab()
+      await userEvent.keyboard('{ArrowDown}{ArrowRight}')
+      await settle(150)
+      expect(vp.scrollTop).toBeGreaterThan(0)
+      expect(vp.scrollLeft).toBeGreaterThan(0)
+      expect(el.querySelector('table caption')?.textContent).toContain('Match scores')
     })
   })
 

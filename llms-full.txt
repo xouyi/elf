@@ -90,7 +90,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, tooltip, popover, hover-card, dropdown-menu, context-menu, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -3693,8 +3693,155 @@ const density = ref('comfortable')
 </template>
 ```
 
+### ScrollArea
+
+Scrolling container with styled scrollbars, built on Reka UI ScrollArea. Native scrolling is kept; the viewport is keyboard focusable. Give ElfScrollArea a height or width (class) and a label.
+
+Components: `ElfScrollArea`, `ElfScrollBar`
+
+Props:
+
+- `type` ('hover' | 'scroll' | 'auto' | 'always', default hover): When the scrollbars are visible.
+- `orientation` ('vertical' | 'horizontal' | 'both', default vertical): Which scrollbars to render.
+- `scrollHideDelay` (number, default 600): Milliseconds before a bar hides for hover and scroll (attribute: scroll-hide-delay).
+- `label` (string): Accessible name; makes the focusable viewport a role=region.
+- `viewportClass` (string | array | object): Classes for the scrolling viewport (attribute: viewport-class).
+- `class` (string | array | object): Merged onto the root; set its height or width here.
+
+Slots:
+
+- default: the scrollable content
+
+Accessibility:
+
+- The viewport is focusable (tabindex=0) so arrow keys, Page Up/Down, Home and End scroll it; pass label to name it.
+- Scrollbars are decorative; content must not depend on dragging them.
+- Do not nest scroll areas or wrap the whole page in one.
+
+Examples:
+
+#### Both
+
+```vue
+<script setup lang="ts">
+import { ElfScrollArea } from '@xouyi/elfui'
+
+const rows = Array.from({ length: 20 }, (_, r) => r + 1)
+const cols = Array.from({ length: 12 }, (_, c) => c + 1)
+</script>
+
+<template>
+  <ElfScrollArea orientation="both" label="Score grid" class="h-56 w-full max-w-md rounded-md border">
+    <table class="text-sm">
+      <caption class="sr-only">
+        Match scores by round and station
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col" class="px-3 py-2 text-left font-medium whitespace-nowrap">
+            Round
+          </th>
+          <th v-for="c in cols" :key="c" scope="col" class="px-3 py-2 text-left font-medium whitespace-nowrap">
+            Station {{ c }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="r in rows" :key="r" class="border-t">
+          <th scope="row" class="px-3 py-2 text-left font-medium">
+            {{ r }}
+          </th>
+          <td v-for="c in cols" :key="c" class="px-3 py-2 text-muted-foreground">
+            {{ r * c }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ElfScrollArea>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfScrollArea, ElfSeparator } from '@xouyi/elfui'
+
+const items = Array.from({ length: 24 }, (_, i) => `Fastener M${i + 3} x 20`)
+</script>
+
+<template>
+  <ElfScrollArea label="Inventory list" class="h-72 w-64 rounded-md border">
+    <div class="p-4">
+      <h4 class="mb-3 text-sm font-medium">
+        Fasteners
+      </h4>
+      <template v-for="item in items" :key="item">
+        <div class="text-sm">
+          {{ item }}
+        </div>
+        <ElfSeparator class="my-2" />
+      </template>
+    </div>
+  </ElfScrollArea>
+</template>
+```
+
+#### Horizontal
+
+```vue
+<script setup lang="ts">
+import { ElfScrollArea } from '@xouyi/elfui'
+
+const parts = Array.from({ length: 12 }, (_, i) => ({ id: i + 1, name: `Sprocket ${i + 1}` }))
+</script>
+
+<template>
+  <ElfScrollArea orientation="horizontal" label="Parts gallery" class="w-full max-w-md rounded-md border">
+    <div class="flex w-max gap-3 p-4">
+      <figure v-for="part in parts" :key="part.id" class="shrink-0">
+        <div class="flex h-24 w-32 items-center justify-center rounded-md bg-muted text-sm text-muted-foreground">
+          #{{ part.id }}
+        </div>
+        <figcaption class="pt-2 text-xs text-muted-foreground">
+          {{ part.name }}
+        </figcaption>
+      </figure>
+    </div>
+  </ElfScrollArea>
+</template>
+```
+
+#### Types
+
+```vue
+<script setup lang="ts">
+import { ElfScrollArea } from '@xouyi/elfui'
+
+const types = ['always', 'auto', 'hover', 'scroll'] as const
+const lines = Array.from({ length: 12 }, (_, i) => `Line ${i + 1}`)
+</script>
+
+<template>
+  <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div v-for="type in types" :key="type" class="grid gap-1">
+      <p class="text-xs font-medium">
+        type="{{ type }}"
+      </p>
+      <ElfScrollArea :type="type" :label="`Scrollbar type ${type}`" class="h-32 rounded-md border">
+        <ul class="p-2 text-sm text-muted-foreground">
+          <li v-for="line in lines" :key="line">
+            {{ line }}
+          </li>
+        </ul>
+      </ElfScrollArea>
+    </div>
+  </div>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

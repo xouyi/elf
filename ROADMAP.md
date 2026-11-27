@@ -358,7 +358,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** courses `LessonShell` TOC, chat panel, command list.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 ### v0.5: Navigation and data display
 

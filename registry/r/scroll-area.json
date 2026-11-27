@@ -1,0 +1,31 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "scroll-area",
+  "title": "Scroll Area",
+  "description": "Scrolling container with styled scrollbars that stays keyboard scrollable, built on Reka UI.",
+  "dependencies": [
+    "reka-ui",
+    "@vueuse/core"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/scroll-area/ScrollArea.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ScrollAreaProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { ScrollAreaCorner, ScrollAreaRoot, ScrollAreaViewport, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\nimport ScrollBar from './ScrollBar.vue'\n\nconst props = withDefaults(defineProps<ScrollAreaProps>(), {\n  orientation: 'vertical',\n})\nconst delegatedProps = reactiveOmit(props, 'class', 'orientation', 'label', 'viewportClass')\nconst forwarded = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <ScrollAreaRoot\n    data-slot=\"scroll-area\"\n    v-bind=\"forwarded\"\n    :class=\"cn('relative overflow-hidden', props.class)\"\n  >\n    <ScrollAreaViewport\n      data-slot=\"scroll-area-viewport\"\n      :role=\"props.label ? 'region' : undefined\"\n      :aria-label=\"props.label\"\n      :class=\"cn('size-full rounded-[inherit] outline-none focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:ring-inset', props.viewportClass)\"\n    >\n      <slot />\n    </ScrollAreaViewport>\n    <ScrollBar v-if=\"props.orientation !== 'horizontal'\" orientation=\"vertical\" />\n    <ScrollBar v-if=\"props.orientation !== 'vertical'\" orientation=\"horizontal\" />\n    <ScrollAreaCorner v-if=\"props.orientation === 'both'\" />\n  </ScrollAreaRoot>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/scroll-area/ScrollBar.vue",
+      "content": "<script setup lang=\"ts\">\nimport type { ScrollBarProps } from './index'\nimport { reactiveOmit } from '@vueuse/core'\nimport { ScrollAreaScrollbar, ScrollAreaThumb, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nconst props = withDefaults(defineProps<ScrollBarProps>(), {\n  orientation: 'vertical',\n})\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <ScrollAreaScrollbar\n    data-slot=\"scroll-area-scrollbar\"\n    v-bind=\"forwarded\"\n    :class=\"cn(\n      'flex touch-none p-px transition-colors select-none',\n      props.orientation === 'vertical' && 'h-full w-2.5 border-l border-l-transparent',\n      props.orientation === 'horizontal' && 'h-2.5 flex-col border-t border-t-transparent',\n      props.class,\n    )\"\n  >\n    <ScrollAreaThumb\n      data-slot=\"scroll-area-thumb\"\n      class=\"relative flex-1 rounded-full bg-muted-foreground/70\"\n    />\n  </ScrollAreaScrollbar>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/scroll-area/index.ts",
+      "content": "import type { ScrollAreaRootProps, ScrollAreaScrollbarProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\n\nexport { default as ScrollArea } from './ScrollArea.vue'\nexport { default as ScrollBar } from './ScrollBar.vue'\n\nexport interface ScrollAreaProps extends ScrollAreaRootProps {\n  /** Which scrollbars to render: `vertical` (default), `horizontal` or `both`. */\n  orientation?: 'vertical' | 'horizontal' | 'both'\n  /**\n   * Accessible name of the scrollable region. The viewport is keyboard focusable so that arrow keys, Page Up/Down,\n   * Home and End scroll it; naming it (`role=\"region\"`) tells screen reader users what they are scrolling.\n   */\n  label?: string\n  /** Extra classes for the scrolling viewport (the focusable element), merged with `cn()`. */\n  viewportClass?: HTMLAttributes['class']\n  /** Extra classes for the root, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nexport interface ScrollBarProps extends Omit<ScrollAreaScrollbarProps, 'orientation'> {\n  /** Direction of the bar. */\n  orientation?: 'vertical' | 'horizontal'\n  /** Extra classes, merged with the base classes through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}
