@@ -61,13 +61,13 @@ describe('elfui CLI (built binary)', () => {
 
   it('initializes a Vite + Vue project idempotently', () => {
     const dir = project(viteFiles(true))
-    const first = elfui(dir, 'init', '--yes', '--theme', 'novatron', '--no-install')
+    const first = elfui(dir, 'init', '--yes', '--theme', 'nova', '--no-install')
     expect(first.code, first.out).toBe(0)
     expect(read(dir, 'vite.config.ts')).toContain('plugins: [vue(), tailwindcss()]')
-    expect(read(dir, 'src/style.css')).toBe('@import \'tailwindcss\';\n@import \'@xouyi/elfui/styles.css\';\n@import \'@xouyi/elfui/themes/novatron.css\';\nbody { margin: 0; }\n')
-    expect(read(dir, 'index.html')).toContain('<html data-theme="novatron" lang="en">')
+    expect(read(dir, 'src/style.css')).toBe('@import \'tailwindcss\';\n@import \'@xouyi/elfui/styles.css\';\n@import \'@xouyi/elfui/themes/nova.css\';\nbody { margin: 0; }\n')
+    expect(read(dir, 'index.html')).toContain('<html data-theme="nova" lang="en">')
     const snapshot = ['vite.config.ts', 'src/style.css', 'index.html', 'src/main.ts'].map(f => read(dir, f))
-    const second = elfui(dir, 'init', '--yes', '--theme', 'novatron', '--no-install')
+    const second = elfui(dir, 'init', '--yes', '--theme', 'nova', '--no-install')
     expect(second.code, second.out).toBe(0)
     expect(['vite.config.ts', 'src/style.css', 'index.html', 'src/main.ts'].map(f => read(dir, f))).toEqual(snapshot)
   })

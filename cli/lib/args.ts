@@ -4,7 +4,7 @@ export interface ParsedArgs {
   flags: Record<string, string | boolean>
 }
 
-/** Flags that take a value (`--theme novatron` or `--theme=novatron`). Everything else is boolean. */
+/** Flags that take a value (`--theme nova` or `--theme=nova`). Everything else is boolean. */
 const VALUE_FLAGS = new Set(['theme', 'path', 'registry', 'cwd'])
 const SHORT_FLAGS: Record<string, string> = { y: 'yes', h: 'help', v: 'version' }
 

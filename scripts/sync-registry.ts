@@ -44,8 +44,20 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   select: { title: 'Select', description: 'Dropdown to choose one value from a list, with groups, typeahead and scroll buttons, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('field')] },
   alert: { title: 'Alert', description: 'Static message with default, destructive, success and warning variants and live region handling.', dependencies: ['class-variance-authority', '@lucide/vue'] },
   progress: { title: 'Progress', description: 'Determinate and indeterminate progress bar built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
+  'gradient-text': { title: 'Gradient Text', description: 'Inline gradient text with theme-aware presets, custom stops, direction and a reduced-motion-safe shimmer.', dependencies: ['reka-ui'] },
   avatar: { title: 'Avatar', description: 'Image with initials fallback, four sizes and an overlapping group, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
+  'scroll-area': { title: 'Scroll Area', description: 'Scrolling container with styled scrollbars that stays keyboard scrollable, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
+  'context-menu': { title: 'Context Menu', description: 'Right-click, long-press and keyboard menu with the same parts and styles as the Dropdown Menu, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('dropdown-menu')] },
+  'dropdown-menu': { title: 'Dropdown Menu', description: 'Action menu opened from a button with items, checkbox and radio items, groups, sub menus and shortcuts, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'] },
+  'hover-card': { title: 'Hover Card', description: 'Rich preview on hover or focus of a link, built on Reka UI and sharing the Popover panel styles.', dependencies: ['reka-ui', '@vueuse/core'], registryDependencies: [dep('popover')] },
+  popover: { title: 'Popover', description: 'Anchored interactive panel with trigger, anchor and close parts, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
+  tooltip: { title: 'Tooltip', description: 'Short non-interactive hint on hover or focus with a shared delay provider, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
   'visually-hidden': { title: 'Visually Hidden', description: 'Hides content visually while keeping it available to assistive technology.', dependencies: ['reka-ui'] },
+  'alert-dialog': { title: 'Alert Dialog', description: 'Modal that demands a decision, with Cancel and Action parts and initial focus on Cancel, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'], registryDependencies: [dep('button'), dep('dialog')] },
+  sheet: { title: 'Sheet', description: 'Edge-anchored modal panel (top, right, bottom, left) with a mobile-friendly bottom sheet, built on Reka UI Dialog.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('dialog')] },
+  toast: { title: 'Toast', description: 'Toaster and useToast(): a queue of transient notifications with variants, actions, promise toasts, swipe to dismiss and an F8 hotkey, built on Reka UI Toast.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue', 'class-variance-authority'], registryDependencies: [dep('button')] },
+  collapsible: { title: 'Collapsible', description: 'Single show and hide region with an animated height, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
+  accordion: { title: 'Accordion', description: 'Stacked collapsible sections, single or multiple, with arrow-key navigation, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', '@lucide/vue'], registryDependencies: [dep('collapsible')] },
 }
 
 const items: unknown[] = [
@@ -90,11 +102,12 @@ items.push({
   name: 'elf-theme',
   type: 'registry:file',
   title: 'Elf theme',
-  description: 'Tailwind v4 token mappings and the elf and novatron theme files. Import elf.css after tailwindcss.',
+  description: 'Tailwind v4 token mappings and the elf, nova and elfwood theme files. Import elf.css after tailwindcss.',
   files: [
     { path: 'registry/_generated/css/elf.css', type: 'registry:file', target: 'assets/css/elf/elf.css' },
     { path: 'registry/_generated/css/themes/elf.css', type: 'registry:file', target: 'assets/css/elf/themes/elf.css' },
-    { path: 'registry/_generated/css/themes/novatron.css', type: 'registry:file', target: 'assets/css/elf/themes/novatron.css' },
+    { path: 'registry/_generated/css/themes/nova.css', type: 'registry:file', target: 'assets/css/elf/themes/nova.css' },
+    { path: 'registry/_generated/css/themes/elfwood.css', type: 'registry:file', target: 'assets/css/elf/themes/elfwood.css' },
   ],
 })
 

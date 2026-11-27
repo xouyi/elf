@@ -80,7 +80,7 @@ function writeStored(storage: ElfThemeStorage, key: string, value: string, maxAg
  *
  * @example
  * const { theme, setTheme } = useElfTheme({ storage: 'localStorage' })
- * setTheme('novatron')
+ * setTheme('nova')
  */
 export function useElfTheme<T extends string = ElfTheme>(options: UseElfThemeOptions<T> = {}): UseElfThemeReturn<T> {
   const themes = (options.themes ?? elfThemes) as readonly T[]

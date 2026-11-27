@@ -31,6 +31,32 @@ describe('Button', () => {
     expect(mount(Button, { props: { size } }).classes()).toContain(cls)
   })
 
+  it('does not glow by default and exposes no glow marker', () => {
+    const w = mount(Button)
+    expect(w.attributes('data-glow')).toBeUndefined()
+    expect(w.classes().some(c => c.includes('elf-glow'))).toBe(false)
+  })
+
+  it.each([
+    ['default', '--elf-primary'],
+    ['secondary', '--elf-secondary-foreground'],
+    ['outline', '--elf-primary'],
+    ['ghost', '--elf-primary'],
+    ['destructive', '--elf-destructive'],
+    ['link', '--elf-primary'],
+  ] as const)('glow on the %s variant uses %s', (variant, token) => {
+    const w = mount(Button, { props: { variant, glow: true } })
+    expect(w.attributes('data-glow')).toBe('')
+    expect(w.classes()).toContain('shadow-(--elf-glow-rest)')
+    expect(w.classes()).toContain(`[--elf-glow-color:var(${token})]`)
+  })
+
+  it('drops the glow without motion and in forced-colors mode', () => {
+    const w = mount(Button, { props: { glow: true } })
+    expect(w.classes()).toContain('motion-reduce:transition-none')
+    expect(w.classes()).toContain('forced-colors:shadow-none')
+  })
+
   it('merges custom classes over variant classes', () => {
     const w = mount(Button, { props: { class: 'h-20' } })
     expect(w.classes()).toContain('h-20')

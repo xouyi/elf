@@ -55,6 +55,9 @@ export type { SpinnerProps, SpinnerVariants } from './components/spinner'
 export { Skeleton as ElfSkeleton } from './components/skeleton'
 export type { SkeletonProps } from './components/skeleton'
 
+export { GradientText as ElfGradientText, gradientTextDirections, gradientTextPresets } from './components/gradient-text'
+export type { GradientTextDirection, GradientTextProps, GradientTextVariant } from './components/gradient-text'
+
 export { Textarea as ElfTextarea } from './components/textarea'
 
 export {
@@ -111,3 +114,130 @@ export type { ElfTheme } from './lib/themes'
 
 export { elfThemeBootScript, useElfTheme } from './composables/use-elf-theme'
 export type { ElfThemeBootScriptOptions, ElfThemeStorage, UseElfThemeOptions, UseElfThemeReturn } from './composables/use-elf-theme'
+
+export {
+  Tooltip as ElfTooltip,
+  TooltipContent as ElfTooltipContent,
+  TooltipProvider as ElfTooltipProvider,
+  TooltipTrigger as ElfTooltipTrigger,
+} from './components/tooltip'
+export type { TooltipContentProps } from './components/tooltip'
+
+export {
+  Popover as ElfPopover,
+  PopoverAnchor as ElfPopoverAnchor,
+  PopoverClose as ElfPopoverClose,
+  PopoverContent as ElfPopoverContent,
+  PopoverTrigger as ElfPopoverTrigger,
+} from './components/popover'
+export type { PopoverContentProps } from './components/popover'
+
+export {
+  HoverCard as ElfHoverCard,
+  HoverCardContent as ElfHoverCardContent,
+  HoverCardTrigger as ElfHoverCardTrigger,
+} from './components/hover-card'
+export type { HoverCardContentProps } from './components/hover-card'
+
+export {
+  DropdownMenu as ElfDropdownMenu,
+  DropdownMenuCheckboxItem as ElfDropdownMenuCheckboxItem,
+  DropdownMenuContent as ElfDropdownMenuContent,
+  DropdownMenuGroup as ElfDropdownMenuGroup,
+  DropdownMenuItem as ElfDropdownMenuItem,
+  DropdownMenuLabel as ElfDropdownMenuLabel,
+  DropdownMenuRadioGroup as ElfDropdownMenuRadioGroup,
+  DropdownMenuRadioItem as ElfDropdownMenuRadioItem,
+  DropdownMenuSeparator as ElfDropdownMenuSeparator,
+  DropdownMenuShortcut as ElfDropdownMenuShortcut,
+  DropdownMenuSub as ElfDropdownMenuSub,
+  DropdownMenuSubContent as ElfDropdownMenuSubContent,
+  DropdownMenuSubTrigger as ElfDropdownMenuSubTrigger,
+  DropdownMenuTrigger as ElfDropdownMenuTrigger,
+  menuContentClass,
+  menuItemVariants,
+  menuLabelClass,
+  menuSeparatorClass,
+  menuShortcutClass,
+} from './components/dropdown-menu'
+export type {
+  DropdownMenuCheckboxItemProps,
+  DropdownMenuContentProps,
+  DropdownMenuItemProps,
+  DropdownMenuLabelProps,
+  DropdownMenuRadioItemProps,
+  DropdownMenuSeparatorProps,
+  DropdownMenuShortcutProps,
+  DropdownMenuSubContentProps,
+  DropdownMenuSubTriggerProps,
+  MenuItemVariants,
+} from './components/dropdown-menu'
+
+export {
+  ContextMenu as ElfContextMenu,
+  ContextMenuCheckboxItem as ElfContextMenuCheckboxItem,
+  ContextMenuContent as ElfContextMenuContent,
+  ContextMenuGroup as ElfContextMenuGroup,
+  ContextMenuItem as ElfContextMenuItem,
+  ContextMenuLabel as ElfContextMenuLabel,
+  ContextMenuRadioGroup as ElfContextMenuRadioGroup,
+  ContextMenuRadioItem as ElfContextMenuRadioItem,
+  ContextMenuSeparator as ElfContextMenuSeparator,
+  ContextMenuShortcut as ElfContextMenuShortcut,
+  ContextMenuSub as ElfContextMenuSub,
+  ContextMenuSubContent as ElfContextMenuSubContent,
+  ContextMenuSubTrigger as ElfContextMenuSubTrigger,
+  ContextMenuTrigger as ElfContextMenuTrigger,
+} from './components/context-menu'
+export type {
+  ContextMenuCheckboxItemProps,
+  ContextMenuContentProps,
+  ContextMenuItemProps,
+  ContextMenuLabelProps,
+  ContextMenuRadioItemProps,
+  ContextMenuSeparatorProps,
+  ContextMenuShortcutProps,
+  ContextMenuSubContentProps,
+  ContextMenuSubTriggerProps,
+} from './components/context-menu'
+
+export { ScrollArea as ElfScrollArea, ScrollBar as ElfScrollBar } from './components/scroll-area'
+export type { ScrollAreaProps, ScrollBarProps } from './components/scroll-area'
+
+export {
+  AlertDialog as ElfAlertDialog,
+  AlertDialogAction as ElfAlertDialogAction,
+  AlertDialogCancel as ElfAlertDialogCancel,
+  AlertDialogContent as ElfAlertDialogContent,
+  AlertDialogDescription as ElfAlertDialogDescription,
+  AlertDialogFooter as ElfAlertDialogFooter,
+  AlertDialogHeader as ElfAlertDialogHeader,
+  AlertDialogTitle as ElfAlertDialogTitle,
+  AlertDialogTrigger as ElfAlertDialogTrigger,
+} from './components/alert-dialog'
+export type { AlertDialogActionProps, AlertDialogCancelProps } from './components/alert-dialog'
+
+export {
+  Sheet as ElfSheet,
+  SheetClose as ElfSheetClose,
+  SheetContent as ElfSheetContent,
+  SheetDescription as ElfSheetDescription,
+  SheetFooter as ElfSheetFooter,
+  SheetHeader as ElfSheetHeader,
+  sheetVariants,
+  SheetTitle as ElfSheetTitle,
+  SheetTrigger as ElfSheetTrigger,
+} from './components/sheet'
+export type { SheetContentExtraProps, SheetVariants } from './components/sheet'
+
+export { toast, Toaster as ElfToaster, toastManager, toastVariants, useToast } from './components/toast'
+export type { ElfToastObject, ToastActionOptions, ToastData, ToasterPosition, ToasterProps, ToastFunction, ToastOptions, ToastPromiseOptions, ToastVariant, ToastVariants } from './components/toast'
+
+export { Collapsible as ElfCollapsible, CollapsibleContent as ElfCollapsibleContent, CollapsibleTrigger as ElfCollapsibleTrigger } from './components/collapsible'
+
+export {
+  Accordion as ElfAccordion,
+  AccordionContent as ElfAccordionContent,
+  AccordionItem as ElfAccordionItem,
+  AccordionTrigger as ElfAccordionTrigger,
+} from './components/accordion'

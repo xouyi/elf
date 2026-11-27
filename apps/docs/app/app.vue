@@ -33,4 +33,6 @@ const bare = computed(() => route.path.includes('/__examples/'))
     <AppFooter />
     <SearchDialog />
   </div>
+  <!-- The one toaster of the app: the toast examples and the docs pages call useToast() from anywhere. -->
+  <ElfToaster />
 </template>

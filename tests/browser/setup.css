@@ -1,7 +1,8 @@
 @import 'tailwindcss';
 @import '../../src/styles.css';
 @import '../../src/themes/elf.css';
-@import '../../src/themes/novatron.css';
+@import '../../src/themes/nova.css';
+@import '../../src/themes/elfwood.css';
 
 body {
   margin: 0;

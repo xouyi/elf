@@ -1,6 +1,6 @@
 # ElfUI
 
-> ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (pure black with violet accents, rounded) and novatron (gold on obsidian, sharp corners).
+> ElfUI is a themeable design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with three themes: elf (pure black with violet accents, rounded), nova (gold on obsidian, sharp corners) and elfwood (light, green on white).
 
 ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.4.0). Install with `bun add @xouyi/elfui` or `bunx @xouyi/elfui@latest init`. All Vue components use the `Elf` prefix. Use Bun for every command.
 
@@ -34,6 +34,18 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [Alert](https://xouyi.github.io/elfUI/docs/components/alert): Static message with an icon, a title and a description. Variants: default, destructive, success, warning. Composed from native elements (no Reka primitive): ElfAlert with ElfAlertTitle and ElfAlertDescription.
 - [Progress](https://xouyi.github.io/elfUI/docs/components/progress): Progress bar built on Reka UI Progress (role=progressbar). Determinate with v-model (0..max) or indeterminate with a null value. Always give it a name with label, aria-label or aria-labelledby.
 - [Avatar](https://xouyi.github.io/elfUI/docs/components/avatar): Person or team image with an initials fallback, built on Reka UI Avatar. ElfAvatar (size) contains ElfAvatarImage and ElfAvatarFallback; ElfAvatarGroup overlaps several.
+- [GradientText](https://xouyi.github.io/elfUI/docs/components/gradient-text): Inline gradient text (bg-clip-text) on a span by default. Real, selectable text; presets follow the theme and pass 4.5:1 on every theme background.
+- [Tooltip](https://xouyi.github.io/elfUI/docs/components/tooltip): Short non-interactive hint on hover or keyboard focus, built on Reka UI Tooltip. Compose ElfTooltip > ElfTooltipTrigger (as-child around a button) + ElfTooltipContent. Wrap related tooltips in one ElfTooltipProvider to share the open delay.
+- [Popover](https://xouyi.github.io/elfUI/docs/components/popover): Anchored interactive panel, built on Reka UI Popover. Compose ElfPopover > ElfPopoverTrigger (as-child around a button) + ElfPopoverContent; ElfPopoverClose closes it, ElfPopoverAnchor anchors it elsewhere. Non-modal by default; modal traps focus.
+- [HoverCard](https://xouyi.github.io/elfUI/docs/components/hover-card): Rich preview shown when a link is hovered or focused, built on Reka UI HoverCard. Compose ElfHoverCard > ElfHoverCardTrigger (as-child around a real link) + ElfHoverCardContent. Supplementary only: never opens on touch and is not announced.
+- [DropdownMenu](https://xouyi.github.io/elfUI/docs/components/dropdown-menu): Action menu opened from a button, built on Reka UI DropdownMenu. Compose ElfDropdownMenu > ElfDropdownMenuTrigger (as-child around a button) + ElfDropdownMenuContent > items. Items: ElfDropdownMenuItem (@select), ElfDropdownMenuCheckboxItem (v-model), ElfDropdownMenuRadioGroup (v-model) with ElfDropdownMenuRadioItem, ElfDropdownMenuSub with SubTrigger and SubContent; ElfDropdownMenuLabel, Group, Separator and Shortcut (put ElfKbd inside) structure it.
+- [ContextMenu](https://xouyi.github.io/elfUI/docs/components/context-menu): Menu for an area opened by right-click, long-press, Shift+F10 or the ContextMenu key, built on Reka UI ContextMenu. Same parts and styles as ElfDropdownMenu: ElfContextMenu > ElfContextMenuTrigger (as-child around a focusable element) + ElfContextMenuContent > ElfContextMenuItem, CheckboxItem, RadioGroup/RadioItem, Label, Group, Separator, Shortcut, Sub/SubTrigger/SubContent. Never the only way to reach an action.
+- [ScrollArea](https://xouyi.github.io/elfUI/docs/components/scroll-area): Scrolling container with styled scrollbars, built on Reka UI ScrollArea. Native scrolling is kept; the viewport is keyboard focusable. Give ElfScrollArea a height or width (class) and a label.
+- [AlertDialog](https://xouyi.github.io/elfUI/docs/components/alert-dialog): Modal that demands a decision (destructive confirmation), built on Reka UI AlertDialog. Role alertdialog: focus starts on Cancel, Escape cancels, an outside click never dismisses it.
+- [Sheet](https://xouyi.github.io/elfUI/docs/components/sheet): Edge-anchored modal panel on Reka UI Dialog: side sheets for forms and navigation, and a bottom sheet for mobile. Same focus trap, Escape and focus restore as ElfDialog; an outside click closes it.
+- [Toast](https://xouyi.github.io/elfUI/docs/components/toast): Transient notifications. Mount one ElfToaster per app and call useToast() (or import toast) from anywhere: toast(message, options), toast.success/warning/error, toast.promise, toast.update, toast.dismiss. Built on the Reka UI Toast viewport and manager; the queue is a module singleton that is a no-op on the server.
+- [Collapsible](https://xouyi.github.io/elfUI/docs/components/collapsible): A single show and hide region with an animated height, built on Reka UI Collapsible. ElfCollapsibleTrigger toggles ElfCollapsibleContent.
+- [Accordion](https://xouyi.github.io/elfUI/docs/components/accordion): Stacked collapsible sections on Reka UI Accordion. ElfAccordion (type single or multiple) contains ElfAccordionItem (value) with an ElfAccordionTrigger heading button and an ElfAccordionContent region.
 
 ## Reference
 
@@ -49,8 +61,9 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - Choose appearance with props (variant, size), not custom classes or inline styles.
 - Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).
 - Use text-destructive-text for error messages and required markers; bg-destructive is a fill and is too dark for text.
-- ElfUI is dark only: do not add light-mode styles or dark: variants.
-- Do not override border radius with arbitrary values; radii derive from the theme (novatron is sharp, 0px).
+- Use text-success-text and text-warning-text for status text and icons; bg-success and bg-warning are fills.
+- Themes decide light or dark (elf and nova are dark, elfwood is light): never add dark: variants or hard-coded colors.
+- Do not override border radius with arbitrary values; radii derive from the theme (nova is sharp, 0px).
 - Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.
 - Dialogs need a title and description; tabs lists need an aria-label.

@@ -1,6 +1,6 @@
 # ElfUI (full reference)
 
-> ElfUI is a dark-only design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with two themes: elf (pure black with violet accents, rounded) and novatron (gold on obsidian, sharp corners).
+> ElfUI is a themeable design system for Vue 3 and Nuxt 4, built on Reka UI and Tailwind CSS v4, with three themes: elf (pure black with violet accents, rounded), nova (gold on obsidian, sharp corners) and elfwood (light, green on white).
 
 Version 0.4.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com/xouyi/elfUI .
 
@@ -10,8 +10,9 @@ Version 0.4.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com
 - Choose appearance with props (variant, size), not custom classes or inline styles.
 - Style with theme tokens (bg-primary, text-muted-foreground, border-border), never hard-coded colors (no #hex, no bg-violet-500).
 - Use text-destructive-text for error messages and required markers; bg-destructive is a fill and is too dark for text.
-- ElfUI is dark only: do not add light-mode styles or dark: variants.
-- Do not override border radius with arbitrary values; radii derive from the theme (novatron is sharp, 0px).
+- Use text-success-text and text-warning-text for status text and icons; bg-success and bg-warning are fills.
+- Themes decide light or dark (elf and nova are dark, elfwood is light): never add dark: variants or hard-coded colors.
+- Do not override border radius with arbitrary values; radii derive from the theme (nova is sharp, 0px).
 - Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.
 - Dialogs need a title and description; tabs lists need an aria-label.
@@ -19,9 +20,9 @@ Version 0.4.0. Docs: https://xouyi.github.io/elfUI/ . Source: https://github.com
 - Install from npm (`bun add @xouyi/elfui`, or `bunx @xouyi/elfui@latest init` to set up a project); typescript 5 or 6 (not 7) must be installed in the consumer project.
 - Use Bun for all package commands (bun add, bun run, bunx), never npm, pnpm or yarn.
 
-### Novatron theme rules
+### Nova theme rules
 
-- Use data-theme="novatron" (or the `elfui: { theme: "novatron" }` option in nuxt.config; the config key stays `elfui`) for anything representing Novatron Robotics (FRC Team 10202).
+- Use data-theme="nova" (or the `elfui: { theme: "nova" }` option in nuxt.config; the config key stays `elfui`) for anything representing Novatron Robotics (FRC Team 10202).
 - Palette: obsidian black background (#050505 / #09090b) and Novatron gold (#ffcc00) primary. 100% dark mode.
 - Geometry is sharp: 0px border radius everywhere. Never add rounded-* overrides or rounded arbitrary values.
 - Downstream user-facing copy for Novatron apps is Turkish; code, identifiers and comments are English.
@@ -32,7 +33,7 @@ Requirements: Bun, Nuxt 4, Tailwind CSS v4 with @tailwindcss/vite, typescript 5 
 
 ```bash
 # automatic: installs, patches nuxt.config and the main CSS (idempotent)
-bunx @xouyi/elfui@latest init --theme novatron --yes
+bunx @xouyi/elfui@latest init --theme nova --yes
 
 # or by hand
 bun add @xouyi/elfui tailwindcss @tailwindcss/vite
@@ -46,7 +47,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineNuxtConfig({
   modules: ['@xouyi/elfui/nuxt'],
   css: ['~/assets/css/main.css'],
-  elfui: { theme: 'novatron', themes: ['elf'] }, // config key stays elfui; theme: 'elf' | 'novatron'
+  elfui: { theme: 'nova', themes: ['elf'] }, // config key stays elfui; theme: 'elf' | 'nova' | 'elfwood'
   vite: { plugins: [tailwindcss()] },
 })
 ```
@@ -57,7 +58,7 @@ export default defineNuxtConfig({
 @import '@xouyi/elfui/styles.css';
 ```
 
-Components are auto-imported with the Elf prefix. Module options: `theme` ('elf' | 'novatron', default 'elf'), `themes` (extra theme CSS to bundle), `prefix` (default 'Elf').
+Components are auto-imported with the Elf prefix. Module options: `theme` ('elf' | 'nova' | 'elfwood', default 'elf'), `themes` (extra theme CSS to bundle), `prefix` (default 'Elf').
 
 Upgrade: `bun update @xouyi/elfui`. Advanced: an unreleased commit can be installed with `bun add github:xouyi/elfUI#<tag-or-sha>`.
 
@@ -71,14 +72,14 @@ bunx @xouyi/elfui@latest init --yes   # or: bun add @xouyi/elfui tailwindcss @ta
 @import 'tailwindcss';
 @import '@xouyi/elfui/styles.css';
 @import '@xouyi/elfui/themes/elf.css';
-@import '@xouyi/elfui/themes/novatron.css';
+@import '@xouyi/elfui/themes/nova.css';
 ```
 
 ```ts
 import { ElfButton } from '@xouyi/elfui'
 ```
 
-Set `<html data-theme="elf">` (or `novatron`).
+Set `<html data-theme="elf">` (`nova` or `elfwood`).
 
 ## CLI and registry (copy components)
 
@@ -90,53 +91,57 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
-Themes: `elf`, `novatron`. Select with `data-theme` on html or any element. Dark only.
+Themes: `elf`, `elfwood`, `nova`. Select with `data-theme` on html or any element.
 
 ```ts
-document.documentElement.dataset.theme = 'novatron'
+document.documentElement.dataset.theme = 'nova'
 ```
 
 Or from code, SSR-safe, with optional persistence (auto-imported in Nuxt; otherwise `import { useElfTheme } from "@xouyi/elfui"`):
 
 ```ts
 const { theme, themes, setTheme, cycle } = useElfTheme({ storage: 'cookie' }) // storage: 'cookie' | 'localStorage' | 'none' (default)
-setTheme('novatron')
+setTheme('nova')
 ```
 
 Tokens (CSS variables `--elf-<name>`, Tailwind utilities `bg-<name>`, `text-<name>-foreground`, `border-border`, `ring-ring`):
 
-| Token | elf | novatron |
-| :-- | :-- | :-- |
-| background | `#000000` | `#050505` |
-| foreground | `#fafafa` | `#fafafa` |
-| card | `#0a0a0a` | `#09090b` |
-| card-foreground | `#fafafa` | `#fafafa` |
-| popover | `#0f0f0f` | `#09090b` |
-| popover-foreground | `#fafafa` | `#fafafa` |
-| primary | `oklch(0.7 0.16 293)` | `#ffcc00` |
-| primary-foreground | `oklch(0.15 0.03 295)` | `#050505` |
-| secondary | `#1c1c1c` | `#18181b` |
-| secondary-foreground | `#fafafa` | `#fafafa` |
-| muted | `#171717` | `#18181b` |
-| muted-foreground | `#a3a3a3` | `#a1a1aa` |
-| accent | `oklch(0.27 0.06 293)` | `#27272a` |
-| accent-foreground | `#fafafa` | `#fafafa` |
-| destructive | `oklch(0.55 0.21 25)` | `#dc2626` |
-| destructive-foreground | `oklch(0.99 0 0)` | `#ffffff` |
-| destructive-text | `oklch(0.72 0.17 22)` | `#f87171` |
-| success | `oklch(0.72 0.17 150)` | `#22c55e` |
-| success-foreground | `oklch(0.15 0.03 150)` | `#050505` |
-| warning | `oklch(0.82 0.15 85)` | `#f59e0b` |
-| warning-foreground | `oklch(0.2 0.04 85)` | `#050505` |
-| border | `#262626` | `#27272a` |
-| input | `#6b6b6b` | `#71717a` |
-| ring | `oklch(0.7 0.16 293)` | `#ffcc00` |
-| radius | `0.625rem` | `0px` |
-| radius-pill | `9999px` | `0px` |
+| Token | elf | elfwood | nova |
+| :-- | :-- | :-- | :-- |
+| background | `#000000` | `#fbfdfb` | `#050505` |
+| foreground | `#fafafa` | `#0b1a10` | `#fafafa` |
+| card | `#0a0a0a` | `#ffffff` | `#09090b` |
+| card-foreground | `#fafafa` | `#0b1a10` | `#fafafa` |
+| popover | `#0f0f0f` | `#ffffff` | `#09090b` |
+| popover-foreground | `#fafafa` | `#0b1a10` | `#fafafa` |
+| primary | `oklch(0.7 0.16 293)` | `#15803d` | `#ffcc00` |
+| primary-foreground | `oklch(0.15 0.03 295)` | `#ffffff` | `#050505` |
+| secondary | `#1c1c1c` | `#e6f1e8` | `#18181b` |
+| secondary-foreground | `#fafafa` | `#0f2417` | `#fafafa` |
+| muted | `#171717` | `#eef5ef` | `#18181b` |
+| muted-foreground | `#a3a3a3` | `#4b6252` | `#a1a1aa` |
+| accent | `oklch(0.27 0.06 293)` | `#d9eddd` | `#27272a` |
+| accent-foreground | `#fafafa` | `#0b1a10` | `#fafafa` |
+| destructive | `oklch(0.55 0.21 25)` | `#dc2626` | `#dc2626` |
+| destructive-foreground | `oklch(0.99 0 0)` | `#ffffff` | `#ffffff` |
+| destructive-text | `oklch(0.72 0.17 22)` | `#b91c1c` | `#f87171` |
+| success | `oklch(0.72 0.17 150)` | `#15803d` | `#22c55e` |
+| success-foreground | `oklch(0.15 0.03 150)` | `#ffffff` | `#050505` |
+| success-text | `oklch(0.72 0.17 150)` | `#166534` | `#22c55e` |
+| warning | `oklch(0.82 0.15 85)` | `#f59e0b` | `#f59e0b` |
+| warning-foreground | `oklch(0.2 0.04 85)` | `#1c1200` | `#050505` |
+| warning-text | `oklch(0.82 0.15 85)` | `#92400e` | `#f59e0b` |
+| border | `#262626` | `#c8dbcc` | `#27272a` |
+| input | `#6b6b6b` | `#6f8a77` | `#71717a` |
+| ring | `oklch(0.7 0.16 293)` | `#15803d` | `#ffcc00` |
+| radius | `0.625rem` | `0.5rem` | `0px` |
+| radius-pill | `9999px` | `9999px` | `0px` |
+| glow | `40%` | `22%` | `45%` |
+| overlay | `rgb(0 0 0 / 0.8)` | `rgb(11 26 16 / 0.38)` | `rgb(0 0 0 / 0.8)` |
 
 Create a theme: add a CSS file declaring every token under `[data-theme='name']`, import it after styles.css, then run `bun run contrast` (WCAG AA).
 
@@ -149,6 +154,7 @@ Triggers an action. Renders a native button; use as-child to render a link or ot
 Components: `ElfButton`
 
 - variant options: `default`, `secondary`, `outline`, `ghost`, `destructive`, `link` (default `default`)
+- glow options: `true`, `false` (default `undefined`)
 - size options: `default`, `sm`, `lg`, `icon` (default `default`)
 
 Props:
@@ -207,6 +213,24 @@ import { ElfButton } from '@xouyi/elfui'
   <ElfButton disabled>
     Disabled
   </ElfButton>
+</template>
+```
+
+#### Glow
+
+```vue
+<script setup lang="ts">
+import { ElfButton } from '@xouyi/elfui'
+
+const variants = ['default', 'secondary', 'outline', 'ghost', 'destructive'] as const
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-4 p-2">
+    <ElfButton v-for="variant in variants" :key="variant" :variant="variant" glow>
+      {{ variant }}
+    </ElfButton>
+  </div>
 </template>
 ```
 
@@ -2800,8 +2824,1860 @@ const sizes = ['sm', 'default', 'lg', 'xl'] as const
 </template>
 ```
 
+### GradientText
+
+Inline gradient text (bg-clip-text) on a span by default. Real, selectable text; presets follow the theme and pass 4.5:1 on every theme background.
+
+Components: `ElfGradientText`
+
+Props:
+
+- `variant` ('brand' | 'aurora' | 'sunset' | 'forest', default brand): Colour preset. brand blends the theme primary into its foreground; the others switch between a light and a dark set by color-scheme.
+- `from / via / to` (string): Custom CSS colours (tokens work: var(--elf-primary)). They override the preset stops.
+- `direction` ('r' | 'l' | 'b' | 't' | 'br' | 'bl' | 'tr' | 'tl', default r): Gradient direction.
+- `animate` (boolean, default false): Slow shimmer; static under prefers-reduced-motion.
+- `as` (string | Component, default span): Element to render.
+- `asChild` (boolean, default false): Render the child element with the gradient (attribute: as-child).
+- `class` (string | array | object): Merged with base classes.
+
+Slots:
+
+- default: the text
+
+Accessibility:
+
+- The text stays real text: selectable, searchable and read as written.
+- In forced-colors mode the gradient is replaced by CanvasText.
+- Custom from/via/to colours are not checked: keep 4.5:1 against the background (3:1 for large text).
+- Use it for short decorative emphasis, not for long paragraphs.
+
+Examples:
+
+#### Animated
+
+```vue
+<script setup lang="ts">
+import { ElfGradientText } from '@xouyi/elfui'
+</script>
+
+<template>
+  <p class="text-3xl font-bold tracking-tight">
+    <ElfGradientText variant="aurora" animate>
+      Shimmering, unless you prefer reduced motion
+    </ElfGradientText>
+  </p>
+</template>
+```
+
+#### Custom
+
+```vue
+<script setup lang="ts">
+import { ElfGradientText } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid gap-2 text-2xl font-semibold tracking-tight">
+    <ElfGradientText from="var(--elf-primary)" to="var(--elf-destructive-text)" direction="br">
+      Primary into destructive text
+    </ElfGradientText>
+    <ElfGradientText from="var(--elf-success-text)" via="var(--elf-primary)" to="var(--elf-warning-text)">
+      Three stops from theme tokens
+    </ElfGradientText>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfGradientText } from '@xouyi/elfui'
+</script>
+
+<template>
+  <p class="text-2xl font-semibold tracking-tight">
+    Build the next <ElfGradientText>robot</ElfGradientText> together.
+  </p>
+</template>
+```
+
+#### Heading
+
+```vue
+<script setup lang="ts">
+import { ElfGradientText } from '@xouyi/elfui'
+</script>
+
+<template>
+  <h2 class="text-4xl font-bold tracking-tight text-balance">
+    Ship faster with
+    <ElfGradientText variant="sunset" direction="br">
+      accessible components
+    </ElfGradientText>
+  </h2>
+</template>
+```
+
+#### Variants
+
+```vue
+<script setup lang="ts">
+import { ElfGradientText } from '@xouyi/elfui'
+
+const variants = ['brand', 'aurora', 'sunset', 'forest'] as const
+</script>
+
+<template>
+  <ul class="grid gap-2 text-2xl font-semibold tracking-tight">
+    <li v-for="variant in variants" :key="variant">
+      <ElfGradientText :variant="variant">
+        {{ variant }}
+      </ElfGradientText>
+    </li>
+  </ul>
+</template>
+```
+
+### Tooltip
+
+Short non-interactive hint on hover or keyboard focus, built on Reka UI Tooltip. Compose ElfTooltip > ElfTooltipTrigger (as-child around a button) + ElfTooltipContent. Wrap related tooltips in one ElfTooltipProvider to share the open delay.
+
+Components: `ElfTooltip`, `ElfTooltipTrigger`, `ElfTooltipContent`, `ElfTooltipProvider`
+
+Props:
+
+- `ElfTooltip open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfTooltip delayDuration` (number): Milliseconds before opening on hover; overrides the provider.
+- `ElfTooltipProvider delayDuration` (number, default 400): Open delay shared by every tooltip below it (attribute: delay-duration).
+- `ElfTooltipProvider skipDelayDuration` (number, default 300): Window after a tooltip closes in which the next one opens instantly.
+- `ElfTooltipContent side` ('top' | 'right' | 'bottom' | 'left', default top): Preferred side; flips when there is no room.
+- `ElfTooltipContent align` ('start' | 'center' | 'end', default center): Alignment against the trigger.
+- `ElfTooltipContent sideOffset` (number, default 6): Gap to the trigger in pixels (attribute: side-offset).
+- `class` (string | array | object): Accepted by ElfTooltipContent; merged with base classes.
+
+Slots:
+
+- ElfTooltipTrigger default: the described element (use as-child)
+- ElfTooltipContent default: a short plain-text hint
+
+Accessibility:
+
+- The tooltip describes the trigger (aria-describedby); give the trigger its own name, for example aria-label on an icon button.
+- Opens on hover and keyboard focus, closes on Escape. Never put links, buttons or essential information inside it.
+- Touch screens cannot hover: do not hide information that touch users need behind a tooltip.
+
+Examples:
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfTooltip, ElfTooltipContent, ElfTooltipTrigger } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfTooltip v-model:open="open">
+      <ElfTooltipTrigger as-child>
+        <ElfButton variant="outline">
+          Details
+        </ElfButton>
+      </ElfTooltipTrigger>
+      <ElfTooltipContent>Opens a read-only summary</ElfTooltipContent>
+    </ElfTooltip>
+    <p class="text-sm text-muted-foreground">
+      open = {{ open }}
+    </p>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfTooltip, ElfTooltipContent, ElfTooltipTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfTooltip>
+    <ElfTooltipTrigger as-child>
+      <ElfButton variant="outline">
+        Hover or focus me
+      </ElfButton>
+    </ElfTooltipTrigger>
+    <ElfTooltipContent>
+      Saved to your team library
+    </ElfTooltipContent>
+  </ElfTooltip>
+</template>
+```
+
+#### Icon Buttons
+
+```vue
+<script setup lang="ts">
+import { Bold, Italic, Link } from '@lucide/vue'
+import { ElfButton, ElfTooltip, ElfTooltipContent, ElfTooltipProvider, ElfTooltipTrigger } from '@xouyi/elfui'
+
+const actions = [
+  { label: 'Bold', icon: Bold },
+  { label: 'Italic', icon: Italic },
+  { label: 'Insert link', icon: Link },
+]
+</script>
+
+<template>
+  <!-- One provider shares the open delay: after the first tooltip, neighbours open instantly. -->
+  <ElfTooltipProvider :delay-duration="300" :skip-delay-duration="500">
+    <div class="flex gap-1">
+      <ElfTooltip v-for="action in actions" :key="action.label">
+        <ElfTooltipTrigger as-child>
+          <ElfButton variant="ghost" size="icon" :aria-label="action.label">
+            <component :is="action.icon" />
+          </ElfButton>
+        </ElfTooltipTrigger>
+        <ElfTooltipContent>{{ action.label }}</ElfTooltipContent>
+      </ElfTooltip>
+    </div>
+  </ElfTooltipProvider>
+</template>
+```
+
+#### Sides
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfTooltip, ElfTooltipContent, ElfTooltipProvider, ElfTooltipTrigger } from '@xouyi/elfui'
+
+const sides = ['top', 'right', 'bottom', 'left'] as const
+</script>
+
+<template>
+  <ElfTooltipProvider :delay-duration="150">
+    <div class="flex flex-wrap items-center gap-2">
+      <ElfTooltip v-for="side in sides" :key="side">
+        <ElfTooltipTrigger as-child>
+          <ElfButton variant="outline" size="sm" class="capitalize">
+            {{ side }}
+          </ElfButton>
+        </ElfTooltipTrigger>
+        <ElfTooltipContent :side="side">
+          Appears on the {{ side }}
+        </ElfTooltipContent>
+      </ElfTooltip>
+    </div>
+  </ElfTooltipProvider>
+</template>
+```
+
+#### With Shortcut
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfKbd, ElfTooltip, ElfTooltipContent, ElfTooltipTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfTooltip>
+    <ElfTooltipTrigger as-child>
+      <ElfButton variant="outline">
+        Save
+      </ElfButton>
+    </ElfTooltipTrigger>
+    <ElfTooltipContent class="flex items-center gap-2">
+      Save changes <ElfKbd>Ctrl S</ElfKbd>
+    </ElfTooltipContent>
+  </ElfTooltip>
+</template>
+```
+
+### Popover
+
+Anchored interactive panel, built on Reka UI Popover. Compose ElfPopover > ElfPopoverTrigger (as-child around a button) + ElfPopoverContent; ElfPopoverClose closes it, ElfPopoverAnchor anchors it elsewhere. Non-modal by default; modal traps focus.
+
+Components: `ElfPopover`, `ElfPopoverTrigger`, `ElfPopoverAnchor`, `ElfPopoverContent`, `ElfPopoverClose`
+
+Props:
+
+- `ElfPopover open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfPopover modal` (boolean, default false): Trap focus and make the page behind inert.
+- `ElfPopoverContent side` ('top' | 'right' | 'bottom' | 'left', default bottom): Preferred side; flips when there is no room.
+- `ElfPopoverContent align` ('start' | 'center' | 'end', default center): Alignment against the trigger.
+- `ElfPopoverContent sideOffset` (number, default 4): Gap to the trigger in pixels (attribute: side-offset).
+- `class` (string | array | object): Accepted by ElfPopoverContent; merged with base classes (default width w-72).
+
+Slots:
+
+- ElfPopoverTrigger default: the toggle (use as-child)
+- ElfPopoverContent default: the panel content
+
+Accessibility:
+
+- The panel is role=dialog; focus moves in on open and returns to the trigger on close; Escape closes.
+- Name the panel with aria-label or aria-labelledby when it has no visible heading.
+- Use a tooltip for non-interactive hints and a dialog or sheet for long content.
+
+Examples:
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfPopover, ElfPopoverClose, ElfPopoverContent, ElfPopoverTrigger } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfPopover v-model:open="open">
+      <ElfPopoverTrigger as-child>
+        <ElfButton variant="outline">
+          Filters
+        </ElfButton>
+      </ElfPopoverTrigger>
+      <ElfPopoverContent class="grid gap-3">
+        <p class="text-sm">
+          Show only items that are low in stock.
+        </p>
+        <ElfPopoverClose as-child>
+          <ElfButton size="sm">
+            Apply
+          </ElfButton>
+        </ElfPopoverClose>
+      </ElfPopoverContent>
+    </ElfPopover>
+    <p class="text-sm text-muted-foreground">
+      open = {{ open }}
+    </p>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfInput, ElfLabel, ElfPopover, ElfPopoverContent, ElfPopoverTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfPopover>
+    <ElfPopoverTrigger as-child>
+      <ElfButton variant="outline">
+        Rename item
+      </ElfButton>
+    </ElfPopoverTrigger>
+    <ElfPopoverContent>
+      <div class="grid gap-3">
+        <p class="text-sm font-medium">
+          Rename item
+        </p>
+        <div class="grid gap-2">
+          <ElfLabel for="popover-name">
+            Name
+          </ElfLabel>
+          <ElfInput id="popover-name" default-value="Battery 12V" />
+        </div>
+      </div>
+    </ElfPopoverContent>
+  </ElfPopover>
+</template>
+```
+
+#### Modal
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfPopover, ElfPopoverContent, ElfPopoverTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <!-- modal traps focus and makes the page behind inert, like a dialog anchored to its trigger. -->
+  <ElfPopover modal>
+    <ElfPopoverTrigger as-child>
+      <ElfButton variant="outline">
+        Modal popover
+      </ElfButton>
+    </ElfPopoverTrigger>
+    <ElfPopoverContent class="grid gap-3">
+      <p class="text-sm">
+        Focus stays inside until you press Escape or choose an action.
+      </p>
+      <ElfButton size="sm" variant="secondary">
+        Confirm
+      </ElfButton>
+    </ElfPopoverContent>
+  </ElfPopover>
+</template>
+```
+
+#### Sides
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfPopover, ElfPopoverContent, ElfPopoverTrigger } from '@xouyi/elfui'
+
+const sides = ['top', 'right', 'bottom', 'left'] as const
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-2">
+    <ElfPopover v-for="side in sides" :key="side">
+      <ElfPopoverTrigger as-child>
+        <ElfButton variant="outline" size="sm" class="capitalize">
+          {{ side }}
+        </ElfButton>
+      </ElfPopoverTrigger>
+      <ElfPopoverContent :side="side" class="w-56">
+        <p class="text-sm">
+          Opens on the {{ side }} and flips when there is no room.
+        </p>
+      </ElfPopoverContent>
+    </ElfPopover>
+  </div>
+</template>
+```
+
+### HoverCard
+
+Rich preview shown when a link is hovered or focused, built on Reka UI HoverCard. Compose ElfHoverCard > ElfHoverCardTrigger (as-child around a real link) + ElfHoverCardContent. Supplementary only: never opens on touch and is not announced.
+
+Components: `ElfHoverCard`, `ElfHoverCardTrigger`, `ElfHoverCardContent`
+
+Props:
+
+- `ElfHoverCard open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfHoverCard openDelay` (number, default 700): Milliseconds before opening (attribute: open-delay).
+- `ElfHoverCard closeDelay` (number, default 300): Milliseconds before closing after the pointer leaves (attribute: close-delay).
+- `ElfHoverCardContent side` ('top' | 'right' | 'bottom' | 'left', default bottom): Preferred side; flips when there is no room.
+- `ElfHoverCardContent align` ('start' | 'center' | 'end', default center): Alignment against the trigger.
+- `class` (string | array | object): Accepted by ElfHoverCardContent; merged with base classes (default width w-72).
+
+Slots:
+
+- ElfHoverCardTrigger default: a link (use as-child)
+- ElfHoverCardContent default: non-interactive preview content
+
+Accessibility:
+
+- The trigger must be a real link that works without the card; the card is an enhancement for pointer users.
+- Opens on keyboard focus and closes on Escape. Put no essential information or interactive elements in it.
+- Use a popover for interactive content.
+
+Examples:
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfHoverCard, ElfHoverCardContent, ElfHoverCardTrigger } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfHoverCard v-model:open="open">
+      <ElfHoverCardTrigger as-child>
+        <a href="#team" class="text-sm text-primary underline underline-offset-4 outline-none focus-visible:ring-3 focus-visible:ring-ring/50">Team Novatron</a>
+      </ElfHoverCardTrigger>
+      <ElfHoverCardContent class="w-64">
+        <p class="text-sm">
+          FRC Team 10202, Istanbul.
+        </p>
+      </ElfHoverCardContent>
+    </ElfHoverCard>
+    <p class="text-sm text-muted-foreground">
+      open = {{ open }}
+    </p>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfAvatar, ElfAvatarFallback, ElfHoverCard, ElfHoverCardContent, ElfHoverCardTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <p class="text-sm">
+    Reviewed by
+    <ElfHoverCard>
+      <ElfHoverCardTrigger as-child>
+        <a href="#ayse" class="font-medium text-primary underline underline-offset-4 outline-none focus-visible:ring-3 focus-visible:ring-ring/50">Ayşe Demir</a>
+      </ElfHoverCardTrigger>
+      <ElfHoverCardContent>
+        <div class="flex gap-3">
+          <ElfAvatar>
+            <ElfAvatarFallback name="Ayşe Demir" />
+          </ElfAvatar>
+          <div class="grid gap-1">
+            <p class="text-sm font-medium">
+              Ayşe Demir
+            </p>
+            <p class="text-sm text-muted-foreground">
+              Software lead. Joined in 2025.
+            </p>
+          </div>
+        </div>
+      </ElfHoverCardContent>
+    </ElfHoverCard>
+    on Friday.
+  </p>
+</template>
+```
+
+#### Delays
+
+```vue
+<script setup lang="ts">
+import { ElfHoverCard, ElfHoverCardContent, ElfHoverCardTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfHoverCard :open-delay="100" :close-delay="100">
+    <ElfHoverCardTrigger as-child>
+      <a href="#quick" class="text-sm text-primary underline underline-offset-4 outline-none focus-visible:ring-3 focus-visible:ring-ring/50">Quick preview</a>
+    </ElfHoverCardTrigger>
+    <ElfHoverCardContent side="top" class="w-64">
+      <p class="text-sm">
+        Opens after 100 ms and closes 100 ms after the pointer leaves.
+      </p>
+    </ElfHoverCardContent>
+  </ElfHoverCard>
+</template>
+```
+
+### DropdownMenu
+
+Action menu opened from a button, built on Reka UI DropdownMenu. Compose ElfDropdownMenu > ElfDropdownMenuTrigger (as-child around a button) + ElfDropdownMenuContent > items. Items: ElfDropdownMenuItem (@select), ElfDropdownMenuCheckboxItem (v-model), ElfDropdownMenuRadioGroup (v-model) with ElfDropdownMenuRadioItem, ElfDropdownMenuSub with SubTrigger and SubContent; ElfDropdownMenuLabel, Group, Separator and Shortcut (put ElfKbd inside) structure it.
+
+Components: `ElfDropdownMenu`, `ElfDropdownMenuTrigger`, `ElfDropdownMenuContent`, `ElfDropdownMenuItem`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuGroup`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuSubContent`
+
+Props:
+
+- `ElfDropdownMenu open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfDropdownMenu modal` (boolean, default true): Make the page behind inert while open.
+- `ElfDropdownMenuContent side / align / sideOffset` (side, alignment, number, default bottom / center / 4): Placement against the trigger (attribute: side-offset).
+- `ElfDropdownMenuItem variant` ('default' | 'destructive', default default): destructive colours irreversible actions such as delete.
+- `ElfDropdownMenuItem inset` (boolean, default false): Indent to line up with indicator items. Also on Label and SubTrigger.
+- `ElfDropdownMenuItem disabled` (boolean, default false): Item cannot be activated.
+- `ElfDropdownMenuItem @select` ((event) => void): Emitted when the item is activated; call event.preventDefault() to keep the menu open.
+- `ElfDropdownMenuCheckboxItem modelValue` (boolean | 'indeterminate'): Checked state, bound with v-model.
+- `ElfDropdownMenuRadioGroup modelValue` (string): Selected value, bound with v-model; each ElfDropdownMenuRadioItem has a value.
+- `class` (string | array | object): Accepted by every part except ElfDropdownMenu; merged with base classes.
+
+Slots:
+
+- ElfDropdownMenuTrigger default: the button (use as-child)
+- ElfDropdownMenuContent default: items, labels, groups, separators, sub menus
+- ElfDropdownMenuShortcut default: ElfKbd elements or text
+
+Accessibility:
+
+- The trigger has aria-haspopup=menu and aria-expanded; give an icon-only trigger an aria-label.
+- Arrow keys, Home, End and typeahead move; Enter or Space activates; ArrowRight and ArrowLeft open and close sub menus; Escape closes and returns focus to the trigger.
+- Use for actions, not for choosing a form value (use ElfSelect). Confirm destructive actions with a dialog.
+
+Examples:
+
+#### Checkboxes
+
+```vue
+<script setup lang="ts">
+import {
+  ElfButton,
+  ElfDropdownMenu,
+  ElfDropdownMenuCheckboxItem,
+  ElfDropdownMenuContent,
+  ElfDropdownMenuLabel,
+  ElfDropdownMenuSeparator,
+  ElfDropdownMenuTrigger,
+} from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const showStatus = ref(true)
+const showSku = ref(false)
+const showNotes = ref(false)
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfDropdownMenu>
+      <ElfDropdownMenuTrigger as-child>
+        <ElfButton variant="outline">
+          Columns
+        </ElfButton>
+      </ElfDropdownMenuTrigger>
+      <ElfDropdownMenuContent class="w-48" align="start">
+        <ElfDropdownMenuLabel>Visible columns</ElfDropdownMenuLabel>
+        <ElfDropdownMenuSeparator />
+        <ElfDropdownMenuCheckboxItem v-model="showStatus">
+          Status
+        </ElfDropdownMenuCheckboxItem>
+        <ElfDropdownMenuCheckboxItem v-model="showSku">
+          SKU
+        </ElfDropdownMenuCheckboxItem>
+        <ElfDropdownMenuCheckboxItem v-model="showNotes" disabled>
+          Notes (unavailable)
+        </ElfDropdownMenuCheckboxItem>
+      </ElfDropdownMenuContent>
+    </ElfDropdownMenu>
+    <p class="text-sm text-muted-foreground">
+      status = {{ showStatus }}, sku = {{ showSku }}
+    </p>
+  </div>
+</template>
+```
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfDropdownMenu, ElfDropdownMenuContent, ElfDropdownMenuItem, ElfDropdownMenuTrigger } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfDropdownMenu v-model:open="open">
+      <ElfDropdownMenuTrigger as-child>
+        <ElfButton variant="outline">
+          Menu
+        </ElfButton>
+      </ElfDropdownMenuTrigger>
+      <ElfDropdownMenuContent align="start">
+        <ElfDropdownMenuItem>First</ElfDropdownMenuItem>
+        <ElfDropdownMenuItem>Second</ElfDropdownMenuItem>
+      </ElfDropdownMenuContent>
+    </ElfDropdownMenu>
+    <p class="text-sm text-muted-foreground">
+      open = {{ open }}
+    </p>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { CreditCard, LifeBuoy, LogOut, Settings, User } from '@lucide/vue'
+import {
+  ElfButton,
+  ElfDropdownMenu,
+  ElfDropdownMenuContent,
+  ElfDropdownMenuGroup,
+  ElfDropdownMenuItem,
+  ElfDropdownMenuLabel,
+  ElfDropdownMenuSeparator,
+  ElfDropdownMenuShortcut,
+  ElfDropdownMenuTrigger,
+  ElfKbd,
+} from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfDropdownMenu>
+    <ElfDropdownMenuTrigger as-child>
+      <ElfButton variant="outline">
+        My account
+      </ElfButton>
+    </ElfDropdownMenuTrigger>
+    <ElfDropdownMenuContent class="w-56" align="start">
+      <ElfDropdownMenuLabel>Signed in as ayse</ElfDropdownMenuLabel>
+      <ElfDropdownMenuGroup>
+        <ElfDropdownMenuItem>
+          <User /> Profile
+          <ElfDropdownMenuShortcut>
+            <ElfKbd>Ctrl</ElfKbd><ElfKbd>P</ElfKbd>
+          </ElfDropdownMenuShortcut>
+        </ElfDropdownMenuItem>
+        <ElfDropdownMenuItem>
+          <CreditCard /> Billing
+        </ElfDropdownMenuItem>
+        <ElfDropdownMenuItem>
+          <Settings /> Settings
+          <ElfDropdownMenuShortcut>
+            <ElfKbd>Ctrl</ElfKbd><ElfKbd>,</ElfKbd>
+          </ElfDropdownMenuShortcut>
+        </ElfDropdownMenuItem>
+      </ElfDropdownMenuGroup>
+      <ElfDropdownMenuSeparator />
+      <ElfDropdownMenuItem>
+        <LifeBuoy /> Support
+      </ElfDropdownMenuItem>
+      <ElfDropdownMenuItem disabled>
+        API (soon)
+      </ElfDropdownMenuItem>
+      <ElfDropdownMenuSeparator />
+      <ElfDropdownMenuItem>
+        <LogOut /> Sign out
+      </ElfDropdownMenuItem>
+    </ElfDropdownMenuContent>
+  </ElfDropdownMenu>
+</template>
+```
+
+#### Radio Items
+
+```vue
+<script setup lang="ts">
+import {
+  ElfButton,
+  ElfDropdownMenu,
+  ElfDropdownMenuContent,
+  ElfDropdownMenuLabel,
+  ElfDropdownMenuRadioGroup,
+  ElfDropdownMenuRadioItem,
+  ElfDropdownMenuSeparator,
+  ElfDropdownMenuTrigger,
+} from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const sort = ref('name')
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfDropdownMenu>
+      <ElfDropdownMenuTrigger as-child>
+        <ElfButton variant="outline">
+          Sort
+        </ElfButton>
+      </ElfDropdownMenuTrigger>
+      <ElfDropdownMenuContent class="w-48" align="start">
+        <ElfDropdownMenuLabel>Sort by</ElfDropdownMenuLabel>
+        <ElfDropdownMenuSeparator />
+        <ElfDropdownMenuRadioGroup v-model="sort">
+          <ElfDropdownMenuRadioItem value="name">
+            Name
+          </ElfDropdownMenuRadioItem>
+          <ElfDropdownMenuRadioItem value="quantity">
+            Quantity
+          </ElfDropdownMenuRadioItem>
+          <ElfDropdownMenuRadioItem value="updated">
+            Last updated
+          </ElfDropdownMenuRadioItem>
+        </ElfDropdownMenuRadioGroup>
+      </ElfDropdownMenuContent>
+    </ElfDropdownMenu>
+    <p class="text-sm text-muted-foreground">
+      sort = {{ sort }}
+    </p>
+  </div>
+</template>
+```
+
+#### Row Actions
+
+```vue
+<script setup lang="ts">
+import { Copy, Ellipsis, Pencil, Trash2 } from '@lucide/vue'
+import {
+  ElfButton,
+  ElfDropdownMenu,
+  ElfDropdownMenuContent,
+  ElfDropdownMenuItem,
+  ElfDropdownMenuSeparator,
+  ElfDropdownMenuTrigger,
+} from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const last = ref('none')
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <p class="text-sm">
+      Battery 12V
+    </p>
+    <ElfDropdownMenu>
+      <ElfDropdownMenuTrigger as-child>
+        <ElfButton variant="ghost" size="icon" aria-label="Actions for Battery 12V">
+          <Ellipsis />
+        </ElfButton>
+      </ElfDropdownMenuTrigger>
+      <ElfDropdownMenuContent align="start">
+        <ElfDropdownMenuItem @select="last = 'edit'">
+          <Pencil /> Edit
+        </ElfDropdownMenuItem>
+        <ElfDropdownMenuItem @select="last = 'duplicate'">
+          <Copy /> Duplicate
+        </ElfDropdownMenuItem>
+        <ElfDropdownMenuSeparator />
+        <ElfDropdownMenuItem variant="destructive" @select="last = 'delete'">
+          <Trash2 /> Delete
+        </ElfDropdownMenuItem>
+      </ElfDropdownMenuContent>
+    </ElfDropdownMenu>
+    <p class="text-sm text-muted-foreground">
+      last = {{ last }}
+    </p>
+  </div>
+</template>
+```
+
+#### Sub Menu
+
+```vue
+<script setup lang="ts">
+import {
+  ElfButton,
+  ElfDropdownMenu,
+  ElfDropdownMenuContent,
+  ElfDropdownMenuItem,
+  ElfDropdownMenuSeparator,
+  ElfDropdownMenuSub,
+  ElfDropdownMenuSubContent,
+  ElfDropdownMenuSubTrigger,
+  ElfDropdownMenuTrigger,
+} from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfDropdownMenu>
+    <ElfDropdownMenuTrigger as-child>
+      <ElfButton variant="outline">
+        Actions
+      </ElfButton>
+    </ElfDropdownMenuTrigger>
+    <ElfDropdownMenuContent class="w-48" align="start">
+      <ElfDropdownMenuItem>Duplicate</ElfDropdownMenuItem>
+      <ElfDropdownMenuSub>
+        <ElfDropdownMenuSubTrigger>Share</ElfDropdownMenuSubTrigger>
+        <ElfDropdownMenuSubContent>
+          <ElfDropdownMenuItem>Email link</ElfDropdownMenuItem>
+          <ElfDropdownMenuItem>Message</ElfDropdownMenuItem>
+          <ElfDropdownMenuSeparator />
+          <ElfDropdownMenuItem>Copy link</ElfDropdownMenuItem>
+        </ElfDropdownMenuSubContent>
+      </ElfDropdownMenuSub>
+      <ElfDropdownMenuItem>Archive</ElfDropdownMenuItem>
+    </ElfDropdownMenuContent>
+  </ElfDropdownMenu>
+</template>
+```
+
+### ContextMenu
+
+Menu for an area opened by right-click, long-press, Shift+F10 or the ContextMenu key, built on Reka UI ContextMenu. Same parts and styles as ElfDropdownMenu: ElfContextMenu > ElfContextMenuTrigger (as-child around a focusable element) + ElfContextMenuContent > ElfContextMenuItem, CheckboxItem, RadioGroup/RadioItem, Label, Group, Separator, Shortcut, Sub/SubTrigger/SubContent. Never the only way to reach an action.
+
+Components: `ElfContextMenu`, `ElfContextMenuTrigger`, `ElfContextMenuContent`, `ElfContextMenuItem`, `ElfContextMenuCheckboxItem`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuLabel`, `ElfContextMenuGroup`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubTrigger`, `ElfContextMenuSubContent`
+
+Props:
+
+- `ElfContextMenu modal` (boolean, default true): Make the page behind inert while open.
+- `ElfContextMenu pressOpenDelay` (number, default 700): Long-press duration in milliseconds that opens the menu on touch (attribute: press-open-delay).
+- `ElfContextMenuTrigger disabled` (boolean, default false): Turns the context menu off for the area; the native menu shows instead.
+- `ElfContextMenuItem variant` ('default' | 'destructive', default default): destructive colours irreversible actions such as delete.
+- `ElfContextMenuItem inset` (boolean, default false): Indent to line up with indicator items. Also on Label and SubTrigger.
+- `ElfContextMenuItem @select` ((event) => void): Emitted when the item is activated; call event.preventDefault() to keep the menu open.
+- `ElfContextMenuCheckboxItem modelValue` (boolean | 'indeterminate'): Checked state, bound with v-model.
+- `ElfContextMenuRadioGroup modelValue` (string): Selected value, bound with v-model; each ElfContextMenuRadioItem has a value.
+- `class` (string | array | object): Accepted by every part except ElfContextMenu; merged with base classes.
+
+Slots:
+
+- ElfContextMenuTrigger default: the area (use as-child on a focusable element)
+- ElfContextMenuContent default: items, labels, groups, separators, sub menus
+
+Accessibility:
+
+- Make the trigger area focusable (tabindex=0), give it a role and a name that mentions the menu, so Shift+F10 or the ContextMenu key open it.
+- The same actions must also be reachable without right-click (a button or a dropdown menu): touch users must long-press.
+- Arrow keys, Home, End and typeahead move; Enter or Space activates; ArrowRight and ArrowLeft open and close sub menus; Escape closes and returns focus to the area.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import {
+  ElfContextMenu,
+  ElfContextMenuContent,
+  ElfContextMenuItem,
+  ElfContextMenuLabel,
+  ElfContextMenuSeparator,
+  ElfContextMenuShortcut,
+  ElfContextMenuTrigger,
+  ElfKbd,
+} from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const last = ref('none')
+</script>
+
+<template>
+  <div class="grid gap-3">
+    <ElfContextMenu>
+      <ElfContextMenuTrigger as-child>
+        <div
+          role="group"
+          aria-label="Item card. Press Shift+F10 or the context menu key for actions."
+          tabindex="0"
+          class="flex h-32 w-full max-w-sm items-center justify-center rounded-md border border-dashed p-4 text-center text-sm text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+        >
+          Right-click, long-press, or focus and press Shift+F10
+        </div>
+      </ElfContextMenuTrigger>
+      <ElfContextMenuContent class="w-56">
+        <ElfContextMenuLabel>Battery 12V</ElfContextMenuLabel>
+        <ElfContextMenuItem @select="last = 'open'">
+          Open
+          <ElfContextMenuShortcut>
+            <ElfKbd>Enter</ElfKbd>
+          </ElfContextMenuShortcut>
+        </ElfContextMenuItem>
+        <ElfContextMenuItem @select="last = 'rename'">
+          Rename
+          <ElfContextMenuShortcut>
+            <ElfKbd>F2</ElfKbd>
+          </ElfContextMenuShortcut>
+        </ElfContextMenuItem>
+        <ElfContextMenuItem disabled>
+          Move (soon)
+        </ElfContextMenuItem>
+        <ElfContextMenuSeparator />
+        <ElfContextMenuItem variant="destructive" @select="last = 'delete'">
+          Delete
+        </ElfContextMenuItem>
+      </ElfContextMenuContent>
+    </ElfContextMenu>
+    <p class="text-sm text-muted-foreground">
+      last = {{ last }}
+    </p>
+  </div>
+</template>
+```
+
+#### Options
+
+```vue
+<script setup lang="ts">
+import {
+  ElfContextMenu,
+  ElfContextMenuCheckboxItem,
+  ElfContextMenuContent,
+  ElfContextMenuItem,
+  ElfContextMenuLabel,
+  ElfContextMenuRadioGroup,
+  ElfContextMenuRadioItem,
+  ElfContextMenuSeparator,
+  ElfContextMenuSub,
+  ElfContextMenuSubContent,
+  ElfContextMenuSubTrigger,
+  ElfContextMenuTrigger,
+} from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const showGrid = ref(true)
+const density = ref('comfortable')
+</script>
+
+<template>
+  <div class="grid gap-3">
+    <ElfContextMenu>
+      <ElfContextMenuTrigger as-child>
+        <div
+          role="group"
+          aria-label="Canvas. Press Shift+F10 or the context menu key for view options."
+          tabindex="0"
+          class="flex h-32 w-full max-w-sm items-center justify-center rounded-md border border-dashed p-4 text-center text-sm text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+        >
+          View options (right-click here)
+        </div>
+      </ElfContextMenuTrigger>
+      <ElfContextMenuContent class="w-56">
+        <ElfContextMenuCheckboxItem v-model="showGrid">
+          Show grid
+        </ElfContextMenuCheckboxItem>
+        <ElfContextMenuSeparator />
+        <ElfContextMenuLabel>Density</ElfContextMenuLabel>
+        <ElfContextMenuRadioGroup v-model="density">
+          <ElfContextMenuRadioItem value="comfortable">
+            Comfortable
+          </ElfContextMenuRadioItem>
+          <ElfContextMenuRadioItem value="compact">
+            Compact
+          </ElfContextMenuRadioItem>
+        </ElfContextMenuRadioGroup>
+        <ElfContextMenuSeparator />
+        <ElfContextMenuSub>
+          <ElfContextMenuSubTrigger>Export as</ElfContextMenuSubTrigger>
+          <ElfContextMenuSubContent>
+            <ElfContextMenuItem>PNG</ElfContextMenuItem>
+            <ElfContextMenuItem>SVG</ElfContextMenuItem>
+          </ElfContextMenuSubContent>
+        </ElfContextMenuSub>
+      </ElfContextMenuContent>
+    </ElfContextMenu>
+    <p class="text-sm text-muted-foreground">
+      grid = {{ showGrid }}, density = {{ density }}
+    </p>
+  </div>
+</template>
+```
+
+### ScrollArea
+
+Scrolling container with styled scrollbars, built on Reka UI ScrollArea. Native scrolling is kept; the viewport is keyboard focusable. Give ElfScrollArea a height or width (class) and a label.
+
+Components: `ElfScrollArea`, `ElfScrollBar`
+
+Props:
+
+- `type` ('hover' | 'scroll' | 'auto' | 'always', default hover): When the scrollbars are visible.
+- `orientation` ('vertical' | 'horizontal' | 'both', default vertical): Which scrollbars to render.
+- `scrollHideDelay` (number, default 600): Milliseconds before a bar hides for hover and scroll (attribute: scroll-hide-delay).
+- `label` (string): Accessible name; makes the focusable viewport a role=region.
+- `viewportClass` (string | array | object): Classes for the scrolling viewport (attribute: viewport-class).
+- `class` (string | array | object): Merged onto the root; set its height or width here.
+
+Slots:
+
+- default: the scrollable content
+
+Accessibility:
+
+- The viewport is focusable (tabindex=0) so arrow keys, Page Up/Down, Home and End scroll it; pass label to name it.
+- Scrollbars are decorative; content must not depend on dragging them.
+- Do not nest scroll areas or wrap the whole page in one.
+
+Examples:
+
+#### Both
+
+```vue
+<script setup lang="ts">
+import { ElfScrollArea } from '@xouyi/elfui'
+
+const rows = Array.from({ length: 20 }, (_, r) => r + 1)
+const cols = Array.from({ length: 12 }, (_, c) => c + 1)
+</script>
+
+<template>
+  <ElfScrollArea orientation="both" label="Score grid" class="h-56 w-full max-w-md rounded-md border">
+    <table class="text-sm">
+      <caption class="sr-only">
+        Match scores by round and station
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col" class="px-3 py-2 text-left font-medium whitespace-nowrap">
+            Round
+          </th>
+          <th v-for="c in cols" :key="c" scope="col" class="px-3 py-2 text-left font-medium whitespace-nowrap">
+            Station {{ c }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="r in rows" :key="r" class="border-t">
+          <th scope="row" class="px-3 py-2 text-left font-medium">
+            {{ r }}
+          </th>
+          <td v-for="c in cols" :key="c" class="px-3 py-2 text-muted-foreground">
+            {{ r * c }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ElfScrollArea>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfScrollArea, ElfSeparator } from '@xouyi/elfui'
+
+const items = Array.from({ length: 24 }, (_, i) => `Fastener M${i + 3} x 20`)
+</script>
+
+<template>
+  <ElfScrollArea label="Inventory list" class="h-72 w-64 rounded-md border">
+    <div class="p-4">
+      <h4 class="mb-3 text-sm font-medium">
+        Fasteners
+      </h4>
+      <template v-for="item in items" :key="item">
+        <div class="text-sm">
+          {{ item }}
+        </div>
+        <ElfSeparator class="my-2" />
+      </template>
+    </div>
+  </ElfScrollArea>
+</template>
+```
+
+#### Horizontal
+
+```vue
+<script setup lang="ts">
+import { ElfScrollArea } from '@xouyi/elfui'
+
+const parts = Array.from({ length: 12 }, (_, i) => ({ id: i + 1, name: `Sprocket ${i + 1}` }))
+</script>
+
+<template>
+  <ElfScrollArea orientation="horizontal" label="Parts gallery" class="w-full max-w-md rounded-md border">
+    <div class="flex w-max gap-3 p-4">
+      <figure v-for="part in parts" :key="part.id" class="shrink-0">
+        <div class="flex h-24 w-32 items-center justify-center rounded-md bg-muted text-sm text-muted-foreground">
+          #{{ part.id }}
+        </div>
+        <figcaption class="pt-2 text-xs text-muted-foreground">
+          {{ part.name }}
+        </figcaption>
+      </figure>
+    </div>
+  </ElfScrollArea>
+</template>
+```
+
+#### Types
+
+```vue
+<script setup lang="ts">
+import { ElfScrollArea } from '@xouyi/elfui'
+
+const types = ['always', 'auto', 'hover', 'scroll'] as const
+const lines = Array.from({ length: 12 }, (_, i) => `Line ${i + 1}`)
+</script>
+
+<template>
+  <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+    <div v-for="type in types" :key="type" class="grid gap-1">
+      <p class="text-xs font-medium">
+        type="{{ type }}"
+      </p>
+      <ElfScrollArea :type="type" :label="`Scrollbar type ${type}`" class="h-32 rounded-md border">
+        <ul class="p-2 text-sm text-muted-foreground">
+          <li v-for="line in lines" :key="line">
+            {{ line }}
+          </li>
+        </ul>
+      </ElfScrollArea>
+    </div>
+  </div>
+</template>
+```
+
+### AlertDialog
+
+Modal that demands a decision (destructive confirmation), built on Reka UI AlertDialog. Role alertdialog: focus starts on Cancel, Escape cancels, an outside click never dismisses it.
+
+Components: `ElfAlertDialog`, `ElfAlertDialogTrigger`, `ElfAlertDialogContent`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogCancel`, `ElfAlertDialogAction`
+
+Props:
+
+- `ElfAlertDialog open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfAlertDialogAction variant` (ButtonVariants['variant'], default default): Button style of the confirming action; use destructive for irreversible actions.
+- `ElfAlertDialogAction / ElfAlertDialogCancel size` (ButtonVariants['size'], default default): Button size.
+- `ElfAlertDialogCancel variant` (ButtonVariants['variant'], default outline): Button style of the cancel action.
+- `class` (string | array | object): Accepted by every part; merged with base classes.
+
+Slots:
+
+- ElfAlertDialogTrigger: use as-child with an ElfButton
+- ElfAlertDialogAction and ElfAlertDialogCancel both close the dialog; handle the decision with @click on the action
+
+Accessibility:
+
+- Always include ElfAlertDialogTitle and ElfAlertDialogDescription.
+- Name the action after what it does ("Delete"), never "OK".
+- Use ElfDialog instead when the content is a form or can be dismissed by clicking outside.
+
+Examples:
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfAlertDialog, ElfAlertDialogAction, ElfAlertDialogCancel, ElfAlertDialogContent, ElfAlertDialogDescription, ElfAlertDialogFooter, ElfAlertDialogHeader, ElfAlertDialogTitle, ElfButton } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref(false)
+const removed = ref(0)
+
+function remove() {
+  removed.value += 1
+}
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfButton variant="outline" @click="open = true">
+      Remove member
+    </ElfButton>
+    <span class="text-sm text-muted-foreground">open = {{ open }}, removed = {{ removed }}</span>
+    <ElfAlertDialog v-model:open="open">
+      <ElfAlertDialogContent>
+        <ElfAlertDialogHeader>
+          <ElfAlertDialogTitle>Remove this member?</ElfAlertDialogTitle>
+          <ElfAlertDialogDescription>They lose access to every team app immediately.</ElfAlertDialogDescription>
+        </ElfAlertDialogHeader>
+        <ElfAlertDialogFooter>
+          <ElfAlertDialogCancel>Cancel</ElfAlertDialogCancel>
+          <ElfAlertDialogAction variant="destructive" @click="remove">
+            Remove
+          </ElfAlertDialogAction>
+        </ElfAlertDialogFooter>
+      </ElfAlertDialogContent>
+    </ElfAlertDialog>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfAlertDialog, ElfAlertDialogAction, ElfAlertDialogCancel, ElfAlertDialogContent, ElfAlertDialogDescription, ElfAlertDialogFooter, ElfAlertDialogHeader, ElfAlertDialogTitle, ElfAlertDialogTrigger, ElfButton } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfAlertDialog>
+    <ElfAlertDialogTrigger as-child>
+      <ElfButton variant="outline">
+        Publish roster
+      </ElfButton>
+    </ElfAlertDialogTrigger>
+    <ElfAlertDialogContent>
+      <ElfAlertDialogHeader>
+        <ElfAlertDialogTitle>Publish the roster?</ElfAlertDialogTitle>
+        <ElfAlertDialogDescription>Every member will be notified and the draft is locked.</ElfAlertDialogDescription>
+      </ElfAlertDialogHeader>
+      <ElfAlertDialogFooter>
+        <ElfAlertDialogCancel>Cancel</ElfAlertDialogCancel>
+        <ElfAlertDialogAction>Publish</ElfAlertDialogAction>
+      </ElfAlertDialogFooter>
+    </ElfAlertDialogContent>
+  </ElfAlertDialog>
+</template>
+```
+
+#### Destructive
+
+```vue
+<script setup lang="ts">
+import { ElfAlertDialog, ElfAlertDialogAction, ElfAlertDialogCancel, ElfAlertDialogContent, ElfAlertDialogDescription, ElfAlertDialogFooter, ElfAlertDialogHeader, ElfAlertDialogTitle, ElfAlertDialogTrigger, ElfButton } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfAlertDialog>
+    <ElfAlertDialogTrigger as-child>
+      <ElfButton variant="destructive">
+        Delete match log
+      </ElfButton>
+    </ElfAlertDialogTrigger>
+    <ElfAlertDialogContent>
+      <ElfAlertDialogHeader>
+        <ElfAlertDialogTitle>Delete this match log?</ElfAlertDialogTitle>
+        <ElfAlertDialogDescription>
+          This permanently removes the log and its scouting notes. This action cannot be undone.
+        </ElfAlertDialogDescription>
+      </ElfAlertDialogHeader>
+      <ElfAlertDialogFooter>
+        <ElfAlertDialogCancel>Keep it</ElfAlertDialogCancel>
+        <ElfAlertDialogAction variant="destructive">
+          Delete
+        </ElfAlertDialogAction>
+      </ElfAlertDialogFooter>
+    </ElfAlertDialogContent>
+  </ElfAlertDialog>
+</template>
+```
+
+### Sheet
+
+Edge-anchored modal panel on Reka UI Dialog: side sheets for forms and navigation, and a bottom sheet for mobile. Same focus trap, Escape and focus restore as ElfDialog; an outside click closes it.
+
+Components: `ElfSheet`, `ElfSheetTrigger`, `ElfSheetContent`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetClose`
+
+- side options: `right`, `left`, `top`, `bottom` (default `right`)
+- size options: `sm`, `default`, `lg`, `full` (default `default`)
+
+Props:
+
+- `ElfSheet open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfSheetContent side` ('top' | 'right' | 'bottom' | 'left', default right): Edge the sheet slides in from. bottom is the mobile pattern (safe-area padding).
+- `ElfSheetContent size` ('sm' | 'default' | 'lg' | 'full', default default): Maximum width (left, right) or height (top, bottom); full fills the viewport.
+- `ElfSheetContent showCloseButton` (boolean, default true): Show the corner close button (attribute: show-close-button).
+- `class` (string | array | object): Accepted by every part; merged with base classes.
+
+Slots:
+
+- ElfSheetTrigger and ElfSheetClose: use as-child with an ElfButton
+
+Accessibility:
+
+- Always include ElfSheetTitle and ElfSheetDescription (hide the description with class="sr-only" if needed).
+- Use ElfAlertDialog, not a sheet, for confirmations.
+- Animations stop under prefers-reduced-motion.
+
+Examples:
+
+#### Bottom Sheet
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfSheet, ElfSheetClose, ElfSheetContent, ElfSheetDescription, ElfSheetFooter, ElfSheetHeader, ElfSheetTitle, ElfSheetTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfSheet>
+    <ElfSheetTrigger as-child>
+      <ElfButton variant="outline">
+        Set quantity
+      </ElfButton>
+    </ElfSheetTrigger>
+    <!-- The bottom sheet spans the screen and keeps its content above the home indicator (safe-area padding). -->
+    <ElfSheetContent side="bottom">
+      <ElfSheetHeader>
+        <ElfSheetTitle>Set quantity</ElfSheetTitle>
+        <ElfSheetDescription>How many units are on the shelf?</ElfSheetDescription>
+      </ElfSheetHeader>
+      <div class="flex gap-2">
+        <ElfSheetClose v-for="n in [1, 2, 5, 10]" :key="n" as-child>
+          <ElfButton variant="secondary" class="h-10 flex-1">
+            {{ n }}
+          </ElfButton>
+        </ElfSheetClose>
+      </div>
+      <ElfSheetFooter>
+        <ElfSheetClose as-child>
+          <ElfButton variant="outline" class="max-sm:h-10">
+            Cancel
+          </ElfButton>
+        </ElfSheetClose>
+      </ElfSheetFooter>
+    </ElfSheetContent>
+  </ElfSheet>
+</template>
+```
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfSheet, ElfSheetContent, ElfSheetDescription, ElfSheetHeader, ElfSheetTitle } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <ElfButton variant="outline" @click="open = true">
+      Open filters
+    </ElfButton>
+    <span class="text-sm text-muted-foreground">open = {{ open }}</span>
+    <ElfSheet v-model:open="open">
+      <ElfSheetContent side="left">
+        <ElfSheetHeader>
+          <ElfSheetTitle>Filters</ElfSheetTitle>
+          <ElfSheetDescription>The open state lives in your component.</ElfSheetDescription>
+        </ElfSheetHeader>
+      </ElfSheetContent>
+    </ElfSheet>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfField, ElfFieldControl, ElfInput, ElfSheet, ElfSheetClose, ElfSheetContent, ElfSheetDescription, ElfSheetFooter, ElfSheetHeader, ElfSheetTitle, ElfSheetTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfSheet>
+    <ElfSheetTrigger as-child>
+      <ElfButton variant="outline">
+        Edit item
+      </ElfButton>
+    </ElfSheetTrigger>
+    <ElfSheetContent>
+      <ElfSheetHeader>
+        <ElfSheetTitle>Edit item</ElfSheetTitle>
+        <ElfSheetDescription>Change the name and quantity. Save when you are done.</ElfSheetDescription>
+      </ElfSheetHeader>
+      <ElfField label="Name">
+        <ElfFieldControl>
+          <ElfInput default-value="Swerve module" />
+        </ElfFieldControl>
+      </ElfField>
+      <ElfField label="Quantity">
+        <ElfFieldControl>
+          <ElfInput type="number" default-value="4" />
+        </ElfFieldControl>
+      </ElfField>
+      <ElfSheetFooter>
+        <ElfSheetClose as-child>
+          <ElfButton variant="outline">
+            Cancel
+          </ElfButton>
+        </ElfSheetClose>
+        <ElfButton>Save</ElfButton>
+      </ElfSheetFooter>
+    </ElfSheetContent>
+  </ElfSheet>
+</template>
+```
+
+#### Sides
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfSheet, ElfSheetContent, ElfSheetDescription, ElfSheetHeader, ElfSheetTitle, ElfSheetTrigger } from '@xouyi/elfui'
+
+const sides = ['top', 'right', 'bottom', 'left'] as const
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-2">
+    <ElfSheet v-for="side in sides" :key="side">
+      <ElfSheetTrigger as-child>
+        <ElfButton variant="outline" class="capitalize">
+          {{ side }}
+        </ElfButton>
+      </ElfSheetTrigger>
+      <ElfSheetContent :side="side">
+        <ElfSheetHeader>
+          <ElfSheetTitle class="capitalize">
+            {{ side }} sheet
+          </ElfSheetTitle>
+          <ElfSheetDescription>The panel slides in from the {{ side }} edge.</ElfSheetDescription>
+        </ElfSheetHeader>
+      </ElfSheetContent>
+    </ElfSheet>
+  </div>
+</template>
+```
+
+#### Sizes
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfSheet, ElfSheetContent, ElfSheetDescription, ElfSheetHeader, ElfSheetTitle, ElfSheetTrigger } from '@xouyi/elfui'
+
+const sizes = ['sm', 'default', 'lg', 'full'] as const
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-2">
+    <ElfSheet v-for="size in sizes" :key="size">
+      <ElfSheetTrigger as-child>
+        <ElfButton variant="outline" class="capitalize">
+          {{ size }}
+        </ElfButton>
+      </ElfSheetTrigger>
+      <ElfSheetContent :size="size">
+        <ElfSheetHeader>
+          <ElfSheetTitle class="capitalize">
+            {{ size }} sheet
+          </ElfSheetTitle>
+          <ElfSheetDescription>On a phone every side sheet leaves a strip of the page visible; from the sm breakpoint the size sets the maximum width.</ElfSheetDescription>
+        </ElfSheetHeader>
+      </ElfSheetContent>
+    </ElfSheet>
+  </div>
+</template>
+```
+
+### Toast
+
+Transient notifications. Mount one ElfToaster per app and call useToast() (or import toast) from anywhere: toast(message, options), toast.success/warning/error, toast.promise, toast.update, toast.dismiss. Built on the Reka UI Toast viewport and manager; the queue is a module singleton that is a no-op on the server.
+
+Components: `ElfToaster`
+
+- variant options: `default`, `success`, `warning`, `destructive` (default `default`)
+
+Props:
+
+- `ElfToaster position` ('top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right', default bottom-right): Where the stack sits; toasts span the width on small screens.
+- `ElfToaster limit` (number, default 3): Maximum toasts visible at once; older ones stay queued.
+- `ElfToaster duration` (number, default 5000): Default milliseconds before a toast closes; 0 keeps it until dismissed.
+- `ElfToaster hotkey` (string[], default ['F8']): Keys that focus the notification region.
+- `ElfToaster closeButton / closeLabel` (boolean / string, default true / Close): Dismiss button and its accessible name (attributes: close-button, close-label).
+- `ElfToaster label / announceLabel` (string): Region landmark label ({hotkey} is replaced) and the name read before each toast.
+- `toast(message, options)` (ToastOptions): options: description, variant (default | success | warning | destructive), duration, action ({ label, onClick, altText }), id, onClose. Returns the id.
+- `toast.promise(promise, { loading, success, error })` (Promise<T>): Loading toast that becomes success or destructive; returns and rethrows the promise.
+
+Slots:
+
+- No slots: toasts are created through the API.
+
+Accessibility:
+
+- Mount exactly one ElfToaster. Destructive toasts are announced assertively (role=alert), others politely (role=status).
+- F8 focuses the region; Escape closes the focused toast; the timer pauses on hover and focus.
+- Never put information only in a toast, and do not use one for errors that need a decision.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfButton, useToast } from '@xouyi/elfui'
+
+// Mount one <ElfToaster /> in app.vue; useToast() works from any component.
+const { toast } = useToast()
+</script>
+
+<template>
+  <ElfButton variant="outline" @click="toast('Roster saved', { description: 'Your changes are visible to every member.' })">
+    Show toast
+  </ElfButton>
+</template>
+```
+
+#### Promise
+
+```vue
+<script setup lang="ts">
+import { ElfButton, useToast } from '@xouyi/elfui'
+
+const { toast } = useToast()
+
+function upload(ok: boolean) {
+  const task = new Promise<string>((resolve, reject) => {
+    setTimeout(() => (ok ? resolve('match-12.csv') : reject(new Error('Network error'))), 1500)
+  })
+  toast.promise(task, {
+    loading: 'Uploading scouting data',
+    success: name => `${name} uploaded`,
+    error: 'Upload failed',
+  }).catch(() => {})
+}
+</script>
+
+<template>
+  <div class="flex gap-2">
+    <ElfButton variant="outline" @click="upload(true)">
+      Upload
+    </ElfButton>
+    <ElfButton variant="outline" @click="upload(false)">
+      Upload and fail
+    </ElfButton>
+  </div>
+</template>
+```
+
+#### Variants
+
+```vue
+<script setup lang="ts">
+import { ElfButton, useToast } from '@xouyi/elfui'
+
+const { toast } = useToast()
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-2">
+    <ElfButton variant="outline" @click="toast('New message', { description: 'Mentor Aylin replied to your post.' })">
+      Default
+    </ElfButton>
+    <ElfButton variant="outline" @click="toast.success('Roster saved')">
+      Success
+    </ElfButton>
+    <ElfButton variant="outline" @click="toast.warning('Battery 3 is low', { description: 'Swap it before the next match.' })">
+      Warning
+    </ElfButton>
+    <ElfButton variant="outline" @click="toast.error('Save failed', { description: 'The roster could not be saved.' })">
+      Destructive
+    </ElfButton>
+  </div>
+</template>
+```
+
+#### With Action
+
+```vue
+<script setup lang="ts">
+import { ElfButton, useToast } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const { toast } = useToast()
+const restored = ref(0)
+
+function remove() {
+  toast('Item removed', {
+    description: 'It will be deleted for good in a few seconds.',
+    duration: 8000,
+    action: { label: 'Undo', altText: 'Undo removing the item', onClick: () => { restored.value += 1 } },
+  })
+}
+</script>
+
+<template>
+  <div class="flex items-center gap-3">
+    <ElfButton variant="outline" @click="remove">
+      Remove item
+    </ElfButton>
+    <span class="text-sm text-muted-foreground">restored = {{ restored }}</span>
+  </div>
+</template>
+```
+
+### Collapsible
+
+A single show and hide region with an animated height, built on Reka UI Collapsible. ElfCollapsibleTrigger toggles ElfCollapsibleContent.
+
+Components: `ElfCollapsible`, `ElfCollapsibleTrigger`, `ElfCollapsibleContent`
+
+Props:
+
+- `ElfCollapsible open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfCollapsible disabled` (boolean, default false): Prevents toggling.
+- `class` (string | array | object): Accepted by ElfCollapsibleContent; merged with base classes.
+
+Slots:
+
+- ElfCollapsibleTrigger: use as-child with an ElfButton
+
+Accessibility:
+
+- Give an icon-only trigger an aria-label.
+- Do not hide required form fields in a closed region.
+- The height animation stops under prefers-reduced-motion.
+
+Examples:
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfCollapsible, ElfCollapsibleContent, ElfCollapsibleTrigger } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <ElfCollapsible v-model:open="open" class="w-full max-w-sm space-y-2">
+    <div class="flex items-center gap-3">
+      <ElfCollapsibleTrigger as-child>
+        <ElfButton variant="outline">
+          {{ open ? 'Hide' : 'Show' }} filters
+        </ElfButton>
+      </ElfCollapsibleTrigger>
+      <span class="text-sm text-muted-foreground">open = {{ open }}</span>
+    </div>
+    <ElfCollapsibleContent class="rounded-md border px-4 py-3 text-sm">
+      Season, event and alliance filters live here.
+    </ElfCollapsibleContent>
+  </ElfCollapsible>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ChevronsUpDown } from '@lucide/vue'
+import { ElfButton, ElfCollapsible, ElfCollapsibleContent, ElfCollapsibleTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfCollapsible class="w-full max-w-sm space-y-2">
+    <div class="flex items-center justify-between gap-4">
+      <h4 class="text-sm font-semibold">
+        3 starred repositories
+      </h4>
+      <ElfCollapsibleTrigger as-child>
+        <ElfButton variant="ghost" size="icon" aria-label="Toggle repositories">
+          <ChevronsUpDown />
+        </ElfButton>
+      </ElfCollapsibleTrigger>
+    </div>
+    <div class="rounded-md border px-4 py-2 text-sm">
+      novatron/hq
+    </div>
+    <ElfCollapsibleContent class="space-y-2">
+      <div class="rounded-md border px-4 py-2 text-sm">
+        novatron/kit
+      </div>
+      <div class="rounded-md border px-4 py-2 text-sm">
+        novatron/scout
+      </div>
+    </ElfCollapsibleContent>
+  </ElfCollapsible>
+</template>
+```
+
+#### Disabled
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfCollapsible, ElfCollapsibleContent, ElfCollapsibleTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfCollapsible disabled class="w-full max-w-sm space-y-2">
+    <ElfCollapsibleTrigger as-child>
+      <ElfButton variant="outline">
+        Advanced settings (locked)
+      </ElfButton>
+    </ElfCollapsibleTrigger>
+    <ElfCollapsibleContent class="rounded-md border px-4 py-3 text-sm">
+      Not reachable while disabled.
+    </ElfCollapsibleContent>
+  </ElfCollapsible>
+</template>
+```
+
+### Accordion
+
+Stacked collapsible sections on Reka UI Accordion. ElfAccordion (type single or multiple) contains ElfAccordionItem (value) with an ElfAccordionTrigger heading button and an ElfAccordionContent region.
+
+Components: `ElfAccordion`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfAccordionContent`
+
+Props:
+
+- `ElfAccordion type` ('single' | 'multiple'): Required. single opens one item at a time; multiple allows several.
+- `ElfAccordion collapsible` (boolean, default false): In single mode, lets the open item be closed.
+- `ElfAccordion modelValue / defaultValue` (string | string[]): Open item value (single) or values (multiple); bind with v-model.
+- `ElfAccordion disabled` (boolean, default false): Disables every item.
+- `ElfAccordionItem value` (string): Required unique value; disabled disables the item.
+- `class` (string | array | object): Accepted by every part; merged with base classes.
+
+Slots:
+
+- ElfAccordionTrigger icon: replaces the chevron
+
+Accessibility:
+
+- Triggers are buttons inside headings; arrow keys, Home and End move between them and skip disabled items.
+- Use short, specific trigger labels and do not nest accordions.
+
+Examples:
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfAccordion, ElfAccordionContent, ElfAccordionItem, ElfAccordionTrigger } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref<string | undefined>('a')
+</script>
+
+<template>
+  <div class="w-full max-w-lg space-y-3">
+    <p class="text-sm text-muted-foreground">
+      open = {{ open ?? 'none' }}
+    </p>
+    <ElfAccordion v-model="open" type="single" collapsible>
+      <ElfAccordionItem value="a">
+        <ElfAccordionTrigger>First section</ElfAccordionTrigger>
+        <ElfAccordionContent>One item is open at a time.</ElfAccordionContent>
+      </ElfAccordionItem>
+      <ElfAccordionItem value="b">
+        <ElfAccordionTrigger>Second section</ElfAccordionTrigger>
+        <ElfAccordionContent>Opening this closes the first.</ElfAccordionContent>
+      </ElfAccordionItem>
+    </ElfAccordion>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfAccordion, ElfAccordionContent, ElfAccordionItem, ElfAccordionTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfAccordion type="single" collapsible default-value="rules" class="w-full max-w-lg">
+    <ElfAccordionItem value="rules">
+      <ElfAccordionTrigger>Who can join the team?</ElfAccordionTrigger>
+      <ElfAccordionContent>Any high-school student in Istanbul can apply. Members are provisioned by an admin.</ElfAccordionContent>
+    </ElfAccordionItem>
+    <ElfAccordionItem value="meetings">
+      <ElfAccordionTrigger>When do we meet?</ElfAccordionTrigger>
+      <ElfAccordionContent>Tuesday and Thursday evenings, plus Saturdays during build season.</ElfAccordionContent>
+    </ElfAccordionItem>
+    <ElfAccordionItem value="dues">
+      <ElfAccordionTrigger>Is there a fee?</ElfAccordionTrigger>
+      <ElfAccordionContent>No. Sponsors and fundraisers cover registration and parts.</ElfAccordionContent>
+    </ElfAccordionItem>
+  </ElfAccordion>
+</template>
+```
+
+#### Disabled
+
+```vue
+<script setup lang="ts">
+import { ElfAccordion, ElfAccordionContent, ElfAccordionItem, ElfAccordionTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfAccordion type="single" collapsible class="w-full max-w-lg">
+    <ElfAccordionItem value="open">
+      <ElfAccordionTrigger>Available section</ElfAccordionTrigger>
+      <ElfAccordionContent>This one can be opened.</ElfAccordionContent>
+    </ElfAccordionItem>
+    <ElfAccordionItem value="locked" disabled>
+      <ElfAccordionTrigger>Locked section</ElfAccordionTrigger>
+      <ElfAccordionContent>Skipped by the keyboard.</ElfAccordionContent>
+    </ElfAccordionItem>
+    <ElfAccordionItem value="last">
+      <ElfAccordionTrigger>Last section</ElfAccordionTrigger>
+      <ElfAccordionContent>Arrow keys jump over the disabled item.</ElfAccordionContent>
+    </ElfAccordionItem>
+  </ElfAccordion>
+</template>
+```
+
+#### Multiple
+
+```vue
+<script setup lang="ts">
+import { ElfAccordion, ElfAccordionContent, ElfAccordionItem, ElfAccordionTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfAccordion type="multiple" :default-value="['build', 'code']" class="w-full max-w-lg">
+    <ElfAccordionItem value="build">
+      <ElfAccordionTrigger>Build</ElfAccordionTrigger>
+      <ElfAccordionContent>Chassis, mechanisms and wiring.</ElfAccordionContent>
+    </ElfAccordionItem>
+    <ElfAccordionItem value="code">
+      <ElfAccordionTrigger>Code</ElfAccordionTrigger>
+      <ElfAccordionContent>Autonomous routines and vision.</ElfAccordionContent>
+    </ElfAccordionItem>
+    <ElfAccordionItem value="outreach">
+      <ElfAccordionTrigger>Outreach</ElfAccordionTrigger>
+      <ElfAccordionContent>Workshops, sponsors and social media.</ElfAccordionContent>
+    </ElfAccordionItem>
+  </ElfAccordion>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

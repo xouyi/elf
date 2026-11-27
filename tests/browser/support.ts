@@ -2,8 +2,8 @@ import type { Component } from 'vue'
 import axe from 'axe-core'
 import { createApp } from 'vue'
 
-export type ThemeName = 'elf' | 'novatron'
-export const themes: ThemeName[] = ['elf', 'novatron']
+export type ThemeName = 'elf' | 'nova' | 'elfwood'
+export const themes: ThemeName[] = ['elf', 'nova', 'elfwood']
 
 export interface Example { id: string, dir: string, file: string, load: () => Promise<Component> }
 
@@ -42,11 +42,18 @@ export async function settle(ms = 50) {
 }
 
 /** Runs axe over the whole document (portalled overlays included) and returns a readable list of violations. */
-export async function axeViolations(context: Element | Document = document) {
+export async function axeViolations(context: Element | Document = document, options: { menuOpen?: boolean } = {}) {
   const result = await axe.run(context as axe.ElementContext, {
     resultTypes: ['violations'],
     // Examples are fragments, not pages: page-level structure rules do not apply to them.
-    rules: { 'region': { enabled: false }, 'landmark-one-main': { enabled: false }, 'page-has-heading-one': { enabled: false } },
+    rules: {
+      'region': { enabled: false },
+      'landmark-one-main': { enabled: false },
+      'page-has-heading-one': { enabled: false },
+      // A modal menu hides the page behind it (aria-hidden) while Reka keeps Tab inside the menu, so the trigger cannot be
+      // reached; axe only recognises role="dialog" modals and flags the hidden trigger. Skipped solely while a menu is open.
+      'aria-hidden-focus': { enabled: !options.menuOpen },
+    },
   })
   return result.violations.map(v => `${v.id} (${v.impact}): ${v.help}\n${v.nodes.map(n => `  ${n.target.join(' ')}\n  ${n.failureSummary?.replace(/\n/g, '\n  ')}`).join('\n')}`)
 }

@@ -67,6 +67,12 @@ export const textPairs: Array<[string, string]> = [
   ['destructive-text', 'popover'],
   ['success-foreground', 'success'],
   ['warning-foreground', 'warning'],
+  ['success-text', 'background'], // success text and icons on the page, cards and popovers
+  ['success-text', 'card'],
+  ['success-text', 'popover'],
+  ['warning-text', 'background'], // warning text and icons on the page, cards and popovers
+  ['warning-text', 'card'],
+  ['warning-text', 'popover'],
   ['primary', 'background'], // primary used as text (link variant)
 ]
 
@@ -75,6 +81,9 @@ export const uiPairs: Array<[string, string]> = [
   ['input', 'background'],
   ['ring', 'background'],
 ]
+
+/** Tokens whose value is not a color: geometry and the glow strength (a percentage used by `color-mix`). */
+export const NON_COLOR_TOKENS = new Set(['radius', 'radius-pill', 'glow', 'overlay'])
 
 export interface ThemeTokens {
   /** Theme name (file name without extension). */
@@ -94,7 +103,7 @@ export function readThemes(root: string): ThemeTokens[] {
     const colors: Record<string, RGB> = {}
     for (const m of css.matchAll(/--elf-([a-z-]+):\s*([^;]+);/g)) {
       raw[m[1]!] = m[2]!.trim()
-      if (m[1] !== 'radius' && m[1] !== 'radius-pill') colors[m[1]!] = parseColor(m[2]!)
+      if (!NON_COLOR_TOKENS.has(m[1]!)) colors[m[1]!] = parseColor(m[2]!)
     }
     return { name: file.replace('.css', ''), raw, colors }
   })
