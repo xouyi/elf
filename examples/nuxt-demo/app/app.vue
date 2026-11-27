@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { LayoutDashboard, Palette, Settings, Users } from '@lucide/vue'
 
-const theme = useElfTheme()
+const theme = useDemoTheme()
 const route = useRoute()
 const nav = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -32,8 +32,9 @@ const nav = [
         </div>
         <ElfTabs v-model="theme">
           <ElfTabsList aria-label="Theme">
-            <ElfTabsTrigger value="novatron"><Palette class="size-3.5" /> Novatron</ElfTabsTrigger>
+            <ElfTabsTrigger value="nova"><Palette class="size-3.5" /> Nova</ElfTabsTrigger>
             <ElfTabsTrigger value="elf"><Palette class="size-3.5" /> Elf</ElfTabsTrigger>
+            <ElfTabsTrigger value="elfwood"><Palette class="size-3.5" /> Elfwood</ElfTabsTrigger>
           </ElfTabsList>
         </ElfTabs>
       </div>

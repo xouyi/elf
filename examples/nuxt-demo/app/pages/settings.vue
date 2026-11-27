@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const theme = useElfTheme()
+const theme = useDemoTheme()
 const team = reactive({ name: 'Novatron Robotics', number: '10202' })
 const saved = ref(false)
 </script>
@@ -47,9 +47,10 @@ const saved = ref(false)
             <ElfCardTitle>Theme</ElfCardTitle>
             <ElfCardDescription>Current theme: <ElfBadge variant="outline">{{ theme }}</ElfBadge></ElfCardDescription>
           </ElfCardHeader>
-          <ElfCardContent class="flex gap-2">
-            <ElfButton :variant="theme === 'novatron' ? 'default' : 'outline'" @click="theme = 'novatron'">Novatron</ElfButton>
+          <ElfCardContent class="flex flex-wrap gap-2">
+            <ElfButton :variant="theme === 'nova' ? 'default' : 'outline'" @click="theme = 'nova'">Nova</ElfButton>
             <ElfButton :variant="theme === 'elf' ? 'default' : 'outline'" @click="theme = 'elf'">Elf</ElfButton>
+            <ElfButton :variant="theme === 'elfwood' ? 'default' : 'outline'" @click="theme = 'elfwood'">Elfwood</ElfButton>
           </ElfCardContent>
         </ElfCard>
       </ElfTabsContent>
