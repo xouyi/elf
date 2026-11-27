@@ -111,3 +111,16 @@ export type { ElfTheme } from './lib/themes'
 
 export { elfThemeBootScript, useElfTheme } from './composables/use-elf-theme'
 export type { ElfThemeBootScriptOptions, ElfThemeStorage, UseElfThemeOptions, UseElfThemeReturn } from './composables/use-elf-theme'
+
+export {
+  AlertDialog as ElfAlertDialog,
+  AlertDialogAction as ElfAlertDialogAction,
+  AlertDialogCancel as ElfAlertDialogCancel,
+  AlertDialogContent as ElfAlertDialogContent,
+  AlertDialogDescription as ElfAlertDialogDescription,
+  AlertDialogFooter as ElfAlertDialogFooter,
+  AlertDialogHeader as ElfAlertDialogHeader,
+  AlertDialogTitle as ElfAlertDialogTitle,
+  AlertDialogTrigger as ElfAlertDialogTrigger,
+} from './components/alert-dialog'
+export type { AlertDialogActionProps, AlertDialogCancelProps } from './components/alert-dialog'

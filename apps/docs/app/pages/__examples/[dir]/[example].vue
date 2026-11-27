@@ -53,7 +53,8 @@ onMounted(async () => {
 /* Deterministic rendering for screenshots: no motion, no caret, no smooth scrolling. */
 html[data-ready], html[data-ready] * { scroll-behavior: auto !important; }
 .example-harness *, .example-harness *::before, .example-harness *::after,
-[data-slot="dialog-overlay"], [data-slot="dialog-content"] {
+[data-slot="dialog-overlay"], [data-slot="dialog-content"],
+[data-slot="alert-dialog-overlay"], [data-slot="alert-dialog-content"] {
   animation: none !important;
   transition: none !important;
   caret-color: transparent !important;

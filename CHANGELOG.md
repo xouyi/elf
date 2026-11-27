@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Add `ElfAlertDialog` with `ElfAlertDialogTrigger`, `ElfAlertDialogContent`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogCancel` and `ElfAlertDialogAction`, built on the Reka UI AlertDialog primitive: role `alertdialog`, initial focus on Cancel, never dismissed by an outside click, a destructive action variant, and the same surface as `ElfDialog` (its overlay and content classes are now shared through `dialogOverlayClass` and `dialogContentClass`).
+
 ## 0.4.0
 
 - Add the `useElfTheme()` composable (`theme`, `themes`, `setTheme`, `cycle`) and `elfThemeBootScript()`: reads and sets `data-theme` on `<html>`, SSR-safe (per-app state, no `document` access on the server), typed theme names with support for custom themes, optional persistence in a cookie or localStorage, auto-imported by the Nuxt module. `elfThemes`, `ElfTheme` and the new `isElfTheme()` now live in `src/lib/themes.ts` and are still exported from the package root.

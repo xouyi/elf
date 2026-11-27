@@ -303,7 +303,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfButton
 - **Complexity:** S
 - **Novatron screens:** courses/stock `ConfirmDialog`; forum `ReasonDialog`.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfSheet
 

@@ -50,6 +50,9 @@ import AvatarFallbackExample from '../../src/components/avatar/examples/Fallback
 import AvatarGroupExample from '../../src/components/avatar/examples/Group.vue'
 import AvatarSizes from '../../src/components/avatar/examples/Sizes.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
+import AlertDialogControlled from '../../src/components/alert-dialog/examples/Controlled.vue'
+import AlertDialogDefault from '../../src/components/alert-dialog/examples/Default.vue'
+import AlertDialogDestructive from '../../src/components/alert-dialog/examples/Destructive.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
 import TabsControlled from '../../src/components/tabs/examples/Controlled.vue'
@@ -125,6 +128,78 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await userEvent.keyboard('{Escape}')
       await settle(150)
       expect(el.textContent).toContain('open = false')
+    })
+  })
+
+  describe('AlertDialog', () => {
+    const alertdialog = () => document.querySelector<HTMLElement>('[role="alertdialog"]')
+
+    it('focuses Cancel first, traps Tab, closes on Escape and returns focus to the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(AlertDialogDefault)
+      const trigger = el.querySelector<HTMLElement>('[aria-haspopup="dialog"]')!
+      await userEvent.click(trigger)
+      await settle(150)
+
+      const dialog = alertdialog()!
+      expect(dialog).not.toBeNull()
+      expect(document.activeElement?.textContent?.trim(), 'initial focus is the safe Cancel action').toBe('Cancel')
+
+      for (let i = 0; i < 6; i++) {
+        await userEvent.tab()
+        expect(dialog.contains(document.activeElement), `focus stayed inside after Tab #${i + 1}`).toBe(true)
+      }
+
+      await userEvent.keyboard('{Escape}')
+      await settle(150)
+      expect(alertdialog()).toBeNull()
+      expect(document.activeElement, 'focus returned to the trigger').toBe(trigger)
+    })
+
+    it('is not dismissed by a click outside', async () => {
+      setTheme(theme)
+      const { el } = await show(AlertDialogControlled)
+      await userEvent.click(el.querySelector<HTMLElement>('button')!)
+      await settle(150)
+      expect(alertdialog()).not.toBeNull()
+      const overlay = document.querySelector<HTMLElement>('[data-slot="alert-dialog-overlay"]')!
+      await userEvent.click(overlay, { position: { x: 4, y: 4 } })
+      await settle(150)
+      expect(alertdialog(), 'still open after an overlay click').not.toBeNull()
+      expect(el.textContent).toContain('open = true')
+    })
+
+    it('runs the action once and closes; Cancel closes without running it', async () => {
+      setTheme(theme)
+      const { el } = await show(AlertDialogControlled)
+      const opener = el.querySelector<HTMLElement>('button')!
+      await userEvent.click(opener)
+      await settle(150)
+      await userEvent.keyboard('{Enter}') // focus is on Cancel
+      await settle(150)
+      expect(alertdialog()).toBeNull()
+      expect(el.textContent).toContain('removed = 0')
+
+      await userEvent.click(opener)
+      await settle(150)
+      await userEvent.click([...document.querySelectorAll<HTMLElement>('[role="alertdialog"] button')].find(b => b.textContent?.trim() === 'Remove')!)
+      await settle(150)
+      expect(alertdialog()).toBeNull()
+      expect(el.textContent).toContain('removed = 1')
+    })
+
+    it('renders the destructive action with the destructive fill', async () => {
+      setTheme(theme)
+      const { el } = await show(AlertDialogDestructive)
+      await userEvent.click(el.querySelector<HTMLElement>('[aria-haspopup="dialog"]')!)
+      await settle(150)
+      const action = document.querySelector<HTMLElement>('[data-slot="alert-dialog-action"]')!
+      const probe = document.createElement('span')
+      probe.style.backgroundColor = 'var(--elf-destructive)'
+      document.body.append(probe)
+      const destructive = getComputedStyle(probe).backgroundColor
+      probe.remove()
+      expect(getComputedStyle(action).backgroundColor).toBe(destructive)
     })
   })
 

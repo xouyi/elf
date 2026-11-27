@@ -336,6 +336,21 @@ export const components: ComponentMeta[] = [
     slots: ['ElfAvatarFallback default: custom fallback content (an icon, +3)', 'ElfAvatarGroup default: ElfAvatar items'],
     a11y: ['Give ElfAvatarImage an alt (the name, or empty when the name is shown beside it).', 'Use label on a standalone avatar, and aria-label on a group.', 'Avatars are not interactive; name the link or button you wrap one in.'],
   },
+  {
+    dir: 'alert-dialog',
+    name: 'AlertDialog',
+    summary: 'Modal that demands a decision (destructive confirmation), built on Reka UI AlertDialog. Role alertdialog: focus starts on Cancel, Escape cancels, an outside click never dismisses it.',
+    parts: ['ElfAlertDialog', 'ElfAlertDialogTrigger', 'ElfAlertDialogContent', 'ElfAlertDialogHeader', 'ElfAlertDialogTitle', 'ElfAlertDialogDescription', 'ElfAlertDialogFooter', 'ElfAlertDialogCancel', 'ElfAlertDialogAction'],
+    props: [
+      { name: 'ElfAlertDialog open / defaultOpen', type: 'boolean', description: 'Controlled (v-model:open) or initial open state.' },
+      { name: 'ElfAlertDialogAction variant', type: 'ButtonVariants[\'variant\']', default: 'default', description: 'Button style of the confirming action; use destructive for irreversible actions.' },
+      { name: 'ElfAlertDialogAction / ElfAlertDialogCancel size', type: 'ButtonVariants[\'size\']', default: 'default', description: 'Button size.' },
+      { name: 'ElfAlertDialogCancel variant', type: 'ButtonVariants[\'variant\']', default: 'outline', description: 'Button style of the cancel action.' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by every part; merged with base classes.' },
+    ],
+    slots: ['ElfAlertDialogTrigger: use as-child with an ElfButton', 'ElfAlertDialogAction and ElfAlertDialogCancel both close the dialog; handle the decision with @click on the action'],
+    a11y: ['Always include ElfAlertDialogTitle and ElfAlertDialogDescription.', 'Name the action after what it does ("Delete"), never "OK".', 'Use ElfDialog instead when the content is a form or can be dismissed by clicking outside.'],
+  },
 ]
 
 export const rules = [

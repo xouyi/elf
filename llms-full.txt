@@ -90,7 +90,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, alert-dialog, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -2800,8 +2800,134 @@ const sizes = ['sm', 'default', 'lg', 'xl'] as const
 </template>
 ```
 
+### AlertDialog
+
+Modal that demands a decision (destructive confirmation), built on Reka UI AlertDialog. Role alertdialog: focus starts on Cancel, Escape cancels, an outside click never dismisses it.
+
+Components: `ElfAlertDialog`, `ElfAlertDialogTrigger`, `ElfAlertDialogContent`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogCancel`, `ElfAlertDialogAction`
+
+Props:
+
+- `ElfAlertDialog open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfAlertDialogAction variant` (ButtonVariants['variant'], default default): Button style of the confirming action; use destructive for irreversible actions.
+- `ElfAlertDialogAction / ElfAlertDialogCancel size` (ButtonVariants['size'], default default): Button size.
+- `ElfAlertDialogCancel variant` (ButtonVariants['variant'], default outline): Button style of the cancel action.
+- `class` (string | array | object): Accepted by every part; merged with base classes.
+
+Slots:
+
+- ElfAlertDialogTrigger: use as-child with an ElfButton
+- ElfAlertDialogAction and ElfAlertDialogCancel both close the dialog; handle the decision with @click on the action
+
+Accessibility:
+
+- Always include ElfAlertDialogTitle and ElfAlertDialogDescription.
+- Name the action after what it does ("Delete"), never "OK".
+- Use ElfDialog instead when the content is a form or can be dismissed by clicking outside.
+
+Examples:
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfAlertDialog, ElfAlertDialogAction, ElfAlertDialogCancel, ElfAlertDialogContent, ElfAlertDialogDescription, ElfAlertDialogFooter, ElfAlertDialogHeader, ElfAlertDialogTitle, ElfButton } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref(false)
+const removed = ref(0)
+
+function remove() {
+  removed.value += 1
+}
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfButton variant="outline" @click="open = true">
+      Remove member
+    </ElfButton>
+    <span class="text-sm text-muted-foreground">open = {{ open }}, removed = {{ removed }}</span>
+    <ElfAlertDialog v-model:open="open">
+      <ElfAlertDialogContent>
+        <ElfAlertDialogHeader>
+          <ElfAlertDialogTitle>Remove this member?</ElfAlertDialogTitle>
+          <ElfAlertDialogDescription>They lose access to every team app immediately.</ElfAlertDialogDescription>
+        </ElfAlertDialogHeader>
+        <ElfAlertDialogFooter>
+          <ElfAlertDialogCancel>Cancel</ElfAlertDialogCancel>
+          <ElfAlertDialogAction variant="destructive" @click="remove">
+            Remove
+          </ElfAlertDialogAction>
+        </ElfAlertDialogFooter>
+      </ElfAlertDialogContent>
+    </ElfAlertDialog>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfAlertDialog, ElfAlertDialogAction, ElfAlertDialogCancel, ElfAlertDialogContent, ElfAlertDialogDescription, ElfAlertDialogFooter, ElfAlertDialogHeader, ElfAlertDialogTitle, ElfAlertDialogTrigger, ElfButton } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfAlertDialog>
+    <ElfAlertDialogTrigger as-child>
+      <ElfButton variant="outline">
+        Publish roster
+      </ElfButton>
+    </ElfAlertDialogTrigger>
+    <ElfAlertDialogContent>
+      <ElfAlertDialogHeader>
+        <ElfAlertDialogTitle>Publish the roster?</ElfAlertDialogTitle>
+        <ElfAlertDialogDescription>Every member will be notified and the draft is locked.</ElfAlertDialogDescription>
+      </ElfAlertDialogHeader>
+      <ElfAlertDialogFooter>
+        <ElfAlertDialogCancel>Cancel</ElfAlertDialogCancel>
+        <ElfAlertDialogAction>Publish</ElfAlertDialogAction>
+      </ElfAlertDialogFooter>
+    </ElfAlertDialogContent>
+  </ElfAlertDialog>
+</template>
+```
+
+#### Destructive
+
+```vue
+<script setup lang="ts">
+import { ElfAlertDialog, ElfAlertDialogAction, ElfAlertDialogCancel, ElfAlertDialogContent, ElfAlertDialogDescription, ElfAlertDialogFooter, ElfAlertDialogHeader, ElfAlertDialogTitle, ElfAlertDialogTrigger, ElfButton } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfAlertDialog>
+    <ElfAlertDialogTrigger as-child>
+      <ElfButton variant="destructive">
+        Delete match log
+      </ElfButton>
+    </ElfAlertDialogTrigger>
+    <ElfAlertDialogContent>
+      <ElfAlertDialogHeader>
+        <ElfAlertDialogTitle>Delete this match log?</ElfAlertDialogTitle>
+        <ElfAlertDialogDescription>
+          This permanently removes the log and its scouting notes. This action cannot be undone.
+        </ElfAlertDialogDescription>
+      </ElfAlertDialogHeader>
+      <ElfAlertDialogFooter>
+        <ElfAlertDialogCancel>Keep it</ElfAlertDialogCancel>
+        <ElfAlertDialogAction variant="destructive">
+          Delete
+        </ElfAlertDialogAction>
+      </ElfAlertDialogFooter>
+    </ElfAlertDialogContent>
+  </ElfAlertDialog>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

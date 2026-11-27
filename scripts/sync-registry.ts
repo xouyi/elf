@@ -46,6 +46,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   progress: { title: 'Progress', description: 'Determinate and indeterminate progress bar built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
   avatar: { title: 'Avatar', description: 'Image with initials fallback, four sizes and an overlapping group, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
   'visually-hidden': { title: 'Visually Hidden', description: 'Hides content visually while keeping it available to assistive technology.', dependencies: ['reka-ui'] },
+  'alert-dialog': { title: 'Alert Dialog', description: 'Modal that demands a decision, with Cancel and Action parts and initial focus on Cancel, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'], registryDependencies: [dep('button'), dep('dialog')] },
 }
 
 const items: unknown[] = [

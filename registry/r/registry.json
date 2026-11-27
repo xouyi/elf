@@ -657,6 +657,63 @@
       ]
     },
     {
+      "name": "alert-dialog",
+      "type": "registry:ui",
+      "title": "Alert Dialog",
+      "description": "Modal that demands a decision, with Cancel and Action parts and initial focus on Cancel, built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json",
+        "https://xouyi.github.io/elfUI/r/button.json",
+        "https://xouyi.github.io/elfUI/r/dialog.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/alert-dialog/AlertDialog.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/alert-dialog/AlertDialogAction.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/alert-dialog/AlertDialogCancel.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/alert-dialog/AlertDialogContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/alert-dialog/AlertDialogDescription.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/alert-dialog/AlertDialogFooter.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/alert-dialog/AlertDialogHeader.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/alert-dialog/AlertDialogTitle.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/alert-dialog/AlertDialogTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/alert-dialog/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "elf-theme",
       "type": "registry:file",
       "title": "Elf theme",
