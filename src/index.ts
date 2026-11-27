@@ -268,3 +268,14 @@ export {
   SimplePagination as ElfSimplePagination,
 } from './components/pagination'
 export type { PaginationEllipsisProps, PaginationFirstProps, PaginationItemProps, PaginationLastProps, PaginationNextProps, PaginationPrevProps, PaginationProps, SimplePaginationProps } from './components/pagination'
+export {
+  Toggle as ElfToggle,
+  ToggleGroup as ElfToggleGroup,
+  ToggleGroupItem as ElfToggleGroupItem,
+  toggleGroupKey,
+  toggleVariants,
+} from './components/toggle'
+export type { ToggleGroupContext, ToggleGroupItemExtraProps, ToggleGroupProps, ToggleProps, ToggleVariants } from './components/toggle'
+
+export { AspectRatio as ElfAspectRatio } from './components/aspect-ratio'
+export type { AspectRatioProps } from './components/aspect-ratio'

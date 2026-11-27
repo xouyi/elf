@@ -1,0 +1,26 @@
+{
+  "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+  "name": "aspect-ratio",
+  "title": "Aspect Ratio",
+  "description": "Fixed-ratio frame for images, video and placeholders, built on Reka UI.",
+  "dependencies": [
+    "reka-ui",
+    "@vueuse/core"
+  ],
+  "registryDependencies": [
+    "https://xouyi.github.io/elfUI/r/utils.json"
+  ],
+  "files": [
+    {
+      "path": "registry/_generated/ui/aspect-ratio/AspectRatio.vue",
+      "content": "<script lang=\"ts\">\nimport type { AspectRatioProps as RekaAspectRatioProps } from 'reka-ui'\nimport type { HTMLAttributes } from 'vue'\n</script>\n\n<script setup lang=\"ts\">\nimport { reactiveOmit } from '@vueuse/core'\nimport { AspectRatio, useForwardProps } from 'reka-ui'\nimport { cn } from '@/lib/utils'\n\nexport interface AspectRatioProps extends RekaAspectRatioProps {\n  /** Width divided by height, for example `16 / 9`. Defaults to `1`. */\n  ratio?: number\n  /** Extra classes, merged onto the frame through `cn()`. */\n  class?: HTMLAttributes['class']\n}\n\nconst props = withDefaults(defineProps<AspectRatioProps>(), { ratio: 1 })\nconst delegatedProps = reactiveOmit(props, 'class')\nconst forwarded = useForwardProps(delegatedProps)\n</script>\n\n<template>\n  <AspectRatio\n    data-slot=\"aspect-ratio\"\n    v-bind=\"forwarded\"\n    :class=\"cn('overflow-hidden rounded-lg bg-muted [&>img]:size-full [&>img]:object-cover [&>video]:size-full [&>video]:object-cover', props.class)\"\n  >\n    <slot />\n  </AspectRatio>\n</template>\n",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/_generated/ui/aspect-ratio/index.ts",
+      "content": "export { default as AspectRatio } from './AspectRatio.vue'\nexport type { AspectRatioProps } from './AspectRatio.vue'\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -102,6 +102,13 @@ import ThemeSwitcherDefault from '../../src/components/theme-switcher/examples/D
 import ThemeSwitcherLabels from '../../src/components/theme-switcher/examples/Labels.vue'
 import ThemeSwitcherToggle from '../../src/components/theme-switcher/examples/Toggle.vue'
 import ThemeSwitcherTwoThemes from '../../src/components/theme-switcher/examples/TwoThemes.vue'
+import ToggleDefault from '../../src/components/toggle/examples/Default.vue'
+import ToggleDisabled from '../../src/components/toggle/examples/Disabled.vue'
+import ToggleGroupMultiple from '../../src/components/toggle/examples/GroupMultiple.vue'
+import ToggleGroupSingle from '../../src/components/toggle/examples/GroupSingle.vue'
+import ToggleWithText from '../../src/components/toggle/examples/WithText.vue'
+import AspectRatioDefault from '../../src/components/aspect-ratio/examples/Default.vue'
+import AspectRatioRatios from '../../src/components/aspect-ratio/examples/Ratios.vue'
 import { axeViolations, mountComponent, settle, setTheme, themes } from './support'
 
 let unmount: (() => void) | undefined
@@ -2378,6 +2385,130 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       const style = getComputedStyle(document.activeElement as HTMLElement)
       expect(style.boxShadow !== 'none' || style.outlineStyle !== 'none', 'focus indicator is drawn').toBe(true)
       expect(el.contains(document.activeElement)).toBe(true)
+  describe('Toggle', () => {
+    it('presses with Space and Enter and reflects aria-pressed', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleDefault)
+      const toggle = el.querySelector<HTMLElement>('[data-slot="toggle"]')!
+      expect(toggle.getAttribute('aria-pressed')).toBe('false')
+      toggle.focus()
+      await userEvent.keyboard(' ')
+      await settle()
+      expect(toggle.getAttribute('aria-pressed')).toBe('true')
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(toggle.getAttribute('aria-pressed')).toBe('false')
+    })
+
+    it('v-model drives the pressed state and the label', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleWithText)
+      expect(el.textContent).toContain('Notifications are off')
+      await userEvent.click(el.querySelector<HTMLElement>('[data-slot="toggle"]')!)
+      await settle()
+      expect(el.textContent).toContain('Notifications are on')
+    })
+
+    it('shows a distinct pressed background and a visible focus ring', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleWithText)
+      const toggle = el.querySelector<HTMLElement>('[data-slot="toggle"]')!
+      const off = getComputedStyle(toggle).backgroundColor
+      await userEvent.click(toggle)
+      await settle(250)
+      expect(getComputedStyle(toggle).backgroundColor).not.toBe(off)
+      toggle.blur()
+      await userEvent.tab()
+      await settle()
+      expect(document.activeElement).toBe(toggle)
+      expect(getComputedStyle(toggle).boxShadow).not.toBe('none')
+    })
+
+    it('does not respond while disabled and is skipped by Tab', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleDisabled)
+      const toggles = [...el.querySelectorAll<HTMLButtonElement>('[data-slot="toggle"]')]
+      expect(toggles.every(t => t.disabled)).toBe(true)
+      expect(toggles[1]!.getAttribute('aria-pressed')).toBe('true')
+      await userEvent.tab()
+      expect(el.contains(document.activeElement) && document.activeElement !== document.body).toBe(false)
+    })
+  })
+
+  describe('ToggleGroup', () => {
+    const items = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('[data-slot="toggle-group-item"]')]
+
+    it('single: is one tab stop; arrows, Home and End move focus (roving) and Space selects', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleGroupSingle)
+      expect(el.querySelector('[data-slot="toggle-group"]')!.getAttribute('aria-label')).toBe('Sort posts')
+      items(el)[0]!.focus()
+      await userEvent.tab()
+      expect(el.contains(document.activeElement), 'the group is one tab stop').toBe(false)
+      items(el)[0]!.focus()
+      await userEvent.keyboard('{ArrowRight}')
+      await settle()
+      expect(document.activeElement).toBe(items(el)[1])
+      await userEvent.keyboard(' ')
+      await settle()
+      expect(el.textContent).toContain('Sorted by: top')
+      await userEvent.keyboard('{End}')
+      expect(document.activeElement).toBe(items(el)[2])
+      await userEvent.keyboard('{Home}')
+      expect(document.activeElement).toBe(items(el)[0])
+      await userEvent.keyboard('{ArrowLeft}')
+      expect(document.activeElement, 'wraps to the last item').toBe(items(el)[2])
+    })
+
+    it('single: pressing the active item clears the value', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleGroupSingle)
+      await userEvent.click(items(el)[0]!)
+      await settle()
+      expect(el.textContent).toContain('Sorted by: nothing')
+      expect(items(el).every(i => i.getAttribute('data-state') === 'off')).toBe(true)
+    })
+
+    it('multiple: items toggle independently by keyboard', async () => {
+      setTheme(theme)
+      const { el } = await show(ToggleGroupMultiple)
+      expect(el.textContent).toContain('Active: bold')
+      items(el)[0]!.focus()
+      await userEvent.keyboard('{ArrowRight}')
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(el.textContent).toContain('Active: bold, italic')
+      await userEvent.keyboard('{ArrowLeft}')
+      await userEvent.keyboard(' ')
+      await settle()
+      expect(el.textContent).toContain('Active: italic')
+      expect(items(el).map(i => i.getAttribute('aria-pressed'))).toEqual(['false', 'true', 'false'])
+    })
+  })
+
+  describe('AspectRatio', () => {
+    it('keeps the frame at the requested width to height ratio', async () => {
+      setTheme(theme)
+      const { el } = await show(AspectRatioDefault)
+      const frame = el.querySelector<HTMLElement>('[data-slot="aspect-ratio"]')!
+      const rect = frame.getBoundingClientRect()
+      expect(rect.width).toBeGreaterThan(100)
+      expect(rect.width / rect.height).toBeCloseTo(16 / 9, 1)
+      const img = frame.querySelector('img')!
+      expect(img.getBoundingClientRect().height).toBeCloseTo(rect.height, 0)
+    })
+
+    it('supports several ratios side by side', async () => {
+      setTheme(theme)
+      const { el } = await show(AspectRatioRatios)
+      const ratios = [...el.querySelectorAll<HTMLElement>('[data-slot="aspect-ratio"]')].map((f) => {
+        const r = f.getBoundingClientRect()
+        return r.width / r.height
+      })
+      expect(ratios[0]).toBeCloseTo(1, 1)
+      expect(ratios[1]).toBeCloseTo(4 / 3, 1)
+      expect(ratios[2]).toBeCloseTo(16 / 9, 1)
+      expect(ratios[3]).toBeCloseTo(21 / 9, 1)
     })
   })
 

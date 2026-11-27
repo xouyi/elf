@@ -417,7 +417,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfButton styles
 - **Complexity:** S
 - **Novatron screens:** courses/stock `AdminChips`; forum feed sort; `UpvoteButton`.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfTable
 
@@ -472,7 +472,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** stock `Thumb`, `PhotoSlot`; course cards.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfSidebar
 

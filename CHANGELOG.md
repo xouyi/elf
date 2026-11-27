@@ -7,6 +7,8 @@
 - Add `ElfBreadcrumb`, `ElfBreadcrumbList`, `ElfBreadcrumbItem`, `ElfBreadcrumbLink` (`asChild` for router links), `ElfBreadcrumbPage`, `ElfBreadcrumbSeparator` and `ElfBreadcrumbEllipsis`, composed from native elements: a labelled `nav` with an ordered list, `aria-current="page"` on the last item, aria-hidden separators (any icon through the slot, mirrored in RTL) and an ellipsis that collapses long trails when placed inside an `ElfDropdownMenuTrigger`.
 
 - Add `ElfPagination`, `ElfPaginationContent`, `ElfPaginationItem`, `ElfPaginationEllipsis`, `ElfPaginationFirst`, `ElfPaginationPrev`, `ElfPaginationNext`, `ElfPaginationLast` and `ElfSimplePagination`, built on the Reka UI Pagination primitive: `v-model:page`, `total`, `itemsPerPage`, `siblingCount` (default 1) and `showEdges` (default true), a labelled `nav` with a list of native buttons, `aria-current="page"`, disabled ends, a `disabled` state, and a previous/next bar with a translatable status for simple lists.
+- Add `ElfToggle`, `ElfToggleGroup` and `ElfToggleGroupItem` (`toggleVariants`), built on the Reka UI Toggle and ToggleGroup primitives: `variant` `default` or `outline`, `size` `sm`, `default` or `lg`, `v-model`, group `type` `single` or `multiple`, a `joined` segmented layout, per-item overrides, roving focus with arrow keys, Home and End. A single toggle is a button with `aria-pressed`; a single group is a radiogroup. Replaces filter chips and sort selectors.
+- Add `ElfAspectRatio`, built on the Reka UI AspectRatio primitive: a fixed `ratio` frame that fills its parent's width, clips and rounds its content, and crops an `img` or `video` child to cover.
 
 ## 0.4.0
 
