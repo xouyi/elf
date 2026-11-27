@@ -96,6 +96,8 @@ import ToggleDisabled from '../../src/components/toggle/examples/Disabled.vue'
 import ToggleGroupMultiple from '../../src/components/toggle/examples/GroupMultiple.vue'
 import ToggleGroupSingle from '../../src/components/toggle/examples/GroupSingle.vue'
 import ToggleWithText from '../../src/components/toggle/examples/WithText.vue'
+import AspectRatioDefault from '../../src/components/aspect-ratio/examples/Default.vue'
+import AspectRatioRatios from '../../src/components/aspect-ratio/examples/Ratios.vue'
 import { axeViolations, mountComponent, settle, setTheme, themes } from './support'
 
 let unmount: (() => void) | undefined
@@ -2227,6 +2229,32 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await settle()
       expect(el.textContent).toContain('Active: italic')
       expect(items(el).map(i => i.getAttribute('aria-pressed'))).toEqual(['false', 'true', 'false'])
+    })
+  })
+
+  describe('AspectRatio', () => {
+    it('keeps the frame at the requested width to height ratio', async () => {
+      setTheme(theme)
+      const { el } = await show(AspectRatioDefault)
+      const frame = el.querySelector<HTMLElement>('[data-slot="aspect-ratio"]')!
+      const rect = frame.getBoundingClientRect()
+      expect(rect.width).toBeGreaterThan(100)
+      expect(rect.width / rect.height).toBeCloseTo(16 / 9, 1)
+      const img = frame.querySelector('img')!
+      expect(img.getBoundingClientRect().height).toBeCloseTo(rect.height, 0)
+    })
+
+    it('supports several ratios side by side', async () => {
+      setTheme(theme)
+      const { el } = await show(AspectRatioRatios)
+      const ratios = [...el.querySelectorAll<HTMLElement>('[data-slot="aspect-ratio"]')].map((f) => {
+        const r = f.getBoundingClientRect()
+        return r.width / r.height
+      })
+      expect(ratios[0]).toBeCloseTo(1, 1)
+      expect(ratios[1]).toBeCloseTo(4 / 3, 1)
+      expect(ratios[2]).toBeCloseTo(16 / 9, 1)
+      expect(ratios[3]).toBeCloseTo(21 / 9, 1)
     })
   })
 

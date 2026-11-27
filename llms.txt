@@ -47,6 +47,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [Collapsible](https://xouyi.github.io/elfUI/docs/components/collapsible): A single show and hide region with an animated height, built on Reka UI Collapsible. ElfCollapsibleTrigger toggles ElfCollapsibleContent.
 - [Accordion](https://xouyi.github.io/elfUI/docs/components/accordion): Stacked collapsible sections on Reka UI Accordion. ElfAccordion (type single or multiple) contains ElfAccordionItem (value) with an ElfAccordionTrigger heading button and an ElfAccordionContent region.
 - [Toggle](https://xouyi.github.io/elfUI/docs/components/toggle): Pressable on/off button (ElfToggle) and a group of them (ElfToggleGroup with ElfToggleGroupItem) in single or multiple mode, built on Reka UI Toggle and ToggleGroup. Use it for filter chips, sort selectors and formatting buttons.
+- [AspectRatio](https://xouyi.github.io/elfUI/docs/components/aspect-ratio): Fixed-ratio frame for media, built on Reka UI AspectRatio. Fills the width of its parent and keeps width / height equal to ratio; an img or video child is cropped to cover.
 
 ## Reference
 

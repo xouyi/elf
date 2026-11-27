@@ -557,6 +557,18 @@ export const components: ComponentMeta[] = [
     slots: ['default: the label or an icon (give icon-only toggles an aria-label)'],
     a11y: ['A single toggle is a button with aria-pressed. In a single group items are radios in a radiogroup; in a multiple group they are toggle buttons in a group.', 'Name the group with aria-label and every icon-only item with aria-label.', 'Arrow keys, Home and End move focus inside a group; Space or Enter presses.'],
   },
+  {
+    dir: 'aspect-ratio',
+    name: 'AspectRatio',
+    summary: 'Fixed-ratio frame for media, built on Reka UI AspectRatio. Fills the width of its parent and keeps width / height equal to ratio; an img or video child is cropped to cover.',
+    parts: ['ElfAspectRatio'],
+    props: [
+      { name: 'ratio', type: 'number', default: '1', description: 'Width divided by height, for example 16 / 9.' },
+      { name: 'class', type: 'string | array | object', description: 'Merged with the frame classes (overflow-hidden, rounded corners, muted background).' },
+    ],
+    slots: ['default: the media or placeholder; it fills the frame'],
+    a11y: ['The frame is presentational. Give an img an alt, and give a non-image placeholder role="img" with an aria-label.', 'Constrain the width on the parent; the height follows from the ratio.'],
+  },
 ]
 
 export const rules = [
