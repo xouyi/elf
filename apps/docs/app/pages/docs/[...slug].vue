@@ -2,7 +2,7 @@
 import { Pencil } from '@lucide/vue'
 
 const route = useRoute()
-const config = useRuntimeConfig()
+const site = useSite()
 const path = route.path.replace(/\/$/, '')
 
 const { data: page } = await useAsyncData(`page-${path}`, () => queryCollection('docs').path(path).first())
@@ -21,7 +21,7 @@ useSeoMeta({
 const editUrl = computed(() => {
   const p = page.value as unknown as { editPath?: string, id: string }
   const file = p.editPath ?? `apps/docs/content/${p.id.replace(/^docs\//, '')}`
-  return `${config.public.repo}/edit/main/${file}`
+  return `${site.repo}/edit/main/${file}`
 })
 const toc = computed(() => (page.value?.body as { toc?: { links?: [] } } | undefined)?.toc?.links ?? [])
 const links = computed(() => (page.value as unknown as { links?: { label: string, to: string }[] }).links ?? [])

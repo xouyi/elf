@@ -72,6 +72,29 @@ Reference, Accessibility (with a keyboard table), Theming, Do and don't.
 | `::component-tokens{component="button"}` | The theme tokens the component's classes use, detected from its source. |
 | `::callout{type="info"}` | A note. Types: `info`, `tip`, `warning`, `danger`. |
 
+#### Name, version and URLs (never hard-code them)
+
+The package name, version, repository, site and registry URLs are read from `package.json` at build time by
+`apps/docs/lib/site.ts`. A release therefore never requires a docs edit. In Vue components call `useSite()`
+(`site.name`, `site.version`, `site.repo`, `site.site`, `site.registry`, `site.npm`). In Markdown, including fenced
+code blocks (Shiki highlights the real value), write a placeholder; a `content:file:beforeParse` hook replaces it
+in the raw Markdown before parsing:
+
+| Placeholder | Value |
+| :--- | :--- |
+| `{{pkg}}` | npm package name (`@xouyi/elfui`) |
+| `{{version}}` | `package.json` version, no leading `v` (a tag is `v{{version}}`) |
+| `{{repo}}` | GitHub repository URL |
+| `{{repo-slug}}` | GitHub `owner/name`, for `github:` installs |
+| `{{site}}` | Published docs site URL, no trailing slash |
+| `{{registry}}` | Static shadcn-vue registry base URL (`{{registry}}/button.json`) |
+| `{{registry-raw}}` | The `raw.githubusercontent.com` registry fallback |
+| `{{npm}}` | npm package page |
+
+Write them without spaces. Other `{{ ... }}` text (Vue mustache in examples) is left alone. `CHANGELOG.md`,
+`CONTRIBUTING.md` and `ROADMAP.md` are copied verbatim and keep their history text. `tests/docs/site.test.ts` fails when a
+docs page or component contains a hard-coded `@xouyi/elfui@<semver>`, `#v<semver>`, site URL or repository URL.
+
 Generated data lives in `apps/docs/app/generated/` and the changelog, roadmap and contributing pages are copied from the
 repository root; both are produced by `bun run docs:prepare` (run automatically by `docs:dev` and `docs:build`) and are not
 committed. A missing example name or component directory fails the docs build, so broken pages cannot ship.

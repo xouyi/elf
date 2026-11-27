@@ -5,7 +5,7 @@ interface Row { name: string, type: string, default: string | null, required?: b
 interface Part { name: string, file: string, props: Row[], emits: { name: string, type: string, description: string }[], slots: { name: string, type: string, description: string }[] }
 
 const props = defineProps<{ component: string }>()
-const config = useRuntimeConfig()
+const site = useSite()
 const data = (meta as unknown as Record<string, { parts: Part[] }>)[props.component]
 if (!data) throw new Error(`ComponentApi: unknown component "${props.component}"`)
 const slug = (s: string) => s.toLowerCase()
@@ -19,7 +19,7 @@ const typeText = (t: string) => t.replace(/\s+/g, ' ')
         <a :href="`#${slug(part.name)}`" class="text-inherit no-underline">{{ part.name }}</a>
       </h3>
       <p class="mb-3 text-xs text-muted-foreground">
-        <a class="underline underline-offset-4 hover:text-foreground" :href="`${config.public.repo}/blob/main/${part.file}`" target="_blank" rel="noopener">{{ part.file }}</a>
+        <a class="underline underline-offset-4 hover:text-foreground" :href="`${site.repo}/blob/main/${part.file}`" target="_blank" rel="noopener">{{ part.file }}</a>
       </p>
 
       <div v-if="part.props.length" class="table-wrap border">
