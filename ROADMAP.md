@@ -314,7 +314,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfButton
 - **Complexity:** S
 - **Novatron screens:** courses/stock `ConfirmDialog`; forum `ReasonDialog`.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfSheet
 
@@ -325,7 +325,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfDialog internals, ElfButton
 - **Complexity:** M
 - **Novatron screens:** stock `ui/Sheet`, `QuantitySheet`, `ItemEditSheet`; mobile filter panels.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfToaster + useToast
 
@@ -336,7 +336,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfAlert (styles), ElfButton
 - **Complexity:** M
 - **Novatron screens:** courses/stock/forum `ToastHost` plus each app's `useToast`.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfCollapsible
 
@@ -347,7 +347,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** none
 - **Complexity:** S
 - **Novatron screens:** courses `LessonOutline`, filter groups.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfAccordion
 
@@ -358,7 +358,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** ElfCollapsible styles
 - **Complexity:** S
 - **Novatron screens:** courses `CourseRulesCard`; docs FAQ; settings pages.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfScrollArea
 

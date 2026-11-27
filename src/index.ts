@@ -203,3 +203,41 @@ export type {
 
 export { ScrollArea as ElfScrollArea, ScrollBar as ElfScrollBar } from './components/scroll-area'
 export type { ScrollAreaProps, ScrollBarProps } from './components/scroll-area'
+
+export {
+  AlertDialog as ElfAlertDialog,
+  AlertDialogAction as ElfAlertDialogAction,
+  AlertDialogCancel as ElfAlertDialogCancel,
+  AlertDialogContent as ElfAlertDialogContent,
+  AlertDialogDescription as ElfAlertDialogDescription,
+  AlertDialogFooter as ElfAlertDialogFooter,
+  AlertDialogHeader as ElfAlertDialogHeader,
+  AlertDialogTitle as ElfAlertDialogTitle,
+  AlertDialogTrigger as ElfAlertDialogTrigger,
+} from './components/alert-dialog'
+export type { AlertDialogActionProps, AlertDialogCancelProps } from './components/alert-dialog'
+
+export {
+  Sheet as ElfSheet,
+  SheetClose as ElfSheetClose,
+  SheetContent as ElfSheetContent,
+  SheetDescription as ElfSheetDescription,
+  SheetFooter as ElfSheetFooter,
+  SheetHeader as ElfSheetHeader,
+  sheetVariants,
+  SheetTitle as ElfSheetTitle,
+  SheetTrigger as ElfSheetTrigger,
+} from './components/sheet'
+export type { SheetContentExtraProps, SheetVariants } from './components/sheet'
+
+export { toast, Toaster as ElfToaster, toastManager, toastVariants, useToast } from './components/toast'
+export type { ElfToastObject, ToastActionOptions, ToastData, ToasterPosition, ToasterProps, ToastFunction, ToastOptions, ToastPromiseOptions, ToastVariant, ToastVariants } from './components/toast'
+
+export { Collapsible as ElfCollapsible, CollapsibleContent as ElfCollapsibleContent, CollapsibleTrigger as ElfCollapsibleTrigger } from './components/collapsible'
+
+export {
+  Accordion as ElfAccordion,
+  AccordionContent as ElfAccordionContent,
+  AccordionItem as ElfAccordionItem,
+  AccordionTrigger as ElfAccordionTrigger,
+} from './components/accordion'

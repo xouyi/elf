@@ -1,4 +1,4 @@
-import { ElfButton, ElfInput, ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger } from '@xouyi/elfui'
+import { ElfButton, ElfInput, ElfTabs, ElfTabsContent, ElfTabsList, ElfTabsTrigger, ElfToaster, toast } from '@xouyi/elfui'
 import { page, userEvent } from 'vitest/browser'
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
@@ -53,8 +53,22 @@ import GradientTextAnimated from '../../src/components/gradient-text/examples/An
 import GradientTextVariants from '../../src/components/gradient-text/examples/Variants.vue'
 import ButtonGlow from '../../src/components/button/examples/Glow.vue'
 import ButtonAsChild from '../../src/components/button/examples/AsChild.vue'
+import AlertDialogControlled from '../../src/components/alert-dialog/examples/Controlled.vue'
+import AlertDialogDefault from '../../src/components/alert-dialog/examples/Default.vue'
+import AlertDialogDestructive from '../../src/components/alert-dialog/examples/Destructive.vue'
 import DialogControlled from '../../src/components/dialog/examples/Controlled.vue'
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
+import SheetBottom from '../../src/components/sheet/examples/BottomSheet.vue'
+import SheetControlled from '../../src/components/sheet/examples/Controlled.vue'
+import SheetDefault from '../../src/components/sheet/examples/Default.vue'
+import SheetSides from '../../src/components/sheet/examples/Sides.vue'
+import ToastWithAction from '../../src/components/toast/examples/WithAction.vue'
+import AccordionControlled from '../../src/components/accordion/examples/Controlled.vue'
+import AccordionDefault from '../../src/components/accordion/examples/Default.vue'
+import AccordionDisabled from '../../src/components/accordion/examples/Disabled.vue'
+import AccordionMultiple from '../../src/components/accordion/examples/Multiple.vue'
+import CollapsibleControlled from '../../src/components/collapsible/examples/Controlled.vue'
+import CollapsibleDefault from '../../src/components/collapsible/examples/Default.vue'
 import TabsControlled from '../../src/components/tabs/examples/Controlled.vue'
 import TabsDefault from '../../src/components/tabs/examples/Default.vue'
 import ScrollAreaBoth from '../../src/components/scroll-area/examples/Both.vue'
@@ -78,6 +92,7 @@ import TooltipControlled from '../../src/components/tooltip/examples/Controlled.
 import TooltipDefault from '../../src/components/tooltip/examples/Default.vue'
 import TooltipIconButtons from '../../src/components/tooltip/examples/IconButtons.vue'
 import { mountComponent, settle, setTheme, themes } from './support'
+import { axeViolations, mountComponent, settle, setTheme, themes } from './support'
 
 let unmount: (() => void) | undefined
 afterEach(() => {
@@ -148,6 +163,429 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await userEvent.keyboard('{Escape}')
       await settle(150)
       expect(el.textContent).toContain('open = false')
+    })
+  })
+
+  describe('AlertDialog', () => {
+    const alertdialog = () => document.querySelector<HTMLElement>('[role="alertdialog"]')
+
+    it('focuses Cancel first, traps Tab, closes on Escape and returns focus to the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(AlertDialogDefault)
+      const trigger = el.querySelector<HTMLElement>('[aria-haspopup="dialog"]')!
+      await userEvent.click(trigger)
+      await settle(150)
+
+      const dialog = alertdialog()!
+      expect(dialog).not.toBeNull()
+      expect(document.activeElement?.textContent?.trim(), 'initial focus is the safe Cancel action').toBe('Cancel')
+
+      for (let i = 0; i < 6; i++) {
+        await userEvent.tab()
+        expect(dialog.contains(document.activeElement), `focus stayed inside after Tab #${i + 1}`).toBe(true)
+      }
+
+      await userEvent.keyboard('{Escape}')
+      await settle(150)
+      expect(alertdialog()).toBeNull()
+      expect(document.activeElement, 'focus returned to the trigger').toBe(trigger)
+    })
+
+    it('is not dismissed by a click outside', async () => {
+      setTheme(theme)
+      const { el } = await show(AlertDialogControlled)
+      await userEvent.click(el.querySelector<HTMLElement>('button')!)
+      await settle(150)
+      expect(alertdialog()).not.toBeNull()
+      const overlay = document.querySelector<HTMLElement>('[data-slot="alert-dialog-overlay"]')!
+      await userEvent.click(overlay, { position: { x: 4, y: 4 } })
+      await settle(150)
+      expect(alertdialog(), 'still open after an overlay click').not.toBeNull()
+      expect(el.textContent).toContain('open = true')
+    })
+
+    it('runs the action once and closes; Cancel closes without running it', async () => {
+      setTheme(theme)
+      const { el } = await show(AlertDialogControlled)
+      const opener = el.querySelector<HTMLElement>('button')!
+      await userEvent.click(opener)
+      await settle(150)
+      await userEvent.keyboard('{Enter}') // focus is on Cancel
+      await settle(150)
+      expect(alertdialog()).toBeNull()
+      expect(el.textContent).toContain('removed = 0')
+
+      await userEvent.click(opener)
+      await settle(150)
+      await userEvent.click([...document.querySelectorAll<HTMLElement>('[role="alertdialog"] button')].find(b => b.textContent?.trim() === 'Remove')!)
+      await settle(150)
+      expect(alertdialog()).toBeNull()
+      expect(el.textContent).toContain('removed = 1')
+    })
+
+    it('renders the destructive action with the destructive fill', async () => {
+      setTheme(theme)
+      const { el } = await show(AlertDialogDestructive)
+      await userEvent.click(el.querySelector<HTMLElement>('[aria-haspopup="dialog"]')!)
+      await settle(150)
+      const action = document.querySelector<HTMLElement>('[data-slot="alert-dialog-action"]')!
+      const probe = document.createElement('span')
+      probe.style.backgroundColor = 'var(--elf-destructive)'
+      document.body.append(probe)
+      const destructive = getComputedStyle(probe).backgroundColor
+      probe.remove()
+      expect(getComputedStyle(action).backgroundColor).toBe(destructive)
+    })
+  })
+
+  describe('Sheet', () => {
+    const sheet = () => document.querySelector<HTMLElement>('[data-slot="sheet-content"]')
+
+    it('moves focus in, traps Tab, closes on Escape and returns focus to the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(SheetDefault)
+      const trigger = el.querySelector<HTMLElement>('[aria-haspopup="dialog"]')!
+      await userEvent.click(trigger)
+      await settle(300)
+      const dialog = sheet()!
+      expect(dialog.contains(document.activeElement), 'focus moved into the sheet').toBe(true)
+      for (let i = 0; i < 10; i++) {
+        await userEvent.tab()
+        expect(dialog.contains(document.activeElement), `focus stayed inside after Tab #${i + 1}`).toBe(true)
+      }
+      await userEvent.keyboard('{Escape}')
+      await settle(300)
+      expect(sheet()).toBeNull()
+      expect(document.activeElement, 'focus returned to the trigger').toBe(trigger)
+    })
+
+    it('closes on an outside click and from Cancel', async () => {
+      setTheme(theme)
+      const { el } = await show(SheetDefault)
+      const trigger = el.querySelector<HTMLElement>('[aria-haspopup="dialog"]')!
+      await userEvent.click(trigger)
+      await settle(300)
+      await userEvent.click(document.querySelector<HTMLElement>('[data-slot="sheet-overlay"]')!, { position: { x: 4, y: 4 } })
+      await settle(300)
+      expect(sheet()).toBeNull()
+
+      await userEvent.click(trigger)
+      await settle(300)
+      await userEvent.click([...document.querySelectorAll<HTMLElement>('[data-slot="sheet-content"] button')].find(b => b.textContent?.trim() === 'Cancel')!)
+      await settle(300)
+      expect(sheet()).toBeNull()
+    })
+
+    it('anchors each side to its viewport edge', async () => {
+      setTheme(theme)
+      const { el } = await show(SheetSides)
+      const triggers = [...el.querySelectorAll<HTMLElement>('[aria-haspopup="dialog"]')]
+      expect(triggers).toHaveLength(4)
+      for (const trigger of triggers) {
+        await userEvent.click(trigger)
+        await settle(300)
+        const dialog = sheet()!
+        const side = dialog.getAttribute('data-side')
+        const rect = dialog.getBoundingClientRect()
+        if (side === 'top') expect(rect.top).toBe(0)
+        if (side === 'left') expect(rect.left).toBe(0)
+        if (side === 'right') expect(Math.round(rect.right)).toBe(document.documentElement.clientWidth)
+        if (side === 'bottom') expect(Math.round(rect.bottom)).toBe(document.documentElement.clientHeight)
+        await userEvent.keyboard('{Escape}')
+        await settle(300)
+        expect(sheet()).toBeNull()
+      }
+    })
+
+    it('the bottom sheet spans the width and stays inside the viewport', async () => {
+      setTheme(theme)
+      const { el } = await show(SheetBottom)
+      await userEvent.click(el.querySelector<HTMLElement>('[aria-haspopup="dialog"]')!)
+      await settle(300)
+      const rect = sheet()!.getBoundingClientRect()
+      expect(Math.round(rect.width)).toBe(document.documentElement.clientWidth)
+      expect(rect.height).toBeLessThanOrEqual(window.innerHeight)
+    })
+
+    it('v-model:open reflects the state', async () => {
+      setTheme(theme)
+      const { el } = await show(SheetControlled)
+      expect(el.textContent).toContain('open = false')
+      await userEvent.click(el.querySelector<HTMLElement>('button')!)
+      await settle(300)
+      expect(el.textContent).toContain('open = true')
+      expect(sheet()).not.toBeNull()
+      await userEvent.keyboard('{Escape}')
+      await settle(300)
+      expect(el.textContent).toContain('open = false')
+    })
+  })
+
+  describe('Toast', () => {
+    const toasts = () => [...document.querySelectorAll<HTMLElement>('[data-slot="toast"]')]
+    const status = () => document.querySelector('[data-slot="toast-announcer"] [role="status"]')!.textContent?.trim()
+    const alertText = () => document.querySelector('[data-slot="toast-announcer"] [role="alert"]')!.textContent?.trim()
+    const App = (props: Record<string, unknown> = {}, example?: Parameters<typeof mountComponent>[0]) => defineComponent(() => () => h('div', [example ? h(example) : null, h(ElfToaster, props)]))
+
+    afterEach(async () => {
+      toast.dismiss()
+      await settle(300)
+    })
+
+    it('announces ordinary toasts politely (role=status) and destructive ones assertively (role=alert)', async () => {
+      setTheme(theme)
+      await show(App())
+      toast('Saved', { description: 'Roster updated' })
+      await settle(100)
+      expect(status()).toBe('Saved. Roster updated')
+      expect(alertText()).toBe('')
+      toast.error('Save failed')
+      await settle(100)
+      expect(alertText()).toBe('Save failed')
+      expect(toasts()).toHaveLength(2)
+    })
+
+    it('has no axe violations with every variant open', async () => {
+      setTheme(theme)
+      await show(App())
+      toast('Default', { description: 'Plain' })
+      toast.success('Success')
+      toast.warning('Warning')
+      toast.error('Destructive', { action: { label: 'Retry' } })
+      await settle(300)
+      expect(await axeViolations()).toEqual([])
+    })
+
+    it('runs an action from the keyboard and closes the toast', async () => {
+      setTheme(theme)
+      const { el } = await show(App({}, ToastWithAction))
+      await userEvent.click(el.querySelector<HTMLElement>('button')!)
+      await settle(300)
+      expect(toasts()).toHaveLength(1)
+      await userEvent.keyboard('{F8}')
+      await settle(100)
+      const action = document.querySelector<HTMLElement>('[data-slot="toast-action"]')!
+      await userEvent.tab()
+      for (let i = 0; i < 4 && document.activeElement !== action; i++) await userEvent.tab()
+      expect(document.activeElement).toBe(action)
+      await userEvent.keyboard('{Enter}')
+      await settle(400)
+      expect(el.textContent).toContain('restored = 1')
+      expect(toasts()).toHaveLength(0)
+    })
+
+    it('dismisses with the close button', async () => {
+      setTheme(theme)
+      await show(App())
+      toast('Bye', { duration: 0 })
+      await settle(200)
+      await userEvent.click(document.querySelector<HTMLElement>('[data-slot="toast-close"]')!)
+      await settle(400)
+      expect(toasts()).toHaveLength(0)
+    })
+
+    it('F8 moves focus to the notification region', async () => {
+      setTheme(theme)
+      await show(App())
+      toast('Focus me', { duration: 0 })
+      await settle(200)
+      await userEvent.keyboard('{F8}')
+      await settle(100)
+      const viewport = document.querySelector<HTMLElement>('[data-slot="toaster"]')!
+      expect(document.activeElement === viewport || viewport.contains(document.activeElement), 'focus is in the toast region').toBe(true)
+    })
+
+    it('Escape closes a focused toast', async () => {
+      setTheme(theme)
+      await show(App())
+      toast('Esc me', { duration: 0 })
+      await settle(200)
+      toasts()[0]!.focus()
+      await userEvent.keyboard('{Escape}')
+      await settle(400)
+      expect(toasts()).toHaveLength(0)
+    })
+
+    it('closes itself after its duration and pauses while hovered', async () => {
+      setTheme(theme)
+      await show(App())
+      toast('Timed', { duration: 700 })
+      await settle(200)
+      await userEvent.hover(toasts()[0]!)
+      await settle(900)
+      expect(toasts(), 'still open while hovered').toHaveLength(1)
+      await userEvent.unhover(toasts()[0]!)
+      await settle(1300)
+      expect(toasts()).toHaveLength(0)
+    })
+
+    it('shows at most `limit` toasts at once', async () => {
+      setTheme(theme)
+      await show(App({ limit: 2 }))
+      for (const n of ['a', 'b', 'c']) toast(n, { duration: 0 })
+      await settle(300)
+      const visible = toasts().filter(t => getComputedStyle(t).display !== 'none')
+      expect(visible).toHaveLength(2)
+      expect(visible.map(t => t.textContent)).toEqual([expect.stringContaining('b'), expect.stringContaining('c')])
+    })
+
+    it('dismisses on a horizontal swipe', async () => {
+      setTheme(theme)
+      await show(App())
+      toast('Swipe me', { duration: 0 })
+      await settle(300)
+      const item = toasts()[0]!
+      const rect = item.getBoundingClientRect()
+      const x = rect.left + 20
+      const y = rect.top + rect.height / 2
+      const fire = (type: string, dx: number) => item.dispatchEvent(new PointerEvent(type, { bubbles: true, cancelable: true, clientX: x + dx, clientY: y, button: 0, pointerId: 1, pointerType: 'touch', isPrimary: true }))
+      fire('pointerdown', 0)
+      for (const dx of [10, 40, 80, 140]) fire('pointermove', dx)
+      fire('pointerup', 140)
+      await settle(500)
+      expect(toasts()).toHaveLength(0)
+    })
+
+    it('shows a spinner while a promise toast is loading', async () => {
+      setTheme(theme)
+      await show(App())
+      let done!: () => void
+      void toast.promise(new Promise<void>((r) => { done = r }), { loading: 'Working', success: 'Done', error: 'Failed' })
+      await settle(200)
+      expect(toasts()[0]!.getAttribute('data-status')).toBe('loading')
+      expect(toasts()[0]!.querySelector('[data-slot="toast-icon"] svg')).not.toBeNull()
+      done()
+      await settle(300)
+      expect(toasts()[0]!.textContent).toContain('Done')
+      expect(status()).toBe('Done')
+    })
+  })
+
+  describe('Collapsible', () => {
+    it('toggles with Enter and Space, exposes aria-expanded and links the content', async () => {
+      setTheme(theme)
+      const { el } = await show(CollapsibleDefault)
+      const trigger = el.querySelector<HTMLElement>('[data-slot="collapsible-trigger"]')!
+      expect(trigger.getAttribute('aria-expanded')).toBe('false')
+      trigger.focus()
+      await userEvent.keyboard('{Enter}')
+      await settle(300)
+      expect(trigger.getAttribute('aria-expanded')).toBe('true')
+      const content = el.querySelector<HTMLElement>('[data-slot="collapsible-content"]')!
+      expect(trigger.getAttribute('aria-controls')).toBe(content.id)
+      expect(content.getBoundingClientRect().height).toBeGreaterThan(0)
+      await userEvent.keyboard(' ')
+      await settle(400)
+      expect(trigger.getAttribute('aria-expanded')).toBe('false')
+      expect(el.querySelector<HTMLElement>('[data-slot="collapsible-content"]')?.hidden ?? true, 'content is hidden when closed').toBe(true)
+    })
+
+    it('v-model:open reflects the state', async () => {
+      setTheme(theme)
+      const { el } = await show(CollapsibleControlled)
+      expect(el.textContent).toContain('open = false')
+      await userEvent.click(el.querySelector<HTMLElement>('button')!)
+      await settle(300)
+      expect(el.textContent).toContain('open = true')
+    })
+
+    it('animates the height and settles at the natural height', async () => {
+      setTheme(theme)
+      const { el } = await show(CollapsibleControlled)
+      await userEvent.click(el.querySelector<HTMLElement>('button')!)
+      await settle(450)
+      const content = el.querySelector<HTMLElement>('[data-slot="collapsible-content"]')!
+      expect(content.getBoundingClientRect().height).toBeGreaterThan(20)
+    })
+  })
+
+  describe('Accordion', () => {
+    const triggers = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('[data-slot="accordion-trigger"]')]
+    const expanded = (el: HTMLElement) => triggers(el).map(t => t.getAttribute('aria-expanded'))
+
+    it('opens with Enter and Space; single mode closes the other item', async () => {
+      setTheme(theme)
+      const { el } = await show(AccordionDefault)
+      expect(expanded(el)).toEqual(['true', 'false', 'false'])
+      const [, second] = triggers(el)
+      second!.focus()
+      await userEvent.keyboard('{Enter}')
+      await settle(350)
+      expect(expanded(el)).toEqual(['false', 'true', 'false'])
+      await userEvent.keyboard(' ')
+      await settle(350)
+      expect(expanded(el), 'collapsible: the open item closes').toEqual(['false', 'false', 'false'])
+    })
+
+    it('moves focus with ArrowDown, ArrowUp, Home and End', async () => {
+      setTheme(theme)
+      const { el } = await show(AccordionDefault)
+      const [first, second, third] = triggers(el)
+      first!.focus()
+      await userEvent.keyboard('{ArrowDown}')
+      expect(document.activeElement).toBe(second)
+      await userEvent.keyboard('{ArrowDown}')
+      expect(document.activeElement).toBe(third)
+      await userEvent.keyboard('{ArrowDown}')
+      expect(document.activeElement, 'wraps to the first').toBe(first)
+      await userEvent.keyboard('{ArrowUp}')
+      expect(document.activeElement, 'wraps to the last').toBe(third)
+      await userEvent.keyboard('{Home}')
+      expect(document.activeElement).toBe(first)
+      await userEvent.keyboard('{End}')
+      expect(document.activeElement).toBe(third)
+    })
+
+    it('multiple mode keeps several items open', async () => {
+      setTheme(theme)
+      const { el } = await show(AccordionMultiple)
+      expect(expanded(el)).toEqual(['true', 'true', 'false'])
+      await userEvent.click(triggers(el)[2]!)
+      await settle(350)
+      expect(expanded(el)).toEqual(['true', 'true', 'true'])
+      await userEvent.click(triggers(el)[0]!)
+      await settle(350)
+      expect(expanded(el)).toEqual(['false', 'true', 'true'])
+    })
+
+    it('skips disabled items with the arrow keys and ignores clicks on them', async () => {
+      setTheme(theme)
+      const { el } = await show(AccordionDisabled)
+      const [first, locked, last] = triggers(el)
+      expect(locked!.hasAttribute('disabled') || locked!.getAttribute('aria-disabled') === 'true').toBe(true)
+      first!.focus()
+      await userEvent.keyboard('{ArrowDown}')
+      expect(document.activeElement).toBe(last)
+      await userEvent.click(locked!, { force: true }).catch(() => {})
+      expect(locked!.getAttribute('aria-expanded')).toBe('false')
+    })
+
+    it('content is a region named by its trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(AccordionDefault)
+      const region = el.querySelector<HTMLElement>('[data-slot="accordion-content"]')!
+      expect(region.getAttribute('role')).toBe('region')
+      expect(region.getAttribute('aria-labelledby')).toBe(triggers(el)[0]!.id)
+    })
+
+    it('v-model reflects the open item', async () => {
+      setTheme(theme)
+      const { el } = await show(AccordionControlled)
+      expect(el.textContent).toContain('open = a')
+      await userEvent.click(triggers(el)[1]!)
+      await settle(350)
+      expect(el.textContent).toContain('open = b')
+      await userEvent.click(triggers(el)[1]!)
+      await settle(350)
+      expect(el.textContent).toContain('open = none')
+    })
+
+    it('the chevron rotates when open', async () => {
+      setTheme(theme)
+      const { el } = await show(AccordionDefault)
+      const rotated = (t: HTMLElement) => getComputedStyle(t.querySelector('svg')!).rotate
+      await settle(300)
+      expect(rotated(triggers(el)[0]!)).not.toBe(rotated(triggers(el)[1]!))
     })
   })
 

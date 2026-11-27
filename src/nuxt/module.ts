@@ -43,6 +43,7 @@ export default defineNuxtModule<ModuleOptions>({
       { name: 'useElfTheme', from: resolve('../composables/use-elf-theme') },
       { name: 'elfThemeBootScript', from: resolve('../composables/use-elf-theme') },
       { name: 'isElfTheme', from: resolve('../lib/themes') },
+      { name: 'useToast', from: resolve('../components/toast/use-toast') },
     ])
 
     // Theme tokens are plain CSS variables; Tailwind mappings live in styles.css,

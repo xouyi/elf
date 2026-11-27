@@ -40,7 +40,7 @@ for (const theme of ['elf', 'nova', 'elfwood'] as const) {
           const overlay = (await trigger.count()) > 0
           if (overlay) {
             await trigger.click()
-            await page.locator('[role="dialog"]').waitFor()
+            await page.locator('[role="dialog"], [role="alertdialog"]').first().waitFor()
           }
           // Let focus and layout settle after the optional open.
           await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))))

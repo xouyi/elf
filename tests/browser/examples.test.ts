@@ -23,7 +23,7 @@ describe.each(themes)('examples in the %s theme', (theme) => {
     if (trigger) {
       await userEvent.click(trigger)
       await settle(150)
-      expect(document.querySelector('[role="dialog"]'), 'trigger did not open the dialog').not.toBeNull()
+      expect(document.querySelector('[role="dialog"], [role="alertdialog"]'), 'trigger did not open the dialog').not.toBeNull()
     }
 
     // Menus open from a click on their button; context menus from a contextmenu event on their area.

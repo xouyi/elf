@@ -5,6 +5,7 @@ import { X } from '@lucide/vue'
 import { reactiveOmit } from '@vueuse/core'
 import { DialogClose, DialogContent, DialogPortal, useForwardPropsEmits } from 'reka-ui'
 import { cn } from '../../lib/utils'
+import { dialogContentClass } from './index'
 import DialogOverlay from './DialogOverlay.vue'
 
 defineOptions({
@@ -32,7 +33,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
       data-slot="dialog-content"
       v-bind="{ ...$attrs, ...forwarded }"
       :class="cn(
-        'fixed top-1/2 left-1/2 z-50 grid max-h-[calc(100dvh-2rem)] w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 overflow-y-auto rounded-lg border bg-popover p-4 text-popover-foreground shadow-lg outline-none data-[state=closed]:animate-[elf-zoom-out_100ms_ease-in_forwards] data-[state=open]:animate-[elf-zoom-in_150ms_ease-out] sm:max-w-lg sm:p-6',
+        dialogContentClass,
         props.class,
       )"
     >
