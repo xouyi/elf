@@ -91,6 +91,10 @@ import PopoverModal from '../../src/components/popover/examples/Modal.vue'
 import TooltipControlled from '../../src/components/tooltip/examples/Controlled.vue'
 import TooltipDefault from '../../src/components/tooltip/examples/Default.vue'
 import TooltipIconButtons from '../../src/components/tooltip/examples/IconButtons.vue'
+import TableDefault from '../../src/components/table/examples/Default.vue'
+import TableSortable from '../../src/components/table/examples/SortableHeader.vue'
+import TableStack from '../../src/components/table/examples/StackOnMobile.vue'
+import TableSticky from '../../src/components/table/examples/StickyHeader.vue'
 import { axeViolations, mountComponent, settle, setTheme, themes } from './support'
 
 let unmount: (() => void) | undefined
@@ -2137,6 +2141,85 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       await settle()
       expect(el.textContent).toContain('Panel B')
       expect(el.textContent).not.toContain('Panel A')
+    })
+  })
+
+  describe('Table', () => {
+    it('is a native table named by its caption', async () => {
+      setTheme(theme)
+      const { el } = await show(TableDefault)
+      const table = el.querySelector('table')!
+      expect(table.caption?.textContent).toBe('Qualification matches')
+      expect(el.querySelectorAll('th[scope="col"]').length).toBe(4)
+      expect(el.querySelector('tfoot')).not.toBeNull()
+    })
+
+    it('puts a scrollable table in the tab order only while it overflows', async () => {
+      setTheme(theme)
+      const wrapper = document.createElement('div')
+      wrapper.style.width = '200px'
+      document.body.append(wrapper)
+      const mounted = await mountComponent(TableDefault)
+      wrapper.append(mounted.el)
+      await settle(100)
+      unmount = () => {
+        mounted.unmount()
+        wrapper.remove()
+      }
+      const container = mounted.el.querySelector<HTMLElement>('[data-slot="table-container"]')!
+      expect(container.scrollWidth).toBeGreaterThan(container.clientWidth)
+      expect(container.getAttribute('tabindex')).toBe('0')
+      expect(container.getAttribute('role')).toBe('region')
+      expect(container.getAttribute('aria-label')).toBe('Qualification matches')
+      await userEvent.tab()
+      expect(document.activeElement).toBe(container)
+      wrapper.style.width = '1000px'
+      await settle(100)
+      expect(container.hasAttribute('tabindex')).toBe(false)
+    })
+
+    it('keeps the header sticky inside a height-limited container', async () => {
+      setTheme(theme)
+      const { el } = await show(TableSticky)
+      const head = el.querySelector<HTMLElement>('th')!
+      expect(getComputedStyle(head).position).toBe('sticky')
+      const container = el.querySelector<HTMLElement>('[data-slot="table-container"]')!
+      container.scrollTop = 200
+      await settle(50)
+      const top = container.getBoundingClientRect().top
+      expect(Math.abs(head.getBoundingClientRect().top - top)).toBeLessThan(3)
+    })
+
+    it('sorts from a keyboard-operable header button and updates aria-sort', async () => {
+      setTheme(theme)
+      const { el } = await show(TableSortable)
+      const heads = [...el.querySelectorAll<HTMLElement>('th')]
+      const cells = () => [...el.querySelectorAll('tbody tr td:first-child')].map(c => c.textContent?.trim())
+      expect(heads[0]!.getAttribute('aria-sort')).toBe('ascending')
+      expect(heads[1]!.getAttribute('aria-sort')).toBe('none')
+      expect(cells()).toEqual(['Climber', 'Intake', 'Swerve drive'])
+      await userEvent.tab()
+      expect(document.activeElement).toBe(heads[0]!.querySelector('button'))
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(heads[0]!.getAttribute('aria-sort')).toBe('descending')
+      expect(cells()).toEqual(['Swerve drive', 'Intake', 'Climber'])
+      await userEvent.tab()
+      await userEvent.keyboard(' ')
+      await settle()
+      expect(heads[0]!.getAttribute('aria-sort')).toBe('none')
+      expect(heads[1]!.getAttribute('aria-sort')).toBe('ascending')
+      expect(cells()).toEqual(['Intake', 'Climber', 'Swerve drive'])
+    })
+
+    it('stacks rows as cards below the sm breakpoint only', async () => {
+      setTheme(theme)
+      const { el } = await show(TableStack)
+      const row = el.querySelector<HTMLElement>('tbody tr')!
+      const stacked = window.innerWidth < 640
+      expect(getComputedStyle(row).display).toBe(stacked ? 'block' : 'table-row')
+      expect(el.querySelector('table')!.getAttribute('role')).toBe('table')
+      expect(el.querySelector('td')!.getAttribute('data-label')).toBe('Name')
     })
   })
 })

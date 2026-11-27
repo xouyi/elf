@@ -46,6 +46,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [Toast](https://xouyi.github.io/elfUI/docs/components/toast): Transient notifications. Mount one ElfToaster per app and call useToast() (or import toast) from anywhere: toast(message, options), toast.success/warning/error, toast.promise, toast.update, toast.dismiss. Built on the Reka UI Toast viewport and manager; the queue is a module singleton that is a no-op on the server.
 - [Collapsible](https://xouyi.github.io/elfUI/docs/components/collapsible): A single show and hide region with an animated height, built on Reka UI Collapsible. ElfCollapsibleTrigger toggles ElfCollapsibleContent.
 - [Accordion](https://xouyi.github.io/elfUI/docs/components/accordion): Stacked collapsible sections on Reka UI Accordion. ElfAccordion (type single or multiple) contains ElfAccordionItem (value) with an ElfAccordionTrigger heading button and an ElfAccordionContent region.
+- [Table](https://xouyi.github.io/elfUI/docs/components/table): Semantic styled table on a native table. ElfTable (required caption) wraps ElfTableHeader, ElfTableBody, ElfTableFooter, ElfTableRow, ElfTableHead (th, scope col) and ElfTableCell (td). It scrolls sideways inside its container; stackOnMobile turns rows into cards below sm. The parts are designed so a data table can be composed on them: put a sort button in ElfTableHead and set its sort prop (aria-sort).
 
 ## Reference
 

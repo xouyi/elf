@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Add `ElfTable` with `ElfTableCaption`, `ElfTableHeader`, `ElfTableBody`, `ElfTableFooter`, `ElfTableRow`, `ElfTableHead` and `ElfTableCell`, on a native table: a required `caption` (optionally `captionHidden`), `density` (`compact`, `default`, `comfortable`), `stickyHeader`, `stackOnMobile` (rows become `label: value` cards below `sm`, with ARIA table roles so the semantics survive), a scroll container that becomes a focusable named region only while it overflows, `sort` on `ElfTableHead` for `aria-sort` (the base for the later data table) and `selected` on `ElfTableRow`.
+
+
 ## 0.4.0
 
 - **Breaking: the `novatron` theme is now `nova`.** `data-theme="novatron"` becomes `data-theme="nova"`, the file `@xouyi/elfui/themes/novatron.css` becomes `@xouyi/elfui/themes/nova.css`, the Nuxt option `elfui: { theme: 'novatron' }` becomes `theme: 'nova'` (also in `themes: [...]`), `elfui init --theme novatron` becomes `--theme nova`, and `useElfTheme` values stored as `novatron` (cookie or localStorage) must be migrated to `nova`. No compatibility alias. The tokens are unchanged. To migrate: search your project for `novatron` in HTML, CSS imports, `nuxt.config.ts` and stored theme values, and replace it with `nova`.

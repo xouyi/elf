@@ -91,7 +91,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, gradient-text, tooltip, popover, hover-card, dropdown-menu, context-menu, scroll-area, alert-dialog, sheet, toast, collapsible, accordion, table, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -4676,8 +4676,312 @@ import { ElfAccordion, ElfAccordionContent, ElfAccordionItem, ElfAccordionTrigge
 </template>
 ```
 
+### Table
+
+Semantic styled table on a native table. ElfTable (required caption) wraps ElfTableHeader, ElfTableBody, ElfTableFooter, ElfTableRow, ElfTableHead (th, scope col) and ElfTableCell (td). It scrolls sideways inside its container; stackOnMobile turns rows into cards below sm. The parts are designed so a data table can be composed on them: put a sort button in ElfTableHead and set its sort prop (aria-sort).
+
+Components: `ElfTable`, `ElfTableCaption`, `ElfTableHeader`, `ElfTableBody`, `ElfTableFooter`, `ElfTableRow`, `ElfTableHead`, `ElfTableCell`
+
+Props:
+
+- `ElfTable caption` (string): Required accessible name, rendered as the table caption.
+- `ElfTable captionHidden` (boolean, default false): Hide the caption visually; screen readers still read it (attribute: caption-hidden).
+- `ElfTable density` ('compact' | 'default' | 'comfortable', default default): Row spacing.
+- `ElfTable stackOnMobile` (boolean, default false): Below sm, show rows as cards with label: value lines (attribute: stack-on-mobile). Give ElfTableCell a label.
+- `ElfTable stickyHeader` (boolean, default false): Keep the header visible while scrolling; limit the height with containerClass (attribute: sticky-header).
+- `ElfTable containerClass` (string | array | object): Classes for the scroll container (attribute: container-class). class goes to the table.
+- `ElfTableHead sort` ('ascending' | 'descending' | 'none' | 'other'): Renders aria-sort on the column header.
+- `ElfTableCell label` (string): Column name shown in stacked mode.
+- `ElfTableRow selected` (boolean, default false): Marks the row as selected (data-state).
+
+Slots:
+
+- ElfTable default: header, body and footer sections
+- ElfTable caption: replaces the caption element
+
+Accessibility:
+
+- Always give the table a caption; hide it visually with caption-hidden if a heading already names it.
+- A table that overflows its container becomes a focusable named region so keyboard users can scroll it.
+- Use for tabular data, not for layout.
+
+Examples:
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfBadge, ElfTable, ElfTableBody, ElfTableCell, ElfTableFooter, ElfTableHead, ElfTableHeader, ElfTableRow } from '@xouyi/elfui'
+
+const matches = [
+  { id: 'Q12', opponent: 'Team 6328', score: 142, result: 'Won' },
+  { id: 'Q18', opponent: 'Team 254', score: 118, result: 'Lost' },
+  { id: 'Q24', opponent: 'Team 1678', score: 131, result: 'Won' },
+]
+</script>
+
+<template>
+  <ElfTable caption="Qualification matches" class="min-w-[28rem]">
+    <ElfTableHeader>
+      <ElfTableRow>
+        <ElfTableHead>Match</ElfTableHead>
+        <ElfTableHead>Opponent</ElfTableHead>
+        <ElfTableHead>Result</ElfTableHead>
+        <ElfTableHead class="text-right">
+          Score
+        </ElfTableHead>
+      </ElfTableRow>
+    </ElfTableHeader>
+    <ElfTableBody>
+      <ElfTableRow v-for="m in matches" :key="m.id">
+        <ElfTableCell class="font-medium">
+          {{ m.id }}
+        </ElfTableCell>
+        <ElfTableCell>{{ m.opponent }}</ElfTableCell>
+        <ElfTableCell>
+          <ElfBadge :variant="m.result === 'Won' ? 'success' : 'secondary'">
+            {{ m.result }}
+          </ElfBadge>
+        </ElfTableCell>
+        <ElfTableCell class="text-right">
+          {{ m.score }}
+        </ElfTableCell>
+      </ElfTableRow>
+    </ElfTableBody>
+    <ElfTableFooter>
+      <ElfTableRow>
+        <ElfTableCell :colspan="3">
+          Total points
+        </ElfTableCell>
+        <ElfTableCell class="text-right">
+          391
+        </ElfTableCell>
+      </ElfTableRow>
+    </ElfTableFooter>
+  </ElfTable>
+</template>
+```
+
+#### Density
+
+```vue
+<script setup lang="ts">
+import { ElfTable, ElfTableBody, ElfTableCell, ElfTableHead, ElfTableHeader, ElfTableRow } from '@xouyi/elfui'
+
+const densities = ['compact', 'default', 'comfortable'] as const
+const rows = [
+  { part: 'Swerve module', stock: 8 },
+  { part: 'Battery 12 V', stock: 14 },
+]
+</script>
+
+<template>
+  <div class="grid gap-6">
+    <ElfTable v-for="d in densities" :key="d" :caption="`Parts, ${d} density`" :density="d">
+      <ElfTableHeader>
+        <ElfTableRow>
+          <ElfTableHead>Part</ElfTableHead>
+          <ElfTableHead class="text-right">
+            In stock
+          </ElfTableHead>
+        </ElfTableRow>
+      </ElfTableHeader>
+      <ElfTableBody>
+        <ElfTableRow v-for="r in rows" :key="r.part">
+          <ElfTableCell>{{ r.part }}</ElfTableCell>
+          <ElfTableCell class="text-right">
+            {{ r.stock }}
+          </ElfTableCell>
+        </ElfTableRow>
+      </ElfTableBody>
+    </ElfTable>
+  </div>
+</template>
+```
+
+#### Hidden Caption
+
+```vue
+<script setup lang="ts">
+import { ElfTable, ElfTableBody, ElfTableCell, ElfTableHead, ElfTableHeader, ElfTableRow } from '@xouyi/elfui'
+</script>
+
+<template>
+  <div class="grid gap-2">
+    <h3 class="text-sm font-medium">
+      Battery log
+    </h3>
+    <ElfTable caption="Battery log" caption-hidden>
+      <ElfTableHeader>
+        <ElfTableRow>
+          <ElfTableHead>Battery</ElfTableHead>
+          <ElfTableHead class="text-right">
+            Voltage
+          </ElfTableHead>
+        </ElfTableRow>
+      </ElfTableHeader>
+      <ElfTableBody>
+        <ElfTableRow selected>
+          <ElfTableCell>B-01</ElfTableCell>
+          <ElfTableCell class="text-right">
+            12.4 V
+          </ElfTableCell>
+        </ElfTableRow>
+        <ElfTableRow>
+          <ElfTableCell>B-02</ElfTableCell>
+          <ElfTableCell class="text-right">
+            12.1 V
+          </ElfTableCell>
+        </ElfTableRow>
+      </ElfTableBody>
+    </ElfTable>
+  </div>
+</template>
+```
+
+#### Sortable Header
+
+```vue
+<script setup lang="ts">
+import type { TableSort } from '@xouyi/elfui'
+import { ArrowDown, ArrowUp, ChevronsUpDown } from '@lucide/vue'
+import { computed, ref } from 'vue'
+import { ElfButton, ElfTable, ElfTableBody, ElfTableCell, ElfTableHead, ElfTableHeader, ElfTableRow } from '@xouyi/elfui'
+
+type Key = 'name' | 'points'
+const rows = [
+  { name: 'Swerve drive', points: 40 },
+  { name: 'Climber', points: 25 },
+  { name: 'Intake', points: 18 },
+]
+const key = ref<Key>('name')
+const asc = ref(true)
+
+const sorted = computed(() => [...rows].sort((a, b) => {
+  const d = a[key.value] > b[key.value] ? 1 : a[key.value] < b[key.value] ? -1 : 0
+  return asc.value ? d : -d
+}))
+
+function sortOf(k: Key): TableSort {
+  return key.value === k ? (asc.value ? 'ascending' : 'descending') : 'none'
+}
+function toggle(k: Key) {
+  if (key.value === k) {
+    asc.value = !asc.value
+  }
+  else {
+    key.value = k
+    asc.value = true
+  }
+}
+</script>
+
+<template>
+  <ElfTable caption="Subsystems by points">
+    <ElfTableHeader>
+      <ElfTableRow>
+        <ElfTableHead :sort="sortOf('name')">
+          <ElfButton variant="ghost" size="sm" class="-ml-3" @click="toggle('name')">
+            Subsystem
+            <ArrowUp v-if="sortOf('name') === 'ascending'" aria-hidden="true" />
+            <ArrowDown v-else-if="sortOf('name') === 'descending'" aria-hidden="true" />
+            <ChevronsUpDown v-else aria-hidden="true" />
+          </ElfButton>
+        </ElfTableHead>
+        <ElfTableHead :sort="sortOf('points')" class="text-right">
+          <ElfButton variant="ghost" size="sm" class="-mr-3" @click="toggle('points')">
+            Points
+            <ArrowUp v-if="sortOf('points') === 'ascending'" aria-hidden="true" />
+            <ArrowDown v-else-if="sortOf('points') === 'descending'" aria-hidden="true" />
+            <ChevronsUpDown v-else aria-hidden="true" />
+          </ElfButton>
+        </ElfTableHead>
+      </ElfTableRow>
+    </ElfTableHeader>
+    <ElfTableBody>
+      <ElfTableRow v-for="r in sorted" :key="r.name">
+        <ElfTableCell>{{ r.name }}</ElfTableCell>
+        <ElfTableCell class="text-right">
+          {{ r.points }}
+        </ElfTableCell>
+      </ElfTableRow>
+    </ElfTableBody>
+  </ElfTable>
+</template>
+```
+
+#### Stack On Mobile
+
+```vue
+<script setup lang="ts">
+import { ElfBadge, ElfTable, ElfTableBody, ElfTableCell, ElfTableHead, ElfTableHeader, ElfTableRow } from '@xouyi/elfui'
+
+const members = [
+  { name: 'Ayşe Demir', role: 'Software', status: 'Active' },
+  { name: 'Mert Kaya', role: 'Mechanical', status: 'Active' },
+  { name: 'Elif Yıldız', role: 'Design', status: 'Away' },
+]
+</script>
+
+<template>
+  <ElfTable caption="Team members" stack-on-mobile>
+    <ElfTableHeader>
+      <ElfTableRow>
+        <ElfTableHead>Name</ElfTableHead>
+        <ElfTableHead>Role</ElfTableHead>
+        <ElfTableHead>Status</ElfTableHead>
+      </ElfTableRow>
+    </ElfTableHeader>
+    <ElfTableBody>
+      <ElfTableRow v-for="m in members" :key="m.name">
+        <ElfTableCell label="Name" class="font-medium">
+          {{ m.name }}
+        </ElfTableCell>
+        <ElfTableCell label="Role">
+          {{ m.role }}
+        </ElfTableCell>
+        <ElfTableCell label="Status">
+          <ElfBadge :variant="m.status === 'Active' ? 'success' : 'warning'">
+            {{ m.status }}
+          </ElfBadge>
+        </ElfTableCell>
+      </ElfTableRow>
+    </ElfTableBody>
+  </ElfTable>
+</template>
+```
+
+#### Sticky Header
+
+```vue
+<script setup lang="ts">
+import { ElfTable, ElfTableBody, ElfTableCell, ElfTableHead, ElfTableHeader, ElfTableRow } from '@xouyi/elfui'
+
+const rows = Array.from({ length: 20 }, (_, i) => ({ id: i + 1, event: `Event log entry ${i + 1}`, level: i % 4 === 0 ? 'Warning' : 'Info' }))
+</script>
+
+<template>
+  <ElfTable caption="Event log" sticky-header container-class="max-h-60">
+    <ElfTableHeader>
+      <ElfTableRow>
+        <ElfTableHead>#</ElfTableHead>
+        <ElfTableHead>Event</ElfTableHead>
+        <ElfTableHead>Level</ElfTableHead>
+      </ElfTableRow>
+    </ElfTableHeader>
+    <ElfTableBody>
+      <ElfTableRow v-for="r in rows" :key="r.id">
+        <ElfTableCell>{{ r.id }}</ElfTableCell>
+        <ElfTableCell>{{ r.event }}</ElfTableCell>
+        <ElfTableCell>{{ r.level }}</ElfTableCell>
+      </ElfTableRow>
+    </ElfTableBody>
+  </ElfTable>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfGradientText`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`, `ElfHoverCard`, `ElfHoverCardContent`, `ElfHoverCardTrigger`, `ElfDropdownMenu`, `ElfDropdownMenuCheckboxItem`, `ElfDropdownMenuContent`, `ElfDropdownMenuGroup`, `ElfDropdownMenuItem`, `ElfDropdownMenuLabel`, `ElfDropdownMenuRadioGroup`, `ElfDropdownMenuRadioItem`, `ElfDropdownMenuSeparator`, `ElfDropdownMenuShortcut`, `ElfDropdownMenuSub`, `ElfDropdownMenuSubContent`, `ElfDropdownMenuSubTrigger`, `ElfDropdownMenuTrigger`, `ElfContextMenu`, `ElfContextMenuCheckboxItem`, `ElfContextMenuContent`, `ElfContextMenuGroup`, `ElfContextMenuItem`, `ElfContextMenuLabel`, `ElfContextMenuRadioGroup`, `ElfContextMenuRadioItem`, `ElfContextMenuSeparator`, `ElfContextMenuShortcut`, `ElfContextMenuSub`, `ElfContextMenuSubContent`, `ElfContextMenuSubTrigger`, `ElfContextMenuTrigger`, `ElfScrollArea`, `ElfScrollBar`, `ElfAlertDialog`, `ElfAlertDialogAction`, `ElfAlertDialogCancel`, `ElfAlertDialogContent`, `ElfAlertDialogDescription`, `ElfAlertDialogFooter`, `ElfAlertDialogHeader`, `ElfAlertDialogTitle`, `ElfAlertDialogTrigger`, `ElfSheet`, `ElfSheetClose`, `ElfSheetContent`, `ElfSheetDescription`, `ElfSheetFooter`, `ElfSheetHeader`, `ElfSheetTitle`, `ElfSheetTrigger`, `ElfToaster`, `ElfCollapsible`, `ElfCollapsibleContent`, `ElfCollapsibleTrigger`, `ElfAccordion`, `ElfAccordionContent`, `ElfAccordionItem`, `ElfAccordionTrigger`, `ElfTable`, `ElfTableBody`, `ElfTableCaption`, `ElfTableCell`, `ElfTableFooter`, `ElfTableHead`, `ElfTableHeader`, `ElfTableRow`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

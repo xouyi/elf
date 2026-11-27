@@ -241,3 +241,15 @@ export {
   AccordionItem as ElfAccordionItem,
   AccordionTrigger as ElfAccordionTrigger,
 } from './components/accordion'
+
+export {
+  Table as ElfTable,
+  TableBody as ElfTableBody,
+  TableCaption as ElfTableCaption,
+  TableCell as ElfTableCell,
+  TableFooter as ElfTableFooter,
+  TableHead as ElfTableHead,
+  TableHeader as ElfTableHeader,
+  TableRow as ElfTableRow,
+} from './components/table'
+export type { TableCaptionProps, TableCellProps, TableDensity, TableHeadProps, TableProps, TableRowProps, TableSectionProps, TableSort } from './components/table'

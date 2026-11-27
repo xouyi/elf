@@ -537,6 +537,25 @@ export const components: ComponentMeta[] = [
     slots: ['ElfAccordionTrigger icon: replaces the chevron'],
     a11y: ['Triggers are buttons inside headings; arrow keys, Home and End move between them and skip disabled items.', 'Use short, specific trigger labels and do not nest accordions.'],
   },
+  {
+    dir: 'table',
+    name: 'Table',
+    summary: 'Semantic styled table on a native table. ElfTable (required caption) wraps ElfTableHeader, ElfTableBody, ElfTableFooter, ElfTableRow, ElfTableHead (th, scope col) and ElfTableCell (td). It scrolls sideways inside its container; stackOnMobile turns rows into cards below sm. The parts are designed so a data table can be composed on them: put a sort button in ElfTableHead and set its sort prop (aria-sort).',
+    parts: ['ElfTable', 'ElfTableCaption', 'ElfTableHeader', 'ElfTableBody', 'ElfTableFooter', 'ElfTableRow', 'ElfTableHead', 'ElfTableCell'],
+    props: [
+      { name: 'ElfTable caption', type: 'string', description: 'Required accessible name, rendered as the table caption.' },
+      { name: 'ElfTable captionHidden', type: 'boolean', default: 'false', description: 'Hide the caption visually; screen readers still read it (attribute: caption-hidden).' },
+      { name: 'ElfTable density', type: '\'compact\' | \'default\' | \'comfortable\'', default: 'default', description: 'Row spacing.' },
+      { name: 'ElfTable stackOnMobile', type: 'boolean', default: 'false', description: 'Below sm, show rows as cards with label: value lines (attribute: stack-on-mobile). Give ElfTableCell a label.' },
+      { name: 'ElfTable stickyHeader', type: 'boolean', default: 'false', description: 'Keep the header visible while scrolling; limit the height with containerClass (attribute: sticky-header).' },
+      { name: 'ElfTable containerClass', type: 'string | array | object', description: 'Classes for the scroll container (attribute: container-class). class goes to the table.' },
+      { name: 'ElfTableHead sort', type: '\'ascending\' | \'descending\' | \'none\' | \'other\'', description: 'Renders aria-sort on the column header.' },
+      { name: 'ElfTableCell label', type: 'string', description: 'Column name shown in stacked mode.' },
+      { name: 'ElfTableRow selected', type: 'boolean', default: 'false', description: 'Marks the row as selected (data-state).' },
+    ],
+    slots: ['ElfTable default: header, body and footer sections', 'ElfTable caption: replaces the caption element'],
+    a11y: ['Always give the table a caption; hide it visually with caption-hidden if a heading already names it.', 'A table that overflows its container becomes a focusable named region so keyboard users can scroll it.', 'Use for tabular data, not for layout.'],
+  },
 ]
 
 export const rules = [

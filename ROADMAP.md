@@ -417,7 +417,7 @@ The structure of an application: navigation chrome, tables, and the dashboard pr
 - **Depends on:** ElfVisuallyHidden
 - **Complexity:** M
 - **Novatron screens:** courses/stock `AdminTable`; activity logs; HQ audit log.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.5)
 
 #### ElfDataTable
 
