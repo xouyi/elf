@@ -22,7 +22,8 @@ export default defineNuxtConfig({
   modules: ['@xouyi/elfui/nuxt', '@nuxt/content'],
   css: ['~/assets/css/main.css'],
   // The docs dogfood ElfUI: every theme are bundled so the switcher and the per-example previews can use either.
-  elfui: { theme: 'elf', themes: ['nova', 'elfwood'] },
+  // The site is prerendered, so the choice is kept in localStorage and applied by the module's inline script before first paint.
+  elfui: { theme: 'elf', themes: ['elf', 'nova', 'elfwood'], persist: 'localStorage' },
   vite: {
     plugins: [tailwindcss()],
     resolve: {

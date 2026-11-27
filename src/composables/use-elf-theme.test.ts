@@ -2,7 +2,7 @@ import type { UseElfThemeOptions, UseElfThemeReturn } from './use-elf-theme'
 import { mount } from '@vue/test-utils'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, nextTick } from 'vue'
-import { elfThemeBootScript, useElfTheme } from './use-elf-theme'
+import { createElfTheme, elfThemeBootScript, provideElfTheme, useElfTheme } from './use-elf-theme'
 
 function setup<T extends string = 'elf' | 'nova'>(options: UseElfThemeOptions<T> = {}) {
   let result!: UseElfThemeReturn<T>
@@ -193,5 +193,100 @@ describe('elfThemeBootScript', () => {
     localStorage.setItem('elfui-theme', 'ocean')
     run(elfThemeBootScript({ themes: ['ocean'] }))
     expect(document.documentElement.dataset.theme).toBe('ocean')
+  })
+})
+
+describe('toggle', () => {
+  it('flips between two themes and cycles through more', () => {
+    const two = setup({ themes: ['elf', 'nova'] as const })
+    two.toggle()
+    expect(two.theme.value).toBe('nova')
+    two.toggle()
+    expect(two.theme.value).toBe('elf')
+    two.wrapper.unmount()
+    const three = setup()
+    three.toggle()
+    three.toggle()
+    expect(three.theme.value).toBe('elfwood')
+    three.toggle()
+    expect(three.theme.value).toBe('elf')
+    three.wrapper.unmount()
+  })
+})
+
+describe('createElfTheme', () => {
+  function withPlugin(config: Parameters<typeof createElfTheme>[0], options: UseElfThemeOptions<string> = {}) {
+    let result!: UseElfThemeReturn<string>
+    const wrapper = mount(defineComponent({
+      setup() {
+        result = useElfTheme<string>(options)
+        return () => h('span', result.theme.value)
+      },
+    }), { global: { plugins: [createElfTheme(config)] } })
+    return { api: result, wrapper }
+  }
+
+  it('gives a zero-argument useElfTheme() the themes, default and persistence of the plugin', async () => {
+    const { api, wrapper } = withPlugin({ themes: ['ocean', 'forest'], defaultTheme: 'forest', persist: 'localStorage' })
+    expect(api.themes).toEqual(['ocean', 'forest'])
+    expect(api.theme.value).toBe('forest')
+    api.setTheme('ocean')
+    expect(localStorage.getItem('elfui-theme')).toBe('ocean')
+    expect(document.documentElement.dataset.theme).toBe('ocean')
+    api.setTheme('rainbow')
+    expect(api.theme.value).toBe('ocean')
+    wrapper.unmount()
+  })
+
+  it('persists in a cookie and not at all when persist is false', () => {
+    const cookie = withPlugin({ persist: 'cookie' })
+    cookie.api.setTheme('nova')
+    expect(document.cookie).toContain('elfui-theme=nova')
+    cookie.wrapper.unmount()
+    clearCookies()
+    const none = withPlugin({ persist: false })
+    none.api.setTheme('nova')
+    expect(document.cookie).not.toContain('elfui-theme')
+    expect(localStorage.getItem('elfui-theme')).toBeNull()
+    none.wrapper.unmount()
+  })
+
+  it('defaults to localStorage and applies the stored choice before the first render', () => {
+    localStorage.setItem('elfui-theme', 'nova')
+    const { api, wrapper } = withPlugin({})
+    expect(api.theme.value).toBe('nova')
+    expect(wrapper.text()).toBe('nova')
+    expect(document.documentElement.dataset.theme).toBe('nova')
+    wrapper.unmount()
+  })
+
+  it('ignores a stored name that is not one of the themes', () => {
+    localStorage.setItem('elfui-theme', 'rainbow')
+    const { api, wrapper } = withPlugin({ themes: ['elf', 'nova'] })
+    expect(api.theme.value).toBe('elf')
+    wrapper.unmount()
+  })
+
+  it('lets explicit options override the plugin defaults', () => {
+    const { api, wrapper } = withPlugin({ themes: ['elf', 'nova'], persist: false }, { storage: 'localStorage' })
+    api.setTheme('nova')
+    expect(localStorage.getItem('elfui-theme')).toBe('nova')
+    wrapper.unmount()
+  })
+
+  it('shares one state between components of the app', () => {
+    const a = withPlugin({})
+    a.api.setTheme('nova')
+    expect(a.api.theme.value).toBe('nova')
+    a.wrapper.unmount()
+  })
+})
+
+describe('provideElfTheme', () => {
+  it('validates the initial theme', () => {
+    const app = { provide() {} } as unknown as Parameters<typeof provideElfTheme>[0]
+    expect(provideElfTheme(app, { initial: 'nova' }).value).toBe('nova')
+    expect(provideElfTheme(app, { initial: 'rainbow' }).value).toBe('elf')
+    expect(provideElfTheme(app, { initial: null, defaultTheme: 'nova' }).value).toBe('nova')
   })
 })

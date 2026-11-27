@@ -546,6 +546,7 @@ export const rules = [
   'Use text-destructive-text for error messages and required markers; bg-destructive is a fill and is too dark for text.',
   'Use text-success-text and text-warning-text for status text and icons; bg-success and bg-warning are fills.',
   'Themes decide light or dark (elf and nova are dark, elfwood is light): never add dark: variants or hard-coded colors.',
+  'To let users switch themes, configure it once (Nuxt module options `themes` and `persist`, or `app.use(createElfTheme({ themes }))` in Vue) and call `useElfTheme()` with no arguments; never write data-theme or cookies by hand.',
   'Do not override border radius with arbitrary values; radii derive from the theme (nova is sharp, 0px).',
   'Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".',
   'Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.',

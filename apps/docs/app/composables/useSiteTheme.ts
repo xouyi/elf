@@ -4,25 +4,12 @@ export const siteThemes: { value: SiteTheme, label: string, swatch: string }[] =
   { value: 'nova', label: 'Nova', swatch: '#ffcc00' },
   { value: 'elfwood', label: 'Elfwood', swatch: '#15803d' },
 ]
-const STORAGE_KEY = 'elfui-theme'
 
-/** Site-wide theme (data-theme on <html>), persisted in localStorage and restored before first paint by an inline head script. */
+/** Site-wide theme (data-theme on <html>). The `elfui` module options in nuxt.config.ts supply the themes, the default and the persistence. */
 export function useSiteTheme() {
-  const theme = useState<SiteTheme>('site-theme', () => 'elf')
-
-  function setTheme(next: SiteTheme) {
-    theme.value = next
-    if (import.meta.client) {
-      try { localStorage.setItem(STORAGE_KEY, next) }
-      catch { /* storage may be blocked; the theme still applies for this visit */ }
-    }
-  }
-
+  const { theme, setTheme } = useElfTheme<SiteTheme>()
   return { theme, setTheme }
 }
-
-/** Inline script (runs before paint) that applies the stored theme so there is no flash of the other theme. */
-export const themeBootScript = `try{var t=localStorage.getItem('${STORAGE_KEY}');if(t==='elf'||t==='nova'||t==='elfwood')document.documentElement.dataset.theme=t}catch(e){}`
 
 /**
  * The site theme as a component should render it. Until the component has mounted it reports the server value ('elf'),

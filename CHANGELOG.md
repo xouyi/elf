@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+
+- Make theme switching a one-line setup. The Nuxt module has a new `persist` option (`'cookie'` by default, `'localStorage'` or `false`); its plugin reads the cookie on the server so `<html data-theme>` is correct in the first HTML (unknown cookie values are ignored), and a zero-argument `useElfTheme()` uses the module's `theme`/`themes`/`persist` automatically. In plain Vue, the new `createElfTheme({ themes, defaultTheme, persist })` plugin provides the same defaults. `useElfTheme()` gains `toggle()` (flips two themes, cycles more). Existing options still work and override the shared defaults. The module also injects the boot script that applies the stored theme before first paint. The `useElfTheme` docs page now starts with a Quick start for Nuxt and Vite.
 ## 0.4.0
 
 - **Breaking: the `novatron` theme is now `nova`.** `data-theme="novatron"` becomes `data-theme="nova"`, the file `@xouyi/elfui/themes/novatron.css` becomes `@xouyi/elfui/themes/nova.css`, the Nuxt option `elfui: { theme: 'novatron' }` becomes `theme: 'nova'` (also in `themes: [...]`), `elfui init --theme novatron` becomes `--theme nova`, and `useElfTheme` values stored as `novatron` (cookie or localStorage) must be migrated to `nova`. No compatibility alias. The tokens are unchanged. To migrate: search your project for `novatron` in HTML, CSS imports, `nuxt.config.ts` and stored theme values, and replace it with `nova`.

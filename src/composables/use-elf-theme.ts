@@ -1,6 +1,6 @@
-import type { Ref } from 'vue'
+import type { App, InjectionKey, Plugin, Ref } from 'vue'
 import type { ElfTheme } from '../lib/themes'
-import { getCurrentInstance, onMounted, readonly, ref } from 'vue'
+import { getCurrentInstance, hasInjectionContext, inject, onMounted, readonly, ref } from 'vue'
 import { elfThemes } from '../lib/themes'
 
 /** Where `useElfTheme` remembers the chosen theme. */
@@ -35,7 +35,39 @@ export interface UseElfThemeReturn<T extends string = ElfTheme> {
   setTheme: (next: T) => void
   /** Activates the next theme of the list, wrapping around at the end. */
   cycle: () => void
+  /** Switches to the other theme when there are two, otherwise activates the next one (same as `cycle`). Bind it to a single button. */
+  toggle: () => void
 }
+
+/** How the choice is remembered: a cookie (readable on the server, so no flash), `localStorage`, or `false` for not at all. */
+export type ElfThemePersist = 'cookie' | 'localStorage' | false
+
+/** Defaults shared with every `useElfTheme()` call of an app. Set by the Nuxt module (`elfui` options) or by `createElfTheme()`. */
+export interface ElfThemeConfig<T extends string = ElfTheme> {
+  /** Theme names the app accepts. Defaults to the shipped themes. */
+  themes?: readonly T[]
+  /** Theme used until something else decides. Defaults to the first entry of `themes`. */
+  defaultTheme?: T
+  /** Where the choice is remembered. Defaults to `localStorage`. */
+  persist?: ElfThemePersist
+  /** Key of the stored value: the localStorage key or the cookie name. Defaults to `elfui-theme`. */
+  storageKey?: string
+  /** Lifetime of the cookie in seconds. Defaults to one year. */
+  cookieMaxAge?: number
+  /** Theme to render first, for example the value read from the request cookie on the server. Unknown names are ignored. */
+  initial?: string | null
+}
+
+interface ElfThemeContext {
+  themes: readonly string[]
+  defaultTheme: string
+  storage: ElfThemeStorage
+  storageKey: string
+  cookieMaxAge: number
+  state: Ref<string>
+}
+
+const contextKey: InjectionKey<ElfThemeContext> = Symbol('elfui-theme')
 
 const DEFAULT_KEY = 'elfui-theme'
 const ONE_YEAR = 60 * 60 * 24 * 365
@@ -83,16 +115,19 @@ function writeStored(storage: ElfThemeStorage, key: string, value: string, maxAg
  * setTheme('nova')
  */
 export function useElfTheme<T extends string = ElfTheme>(options: UseElfThemeOptions<T> = {}): UseElfThemeReturn<T> {
-  const themes = (options.themes ?? elfThemes) as readonly T[]
-  const fallback = options.defaultTheme ?? themes[0]!
-  const storage = options.storage ?? 'none'
-  const key = options.storageKey ?? DEFAULT_KEY
-  const maxAge = options.cookieMaxAge ?? ONE_YEAR
+  // Defaults from the Nuxt module or createElfTheme(). Explicit options always win; own `themes` opt out of the shared state.
+  const shared = getCurrentInstance() || hasInjectionContext() ? inject(contextKey, undefined) : undefined
+  const context = options.themes ? undefined : shared
+  const themes = (options.themes ?? context?.themes ?? elfThemes) as readonly T[]
+  const fallback = options.defaultTheme ?? (context?.defaultTheme as T | undefined) ?? themes[0]!
+  const storage = options.storage ?? context?.storage ?? 'none'
+  const key = options.storageKey ?? context?.storageKey ?? DEFAULT_KEY
+  const maxAge = options.cookieMaxAge ?? context?.cookieMaxAge ?? ONE_YEAR
   const accepts = (value: unknown): value is T => typeof value === 'string' && (themes as readonly string[]).includes(value)
   const element = () => (options.target !== undefined ? options.target : typeof document === 'undefined' ? null : document.documentElement)
 
   const owner = getCurrentInstance()?.appContext.app
-  let store = owner ? stores.get(owner) : fallbackStore
+  let store: Ref<string> | undefined = context?.state ?? (owner ? stores.get(owner) : fallbackStore)
   if (!store) {
     store = ref(accepts(options.initial) ? options.initial : fallback) as Ref<string>
     if (owner)
@@ -133,13 +168,59 @@ export function useElfTheme<T extends string = ElfTheme>(options: UseElfThemeOpt
   else if (typeof document !== 'undefined')
     sync()
 
+  function cycle() {
+    const index = themes.indexOf(state.value as T)
+    setTheme(themes[(index + 1) % themes.length]!)
+  }
+
   return {
     theme: readonly(state) as Readonly<Ref<T>>,
     themes,
     setTheme,
-    cycle() {
-      const index = themes.indexOf(state.value as T)
-      setTheme(themes[(index + 1) % themes.length]!)
+    cycle,
+    toggle: cycle,
+  }
+}
+
+/**
+ * Registers the shared theme defaults on a Vue app and creates its theme state. This is what `createElfTheme()` and the
+ * Nuxt module call; use it directly only to build your own plugin. Returns the app's theme state.
+ */
+export function provideElfTheme<T extends string = ElfTheme>(app: App, config: ElfThemeConfig<T> = {}): Readonly<Ref<T>> {
+  const themes = (config.themes ?? elfThemes) as readonly string[]
+  const defaultTheme = config.defaultTheme ?? themes[0]!
+  const persist = config.persist === undefined ? 'localStorage' : config.persist
+  const storageKey = config.storageKey ?? DEFAULT_KEY
+  const initial = typeof config.initial === 'string' && themes.includes(config.initial) ? config.initial : defaultTheme
+  const state = ref(initial)
+  app.provide(contextKey, {
+    themes,
+    defaultTheme,
+    storage: persist === false ? 'none' : persist,
+    storageKey,
+    cookieMaxAge: config.cookieMaxAge ?? ONE_YEAR,
+    state,
+  })
+  return readonly(state) as Readonly<Ref<T>>
+}
+
+/**
+ * Vue plugin for apps without Nuxt: every `useElfTheme()` and `<ElfThemeSwitcher>` then uses these themes, default and
+ * persistence without further options. On the client the stored choice is applied right away, before the first render.
+ * Pair it with `elfThemeBootScript()` in `index.html` to avoid a flash on load.
+ *
+ * @example
+ * createApp(App).use(createElfTheme({ themes: ['elf', 'nova'], defaultTheme: 'elf', persist: 'localStorage' })).mount('#app')
+ */
+export function createElfTheme<T extends string = ElfTheme>(config: ElfThemeConfig<T> = {}): Plugin {
+  return {
+    install(app) {
+      const key = config.storageKey ?? DEFAULT_KEY
+      const persist = config.persist === undefined ? 'localStorage' : config.persist
+      const stored = config.initial == null && persist && typeof document !== 'undefined' ? readStored(persist, key) : undefined
+      const state = provideElfTheme(app, { ...config, initial: config.initial ?? stored })
+      if (typeof document !== 'undefined' && stored && stored === state.value)
+        document.documentElement.dataset.theme = stored
     },
   }
 }

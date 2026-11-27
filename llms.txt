@@ -11,7 +11,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - [Installation (Vite + Vue)](https://xouyi.github.io/elfUI/docs/getting-started/installation-vite): Vite and Vue setup
 - [Theming](https://xouyi.github.io/elfUI/docs/getting-started/theming): tokens, data-theme, creating a theme
 - [CLI](https://xouyi.github.io/elfUI/docs/getting-started/cli): bunx @xouyi/elfui init, add, list, diff
-- [useElfTheme](https://xouyi.github.io/elfUI/docs/getting-started/use-elf-theme): composable to read, set and persist the theme (SSR-safe)
+- [useElfTheme](https://xouyi.github.io/elfUI/docs/getting-started/use-elf-theme): switch themes in one line: Nuxt module options or createElfTheme() plus useElfTheme() (SSR-safe, persisted, no flash)
 - [Registry](https://xouyi.github.io/elfUI/docs/getting-started/registry): copy components with bunx @xouyi/elfui add (or the shadcn-vue CLI)
 - [Button](https://xouyi.github.io/elfUI/docs/components/button): Triggers an action. Renders a native button; use as-child to render a link or other element.
 - [Input](https://xouyi.github.io/elfUI/docs/components/input): Single-line text input with v-model. A native input: all native attributes fall through.
@@ -63,6 +63,7 @@ ElfUI is source-distributed and published on npm as `@xouyi/elfui` (currently 0.
 - Use text-destructive-text for error messages and required markers; bg-destructive is a fill and is too dark for text.
 - Use text-success-text and text-warning-text for status text and icons; bg-success and bg-warning are fills.
 - Themes decide light or dark (elf and nova are dark, elfwood is light): never add dark: variants or hard-coded colors.
+- To let users switch themes, configure it once (Nuxt module options `themes` and `persist`, or `app.use(createElfTheme({ themes }))` in Vue) and call `useElfTheme()` with no arguments; never write data-theme or cookies by hand.
 - Do not override border radius with arbitrary values; radii derive from the theme (nova is sharp, 0px).
 - Components are auto-imported in Nuxt with the Elf prefix; outside Nuxt import them from "@xouyi/elfui".
 - Always label inputs (label for= or aria-label) and give icon-only buttons an aria-label.
