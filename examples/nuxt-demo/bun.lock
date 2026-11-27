@@ -6,7 +6,7 @@
       "name": "elf-nuxt-demo",
       "dependencies": {
         "@lucide/vue": "1.79.0",
-        "@xouyi/elfui": "^0.4.0",
+        "@xouyi/elfui": "^0.5.0",
         "nuxt": "4.7.0",
         "vue": "3.5.46",
         "vue-router": "5.5.1",
@@ -355,7 +355,13 @@
 
     "@tailwindcss/vite": ["@tailwindcss/vite@4.3.5", "", { "dependencies": { "@tailwindcss/node": "4.3.5", "@tailwindcss/oxide": "4.3.5", "tailwindcss": "4.3.5" }, "peerDependencies": { "vite": "^5.2.0 || ^6 || ^7 || ^8" } }, "sha512-BCNiY0a1ZjdOHVqw7kyb7U72BwfMF3dfUuN+tQsLWky/J5JOI/r7abibglXfygrZhVO/3u3V+E25kkKTeMkXaQ=="],
 
+    "@tanstack/store": ["@tanstack/store@0.11.3", "", {}, "sha512-/Mt3h2Qe67HmRMc5SJ+8jM2Fp7O4fBbwOlS0ujUvx34KgAvkvdLSHrJatv0PJG5fbvlDsACTawMMY4ptCpVI8w=="],
+
+    "@tanstack/table-core": ["@tanstack/table-core@9.3.1", "", { "dependencies": { "@tanstack/store": "^0.11.2" } }, "sha512-zQvlxSNi2qGM3L4jh85Z6hqMfdIR5qOfD9KHOU32nuKFJGN0RlJ7UvV1lsPb1fPVhpFYI0VP3jJGxLdLDpTKjQ=="],
+
     "@tanstack/virtual-core": ["@tanstack/virtual-core@3.19.13", "", {}, "sha512-CyCvMm7m5JuvPW6eMPZkZBZk6diySrlUQNNRpQPiEnh2vakyghx82Hw3wW2THFUsl6xJ6uM4lSUaiA2T0oYW8w=="],
+
+    "@tanstack/vue-table": ["@tanstack/vue-table@9.3.1", "", { "dependencies": { "@tanstack/store": "^0.11.2", "@tanstack/table-core": "9.3.1" }, "peerDependencies": { "vue": ">=3.2" } }, "sha512-7z7nS4UP91rLZ01suGxQBT611ogfBrs7/E+lsKeYS9XdHSRUAzclFvQ4B10F0bC/Q8BrzgXiNH3QzumK7b0Tow=="],
 
     "@tanstack/vue-virtual": ["@tanstack/vue-virtual@3.13.54", "", { "dependencies": { "@tanstack/virtual-core": "3.19.13" }, "peerDependencies": { "vue": "^2.7.0 || ^3.0.0" } }, "sha512-KIZR3xG56QORaFAUOg0oZzhOlxtaLwRw8W6WEeHUtzJ556tgcI2KuaSHy+GHe/tRi5/XOjn4c9BUYDI2zq2XxA=="],
 
@@ -415,7 +421,7 @@
 
     "@vueuse/shared": ["@vueuse/shared@15.1.0", "", { "peerDependencies": { "vue": "^3.5.0" } }, "sha512-JAbQLO+vOULt8MPR4oRbvstBuztTTMIX4LOfCGeBvp9JSgj5OppZDing3gKDrmlyUQvYYFSPIX4dxkfJgdsxWQ=="],
 
-    "@xouyi/elfui": ["@xouyi/elfui@0.4.0", "", { "dependencies": { "@lucide/vue": "1.79.0", "@nuxt/kit": "4.7.0", "@vueuse/core": "15.1.0", "class-variance-authority": "0.7.1", "clsx": "2.1.1", "reka-ui": "2.11.0", "tailwind-merge": "3.7.1" }, "peerDependencies": { "@tailwindcss/vite": "^4.3.0", "nuxt": ">=4.0.0", "tailwindcss": "^4.0.0", "typescript": ">=5.0.0 <7.0.0", "vue": "^3.5.0" }, "optionalPeers": ["nuxt"], "bin": { "elfui": "dist/cli.mjs" } }, "sha512-PfS81TxWtLrNp3zHA0aI7mX8KCaIHe2N523BQwYhztXfkzy/zr63wCEf8+MvnbfWEsVjZV2N46dAAbp8hIEUIA=="],
+    "@xouyi/elfui": ["@xouyi/elfui@0.5.0", "", { "dependencies": { "@lucide/vue": "1.79.0", "@nuxt/kit": "4.7.0", "@tanstack/vue-table": "^9.3.1", "@vueuse/core": "15.1.0", "class-variance-authority": "0.7.1", "clsx": "2.1.1", "reka-ui": "2.11.0", "tailwind-merge": "3.7.1" }, "peerDependencies": { "@tailwindcss/vite": "^4.3.0", "nuxt": ">=4.0.0", "tailwindcss": "^4.0.0", "typescript": ">=5.0.0 <7.0.0", "vue": "^3.5.0" }, "optionalPeers": ["nuxt"], "bin": { "elfui": "dist/cli.mjs" } }, "sha512-p/LjgRU2lj3V51QvbawEL7EXxYD4l80OAaEGerRTIDVLsjYY1ZGKYAByCrOSXJjn2+wZvLJQqj4MVvdlT7RI2Q=="],
 
     "abbrev": ["abbrev@3.0.1", "", {}, "sha512-AO2ac6pjRB3SJmGJo+v5/aK6Omggp6fsLrs6wN9bd35ulu4cCwaAU9+7ZhXjeqHVkaHThLuzH0nZr0YpCDhygg=="],
 
