@@ -354,6 +354,22 @@ export const components: ComponentMeta[] = [
     slots: ['ElfTooltipTrigger default: the described element (use as-child)', 'ElfTooltipContent default: a short plain-text hint'],
     a11y: ['The tooltip describes the trigger (aria-describedby); give the trigger its own name, for example aria-label on an icon button.', 'Opens on hover and keyboard focus, closes on Escape. Never put links, buttons or essential information inside it.', 'Touch screens cannot hover: do not hide information that touch users need behind a tooltip.'],
   },
+  {
+    dir: 'popover',
+    name: 'Popover',
+    summary: 'Anchored interactive panel, built on Reka UI Popover. Compose ElfPopover > ElfPopoverTrigger (as-child around a button) + ElfPopoverContent; ElfPopoverClose closes it, ElfPopoverAnchor anchors it elsewhere. Non-modal by default; modal traps focus.',
+    parts: ['ElfPopover', 'ElfPopoverTrigger', 'ElfPopoverAnchor', 'ElfPopoverContent', 'ElfPopoverClose'],
+    props: [
+      { name: 'ElfPopover open / defaultOpen', type: 'boolean', description: 'Controlled (v-model:open) or initial open state.' },
+      { name: 'ElfPopover modal', type: 'boolean', default: 'false', description: 'Trap focus and make the page behind inert.' },
+      { name: 'ElfPopoverContent side', type: '\'top\' | \'right\' | \'bottom\' | \'left\'', default: 'bottom', description: 'Preferred side; flips when there is no room.' },
+      { name: 'ElfPopoverContent align', type: '\'start\' | \'center\' | \'end\'', default: 'center', description: 'Alignment against the trigger.' },
+      { name: 'ElfPopoverContent sideOffset', type: 'number', default: '4', description: 'Gap to the trigger in pixels (attribute: side-offset).' },
+      { name: 'class', type: 'string | array | object', description: 'Accepted by ElfPopoverContent; merged with base classes (default width w-72).' },
+    ],
+    slots: ['ElfPopoverTrigger default: the toggle (use as-child)', 'ElfPopoverContent default: the panel content'],
+    a11y: ['The panel is role=dialog; focus moves in on open and returns to the trigger on close; Escape closes.', 'Name the panel with aria-label or aria-labelledby when it has no visible heading.', 'Use a tooltip for non-interactive hints and a dialog or sheet for long content.'],
+  },
 ]
 
 export const rules = [

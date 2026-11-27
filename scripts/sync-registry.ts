@@ -45,6 +45,7 @@ const meta: Record<string, { title: string, description: string, dependencies: s
   alert: { title: 'Alert', description: 'Static message with default, destructive, success and warning variants and live region handling.', dependencies: ['class-variance-authority', '@lucide/vue'] },
   progress: { title: 'Progress', description: 'Determinate and indeterminate progress bar built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
   avatar: { title: 'Avatar', description: 'Image with initials fallback, four sizes and an overlapping group, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core', 'class-variance-authority'] },
+  popover: { title: 'Popover', description: 'Anchored interactive panel with trigger, anchor and close parts, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
   tooltip: { title: 'Tooltip', description: 'Short non-interactive hint on hover or focus with a shared delay provider, built on Reka UI.', dependencies: ['reka-ui', '@vueuse/core'] },
   'visually-hidden': { title: 'Visually Hidden', description: 'Hides content visually while keeping it available to assistive technology.', dependencies: ['reka-ui'] },
 }

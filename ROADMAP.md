@@ -259,7 +259,7 @@ Floating surfaces, menus and the first feedback surface that appears over the pa
 - **Depends on:** none
 - **Complexity:** M
 - **Novatron screens:** courses `AdminFilterBar` extra filters; stock filters.
-- **Status:** planned
+- **Status:** shipped (unreleased, v0.4)
 
 #### ElfHoverCard
 

@@ -119,3 +119,12 @@ export {
   TooltipTrigger as ElfTooltipTrigger,
 } from './components/tooltip'
 export type { TooltipContentProps } from './components/tooltip'
+
+export {
+  Popover as ElfPopover,
+  PopoverAnchor as ElfPopoverAnchor,
+  PopoverClose as ElfPopoverClose,
+  PopoverContent as ElfPopoverContent,
+  PopoverTrigger as ElfPopoverTrigger,
+} from './components/popover'
+export type { PopoverContentProps } from './components/popover'

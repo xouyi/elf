@@ -90,7 +90,7 @@ bunx @xouyi/elfui add button --overwrite     # replace a changed local copy (nev
 bunx shadcn-vue@latest add https://xouyi.github.io/elfUI/r/button.json
 ```
 
-The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, tooltip, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
+The same files work with shadcn-vue. Register `"@elf": "https://xouyi.github.io/elfUI/r/{name}.json"` under `registries` in components.json and run `bunx shadcn-vue@latest add @elf/button @elf/elf-theme`. Items: utils, button, input, badge, card, dialog, tabs, visually-hidden, label, separator, kbd, spinner, skeleton, textarea, field, checkbox, radio-group, switch, select, alert, progress, avatar, tooltip, popover, elf-theme. Fallback host: https://raw.githubusercontent.com/xouyi/elfUI/main/registry/r/{name}.json
 
 ## Theming
 
@@ -2957,8 +2957,157 @@ import { ElfButton, ElfKbd, ElfTooltip, ElfTooltipContent, ElfTooltipTrigger } f
 </template>
 ```
 
+### Popover
+
+Anchored interactive panel, built on Reka UI Popover. Compose ElfPopover > ElfPopoverTrigger (as-child around a button) + ElfPopoverContent; ElfPopoverClose closes it, ElfPopoverAnchor anchors it elsewhere. Non-modal by default; modal traps focus.
+
+Components: `ElfPopover`, `ElfPopoverTrigger`, `ElfPopoverAnchor`, `ElfPopoverContent`, `ElfPopoverClose`
+
+Props:
+
+- `ElfPopover open / defaultOpen` (boolean): Controlled (v-model:open) or initial open state.
+- `ElfPopover modal` (boolean, default false): Trap focus and make the page behind inert.
+- `ElfPopoverContent side` ('top' | 'right' | 'bottom' | 'left', default bottom): Preferred side; flips when there is no room.
+- `ElfPopoverContent align` ('start' | 'center' | 'end', default center): Alignment against the trigger.
+- `ElfPopoverContent sideOffset` (number, default 4): Gap to the trigger in pixels (attribute: side-offset).
+- `class` (string | array | object): Accepted by ElfPopoverContent; merged with base classes (default width w-72).
+
+Slots:
+
+- ElfPopoverTrigger default: the toggle (use as-child)
+- ElfPopoverContent default: the panel content
+
+Accessibility:
+
+- The panel is role=dialog; focus moves in on open and returns to the trigger on close; Escape closes.
+- Name the panel with aria-label or aria-labelledby when it has no visible heading.
+- Use a tooltip for non-interactive hints and a dialog or sheet for long content.
+
+Examples:
+
+#### Controlled
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfPopover, ElfPopoverClose, ElfPopoverContent, ElfPopoverTrigger } from '@xouyi/elfui'
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-3">
+    <ElfPopover v-model:open="open">
+      <ElfPopoverTrigger as-child>
+        <ElfButton variant="outline">
+          Filters
+        </ElfButton>
+      </ElfPopoverTrigger>
+      <ElfPopoverContent class="grid gap-3">
+        <p class="text-sm">
+          Show only items that are low in stock.
+        </p>
+        <ElfPopoverClose as-child>
+          <ElfButton size="sm">
+            Apply
+          </ElfButton>
+        </ElfPopoverClose>
+      </ElfPopoverContent>
+    </ElfPopover>
+    <p class="text-sm text-muted-foreground">
+      open = {{ open }}
+    </p>
+  </div>
+</template>
+```
+
+#### Default
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfInput, ElfLabel, ElfPopover, ElfPopoverContent, ElfPopoverTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <ElfPopover>
+    <ElfPopoverTrigger as-child>
+      <ElfButton variant="outline">
+        Rename item
+      </ElfButton>
+    </ElfPopoverTrigger>
+    <ElfPopoverContent>
+      <div class="grid gap-3">
+        <p class="text-sm font-medium">
+          Rename item
+        </p>
+        <div class="grid gap-2">
+          <ElfLabel for="popover-name">
+            Name
+          </ElfLabel>
+          <ElfInput id="popover-name" default-value="Battery 12V" />
+        </div>
+      </div>
+    </ElfPopoverContent>
+  </ElfPopover>
+</template>
+```
+
+#### Modal
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfPopover, ElfPopoverContent, ElfPopoverTrigger } from '@xouyi/elfui'
+</script>
+
+<template>
+  <!-- modal traps focus and makes the page behind inert, like a dialog anchored to its trigger. -->
+  <ElfPopover modal>
+    <ElfPopoverTrigger as-child>
+      <ElfButton variant="outline">
+        Modal popover
+      </ElfButton>
+    </ElfPopoverTrigger>
+    <ElfPopoverContent class="grid gap-3">
+      <p class="text-sm">
+        Focus stays inside until you press Escape or choose an action.
+      </p>
+      <ElfButton size="sm" variant="secondary">
+        Confirm
+      </ElfButton>
+    </ElfPopoverContent>
+  </ElfPopover>
+</template>
+```
+
+#### Sides
+
+```vue
+<script setup lang="ts">
+import { ElfButton, ElfPopover, ElfPopoverContent, ElfPopoverTrigger } from '@xouyi/elfui'
+
+const sides = ['top', 'right', 'bottom', 'left'] as const
+</script>
+
+<template>
+  <div class="flex flex-wrap gap-2">
+    <ElfPopover v-for="side in sides" :key="side">
+      <ElfPopoverTrigger as-child>
+        <ElfButton variant="outline" size="sm" class="capitalize">
+          {{ side }}
+        </ElfButton>
+      </ElfPopoverTrigger>
+      <ElfPopoverContent :side="side" class="w-56">
+        <p class="text-sm">
+          Opens on the {{ side }} and flips when there is no room.
+        </p>
+      </ElfPopoverContent>
+    </ElfPopover>
+  </div>
+</template>
+```
+
 ## Exports from "@xouyi/elfui"
 
-- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`
+- Components: `ElfButton`, `ElfInput`, `ElfBadge`, `ElfCard`, `ElfCardAction`, `ElfCardContent`, `ElfCardDescription`, `ElfCardFooter`, `ElfCardHeader`, `ElfCardTitle`, `ElfDialog`, `ElfDialogClose`, `ElfDialogContent`, `ElfDialogDescription`, `ElfDialogFooter`, `ElfDialogHeader`, `ElfDialogOverlay`, `ElfDialogTitle`, `ElfDialogTrigger`, `ElfTabs`, `ElfTabsContent`, `ElfTabsList`, `ElfTabsTrigger`, `ElfVisuallyHidden`, `ElfLabel`, `ElfSeparator`, `ElfKbd`, `ElfKbdGroup`, `ElfSpinner`, `ElfSkeleton`, `ElfTextarea`, `ElfField`, `ElfFieldControl`, `ElfFieldDescription`, `ElfFieldError`, `ElfFieldLabel`, `ElfCheckbox`, `ElfRadioGroup`, `ElfRadioGroupItem`, `ElfSwitch`, `ElfSelect`, `ElfSelectContent`, `ElfSelectGroup`, `ElfSelectItem`, `ElfSelectLabel`, `ElfSelectScrollDownButton`, `ElfSelectScrollUpButton`, `ElfSelectSeparator`, `ElfSelectTrigger`, `ElfSelectValue`, `ElfAlert`, `ElfAlertDescription`, `ElfAlertTitle`, `ElfProgress`, `ElfAvatar`, `ElfAvatarFallback`, `ElfAvatarGroup`, `ElfAvatarImage`, `ElfTooltip`, `ElfTooltipContent`, `ElfTooltipProvider`, `ElfTooltipTrigger`, `ElfPopover`, `ElfPopoverAnchor`, `ElfPopoverClose`, `ElfPopoverContent`, `ElfPopoverTrigger`
 - Helpers: `cn`, `buttonVariants`, `badgeVariants`, `elfThemes`
 - Types: `ButtonProps`, `ButtonVariants`, `BadgeProps`, `BadgeVariants`, `ElfTheme`

@@ -635,6 +635,45 @@
       ]
     },
     {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Anchored interactive panel with trigger, anchor and close parts, built on Reka UI.",
+      "dependencies": [
+        "reka-ui",
+        "@vueuse/core"
+      ],
+      "registryDependencies": [
+        "https://xouyi.github.io/elfUI/r/utils.json"
+      ],
+      "files": [
+        {
+          "path": "registry/_generated/ui/popover/Popover.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/popover/PopoverAnchor.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/popover/PopoverClose.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/popover/PopoverContent.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/popover/PopoverTrigger.vue",
+          "type": "registry:ui"
+        },
+        {
+          "path": "registry/_generated/ui/popover/index.ts",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "tooltip",
       "type": "registry:ui",
       "title": "Tooltip",

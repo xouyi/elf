@@ -54,6 +54,9 @@ import DialogControlled from '../../src/components/dialog/examples/Controlled.vu
 import DialogDefault from '../../src/components/dialog/examples/Default.vue'
 import TabsControlled from '../../src/components/tabs/examples/Controlled.vue'
 import TabsDefault from '../../src/components/tabs/examples/Default.vue'
+import PopoverControlled from '../../src/components/popover/examples/Controlled.vue'
+import PopoverDefault from '../../src/components/popover/examples/Default.vue'
+import PopoverModal from '../../src/components/popover/examples/Modal.vue'
 import TooltipControlled from '../../src/components/tooltip/examples/Controlled.vue'
 import TooltipDefault from '../../src/components/tooltip/examples/Default.vue'
 import TooltipIconButtons from '../../src/components/tooltip/examples/IconButtons.vue'
@@ -1085,6 +1088,68 @@ describe.each(themes)('behavior in the %s theme', (theme) => {
       const [a, b] = [avatars[0]!.getBoundingClientRect(), avatars[1]!.getBoundingClientRect()]
       expect(b.left, 'each avatar overlaps the previous one').toBeLessThan(a.right)
       expect(getComputedStyle(avatars[0]!).boxShadow).not.toBe('none')
+    })
+  })
+
+  describe('Popover', () => {
+    const panel = () => document.querySelector<HTMLElement>('[data-slot="popover-content"]')
+
+    it('moves focus into the panel on open, closes on Escape and returns focus to the trigger', async () => {
+      setTheme(theme)
+      const { el } = await show(PopoverDefault)
+      const trigger = el.querySelector<HTMLElement>('[aria-haspopup="dialog"]')!
+      await userEvent.tab()
+      expect(document.activeElement).toBe(trigger)
+      await userEvent.keyboard('{Enter}')
+      await settle(200)
+      expect(panel()).not.toBeNull()
+      expect(trigger.getAttribute('aria-expanded')).toBe('true')
+      expect(panel()!.contains(document.activeElement), 'focus moved into the panel').toBe(true)
+      await userEvent.keyboard('{Escape}')
+      await settle(200)
+      expect(panel()).toBeNull()
+      expect(document.activeElement, 'focus returned to the trigger').toBe(trigger)
+    })
+
+    it('opens with Space and closes when focus moves outside it by clicking elsewhere', async () => {
+      setTheme(theme)
+      await show(PopoverDefault)
+      await userEvent.tab()
+      await userEvent.keyboard(' ')
+      await settle(200)
+      expect(panel()).not.toBeNull()
+      await userEvent.click(document.body)
+      await settle(200)
+      expect(panel()).toBeNull()
+    })
+
+    it('a close part closes it and v-model:open follows', async () => {
+      setTheme(theme)
+      const { el } = await show(PopoverControlled)
+      expect(el.textContent).toContain('open = false')
+      await userEvent.click(el.querySelector<HTMLElement>('button')!)
+      await settle(200)
+      expect(el.textContent).toContain('open = true')
+      const apply = [...document.querySelectorAll<HTMLElement>('[data-slot="popover-content"] button')].find(b => b.textContent?.trim() === 'Apply')!
+      await userEvent.click(apply)
+      await settle(200)
+      expect(panel()).toBeNull()
+      expect(el.textContent).toContain('open = false')
+    })
+
+    it('modal traps Tab inside the panel and makes the page behind inert to assistive tech', async () => {
+      setTheme(theme)
+      const { el } = await show(PopoverModal)
+      await userEvent.click(el.querySelector<HTMLElement>('button')!)
+      await settle(200)
+      for (let i = 0; i < 6; i++) {
+        await userEvent.tab()
+        expect(panel()!.contains(document.activeElement), `focus stayed inside after Tab #${i + 1}`).toBe(true)
+      }
+      expect(el.querySelector('button')!.closest('[aria-hidden="true"]')).not.toBeNull()
+      await userEvent.keyboard('{Escape}')
+      await settle(200)
+      expect(panel()).toBeNull()
     })
   })
 

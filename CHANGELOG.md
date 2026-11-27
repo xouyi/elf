@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Add `ElfTooltip`, `ElfTooltipTrigger`, `ElfTooltipContent` and `ElfTooltipProvider`, built on the Reka UI Tooltip primitive: opens on hover and keyboard focus, closes on Escape, hoverable content, a shared open delay through the provider (400 ms by default), `side`/`align`, `v-model:open`, and a standalone mode that creates its own provider.
+- Add `ElfPopover`, `ElfPopoverTrigger`, `ElfPopoverAnchor`, `ElfPopoverContent` and `ElfPopoverClose`, built on the Reka UI Popover primitive: anchored interactive panel, `v-model:open`, `side`/`align`, optional `modal` focus trap, focus moves in and returns to the trigger, Escape and outside click close, never exceeds the viewport.
 
 ## 0.4.0
 
