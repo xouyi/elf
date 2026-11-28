@@ -104,7 +104,7 @@ keyboard accessible, no `class*='size-'` selectors with escaped quotes (use `[cl
 
 ## The quality gate
 
-`bun run check` runs, in order:
+`bun run check` runs `bun run check:fast` (every step below except the `browser` project of step 3) and then the browser tests. In order:
 
 1. `typecheck`: `vue-tsc` over sources, examples, scripts and tests.
 2. `lint`: ESLint with `@antfu/eslint-config` (Vue + TypeScript). `bun run lint:fix` autofixes.
@@ -144,9 +144,9 @@ Docker image (`mcr.microsoft.com/playwright:v1.64.0-noble`), by the **Visual bas
 generated on your machine. To update baselines after an intentional visual change:
 
 1. Open a pull request with the change. The **Visual regression** job fails and uploads the `visual-report` artifact.
-2. Run **Actions - Visual baselines - Run workflow** on the pull request branch. It commits the changed PNGs to the branch.
+2. Run `bun run baselines` on the pull request branch (or **Actions - Visual baselines - Run workflow**). It commits the changed PNGs to the branch.
 3. Review the PNG diff in the pull request's **Files changed** tab; every changed image must be explained by the change.
-4. Push an empty commit (pushes by the workflow do not start CI) so the required checks run, then merge.
+4. `bun run baselines` re-pushes the commit under your name, which starts the required checks. After a manual workflow run, push an empty commit instead (pushes by the workflow do not start CI). Then merge.
 
 A new example fails with "A snapshot doesn't exist" until the workflow has run once for it. Delete the PNGs of removed
 examples in the same pull request. To debug the harness locally, `bun run docs:build` and
@@ -156,21 +156,35 @@ examples in the same pull request. To debug the harness locally, `bun run docs:b
 
 - **pre-push** (installed by `bun install` through `simple-git-hooks`): `bun run prepush` = typecheck + lint + unit tests.
   Fast on purpose; bypass only in emergencies with `git push --no-verify`.
-- **CI** (`.github/workflows/ci.yml`, on push and pull request to `main`, Bun + Node 22): the full `bun run check`
-  (**Check**, includes the browser tests), the blocking Playwright **Visual regression** job, and **Build example**. The built docs site is uploaded as an artifact. The docs site (`apps/docs`), the registry and
-  the llms files are deployed to GitHub Pages at `https://xouyi.github.io/elfUI/` only after CI succeeds on `main`. A separate workflow builds `examples/nuxt-demo`. The CLI is tested by unit tests and by an end-to-end test of the built binary against temporary projects and the local `registry/r` (no network); both run inside `bun run check`.
-
-Commits are small and in English, written in the imperative mood ("Add Tooltip component").
+- **CI** (`.github/workflows/ci.yml`, on push and pull request to `main`, Bun + Node 22). The slow suites run as parallel shards so a pull
+  request finishes in about 4 minutes: **Static checks and docs** (`bun run check:fast`), **Browser tests** in 3 shards
+  (`vitest --project browser --shard=i/3`) and **Visual regression** in 3 shards (`playwright test --shard=i/3`). The small **Check** and
+  **Visual regression** summary jobs pass only when every shard passed; they are the names branch protection requires, together with
+  **Build example**. The built docs site is uploaded as an artifact. The docs site (`apps/docs`), the registry and
+  the llms files are deployed to GitHub Pages at `https://xouyi.github.io/elfUI/` only after CI succeeds on `main`. A separate workflow builds `examples/nuxt-demo`. The CLI is tested by unit tests and by an end-to-end test of the built binary against temporary projects and the local `registry/r` (no network); both run in `bun run check:fast`.
+- **Visual baselines** (`.github/workflows/visual-baselines.yml`, manual): renders every screenshot in the Playwright Docker image in 3 shards
+  and commits the merged set to the branch. Run it with `bun run baselines` from a pull request branch: it pushes, starts the workflow,
+  waits (about 3 minutes), pulls the baselines commit and re-authors it with your git identity.
 
 ## Releasing
 
-1. Add a `## x.y.z` section to `CHANGELOG.md` (rename the Unreleased section) and commit it on `main`.
-2. Run `bun run release x.y.z` (`x.y.z-beta.N` for a prerelease). It refuses unless the working tree is clean, you are on `main`, the changelog has the
-   section, and `bun run check` passes. It then bumps `package.json`, commits `Release vx.y.z` and creates the tag `vx.y.z`. It never pushes.
-3. Publish: `git push origin main --follow-tags`. The **Release** workflow (`.github/workflows/release.yml`) then verifies that the tag equals
-   the `package.json` version, runs `bun run check`, publishes `@xouyi/elfui` to npm with provenance and creates the GitHub Release from the changelog section.
-   Prereleases are published with the `next` dist-tag, so `bun add @xouyi/elfui` keeps resolving to the last stable version.
-4. After the first npm release, switch `examples/nuxt-demo` to `"@xouyi/elfui": "^x.y.z"` (see its README).
+A small fix goes from branch to npm in about 10 minutes:
+
+1. On a branch: make the change and add a line under `## Unreleased` at the top of `CHANGELOG.md` (create the heading if it is missing).
+2. If the change alters how something looks: `bun run baselines`.
+3. Open the pull request; when **Check**, **Visual regression** and **Build example** are green (about 4 minutes), merge it.
+4. On an up-to-date `main`: `bun run release patch` (or `minor`, `major`, an explicit `x.y.z`, or `x.y.z-beta.N` for a prerelease).
+   It refuses unless the tree is clean and you are on `main`, renames `## Unreleased` to `## x.y.z`, runs a quick gate
+   (typecheck, lint, unit tests, registry and llms up to date; about 1 minute. The docs build, browser and visual suites already passed on
+   the pull request; `--full` runs `bun run check` instead),
+   bumps `package.json`, regenerates the llms files, commits `Release vx.y.z` and creates the tag `vx.y.z`.
+5. Publish and push: `bunx npm@latest publish --access public --provenance=false` (while npm Trusted Publishing is not set up), then
+   `git push origin main vx.y.z`. Once Trusted Publishing works, skip the manual publish and use `bun run release patch --push`.
+   The **Release** workflow (`.github/workflows/release.yml`) verifies that the tag equals the `package.json` version, runs a quick
+   typecheck and unit test pass, publishes `@xouyi/elfui` to npm with provenance unless that version is already there, and creates the
+   GitHub Release from the changelog section (about 1 minute). Prereleases are published with the `next` dist-tag, so `bun add @xouyi/elfui`
+   keeps resolving to the last stable version.
+6. After a release, switch `examples/nuxt-demo` to `"@xouyi/elfui": "^x.y.z"` (see its README).
 
 ## Publishing to npm (one-time setup)
 

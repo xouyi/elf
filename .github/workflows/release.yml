@@ -35,8 +35,8 @@ jobs:
           key: bun-${{ hashFiles('bun.lock') }}
           restore-keys: bun-
       - run: bun install --frozen-lockfile
-      - run: bunx playwright install --with-deps chromium
-      - run: bun run check
+      # The full gate already ran on the pull request and on main; the tag only adds the version bump. Re-check the cheap parts.
+      - run: bun run typecheck && bun run test:unit && bun run llms:check
 
       - name: Verify the tag matches package.json
         id: version

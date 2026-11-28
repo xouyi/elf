@@ -1,6 +1,5 @@
 name: CI
 
-# Quality gate: nothing is accepted unless this workflow is green. The Docs workflow only deploys after it succeeds.
 on:
   push:
     branches: [main]
@@ -11,9 +10,11 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# The slow suites run as parallel shards. "Check" and "Visual regression" are small summary jobs that only pass when every
+# shard passed: they keep the names branch protection requires.
 jobs:
-  check:
-    name: Check
+  static:
+    name: Static checks and docs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -27,43 +28,84 @@ jobs:
           key: bun-${{ hashFiles('bun.lock') }}
           restore-keys: bun-
       - run: bun install --frozen-lockfile
-      # Real Chromium (Playwright) runs the browser tests (axe in both themes, keyboard and focus behavior) in `bun run test`.
       - run: bunx playwright install --with-deps chromium
-      # typecheck, lint, unit + browser tests, contrast, registry and llms.txt freshness, docs site build, playground build.
-      - run: bun run check
+      - run: bun run check:fast
       - uses: actions/upload-artifact@v4
         with:
           name: docs-site
           path: apps/docs/.output/public
           retention-days: 7
 
-  visual:
-    name: Visual regression
+  browser:
+    name: Browser tests (${{ matrix.shard }}/3)
     runs-on: ubuntu-latest
-    # Baselines must be rendered in exactly this image; see CONTRIBUTING.md.
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-
+      - run: bun install --frozen-lockfile
+      - run: bunx playwright install --with-deps chromium
+      - run: bunx vitest run --project browser --shard=${{ matrix.shard }}/3
+
+  check:
+    name: Check
+    if: always()
+    needs: [static, browser]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every check shard to pass
+        run: |
+          echo "static=${{ needs.static.result }} browser=${{ needs.browser.result }}"
+          [ "${{ needs.static.result }}" = success ] && [ "${{ needs.browser.result }}" = success ]
+
+  visual-shard:
+    name: Visual regression (${{ matrix.shard }}/3)
+    runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.64.0-noble
       env:
         HOME: /root
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
     steps:
       - uses: actions/checkout@v4
-      # The Playwright image has no unzip, which setup-bun needs to unpack Bun.
       - run: apt-get update && apt-get install -y --no-install-recommends unzip
       - uses: oven-sh/setup-bun@v2
       - uses: actions/setup-node@v4
         with:
           node-version: 22
       - run: bun install --frozen-lockfile
-      # Builds the docs site, serves it under /elfUI/ and screenshots every example in isolation
-      # (/__examples/<component>/<example>) in both themes at 1280 and 360 px, comparing against
-      # tests/visual/__screenshots__. A missing baseline fails the job: run the "Visual baselines" workflow first.
       - run: bun run docs:build
-      - run: bun run test:visual
+      - run: bun run test:visual --shard=${{ matrix.shard }}/3
       - if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: visual-report
+          name: visual-report-${{ matrix.shard }}
           path: |
             playwright-report
             test-results
           retention-days: 7
+
+  visual:
+    name: Visual regression
+    if: always()
+    needs: [visual-shard]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every visual shard to pass
+        run: |
+          echo "visual=${{ needs.visual-shard.result }}"
+          [ "${{ needs.visual-shard.result }}" = success ]

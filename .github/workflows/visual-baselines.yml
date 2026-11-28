@@ -1,26 +1,26 @@
 name: Visual baselines
 
-# Regenerates tests/visual/__screenshots__ inside the same Playwright image the CI visual job uses,
-# then commits the result to the branch the workflow was run on. Run it from the Actions tab ("Run workflow",
-# choose the PR branch, never main) after an intentional visual change, and once to create the first baselines.
-# Review the PNG diff in the pull request before merging. A push made with the default token does not start
-# CI, so push an empty commit (or re-run the "Visual regression" job) afterwards to get the checks green.
 on:
   workflow_dispatch:
 
 permissions:
   contents: write
 
+# Three shards render their part of the screenshots in the official Playwright image; one job merges them and commits.
 jobs:
-  update:
+  render:
+    name: Render baselines (${{ matrix.shard }}/3)
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.64.0-noble
       env:
         HOME: /root
+    strategy:
+      fail-fast: true
+      matrix:
+        shard: [1, 2, 3]
     steps:
       - uses: actions/checkout@v4
-      # The Playwright image has no unzip, which setup-bun needs to unpack Bun.
       - run: apt-get update && apt-get install -y --no-install-recommends unzip
       - uses: oven-sh/setup-bun@v2
       - uses: actions/setup-node@v4
@@ -28,18 +28,32 @@ jobs:
           node-version: 22
       - run: bun install --frozen-lockfile
       - run: bun run docs:build
-      # Rewrites every baseline PNG that changed; unchanged files are left byte-identical.
-      - run: bun run test:visual:update
+      # Every shard renders its own tests from scratch, so the merged set is complete and drops screenshots of removed examples.
+      - run: rm -rf tests/visual/__screenshots__
+      - run: bunx playwright test --update-snapshots=all --shard=${{ matrix.shard }}/3
       - uses: actions/upload-artifact@v4
         with:
-          name: visual-baselines
+          name: visual-baselines-${{ matrix.shard }}
           path: tests/visual/__screenshots__
+          retention-days: 7
+
+  commit:
+    name: Commit baselines
+    needs: render
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: rm -rf tests/visual/__screenshots__
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: visual-baselines-*
+          path: tests/visual/__screenshots__
+          merge-multiple: true
       - name: Commit baselines
         run: |
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add tests/visual/__screenshots__
+          git add -A tests/visual/__screenshots__
           if git diff --cached --quiet; then
             echo "Baselines unchanged."
           else
