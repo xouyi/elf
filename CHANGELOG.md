@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.5.3
 
 - Theme: the `elf` theme's text field, textarea and select borders (`--elf-field`) are now neutral grey `#6b6b6b` (3.94:1) instead of violet.
 
