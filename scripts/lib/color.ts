@@ -80,6 +80,7 @@ export const textPairs: Array<[string, string]> = [
 /** UI component boundaries need 3:1. */
 export const uiPairs: Array<[string, string]> = [
   ['input', 'background'],
+  ['field', 'background'], // text field, textarea and select borders
   ['ring', 'background'],
 ]
 

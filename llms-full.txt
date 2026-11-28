@@ -140,6 +140,7 @@ Tokens (CSS variables `--elf-<name>`, Tailwind utilities `bg-<name>`, `text-<nam
 | warning-text | `oklch(0.82 0.15 85)` | `#92400e` | `#f59e0b` |
 | border | `#262626` | `#c8dbcc` | `#27272a` |
 | input | `oklch(0.47 0.04 293)` | `#6f8a77` | `#71717a` |
+| field | `oklch(0.55 0.06 293)` | `#6f8a77` | `#71717a` |
 | ring | `oklch(0.7 0.16 293)` | `#15803d` | `#ffcc00` |
 | radius | `0.625rem` | `0.5rem` | `0px` |
 | radius-pill | `9999px` | `9999px` | `0px` |

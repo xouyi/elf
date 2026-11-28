@@ -38,6 +38,7 @@
   --color-warning-text: var(--elf-warning-text);
   --color-border: var(--elf-border);
   --color-input: var(--elf-input);
+  --color-field: var(--elf-field, var(--elf-input));
   --color-ring: var(--elf-ring);
 
   --radius-sm: max(0px, calc(var(--elf-radius) - 4px));
