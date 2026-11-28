@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.5.6
 
 - Theme: new optional `--elf-outline` token (`border-outline`) for outline buttons, outline toggles and the selected pagination item, falling back to `--elf-input`. `nova` sets it to the soft `#363636` used by its text fields, so outline buttons and toggles no longer show a bright border. Checkboxes, radios and switches keep `--elf-input` (3:1). `elf` and `elfwood` are unchanged.
 
