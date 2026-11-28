@@ -2,7 +2,7 @@
 
 This is the plan for taking ElfUI from the current six components to a complete, professional component library at v1.0. It is the working document for contributors: every entry names the primitive it builds on, how it is made accessible, what it depends on, and which Novatron screens need it. The order inside each milestone is the build order.
 
-Status legend: **done** (shipped), **planned** (not started). Complexity: **S** (about a day, single file), **M** (a few days, several parts or non-trivial behaviour), **L** (a week or more, composed behaviour or third-party dependency).
+Status legend: **shipped (vX.Y.Z)** (released in that version), **shipped (unreleased, vX.Y)** (merged, not yet released), **planned** (not started). Complexity: **S** (about a day, single file), **M** (a few days, several parts or non-trivial behaviour), **L** (a week or more, composed behaviour or third-party dependency).
 
 ## Contents
 
@@ -867,7 +867,7 @@ Copy this checklist into the pull request. All boxes are required unless marked 
 - [ ] **Source.** `src/components/<name>/` with one `.vue` file per part, `index.ts` exporting the parts, `<Name>Props` types and `<name>Variants`, wired into `src/index.ts`. Uses semantic tokens only; works in `elf` and `nova` themes and at `--radius: 0`.
 - [ ] **Types.** Strict TypeScript, no `any`, no unexported prop types; `bun run typecheck` and `bun run lint` pass.
 - [ ] **Examples.** `src/components/<name>/examples/*.vue`: at least `Default`, every variant, every size, `Disabled`, and one realistic composition. Examples are the single source for docs, tests and visual baselines.
-- [ ] **Docs page.** `apps/docs/content/components/<name>.md` with Installation (package and registry command), Usage, Examples via `<ComponentPreview>`, generated API reference (props, emits, slots), Accessibility (keyboard table and ARIA roles, with APG link), Theming (tokens used).
+- [ ] **Docs page.** `apps/docs/content/docs/2.components/NN.<name>.md` (next free number) with Installation (package and registry command), Usage, Examples via `<ComponentPreview>`, generated API reference (props, emits, slots), Accessibility (keyboard table and ARIA roles, with APG link), Theming (tokens used).
 - [ ] **Unit test.** Vitest (happy-dom): variant classes, `v-model`, `asChild`, props passthrough, edge cases.
 - [ ] **Browser a11y test.** Vitest browser mode: every example mounted in every theme, axe-core with zero violations; interaction tests for focus management, Escape, arrow-key behaviour, focus return and typeahead where the pattern defines them.
 - [ ] **Visual baselines.** Default examples captured by Playwright at 1280px and 360px in every theme, generated in the Playwright Docker image through the baselines workflow; PNG diff reviewed in the pull request.

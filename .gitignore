@@ -15,6 +15,9 @@ CLAUDE.md
 GEMINI.md
 RULES.md
 DESIGN.md
+ARCHITECTURE.md
+WORKFLOW.md
+COMPONENT-GUIDE.md
 .claude/
 .cursor/
 .gemini/
