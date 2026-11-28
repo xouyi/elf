@@ -27,6 +27,7 @@
   --elf-warning-text: oklch(0.82 0.15 85);
   --elf-border: #262626;
   --elf-input: oklch(0.47 0.04 293);
+  --elf-field: oklch(0.55 0.06 293);
   --elf-ring: oklch(0.7 0.16 293);
   --elf-radius: 0.625rem;
   --elf-radius-pill: 9999px;
