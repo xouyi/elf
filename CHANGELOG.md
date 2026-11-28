@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Theme: softer text fields in the dark themes. In `elf` and `nova`, Input, Textarea and Select now have a soft `#363636` border (`--elf-field`) and a subtle translucent fill (new optional `--elf-field-bg`, `bg-field-bg`), like shadcn's dark inputs, instead of a bright grey outline. `elfwood` is unchanged. Field borders are no longer part of the 3:1 contrast gate: the fill, the placeholder and the focus ring identify the field.
+
 ## 0.5.4
 
 - Theme: softer control borders in the `nova` theme. `--elf-input` (outline buttons, toggles, checkboxes, radios, switches) is now `#5c5c66` (3.08:1) instead of `#71717a`; text fields keep `#71717a` through `--elf-field`.

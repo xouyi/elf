@@ -39,6 +39,7 @@
   --color-border: var(--elf-border);
   --color-input: var(--elf-input);
   --color-field: var(--elf-field, var(--elf-input));
+  --color-field-bg: var(--elf-field-bg, transparent);
   --color-ring: var(--elf-ring);
 
   --radius-sm: max(0px, calc(var(--elf-radius) - 4px));
