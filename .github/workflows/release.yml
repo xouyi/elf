@@ -1,7 +1,7 @@
 name: Release
 
 # Publishes `@xouyi/elfui` to npm and creates the GitHub Release when a version tag is pushed
-# (`bun run release x.y.z`, then `git push origin main --follow-tags`).
+# (`bun run release patch|minor|major|x.y.z`, then `git push origin main vX.Y.Z`, or `--push`).
 #
 # Authentication is npm Trusted Publishing (OIDC): no NPM_TOKEN secret exists. The package must be linked to this
 # repository and workflow on npmjs.com (see CONTRIBUTING.md, "Publishing"). Provenance is attached automatically.
