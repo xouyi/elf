@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+    # `labeled` so that adding the `visual` label starts the visual regression shards.
+    types: [opened, synchronize, reopened, labeled]
+  workflow_dispatch:
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -12,6 +15,10 @@ concurrency:
 
 # The slow suites run as parallel shards. "Check" and "Visual regression" are small summary jobs that only pass when every
 # shard passed: they keep the names branch protection requires.
+#
+# Visual regression (screenshots) is opt-in: it runs only on pull requests labelled `visual` and on manual runs
+# (Actions > CI > Run workflow). Use the label for major or visually important changes. Without it the shards are skipped
+# and the "Visual regression" summary passes. Themes and widths: tests/visual/settings.ts.
 jobs:
   static:
     name: Static checks and docs
@@ -71,6 +78,7 @@ jobs:
 
   visual-shard:
     name: Visual regression (${{ matrix.shard }}/3)
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'visual'))
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.64.0-noble
@@ -105,7 +113,7 @@ jobs:
     needs: [visual-shard]
     runs-on: ubuntu-latest
     steps:
-      - name: Require every visual shard to pass
+      - name: Require every visual shard to pass (skipped without the `visual` label)
         run: |
           echo "visual=${{ needs.visual-shard.result }}"
-          [ "${{ needs.visual-shard.result }}" = success ]
+          [ "${{ needs.visual-shard.result }}" = success ] || [ "${{ needs.visual-shard.result }}" = skipped ]
