@@ -17,7 +17,7 @@ const forwarded = useForwardProps(delegatedProps)
     <PaginationListItem
       data-slot="pagination-link"
       v-bind="forwarded"
-      :class="cn(buttonVariants({ variant: 'ghost', size: props.size }), 'data-[selected=true]:border data-[selected=true]:border-input data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground', props.class)"
+      :class="cn(buttonVariants({ variant: 'ghost', size: props.size }), 'data-[selected=true]:border data-[selected=true]:border-outline data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground', props.class)"
     >
       <slot>{{ props.value }}</slot>
     </PaginationListItem>

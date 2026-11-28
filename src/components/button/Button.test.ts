@@ -14,7 +14,7 @@ describe('Button', () => {
 
   it.each([
     ['secondary', 'bg-secondary'],
-    ['outline', 'border-input'],
+    ['outline', 'border-outline'],
     ['ghost', 'hover:bg-accent'],
     ['destructive', 'bg-destructive'],
     ['link', 'underline-offset-4'],

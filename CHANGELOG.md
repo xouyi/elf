@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Theme: new optional `--elf-outline` token (`border-outline`) for outline buttons, outline toggles and the selected pagination item, falling back to `--elf-input`. `nova` sets it to the soft `#363636` used by its text fields, so outline buttons and toggles no longer show a bright border. Checkboxes, radios and switches keep `--elf-input` (3:1). `elf` and `elfwood` are unchanged.
+
 ## 0.5.5
 
 - Theme: softer text fields in the dark themes. In `elf` and `nova`, Input, Textarea and Select now have a soft `#363636` border (`--elf-field`) and a subtle translucent fill (new optional `--elf-field-bg`, `bg-field-bg`), like shadcn's dark inputs, instead of a bright grey outline. `elfwood` is unchanged. Field borders are no longer part of the 3:1 contrast gate: the fill, the placeholder and the focus ring identify the field.

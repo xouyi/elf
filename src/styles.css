@@ -38,6 +38,7 @@
   --color-warning-text: var(--elf-warning-text);
   --color-border: var(--elf-border);
   --color-input: var(--elf-input);
+  --color-outline: var(--elf-outline, var(--elf-input));
   --color-field: var(--elf-field, var(--elf-input));
   --color-field-bg: var(--elf-field-bg, transparent);
   --color-ring: var(--elf-ring);
