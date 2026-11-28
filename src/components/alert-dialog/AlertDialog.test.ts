@@ -60,7 +60,7 @@ describe('AlertDialog', () => {
   it('renders the action as a default button and the cancel as an outline button', async () => {
     await open()
     expect(document.body.querySelector('[data-slot="alert-dialog-action"]')!.getAttribute('data-variant')).toBe('default')
-    expect(document.body.querySelector('[data-slot="alert-dialog-cancel"]')!.className).toContain('border-input')
+    expect(document.body.querySelector('[data-slot="alert-dialog-cancel"]')!.className).toContain('border-outline')
   })
 
   it('styles a destructive action', async () => {
