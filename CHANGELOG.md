@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.5.4
 
 - Theme: softer control borders in the `nova` theme. `--elf-input` (outline buttons, toggles, checkboxes, radios, switches) is now `#5c5c66` (3.08:1) instead of `#71717a`; text fields keep `#71717a` through `--elf-field`.
 
