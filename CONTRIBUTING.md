@@ -136,14 +136,22 @@ goes into `tests/browser/interactions.test.ts`. The full explanation is on the d
 ### Visual regression
 
 The docs site renders each example alone at `/__examples/<component>/<example>?theme=elf|nova|elfwood` (noindex, not in the
-sitemap or search). `tests/visual/examples.spec.ts` screenshots every example in every theme at 1280 and 360 px and
-compares them with `tests/visual/__screenshots__/<component>/<example>-<theme>-<width>.png`.
+sitemap or search). `tests/visual/examples.spec.ts` screenshots every example in the themes and widths set in
+`tests/visual/settings.ts` (default: only the `elf` theme, at 1280 and 360 px; themes differ in tokens, not layout, and axe still
+covers every theme) and compares them with `tests/visual/__screenshots__/<component>/<example>-<theme>-<width>.png`.
+Override for one run with `VISUAL_THEMES=elf,elfwood VISUAL_WIDTHS=1280`; after changing the defaults, regenerate the baselines.
+
+**Opt-in.** Screenshots do not run on every pull request. They run only when the pull request has the `visual` label
+(`gh pr create --label visual`, or add it later) and on manual runs of the CI workflow. Use the label for major or
+visually important changes (new components, theme or token changes, layout work). Without it the shards are skipped and the
+required **Visual regression** summary passes. Baselines can drift while unlabelled pull requests change visuals, so a
+labelled pull request may show unrelated diffs: regenerate with `bun run baselines` and review them.
 
 Baselines depend on the operating system's fonts and rasterizer, so they are created **only** in the official Playwright
 Docker image (`mcr.microsoft.com/playwright:v1.64.0-noble`), by the **Visual baselines** workflow. Never commit PNGs
 generated on your machine. To update baselines after an intentional visual change:
 
-1. Open a pull request with the change. The **Visual regression** job fails and uploads the `visual-report` artifact.
+1. Open a pull request with the change and the `visual` label. The **Visual regression** job fails and uploads the `visual-report` artifact.
 2. Run `bun run baselines` on the pull request branch (or **Actions - Visual baselines - Run workflow**). It commits the changed PNGs to the branch.
 3. Review the PNG diff in the pull request's **Files changed** tab; every changed image must be explained by the change.
 4. `bun run baselines` re-pushes the commit under your name, which starts the required checks. After a manual workflow run, push an empty commit instead (pushes by the workflow do not start CI). Then merge.
@@ -171,7 +179,8 @@ examples in the same pull request. To debug the harness locally, `bun run docs:b
 A small fix goes from branch to npm in about 10 minutes:
 
 1. On a branch: make the change and add a line under `## Unreleased` at the top of `CHANGELOG.md` (create the heading if it is missing).
-2. If the change alters how something looks: `bun run baselines`.
+2. If the change alters how something looks and is important (a theme, a token, a new component): `bun run baselines`, and open
+   the pull request with `--label visual`. Small fixes skip both.
 3. Open the pull request; when **Check**, **Visual regression** and **Build example** are green (about 4 minutes), merge it.
 4. On an up-to-date `main`: `bun run release patch` (or `minor`, `major`, an explicit `x.y.z`, or `x.y.z-beta.N` for a prerelease).
    It refuses unless the tree is clean and you are on `main`, renames `## Unreleased` to `## x.y.z`, runs a quick gate
