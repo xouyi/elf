@@ -26,7 +26,8 @@
   --elf-warning-text: #f59e0b;
   --elf-border: #27272a;
   --elf-input: #5c5c66;
-  --elf-field: #71717a;
+  --elf-field: #363636;
+  --elf-field-bg: rgb(255 255 255 / 0.045);
   --elf-ring: #ffcc00;
   --elf-radius: 0px;
   --elf-radius-pill: 0px;

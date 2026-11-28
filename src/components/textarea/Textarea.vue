@@ -75,7 +75,7 @@ useResizeObserver(el, ([entry]) => {
     :maxlength="props.maxlength"
     :aria-invalid="props.invalid ? 'true' : undefined"
     :class="cn(
-      'w-full min-w-0 rounded-md border border-field bg-transparent px-3 py-2 text-base text-foreground transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+      'w-full min-w-0 rounded-md border border-field bg-field-bg px-3 py-2 text-base text-foreground transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
       'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
       'aria-invalid:border-destructive aria-invalid:ring-destructive/30',
       props.autoResize ? 'resize-none' : 'resize-y',

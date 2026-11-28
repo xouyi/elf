@@ -80,12 +80,11 @@ export const textPairs: Array<[string, string]> = [
 /** UI component boundaries need 3:1. */
 export const uiPairs: Array<[string, string]> = [
   ['input', 'background'],
-  ['field', 'background'], // text field, textarea and select borders
   ['ring', 'background'],
 ]
 
 /** Tokens whose value is not a color: geometry and the glow strength (a percentage used by `color-mix`). */
-export const NON_COLOR_TOKENS = new Set(['radius', 'radius-pill', 'glow', 'overlay'])
+export const NON_COLOR_TOKENS = new Set(['radius', 'radius-pill', 'glow', 'overlay', 'field-bg'])
 
 export interface ThemeTokens {
   /** Theme name (file name without extension). */
