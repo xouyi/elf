@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.5.2
 
 - Theme: new optional `--elf-field` token (`border-field`) for text field, textarea and select borders, falling back to `--elf-input`. The `elf` theme sets it to a clearer violet `oklch(0.55 0.06 293)` (4.25:1) so field corners no longer fade, while buttons, toggles and other controls keep the softer `--elf-input`. `nova` and `elfwood` are unchanged.
 
